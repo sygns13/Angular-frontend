@@ -1,0 +1,26 @@
+<div class="pages-body notfound-page p-d-flex p-flex-column">
+    <div class="topbar p-p-3 p-d-flex p-jc-between p-flex-row p-ai-center">
+        <div class="topbar-left p-ml-3 p-d-flex" routerLink="/">
+            <div class="logo">
+                <img src="assets/layout/images/logo2x.png" alt=""/>
+            </div>
+        </div>
+        <div class="topbar-right p-mr-3 p-d-flex">
+            <button pButton pRipple type="button" label="DASHBOARD" [routerLink]="['/']"
+                    class="p-button-text p-button-plain topbar-button"></button>
+        </div>
+    </div>
+
+    <div class="p-as-center p-mt-auto p-mb-auto">
+        <div class="pages-panel card p-d-flex p-flex-column">
+            <div class="pages-header p-px-3 p-py-1">
+                <h2>NOT FOUND</h2>
+            </div>
+            <div class="card p-mt-3 p-px-6">
+                <img src="assets/layout/images/pages/404.png" alt=""/>
+            </div>
+            <div class="pages-detail p-pb-6">Requested resource is not available.</div>
+            <button pButton pRipple type="button" label="GO BACK TO DASHBOARD" [routerLink]="['/']" class="p-button-text"></button>
+        </div>
+    </div>
+</div>
