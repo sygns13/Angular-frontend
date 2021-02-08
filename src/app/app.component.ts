@@ -8,9 +8,9 @@ import { PrimeNGConfig } from 'primeng/api';
 })
 export class AppComponent implements OnInit{
 
-    topbarTheme: string = 'dark';
+    topbarTheme: string = 'lightblue';
 
-    menuTheme: string = 'indigo';
+    menuTheme: string = 'dark';
 
     layoutMode: string = 'light';
 

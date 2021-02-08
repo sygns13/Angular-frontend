@@ -1,0 +1,17 @@
+<svg width="540" height="100" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="102" width="542" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="1" x="1" height="600" width="800"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <text stroke="#000000" transform="matrix(0.7037391406194473,0,0,0.9799749851226807,11.545172411974889,-0.3313514180481434) " font-style="normal" font-weight="normal" xml:space="preserve" text-anchor="start" font-family="'Quicksand'" font-size="75" id="svg_1" y="58.9387" x="-15.11354" stroke-width="0" fill="#ffffff">BUILDING COMPUTER</text>
+  <line stroke="#ffffff" stroke-linecap="null" stroke-linejoin="null" id="svg_2" y2="60" x2="2.5" y1="61" x1="541.49996" fill="none"/>
+  <text stroke="#ffffff" font-style="normal" font-weight="normal" xml:space="preserve" text-anchor="start" font-family="'Poppins Light'" font-size="30" id="svg_3" y="90" x="316.5" fill-opacity="null" stroke-width="0" fill="#ffffff">S O L U T I O N S</text>
+ </g>
+</svg>

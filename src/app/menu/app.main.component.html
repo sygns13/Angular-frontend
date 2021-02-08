@@ -9,29 +9,38 @@
         'layout-rightmenu-active': rightMenuActive,
         'layout-rtl': app.isRTL}" [class]="'layout-menu-' + app.menuTheme + ' layout-topbar-' + app.topbarTheme">
 
+        <!-- BARRA SUPERIOR - NEGRO -->
     <app-topbar></app-topbar>
 
-    <app-rightmenu></app-rightmenu>
+   <!-- <app-rightmenu></app-rightmenu> -->
 
+   <!-- MENU - AZUL -->
     <div class="menu-wrapper" (click)="onMenuClick($event)">
         <div class="layout-menu-container">
+            <!-- OPCION MI PERFIL TOP MENU AZUL -->
             <app-inline-menu *ngIf="app.inlineMenuPosition=='top' || app.inlineMenuPosition=='both'" key="top"></app-inline-menu>
+            <!-- MENU PRINCIPAL -->
             <app-menu></app-menu>
+            <!-- OPCION MI PERFIL BOTTOM MENU AZUL -->
             <app-inline-menu *ngIf="app.inlineMenuPosition=='bottom' || app.inlineMenuPosition=='both'" key="bottom"></app-inline-menu>
         </div>
     </div>
 
     <div class="layout-main">
+        <!-- SUBMENU DATOS - WHITE -->
         <app-breadcrumb></app-breadcrumb>
 
+        <!-- CONTENIDO PRINCIPAL - WHITE -->
         <div class="layout-content">
             <router-outlet></router-outlet>
         </div>
 
+        <!-- FOOTER -->
         <app-footer></app-footer>
     </div>
 
-    <app-config></app-config>
+    <!-- CONFIGURACIONES -->
+    <!-- <app-config></app-config> -->
 
     <div *ngIf="mobileMenuActive" class="layout-mask modal-in"></div>
 

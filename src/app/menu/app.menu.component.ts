@@ -18,123 +18,122 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
-                label: 'Favorites', icon: 'pi pi-fw pi-home',
-                items: [
+                label: 'Inicio', icon: 'pi pi-fw pi-home',  routerLink: ['/principal']
+                /*items: [
                     {label: 'Dashboard Sales', icon: 'pi pi-fw pi-home', routerLink: ['/'], badge: '4', badgeClass: 'p-badge-info'},
                     {label: 'Dashboard Analytics', icon: 'pi pi-fw pi-home',
                         routerLink: ['/favorites/dashboardanalytics'], badge: '2', badgeClass: 'p-badge-success'}
+                ]*/
+            },
+            {
+                label: 'Tablas Base', icon: 'pi pi-fw pi-inbox',
+                items: [
+                    {label: 'Gestión de Locales', icon: 'pi pi-fw pi-home', routerLink: ['/uikit/input']},
+                    {label: 'Tipos de Productos', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/floatlabel']},
+                    {label: 'Gestión de Marcas', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/invalidstate']},
+                    {label: 'Presentaciones de Productos', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/button']},
+                    {label: 'Gestión de Unidades', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table']},
+                    {label: 'Registro de Bancos', icon: 'pi pi-fw pi-home', routerLink: ['/uikit/list']}
                 ]
             },
             {
-                label: 'UI Kit', icon: 'pi pi-fw pi-star', routerLink: ['/uikit'],
+                label: 'Gestión de Almacén', icon: 'pi pi-fw pi-inbox',
                 items: [
-                    {label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'], badge: '6', badgeClass: 'p-badge-danger'},
-                    {label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel']},
-                    {label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate']},
-                    {label: 'Button', icon: 'pi pi-fw pi-mobile', routerLink: ['/uikit/button'], class: 'rotated-icon'},
-                    {label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'], badge: '6', badgeClass: 'p-badge-help'},
-                    {label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list']},
-                    {label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree']},
-                    {label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel']},
-                    {label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay']},
-                    {label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media']},
-                    {label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu']},
-                    {label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message']},
-                    {label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file']},
-                    {label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts']},
-                    {label: 'Misc', icon: 'pi pi-fw pi-circle-off', routerLink: ['/uikit/misc']}
+                    {label: 'Catálogo de Productos', icon: 'pi pi-fw pi-camera', routerLink: ['/uikit/formlayout']},
+                    {label: 'Inventario', icon: 'pi pi-fw pi-briefcase', routerLink: ['utilities/display']},
+                    {label: 'Gestión de Lotes y Stock', icon: 'pi pi-fw pi-sort', routerLink: ['utilities/elevation']},
+                    {label: 'Movimientos Libres de Productos', icon: 'pi pi-fw pi-undo', routerLink: ['utilities/flexbox']},
+                    {label: 'Productos Bajos de Stock', icon: 'pi pi-fw pi-angle-double-down', routerLink: ['utilities/icons']},
+                    {label: 'productos Vencidos', icon: 'pi pi-fw pi-backward', routerLink: ['utilities/text']},
                 ]
             },
             {
-                label: 'Utilities', icon: 'pi pi-fw pi-compass', routerLink: ['utilities'],
+                label: 'Ventas', icon: 'pi pi-fw pi-shopping-cart',
                 items: [
-                    {label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'], badge: '6', badgeClass: 'p-badge-warning'},
-                    {label: 'Display', icon: 'pi pi-fw pi-desktop', routerLink: ['utilities/display']},
-                    {label: 'Elevation', icon: 'pi pi-fw pi-external-link', routerLink: ['utilities/elevation']},
-                    {label: 'FlexBox', icon: 'pi pi-fw pi-directions', routerLink: ['utilities/flexbox']},
-                    {label: 'Icons', icon: 'pi pi-fw pi-search', routerLink: ['utilities/icons']},
-                    {label: 'Text', icon: 'pi pi-fw pi-pencil', routerLink: ['utilities/text']},
-                    {label: 'Widgets', icon: 'pi pi-fw pi-star-o', routerLink: ['utilities/widgets']},
-                    {label: 'Grid System', icon: 'pi pi-fw pi-th-large', routerLink: ['utilities/grid']},
-                    {label: 'Spacing', icon: 'pi pi-fw pi-arrow-right', routerLink: ['utilities/spacing']},
-                    {label: 'Typography', icon: 'pi pi-fw pi-align-center', routerLink: ['utilities/typography']}
+                    {label: 'Clientes', icon: 'pi pi-fw pi-users', routerLink: ['/uikit/formlayout']},
+                    {label: 'Realizar Venta', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['utilities/display']},
+                    {label: 'Ventas Realizadas', icon: 'pi pi-fw pi-inbox', routerLink: ['utilities/elevation']},
+                    {label: 'Resúmenes de Ventas', icon: 'pi pi-fw pi-sliders-h', routerLink: ['utilities/flexbox']},
+                    {label: 'Cuentas por Cobrar', icon: 'pi pi-fw pi-money-bill', routerLink: ['utilities/icons']}
                 ]
             },
             {
-                label: 'Pages', icon: 'pi pi-fw pi-briefcase', routerLink: ['/pages'],
+                label: 'Compras', icon: 'pi pi-fw pi-compass',
                 items: [
-                    {label: 'Crud', icon: 'pi pi-fw pi-pencil', routerLink: ['/pages/crud']},
-                    {label: 'Calendar', icon: 'pi pi-fw pi-calendar-plus', routerLink: ['/pages/calendar']},
-                    {label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/timeline']},
-                    {
-                        label: 'Landing', icon: 'pi pi-fw pi-globe', badge: '2', badgeClass: 'p-badge-warning',
+                    {label: 'Proveedores', icon: 'pi pi-fw pi-user-plus', routerLink: ['/uikit/formlayout']},
+                    {label: 'Cuentas Bancarias', icon: 'pi pi-fw pi-table', routerLink: ['utilities/display']},
+                    {label: 'Compras a Proveedores', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['utilities/elevation']},
+                    {label: 'Compras Realziadas', icon: 'pi pi-fw pi-list', routerLink: ['utilities/flexbox']},
+                    {label: 'Cuentas por Pagar', icon: 'pi pi-fw pi-star', routerLink: ['utilities/icons']}
+                ]
+            },
+            {
+                label: 'Caja', icon: 'pi pi-fw pi-dollar',
+                items: [
+                    {label: 'Registro de Movimientos', icon: 'pi pi-fw pi-sort-numeric-down-alt', routerLink: ['/uikit/formlayout']},
+                    {label: 'Caja Diaria', icon: 'pi pi-fw pi-table', routerLink: ['utilities/display']},
+                    {label: 'Iniciar Comprobantes', icon: 'pi pi-fw pi-file', routerLink: ['utilities/elevation']}
+                ]
+            },
+            {
+                label: 'Reportes', icon: 'pi pi-fw pi-print',
+                items: [
+                    {label: 'Reporte de Clientes', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/pages/crud']},
+                    {label: 'Proveedores', icon: 'pi pi-fw pi-file-pdf',
                         items: [
-                            {label: 'Static', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank'},
-                            {label: 'Component', icon: 'pi pi-fw pi-globe', routerLink: ['/landing']}
+                            /* {label: 'Listado de Proveedores', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank'}, */
+                            {label: 'Listado de Proveedores', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
+                            {label: 'Cuentas de Proveedores', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}
                         ]
                     },
-                    {label: 'Login', icon: 'pi pi-fw pi-sign-in', routerLink: ['/login']},
-                    {label: 'Invoice', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/invoice']},
-                    {label: 'Help', icon: 'pi pi-fw pi-question-circle', routerLink: ['/pages/help']},
-                    {label: 'Error', icon: 'pi pi-fw pi-times-circle', routerLink: ['/error']},
-                    {label: 'Not Found', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/notfound']},
-                    {label: 'Access Denied', icon: 'pi pi-fw pi-lock', routerLink: ['/access']},
-                    {label: 'Contact Us', icon: 'pi pi-fw pi-pencil', routerLink: ['/contactus']},
-                    {label: 'Empty', icon: 'pi pi-fw pi-circle-off', routerLink: ['/pages/empty']}
-                ]
-            },
-            {
-                label: 'Hierarchy', icon: 'pi pi-fw pi-align-left',
-                items: [
-                    {
-                        label: 'Submenu 1', icon: 'pi pi-fw pi-align-left',
-                        items: [
-                            {
-                                label: 'Submenu 1.1', icon: 'pi pi-fw pi-align-left',
-                                items: [
-                                    {label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-align-left'},
-                                    {label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-align-left'},
-                                    {label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-align-left'},
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2', icon: 'pi pi-fw pi-align-left',
-                                items: [
-                                    {label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-align-left'}
-                                ]
-                            },
-                        ]
+                    {label: 'Reporte de Bancos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/login']},
+                    {label: 'Reporte de Marcas', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/pages/invoice']},
+                    {label: 'Tipos de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/pages/help']},
+                    {label: 'Productos', icon: 'pi pi-fw pi-file-pdf', 
+                    items: [
+                        {label: 'Productos por Almacén', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
+                        {label: 'Reportes de Inventario', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Listado de Precios de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}
+                    ]
                     },
-                    {
-                        label: 'Submenu 2', icon: 'pi pi-fw pi-align-left',
-                        items: [
-                            {
-                                label: 'Submenu 2.1', icon: 'pi pi-fw pi-align-left',
-                                items: [
-                                    {label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-align-left'},
-                                    {label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-align-left'},
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2', icon: 'pi pi-fw pi-align-left',
-                                items: [
-                                    {label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-align-left'},
-                                ]
-                            },
-                        ]
+                    {label: 'Reporte de Salidas Libres', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/notfound']},
+                    {label: 'Compras', icon: 'pi pi-fw pi-file-pdf',
+                    items: [
+                        {label: 'Compras de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
+                        {label: 'Compras Detalladas por Producto', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Compras Detalladas por Proveedor', icon: 'pi pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Reporte de Cuentas por Pagar', icon: 'pi pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Reporte de Pagos Realizados', icon: 'pi pi-file-pdf', routerLink: ['/landing']}
+                    ]
+                    },
+                    {label: 'Ventas', icon: 'pi pi-fw pi-file-pdf',
+                    items: [
+                        {label: 'Ventas Generales', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
+                        {label: 'Ventas por Vendedor', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Ventas Detalladas', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Top de Productos Vendidos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Reporte de Cuentas por Cobrar', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Reporte de Pagos Cobrados', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
+                        {label: 'Análisis Estadístico', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}
+                    ]
+                    },
+                    {label: 'Caja', icon: 'pi pi-fw pi-chart-line',
+                    items: [
+                        {label: 'Caja Diaria', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']}, 
+                        {label: 'Ingresos por Ventas', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']},
+                        {label: 'Ingresos por Otros Conceptos', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']},
+                        {label: 'Gastos por Pago a Proveedores', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']},
+                        {label: 'Gastos Diversos', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']},
+                        {label: 'Ingresos Egresos Detallados', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']}
+                    ]
                     }
                 ]
             },
-            {
-                label: 'Start', icon: 'pi pi-fw pi-download',
-                items: [
-                    {
-                        label: 'Buy Now', icon: 'pi pi-fw pi-shopping-cart', url: ['https://www.primefaces.org/store']
-                    },
-                    {
-                        label: 'Documentation', icon: 'pi pi-fw pi-info-circle', routerLink: ['/documentation']
-                    }
-                ]
+            {label: 'Configuraciones', icon: 'pi pi-fw pi-cog',
+            items: [
+                {label: 'Gestión de Usuarios', icon: 'pi pi-fw pi-user-edit', routerLink: ['/landing']}, 
+                {label: 'Configuraciones', icon: 'pi pi-fw pi-cog', routerLink: ['/landing']}
+            ]
             }
         ];
     }

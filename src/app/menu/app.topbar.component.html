@@ -1,25 +1,34 @@
-<div class="layout-topbar p-shadow-4">
+<div class="layout-topbar p-shadow-4">  <!-- BARRA SUPERIOR - NEGRO -->
     <div class="layout-topbar-left">
+        <!-- lOGO EN LA BARRA DE TAREAS SUPERIOR -->
         <a class="layout-topbar-logo" routerLink="/">
-            <img id="app-logo" src="assets/layout/images/logo-light.svg" alt="ultima-layout" style="height: 2.25rem">
+            <!-- <img id="app-logo" src="assets/layout/images/logo-light.svg" alt="ultima-layout" style="height: 2.25rem"> -->
+            <img id="app-logo" src="assets/layout/images/logo-final.png" alt="ultima-layout" style="height: 2.25rem">
         </a>
 
+        <!-- BOTON MINIMIZAR MENUS IZQUIERDA -->
         <a class="layout-menu-button p-shadow-6" (click)="appMain.onMenuButtonClick($event)" pRipple>
             <i class="pi pi-chevron-right"></i>
         </a>
 
+        <!-- BOTON MINIMIZAR ICONOS SUPERIORES DERECHA -->
         <a class="layout-topbar-mobile-button" (click)="appMain.onTopbarMobileButtonClick($event)" pRipple>
             <i class="pi pi-ellipsis-v fs-large"></i>
         </a>
     </div>
 
     <div class="layout-topbar-right" [ngClass]="{'layout-topbar-mobile-active': appMain.mobileTopbarActive}">
+        <!-- SECCION MEDIA DE LA BARRA DE TAREAS -->
         <div class="layout-topbar-actions-left">
-            <p-megaMenu [model]="model" styleClass="layout-megamenu"></p-megaMenu>
+             <!-- MENUS SUPERIORES -->
+            <!-- <p-megaMenu [model]="model" styleClass="layout-megamenu"></p-megaMenu> -->
+            Sistema de Gestión de Ventas y Comprobantes Electrónicos BCS V.1.0
         </div>
+        
         <div class="layout-topbar-actions-right">
             <ul class="layout-topbar-items">
-                <li class="layout-topbar-item layout-search-item">
+                <!-- BOTON BUSCAR -->
+                <!-- <li class="layout-topbar-item layout-search-item">
                     <a class="layout-topbar-action rounded-circle" (click)="appMain.onTopbarItemClick($event, 'search')" pRipple>
                         <i class="pi pi-search fs-large"></i>
                     </a>
@@ -31,8 +40,11 @@
                             <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-text p-button-plain" (click)="appMain.searchClick = false;"></button>
                         </span>
                     </div>
-                </li>
-                <li class="layout-topbar-item notifications">
+                </li> -->
+
+                <!-- BOTON NOTIFICACIONES -->
+
+               <!--  <li class="layout-topbar-item notifications">
                     <a class="layout-topbar-action rounded-circle" (click)="appMain.onTopbarItemClick($event, 'notifications')" pRipple>
                         <span class="p-overlay-badge">
                             <i class="pi pi-bell fs-large"></i>
@@ -93,8 +105,10 @@
                             </div>
                         </li>
                     </ul>
-                </li>
-                <li class="layout-topbar-item app">
+                </li> -->
+
+                <!-- BOTON APPS -->
+                <!-- <li class="layout-topbar-item app">
                     <a class="layout-topbar-action rounded-circle" (click)="appMain.onTopbarItemClick($event, 'apps')" pRipple>
                         <i class="pi pi-table fs-large"></i>
                     </a>
@@ -139,7 +153,7 @@
                             </div>
                         </div>
                     </div>
-                </li>
+                </li> -->
                 <li class="layout-topbar-item">
                     <a class="layout-topbar-action p-d-flex p-dir-row p-jc-center p-ai-center p-px-2 rounded-circle" (click)="appMain.onTopbarItemClick($event, 'profile')" pRipple>
                         <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style="width: 32px; height: 32px;">
@@ -149,34 +163,36 @@
                         <li class="layout-topbar-action-item">
                             <a class="p-d-flex p-flex-row p-ai-center" pRipple>
                                 <i class="pi pi-cog" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
-                                <span>Settings</span>
+                                <span>Mi Perfil</span>
                             </a>
                         </li>
                         <li class="layout-topbar-action-item">
                             <a class="p-d-flex p-flex-row p-ai-center" pRipple>
                                 <i class="pi pi-file-o" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
-                                <span>Terms of Usage</span>
+                                <span>Términos de Uso</span>
                             </a>
                         </li>
                         <li class="layout-topbar-action-item">
                             <a class="p-d-flex p-flex-row p-ai-center" pRipple>
                                 <i class="pi pi-compass" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
-                                <span>Support</span>
+                                <span>Ticket de Asistencia</span>
                             </a>
                         </li>
                         <li class="layout-topbar-action-item">
                             <a class="p-d-flex p-flex-row p-ai-center" pRipple>
                                 <i class="pi pi-power-off" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
-                                <span>Logout</span>
+                                <span>Cerrar Sesión</span>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="layout-topbar-item">
+
+                <!-- BOTON MENU DERECHO -->
+                <!-- <li class="layout-topbar-item">
                     <a class="layout-topbar-action rounded-circle" (click)="appMain.onRightMenuButtonClick($event)" pRipple>
                         <i class="pi fs-large" [ngClass]="{'pi-arrow-left': !app.isRTL, 'pi-arrow-right': app.isRTL}"></i>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

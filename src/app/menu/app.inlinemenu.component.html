@@ -1,37 +1,37 @@
 <div [ngClass]="{'layout-inline-menu': true, 'layout-inline-menu-active':appMain.inlineMenuActive[key]}" [ngStyle]="style" [class]="styleClass">
     <a class="layout-inline-menu-action p-d-flex p-dir-row p-ai-center" [ngClass]="appMain.isHorizontal() ? 'p-p-3 p-p-lg-1 p-py-3' : 'p-p-3'" (click)="onClick($event)"
-        pTooltip="Amy Elsner" [tooltipDisabled]="isTooltipDisabled">
+        pTooltip="Marco Rios" [tooltipDisabled]="isTooltipDisabled">
         <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style="width: 32px; height: 32px;">
         <span class="p-d-flex p-flex-column" [ngClass]="{'p-ml-2': !app.isRTL, 'p-mr-2': app.isRTL}">
-            <span class="p-text-bold">Amy Elsner</span>
-            <small>Webmaster</small>
+            <span class="p-text-bold">Marco Rios Orellana</span>
+            <small>Tipo de Usuario</small>
         </span>
         <i class="layout-inline-menu-icon pi pi-angle-down" [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}"></i>
     </a>
 
     <ul class="layout-inline-menu-action-panel" [@menu]="appMain.inlineMenuActive[key] ? isHorizontalActive() ? 'visible' : 'visibleAnimated' : isHorizontalActive() ? 'hidden' : 'hiddenAnimated'">
-        <li class="layout-inline-menu-action-item" pTooltip="Settings" [tooltipDisabled]="isTooltipDisabled">
+        <li class="layout-inline-menu-action-item" pTooltip="Mi Perfil" [tooltipDisabled]="isTooltipDisabled">
             <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-cog pi-fw"></i>
-                <span>Settings</span>
+                <span>Mi Perfil</span>
             </a>
         </li>
-        <li class="layout-inline-menu-action-item" pTooltip="Terms of Usage" [tooltipDisabled]="isTooltipDisabled">
+        <li class="layout-inline-menu-action-item" pTooltip="Términos de Uso" [tooltipDisabled]="isTooltipDisabled">
             <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-file-o pi-fw"></i>
-                <span>Terms of Usage</span>
+                <span>Términos de Uso</span>
             </a>
         </li>
-        <li class="layout-inline-menu-action-item" pTooltip="Support" [tooltipDisabled]="isTooltipDisabled">
+        <li class="layout-inline-menu-action-item" pTooltip="Ticket de Asistencia" [tooltipDisabled]="isTooltipDisabled">
             <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-compass pi-fw"></i>
-                <span>Support</span>
+                <span>Ticket de Asistencia</span>
             </a>
         </li>
-        <li class="layout-inline-menu-action-item" pTooltip="Logout" [tooltipDisabled]="isTooltipDisabled">
+        <li class="layout-inline-menu-action-item" pTooltip="Cerrar Sesión" [tooltipDisabled]="isTooltipDisabled">
             <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-power-off pi-fw"></i>
-                <span>Logout</span>
+                <span>Cerrar Sesión</span>
             </a>
         </li>
     </ul>

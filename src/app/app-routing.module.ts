@@ -51,13 +51,13 @@ const routes: Routes = [
   {
     path: '', component: AppMainComponent,
     children: [
-      {path: '', component: DashboardComponent},
+     /* {path: '', component: DashboardComponent}, */
     ]
   },
   {
-    path: '', component: AppMainComponent,
+    path: 'principal', component: AppMainComponent,
     children: [
-      {path: 'principal', component: DashboardComponent},
+     /* {path: 'principal', component: DashboardComponent}, */
     ]
   }
 ];
