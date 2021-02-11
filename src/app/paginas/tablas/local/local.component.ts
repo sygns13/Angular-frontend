@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-local',
@@ -8,8 +9,10 @@ import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 })
 export class LocalComponent implements OnInit {
 
-  
+ @ViewChild('inputNombre', { static: false }) inputNombre: ElementRef;
+
   vistaRegistro: boolean = false;
+
   clsDepartamento: any = null;
   clsProvincia: any = null;
   clsDistrito: any = null;
@@ -22,6 +25,7 @@ export class LocalComponent implements OnInit {
       {name: 'Activo', code: '1'},
       {name: 'Inactivo', value: '0'}
   ];
+  
 
   //customers: Customer[];
   first = 0;
@@ -31,7 +35,7 @@ export class LocalComponent implements OnInit {
     {id: 1, name: 'Juan', country: {name:'Peru', code:'1234'}, company:'Puerto Ballarta', date:'13/11/1995', status:'Activo', activity: 15, representative:{name:'Anna', image:'Fali'}},
 ];
 
-  constructor(private breadcrumbService: AppBreadcrumbService) {
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
         { label: 'Gestión de Locales', routerLink: ['/tablas/locales'] }
@@ -62,6 +66,13 @@ isFirstPage(): boolean {
     return this.customers ? this.first === 0 : true;
 }
 
+setFocusNombre() {    
+
+  this.changeDetectorRef.detectChanges();
+  this.inputNombre.nativeElement.focus();
+
+}
+
 //Funciones crud
 
 
@@ -79,10 +90,13 @@ cancelar() {
   this.codigo = '';
   this.direccion = '';
   this.clsEstado = null;
+
+  this.setFocusNombre();
 }
 
 cerrar(){
   this.vistaRegistro = false;
 }
+
 
 }

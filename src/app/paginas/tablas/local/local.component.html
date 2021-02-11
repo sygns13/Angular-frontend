@@ -15,22 +15,21 @@
 </div>
 
 
-
 <div class="p-col-12" *ngIf="vistaRegistro">
     <div class="card">
         <h5>Nuevo Local</h5>
         <div class="p-fluid">
             <div class="p-field p-grid">
-                <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento</label>
+                <label for="departamento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label">
-                        <p-dropdown inputId="departamento" [options]="states" [(ngModel)]="clsDepartamento" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                        <p-dropdown inputId="departamento" [options]="states" [(ngModel)]="clsDepartamento" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
                             <label>Seleccione</label>
                     </span>
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Provincia</label>
+                <label for="provincia" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Provincia</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label">
                         <p-dropdown inputId="provincia" [options]="states" [(ngModel)]="clsProvincia" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}"></p-dropdown>
@@ -39,7 +38,7 @@
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Distrito</label>
+                <label for="distrito" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Distrito</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label">
                         <p-dropdown inputId="distrito" [options]="states" [(ngModel)]="clsDistrito" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}"></p-dropdown>
@@ -50,7 +49,7 @@
             <div class="p-field p-grid">
                 <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Local</label>
                 <div class="p-col-12 p-md-10">
-                    <input id="nombre" type="text" pInputText [(ngModel)]="nombre">
+                    <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre>
                 </div>
             </div>
             <div class="p-field p-grid">
@@ -60,16 +59,16 @@
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Dirección</label>
+                <label for="direccion" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Dirección</label>
                 <div class="p-col-12 p-md-10">
-                    <input id="codigo" type="text" pInputText  [(ngModel)]="direccion">
+                    <input id="direccion" type="text" pInputText  [(ngModel)]="direccion">
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</label>
+                <label for="state" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label combo">
-                        <p-dropdown inputId="state" [options]="states" [(ngModel)]="clsEstado" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}"></p-dropdown>
+                        <p-dropdown inputId="state" [options]="states" [(ngModel)]="clsEstado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}"></p-dropdown>
                             <label>Seleccione</label>
                     </span>
                 </div>
