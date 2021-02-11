@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+//Fondo Principal padre
 import {AppMainComponent} from './menu/app.main.component';
+
+//tablas base
+import {LocalComponent} from './paginas/tablas/local/local.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -58,6 +62,12 @@ const routes: Routes = [
     path: 'principal', component: AppMainComponent,
     children: [
      /* {path: 'principal', component: DashboardComponent}, */
+    ]
+  },
+  {
+    path: 'tablas', component: AppMainComponent,
+    children: [
+     {path: 'locales', component: LocalComponent},
     ]
   }
 ];

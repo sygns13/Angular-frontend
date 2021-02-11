@@ -148,6 +148,7 @@ import {ProductService} from './demo/service/productservice';
 import {MenuService} from './menu/app.menu.service';
 import {AppBreadcrumbService} from './menu/app.breadcrumb.service';
 import {AppContactusComponent} from './pages/app.contactus.component';
+import { LocalComponent } from './paginas/tablas/local/local.component';
 
 @NgModule({
     imports: [
@@ -288,7 +289,8 @@ import {AppContactusComponent} from './pages/app.contactus.component';
         AppErrorComponent,
         AppAccessdeniedComponent,
         AppTimelineDemoComponent,
-        AppContactusComponent
+        AppContactusComponent,
+        LocalComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

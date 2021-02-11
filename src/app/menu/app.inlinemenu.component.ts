@@ -19,10 +19,12 @@ import { AppComponent } from '../app.component';
             })),
             state('visible', style({
                 opacity: 1,
+                display:'block',
                 'z-index': 100
             })),
             state('hidden', style({
                 opacity: 0,
+                display: 'none',
                 'z-index': '*'
             })),
             transition('visibleAnimated => hiddenAnimated', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),

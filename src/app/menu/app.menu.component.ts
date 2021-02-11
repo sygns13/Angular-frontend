@@ -28,7 +28,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Tablas Base', icon: 'pi pi-fw pi-inbox',
                 items: [
-                    {label: 'Gestión de Locales', icon: 'pi pi-fw pi-home', routerLink: ['/uikit/input']},
+                    {label: 'Gestión de Locales', icon: 'pi pi-fw pi-home', routerLink: ['/tablas/locales']},
                     {label: 'Tipos de Productos', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/floatlabel']},
                     {label: 'Gestión de Marcas', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/invalidstate']},
                     {label: 'Presentaciones de Productos', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/button']},
