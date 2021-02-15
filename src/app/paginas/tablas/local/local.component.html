@@ -1,8 +1,14 @@
-<div class="p-grid">
+<div class="p-grid" *ngIf="vistaCarga">
+<div class="p-col-12" style="text-align: center;" >
+    <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+    </div>
+</div>
+
+<div class="p-grid" *ngIf="!vistaCarga">
 
 
 <div class="p-col-12">
-    <div class="card">
+    <div class="card  p-shadow-10">
         <h4>Gestión de Locales</h4>
         <div class="p-fluid">
             <blockquote>Aquí puede gestionar los locales con los que cuenta su empresa, en cada local se controlarán stocks de productos y se emitirán ventas y compras</blockquote>
@@ -16,14 +22,14 @@
 
 
 <div class="p-col-12" *ngIf="vistaRegistro">
-    <div class="card">
-        <h5>Nuevo Local</h5>
-        <div class="p-fluid">
+    <div class="card  p-shadow-10">
+        <h5>{{tipoFrm}}</h5>
+        <div class="p-fluid box">
             <div class="p-field p-grid">
                 <label for="departamento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label">
-                        <p-dropdown inputId="departamento" [options]="states" [(ngModel)]="clsDepartamento" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                        <p-dropdown inputId="departamento" [options]="departamentos" [(ngModel)]="clsDepartamento" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true" (onChange)="getProvincias()"></p-dropdown>
                             <label>Seleccione</label>
                     </span>
                 </div>
@@ -32,7 +38,7 @@
                 <label for="provincia" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Provincia</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label">
-                        <p-dropdown inputId="provincia" [options]="states" [(ngModel)]="clsProvincia" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}"></p-dropdown>
+                        <p-dropdown inputId="provincia" [options]="provincias" [(ngModel)]="clsProvincia" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}"  [filter]="true" (onChange)="getDistritos()"></p-dropdown>
                             <label>Seleccione</label>
                     </span>
                 </div>
@@ -41,7 +47,7 @@
                 <label for="distrito" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Distrito</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label">
-                        <p-dropdown inputId="distrito" [options]="states" [(ngModel)]="clsDistrito" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}"></p-dropdown>
+                        <p-dropdown inputId="distrito" [options]="distritos" [(ngModel)]="clsDistrito" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
                             <label>Seleccione</label>
                     </span>
                 </div>
@@ -65,10 +71,10 @@
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="state" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</label>
+                <label for="estado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</label>
                 <div class="p-col-12 p-md-10">
                     <span class="p-float-label combo">
-                        <p-dropdown inputId="state" [options]="states" [(ngModel)]="clsEstado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}"></p-dropdown>
+                        <p-dropdown inputId="estado" [options]="estados" [(ngModel)]="clsEstado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}"></p-dropdown>
                             <label>Seleccione</label>
                     </span>
                 </div>
@@ -76,48 +82,76 @@
         </div>
 
         <br>
-
-        <button pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
-        <button pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+        <button *ngIf="vistaBotonRegistro" (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+        <button *ngIf="vistaBotonRegistro"  (click)="cancelar()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+        <button *ngIf="vistaBotonEdicion" (click)="modificar($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
         <button (click)="cerrar()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
     </div>
 </div>
 
-
-
-
 <div class="p-col-12">
-    <div class="card">
+    <div class="card  p-shadow-10">
          <h5>Listado de Locales Registrados</h5>
     <div class="p-mb-3">
-        <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" styleClass="p-button-text"></p-button>
+        <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
         <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
-        <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" styleClass="p-button-text"></p-button>
+        <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
     </div>
-    <p-table [value]="customers" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [(first)]="first"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines">
+    <p-table [value]="almacens" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [(first)]="first"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
         <ng-template pTemplate="header">
             <tr>
-                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 4%; color:white;">Name</th>
-                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 4%; color:white;">Country</th>
-                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 4%; color:white;">Company</th>
-                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 4%; color:white;">Representative</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 4%; color:white;">N°</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 11%; color:white;">Departamento</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 11%; color:white;">Provincia</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 11%; color:white;">Distrito</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 17%; color:white;">Nombre</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Código Domicilio Fiscal</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 17%; color:white;">Dirección</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 7%; color:white;">Estado</th>
+                <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 14%; color:white;">Gestión</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-customer>
+        <ng-template pTemplate="body" let-almacens let-rowIndex="rowIndex" >
             <tr>
-                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Name</span> {{customer.name}}</td>
-                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Country</span> {{customer.country.name}}</td>
-                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Company</span> {{customer.company}}</td>
-                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Representative</span>  {{customer.representative.name}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{first+rowIndex+1}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Departamento</span> {{almacens.departamento.nombre}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Provincia</span> {{almacens.provincia.nombre}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Distrito</span> {{almacens.distrito.nombre}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Nombre</span>  {{almacens.nombre}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Código</span>  {{almacens.codigo}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Dirección</span>  {{almacens.direccion}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Estado</span>
+                   <!--  <center> -->
+                          <p-tag styleClass="p-mr-2" severity="success" *ngIf="almacens.activo === 1" value="Activo"></p-tag>
+                          <p-tag styleClass="p-mr-2" severity="warning" *ngIf="almacens.activo === 0" value="Inactivo"></p-tag>
+                      <!-- </center> -->
+                </td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
+                    <!-- <center> -->
+                    <button (click)="editar(almacens, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Local" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                    <button (click)="eliminar(almacens , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Local" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+               <!--  </center> -->
+                </td>
             </tr>
         </ng-template>
     </p-table>
-
-
-        
     </div>
 </div>
+
+
+    <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                             [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                             <p-footer>
+                                <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                            </p-footer>
+                            </p-confirmDialog>
+
+                             <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                             <!-- <p-messages [value]="msgs"></p-messages> -->
+
+                             <p-toast></p-toast>
 
 
 </div>

@@ -6,6 +6,8 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 
+import { ConfirmationService, MessageService } from "primeng/api";
+
 import {AccordionModule} from 'primeng/accordion';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {AvatarModule} from 'primeng/avatar';
@@ -149,6 +151,8 @@ import {MenuService} from './menu/app.menu.service';
 import {AppBreadcrumbService} from './menu/app.breadcrumb.service';
 import {AppContactusComponent} from './pages/app.contactus.component';
 import { LocalComponent } from './paginas/tablas/local/local.component';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {BlockUIModule} from 'primeng/blockui';
 
 @NgModule({
     imports: [
@@ -236,7 +240,9 @@ import { LocalComponent } from './paginas/tablas/local/local.component';
         TreeModule,
         TreeTableModule,
         VirtualScrollerModule,
-        AppCodeModule
+        AppCodeModule,
+        ProgressSpinnerModule,
+        BlockUIModule
     ],
     declarations: [
         AppComponent,
@@ -294,7 +300,7 @@ import { LocalComponent } from './paginas/tablas/local/local.component';
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, ConfirmationService, MessageService
     ],
     bootstrap: [AppComponent]
 })
