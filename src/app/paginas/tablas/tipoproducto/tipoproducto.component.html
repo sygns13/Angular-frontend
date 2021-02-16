@@ -1,0 +1,109 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    
+    <p-toast></p-toast>
+    
+    <div class="p-grid" >
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Gestión de Tipos de Productos</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede gestionar los tipos de productos que desee definir, un tipo de producto es similar a una categoría de producto, sirve para que pueda tener un mejor orden de los los productos</blockquote>
+            </div>
+            <br>
+    
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Tipo de Producto" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+    
+    
+    <div class="p-col-12" *ngIf="vistaRegistro">
+        <div class="card  p-shadow-10">
+            <h5>{{tipoFrm}}</h5>
+            <div class="p-fluid box">
+
+                <div class="p-field p-grid">
+                    <label for="tipo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Tipo de Producto</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="tipo" type="text" pInputText [(ngModel)]="tipo" #inputTipo>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="estado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="estado" [options]="estados" [(ngModel)]="clsEstado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+    
+            <br>
+            <button *ngIf="vistaBotonRegistro" (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonRegistro"  (click)="cancelar()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonEdicion" (click)="modificar($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="cerrar()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Tipos de Productos Registrados</h5>
+        <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>
+        <p-table [value]="tipoProductos" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [(first)]="first"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 71%; color:white;">Tipo de Producto</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Estado</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 14%; color:white;">Gestión</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-tipoProductos let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{first+rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{tipoProductos.tipo}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;"><span class="p-column-title">Estado</span>
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="tipoProductos.activo === 1" value="Activo"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="tipoProductos.activo === 0" value="Inactivo"></p-tag>
+                    </td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
+    
+                        <button (click)="editar(tipoProductos, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="tipoProductos.borrado === 0" (click)="eliminar(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="tipoProductos.activo === 0" (click)="alta(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="tipoProductos.activo === 1" (click)="baja(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+                                 <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                                 <!-- <p-messages [value]="msgs"></p-messages> -->
+    
+    </div>

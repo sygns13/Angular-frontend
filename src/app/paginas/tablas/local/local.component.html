@@ -4,7 +4,9 @@
     </div>
 </div>
 
-<div class="p-grid" *ngIf="!vistaCarga">
+<p-toast></p-toast>
+
+<div class="p-grid" >
 
 
 <div class="p-col-12">
@@ -121,17 +123,17 @@
                 <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Nombre</span>  {{almacens.nombre}}</td>
                 <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Código</span>  {{almacens.codigo}}</td>
                 <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Dirección</span>  {{almacens.direccion}}</td>
-                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Estado</span>
-                   <!--  <center> -->
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;"><span class="p-column-title">Estado</span>
                           <p-tag styleClass="p-mr-2" severity="success" *ngIf="almacens.activo === 1" value="Activo"></p-tag>
                           <p-tag styleClass="p-mr-2" severity="warning" *ngIf="almacens.activo === 0" value="Inactivo"></p-tag>
-                      <!-- </center> -->
                 </td>
                 <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
-                    <!-- <center> -->
+
                     <button (click)="editar(almacens, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Local" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                    <button (click)="eliminar(almacens , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Local" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-               <!--  </center> -->
+                    <button *ngIf="almacens.borrado === 0" (click)="eliminar(almacens , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Local" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                    <button *ngIf="almacens.activo === 0" (click)="alta(almacens , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Local" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                    <button *ngIf="almacens.activo === 1" (click)="baja(almacens , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Local" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                    
                 </td>
             </tr>
         </ng-template>
@@ -150,8 +152,5 @@
 
                              <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
                              <!-- <p-messages [value]="msgs"></p-messages> -->
-
-                             <p-toast></p-toast>
-
 
 </div>

@@ -5,6 +5,7 @@ export class Almacen {
     distritoId: number;
     codigo: string;
     activo: number;
+    borrado: number;
     pais: {id: number, nombre: string, inicial: string };
     departamento: {id: number, nombre: string };
     provincia: {id: number, nombre: string };

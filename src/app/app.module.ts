@@ -153,6 +153,7 @@ import {AppContactusComponent} from './pages/app.contactus.component';
 import { LocalComponent } from './paginas/tablas/local/local.component';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {BlockUIModule} from 'primeng/blockui';
+import { TipoProductoComponent } from './paginas/tablas/tipoproducto/tipoproducto.component';
 
 @NgModule({
     imports: [
@@ -296,7 +297,8 @@ import {BlockUIModule} from 'primeng/blockui';
         AppAccessdeniedComponent,
         AppTimelineDemoComponent,
         AppContactusComponent,
-        LocalComponent
+        LocalComponent,
+        TipoProductoComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

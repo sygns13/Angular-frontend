@@ -6,6 +6,7 @@ import {AppMainComponent} from './menu/app.main.component';
 
 //tablas base
 import {LocalComponent} from './paginas/tablas/local/local.component';
+import {TipoProductoComponent} from './paginas/tablas/tipoproducto/tipoproducto.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -68,6 +69,7 @@ const routes: Routes = [
     path: 'tablas', component: AppMainComponent,
     children: [
      {path: 'locales', component: LocalComponent},
+     {path: 'tipo_productos', component: TipoProductoComponent},
     ]
   }
 ];

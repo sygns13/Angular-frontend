@@ -40,6 +40,10 @@ export class AlmacenService extends GenericService<Almacen> {
   getDistritos(idProv: number) {
     return this.http.get<Distrito[]>(`${this.urlGetDistrito}/${idProv}`);
   }
+
+  altaBaja(id: number, valor: number) {
+    return this.http.get(`${this.url}/altabaja/${id}/${valor}`);
+  }
 /*
   listar() {
     return this.http.get<Almacen[]>(this.url);

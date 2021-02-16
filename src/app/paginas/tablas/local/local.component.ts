@@ -378,4 +378,56 @@ export class LocalComponent implements OnInit {
 
   }
 
+
+  alta(data: Almacen, event: Event){
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Activar el local?',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Activación',
+      accept: () => {
+        let msj : string = 'El local se ha activado satisfactoriamente';
+        let valor: number = 1;
+       this.altaBaja(data, valor, msj);
+      },
+      reject: () => {
+      }
+  });
+    
+  }
+
+  baja(data: Almacen, event: Event){
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Desactivar el registro?',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Desactivación',
+      accept: () => {
+        let msj : string = 'El local se ha desactivado satisfactoriamente';
+        let valor: number = 0;
+        this.altaBaja(data, valor, msj);
+      },
+      reject: () => {
+      }
+  });
+    
+  }
+
+  altaBaja(data: Almacen, valor: number, msj: string){
+    //this.vistaCarga = true;
+    
+    this.almacenService.altaBaja(data.id, valor).pipe(switchMap(() => {
+      return this.almacenService.listar();
+    })).subscribe(data => {
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
+      this.almacens = data;
+      //this.vistaCarga = false;
+    });
+
+  }
+
+
+
 }
