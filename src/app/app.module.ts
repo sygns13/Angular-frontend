@@ -154,6 +154,11 @@ import { LocalComponent } from './paginas/tablas/local/local.component';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {BlockUIModule} from 'primeng/blockui';
 import { TipoProductoComponent } from './paginas/tablas/tipoproducto/tipoproducto.component';
+import { MarcaComponent } from './paginas/tablas/marca/marca.component';
+import { PresentacionComponent } from './paginas/tablas/presentacion/presentacion.component';
+import { UnidadComponent } from './paginas/tablas/unidad/unidad.component';
+import { BancoComponent } from './paginas/tablas/banco/banco.component';
+import { ProductoComponent } from './paginas/productos/producto/producto.component';
 
 @NgModule({
     imports: [
@@ -298,7 +303,12 @@ import { TipoProductoComponent } from './paginas/tablas/tipoproducto/tipoproduct
         AppTimelineDemoComponent,
         AppContactusComponent,
         LocalComponent,
-        TipoProductoComponent
+        TipoProductoComponent,
+        MarcaComponent,
+        PresentacionComponent,
+        UnidadComponent,
+        BancoComponent,
+        ProductoComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

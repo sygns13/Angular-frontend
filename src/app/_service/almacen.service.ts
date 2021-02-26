@@ -52,4 +52,8 @@ export class AlmacenService extends GenericService<Almacen> {
    registrar(almacen: Almacen) {
     return this.http.post(this.url, almacen);
   } */
+
+  listarPageable(p: number, s:number, txtBuscar:String){
+    return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
+  }
 }

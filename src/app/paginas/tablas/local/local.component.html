@@ -57,19 +57,19 @@
             <div class="p-field p-grid">
                 <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Local</label>
                 <div class="p-col-12 p-md-10">
-                    <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre>
+                    <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre maxLength="500">
                 </div>
             </div>
             <div class="p-field p-grid">
                 <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Código de Domicilio Fiscal</label>
                 <div class="p-col-12 p-md-10">
-                    <input id="codigo" type="text" pInputText [(ngModel)]="codigo">
+                    <input id="codigo" type="text" pInputText [(ngModel)]="codigo" maxLength="200">
                 </div>
             </div>
             <div class="p-field p-grid">
                 <label for="direccion" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Dirección</label>
                 <div class="p-col-12 p-md-10">
-                    <input id="direccion" type="text" pInputText  [(ngModel)]="direccion">
+                    <input id="direccion" type="text" pInputText  [(ngModel)]="direccion" maxLength="500">
                 </div>
             </div>
             <div class="p-field p-grid">
@@ -94,13 +94,23 @@
 <div class="p-col-12">
     <div class="card  p-shadow-10">
          <h5>Listado de Locales Registrados</h5>
-    <div class="p-mb-3">
-        <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
-        <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
-        <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
-    </div>
-    <p-table [value]="almacens" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [(first)]="first"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
+    <!-- <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>-->
+
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+    <p-table [value]="almacens"  [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
         <ng-template pTemplate="header">
             <tr>
                 <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 4%; color:white;">N°</th>
@@ -116,7 +126,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-almacens let-rowIndex="rowIndex" >
             <tr>
-                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{first+rowIndex+1}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
                 <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Departamento</span> {{almacens.departamento.nombre}}</td>
                 <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Provincia</span> {{almacens.provincia.nombre}}</td>
                 <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Distrito</span> {{almacens.distrito.nombre}}</td>

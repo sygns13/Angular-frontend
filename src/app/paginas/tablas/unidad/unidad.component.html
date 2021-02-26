@@ -11,13 +11,13 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-            <h4>Gestión de Tipos de Productos</h4>
+            <h4>Gestión de Unidads</h4>
             <div class="p-fluid">
-                <blockquote>Aquí puede gestionar los tipos de productos que desee definir, un tipo de producto es similar a una categoría de producto, sirve para que pueda tener un mejor orden de los los productos</blockquote>
+                <blockquote>Aquí puede gestionar las unidads que desee definir, las unidads permitirán agrupamientos de productos y registrar en el sistema precios por mayor de compra y de venta</blockquote>
             </div>
             <br>
     
-            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Tipo de Producto" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nueva Unidad" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
     
         </div>
     </div>
@@ -29,9 +29,23 @@
             <div class="p-fluid box">
 
                 <div class="p-field p-grid">
-                    <label for="tipo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Tipo de Producto</label>
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre de la Unidad</label>
                     <div class="p-col-12 p-md-10">
-                        <input id="tipo" type="text" pInputText [(ngModel)]="tipo" #inputTipo maxLength="250">
+                        <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre maxLength="200">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="abreviatura" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Abreviatura</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="abreviatura" type="text" pInputText [(ngModel)]="abreviatura" maxLength="45">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Cantidad</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" (keypress)="soloNumeros($event)" maxLength="8">
                     </div>
                 </div>
 
@@ -56,37 +70,51 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-             <h5>Listado de Tipos de Productos Registrados</h5>
+             <h5>Listado de Unidades Registradas</h5>
         <!-- <div class="p-mb-3">
             <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
             <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
             <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
         </div>-->
-        <p-table [value]="tipoProductos"  [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+        <p-table [value]="unidads" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
             <ng-template pTemplate="header">
                 <tr>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 71%; color:white;">Tipo de Producto</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 40%; color:white;">Unidad</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 16%; color:white;">Abreviatura</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Cantidad</th>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Estado</th>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 14%; color:white;">Gestión</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-tipoProductos let-rowIndex="rowIndex" >
+            <ng-template pTemplate="body" let-unidads let-rowIndex="rowIndex" >
                 <tr>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{tipoProductos.tipo}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{unidads.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{unidads.abreviatura}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{unidads.cantidad}}</td>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;"><span class="p-column-title">Estado</span>
-                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="tipoProductos.activo === 1" value="Activo"></p-tag>
-                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="tipoProductos.activo === 0" value="Inactivo"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="unidads.activo === 1" value="Activo"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="unidads.activo === 0" value="Inactivo"></p-tag>
                     </td>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
     
-                        <button (click)="editar(tipoProductos, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        <button *ngIf="tipoProductos.borrado === 0" (click)="eliminar(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        <button *ngIf="tipoProductos.activo === 0" (click)="alta(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        <button *ngIf="tipoProductos.activo === 1" (click)="baja(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        
+                        <div  *ngIf="rowIndex > 0 || first>1">
+                            <button (click)="editar(unidads, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Unidad" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                            <button *ngIf="unidads.borrado === 0" (click)="eliminar(unidads , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Unidad" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                            <button *ngIf="unidads.activo === 0" (click)="alta(unidads , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Unidad" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                            <button *ngIf="unidads.activo === 1" (click)="baja(unidads , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Unidad" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        </div>
                     </td>
                 </tr>
             </ng-template>

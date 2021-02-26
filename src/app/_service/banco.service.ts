@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
-import { TipoProducto } from '../_model/tipo_producto';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { Banco } from './../_model/banco';
 import { Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TipoProductoService extends GenericService<TipoProducto> {
+export class BancoService extends GenericService<Banco>  {
 
-  tipoProductos = new Subject<TipoProducto[]>();
+  bancos = new Subject<Banco[]>();
 
-  protected url: string = `${environment.HOST}/tipoproductos`
+  protected url: string = `${environment.HOST}/bancos`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/tipoproductos`);
+    super(http, `${environment.HOST}/bancos`);
   }
 
   altaBaja(id: number, valor: number) {

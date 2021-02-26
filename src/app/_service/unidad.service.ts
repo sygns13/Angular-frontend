@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
-import { TipoProducto } from '../_model/tipo_producto';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { Unidad } from './../_model/unidad';
 import { Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TipoProductoService extends GenericService<TipoProducto> {
+export class UnidadService extends GenericService<Unidad>  {
 
-  tipoProductos = new Subject<TipoProducto[]>();
+  unidads = new Subject<Unidad[]>();
 
-  protected url: string = `${environment.HOST}/tipoproductos`
+  protected url: string = `${environment.HOST}/unidads`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/tipoproductos`);
+    super(http, `${environment.HOST}/unidads`);
   }
 
   altaBaja(id: number, valor: number) {
@@ -26,4 +26,5 @@ export class TipoProductoService extends GenericService<TipoProducto> {
   listarPageable(p: number, s:number, txtBuscar:String){
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
   }
+  
 }

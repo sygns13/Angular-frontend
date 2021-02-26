@@ -7,6 +7,10 @@ import {AppMainComponent} from './menu/app.main.component';
 //tablas base
 import {LocalComponent} from './paginas/tablas/local/local.component';
 import {TipoProductoComponent} from './paginas/tablas/tipoproducto/tipoproducto.component';
+import {MarcaComponent} from './paginas/tablas/marca/marca.component';
+import {PresentacionComponent} from './paginas/tablas/presentacion/presentacion.component';
+import {UnidadComponent} from './paginas/tablas/unidad/unidad.component';
+import {BancoComponent} from './paginas/tablas/banco/banco.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -70,6 +74,10 @@ const routes: Routes = [
     children: [
      {path: 'locales', component: LocalComponent},
      {path: 'tipo_productos', component: TipoProductoComponent},
+     {path: 'marcas', component: MarcaComponent},
+     {path: 'presentaciones', component: PresentacionComponent},
+     {path: 'unidades', component: UnidadComponent},
+     {path: 'bancos', component: BancoComponent},
     ]
   }
 ];

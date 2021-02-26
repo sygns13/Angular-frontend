@@ -6,6 +6,7 @@ import { Almacen } from './../../../_model/almacen';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Message} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-local',
@@ -37,8 +38,15 @@ export class LocalComponent implements OnInit {
 
   almacen = new Almacen();
 
-  first = 0;
-  rows = 10;
+  page: number = 0;
+  first: number = 0;
+  last: number = 0;
+  rows: number = 10;
+
+  isFirst: boolean = true;
+  isLast: boolean = false;
+  totalRecords: number = 0;
+  numberElements: number = 0;
 
   almacens: any[] = [];
 
@@ -49,6 +57,10 @@ export class LocalComponent implements OnInit {
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
   vistaCarga : boolean = true;
+
+  loading: boolean = true; 
+  txtBuscar: String = '';
+
 
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private almacenService: AlmacenService,
@@ -62,29 +74,33 @@ export class LocalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDepartamentos();
-    this.listarMain();
+    this.listarPageMain(this.page, this.rows);
     this.primengConfig.ripple = true;
     this.vistaCarga = false;
   }
 
   next() {
-    this.first = this.first + this.rows;
+    this.page++;
+    this.listarPageMain(this.page, this.rows);
   }
 
   prev() {
-      this.first = this.first - this.rows;
+      this.page--;
+      this.listarPageMain(this.page, this.rows);
   }
 
   reset() {
       this.first = 0;
+      this.listarPageMain(this.page, this.rows);
   }
 
   isLastPage(): boolean {
-      return this.almacens ? this.first > (this.almacens.length - this.rows): true;
+      //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
+      return this.isLast;
   }
 
   isFirstPage(): boolean {
-      return this.almacens ? this.first === 0 : true;
+      return this.isFirst;
   }
 
   setFocusNombre() {    
@@ -199,14 +215,43 @@ export class LocalComponent implements OnInit {
     }
 
   }
-
+/*
   listarMain() {
 
     this.almacenService.listar().subscribe(data => {
       
       this.almacens = data;
     });
+  }*/
+
+  loadData(event: LazyLoadEvent) { 
+    this.loading = true; 
+    this.rows = event.rows;
+    this.page = event.first / this.rows;
+
+    this.listarPageMain(this.page, this.rows);
+
   }
+
+  listarPageMain(p: number, s:number) {
+
+    this.almacenService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
+      this.almacens = data.content;
+      this.isFirst = data.first;
+      this.isLast = data.last;
+      this.numberElements = data.numberOfElements;
+      this.first = (p * s);
+      this.last = (p * s) + this.numberElements;
+      this.totalRecords = data.totalElements;
+      this.loading = false;
+    });
+  }
+
+  buscar(){
+    this.page = 0;
+    this.listarPageMain(this.page , this.rows);
+  }
+
 
   //Funciones crud
 
@@ -332,6 +377,16 @@ export class LocalComponent implements OnInit {
     this.almacen.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
     this.almacen.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
 
+    this.almacenService.registrar(this.almacen).subscribe(() => {
+      this.vistaCarga = false;
+      this.loading = true; 
+      this.cancelar();
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha registrado satisfactoriamente'});
+   });
+
+
+/*
     this.almacenService.registrar(this.almacen).pipe(switchMap(() => {
       return this.almacenService.listar();
     })).subscribe(data => {
@@ -340,7 +395,7 @@ export class LocalComponent implements OnInit {
       this.messageService.add({severity:'success', summary:'Confirmado', detail:'El local se ha registrado satisfactoriamente'});
       this.cancelar();
       this.almacens = data;
-    });
+    });*/
 
   }
 
@@ -353,28 +408,28 @@ export class LocalComponent implements OnInit {
     this.almacen.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
     this.almacen.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
 
-    this.almacenService.modificar(this.almacen).pipe(switchMap(() => {
-      return this.almacenService.listar();
-    })).subscribe(data => {
+    this.almacenService.modificar(this.almacen).subscribe(() => {
+      this.loading = true; 
       this.vistaCarga = false;
-      //this.almacenService.almacens.next(data);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail:'El local se ha editado satisfactoriamente'});
-      this.almacens = data;
       this.cancelar();
       this.cerrar();
-    });
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha editado satisfactoriamente'});
+   });
 
   }
 
   eliminarConfirmado(data: Almacen){
     this.vistaCarga = true;
-    this.almacenService.eliminar(data.id).pipe(switchMap(() => {
-      return this.almacenService.listar();
-    })).subscribe(data => {
-      this.messageService.add({severity:'success', summary:'Confirmado', detail:'El local se ha eliminado satisfactoriamente'});
-      this.almacens = data;
+    this.almacenService.eliminar(data.id).subscribe(() => {
+      this.loading = true; 
       this.vistaCarga = false;
-    });
+      if(this.numberElements <= 1 && this.page > 0){
+        this.page--;
+      }
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha eliminado satisfactoriamente'});
+   });
 
   }
 
@@ -418,13 +473,11 @@ export class LocalComponent implements OnInit {
   altaBaja(data: Almacen, valor: number, msj: string){
     //this.vistaCarga = true;
     
-    this.almacenService.altaBaja(data.id, valor).pipe(switchMap(() => {
-      return this.almacenService.listar();
-    })).subscribe(data => {
+    this.almacenService.altaBaja(data.id, valor).subscribe(() => {
+      this.loading = true; 
+      this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-      this.almacens = data;
-      //this.vistaCarga = false;
-    });
+   });
 
   }
 

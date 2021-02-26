@@ -1,27 +1,27 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
-import { TipoProductoService } from '../../../_service/tipo_producto.service';
+import {PresentacionService } from '../../../_service/presentacion.service';
 import { switchMap } from 'rxjs/operators';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Message} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
-import { TipoProducto } from '../../../_model/tipo_producto';
+import {Presentacion } from '../../../_model/presentacion';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
-  selector: 'app-tipoproducto',
-  templateUrl: './tipoproducto.component.html',
-  styleUrls: ['./tipoproducto.component.scss'],
+  selector: 'app-presentacion',
+  templateUrl: './presentacion.component.html',
+  styleUrls: ['./presentacion.component.scss'],
   providers: [ConfirmationService, MessageService]
 })
-export class TipoProductoComponent implements OnInit {
+export class PresentacionComponent implements OnInit {
 
-  @ViewChild('inputTipo', { static: false }) inputTipo: ElementRef;
+  @ViewChild('inputPresentacion', { static: false }) inputPresentacion: ElementRef;
 
   vistaRegistro: boolean = false;
 
 
-  tipo: String = '';
+  presentacion: String = '';
   clsEstado: any = null;
 
   estados: any[] = [
@@ -30,7 +30,7 @@ export class TipoProductoComponent implements OnInit {
   ];
 
 
-  tipoProducto = new TipoProducto();
+  presentacionClass = new Presentacion();
 
   page: number = 0;
   first: number = 0;
@@ -42,12 +42,12 @@ export class TipoProductoComponent implements OnInit {
   totalRecords: number = 0;
   numberElements: number = 0;
 
-  tipoProductos: any[] = [];
+  presentacions: any[] = [];
 
   msgs: Message[] = [];
   position: string;
 
-  tipoFrm: String = 'Nuevo Tipo de Producto';
+  tipoFrm: String = 'Nueva Presentación';
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
   vistaCarga : boolean = true;
@@ -56,11 +56,11 @@ export class TipoProductoComponent implements OnInit {
   txtBuscar: String = '';
 
 
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private tipoProductoService: TipoProductoService,
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private presentacionService:PresentacionService,
                 private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
-        { label: 'Gestión de Tipos de Productos', routerLink: ['/tablas/tipoProducto'] }
+        { label: 'Gestión de Presentaciones de Productos', routerLink: ['/tablas/presentaciones'] }
     ]);
 
 }
@@ -98,7 +98,7 @@ export class TipoProductoComponent implements OnInit {
   setFocusTipo() {    
 
     this.changeDetectorRef.detectChanges();
-    this.inputTipo.nativeElement.focus();
+    this.inputPresentacion.nativeElement.focus();
 
   }
 
@@ -106,9 +106,9 @@ export class TipoProductoComponent implements OnInit {
 /*
   listarMain() {
 
-    this.tipoProductoService.listar().subscribe(data => {
+    this.presentacionService.listar().subscribe(data => {
       
-      this.tipoProductos = data;
+      this.presentacions = data;
     });
   }*/
 
@@ -123,8 +123,8 @@ export class TipoProductoComponent implements OnInit {
 
   listarPageMain(p: number, s:number) {
 
-    this.tipoProductoService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
-      this.tipoProductos = data.content;
+    this.presentacionService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
+      this.presentacions = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
       this.numberElements = data.numberOfElements;
@@ -148,7 +148,7 @@ export class TipoProductoComponent implements OnInit {
     this.vistaBotonRegistro = true;
     this.vistaBotonEdicion = false;
     
-    this.tipoFrm = 'Nuevo Tipo de Producto' 
+    this.tipoFrm = 'Nueva Presentación' 
     this.vistaRegistro = true;
 
     this.cancelar();
@@ -156,9 +156,9 @@ export class TipoProductoComponent implements OnInit {
 
   cancelar() {
 
-    this.tipoProducto = new TipoProducto();
+    this.presentacionClass = new Presentacion();
 
-    this.tipo = '';
+    this.presentacion = '';
     this.clsEstado = null;
 
     this.setFocusTipo();
@@ -170,23 +170,23 @@ export class TipoProductoComponent implements OnInit {
 
   }
 
-  editar(data: TipoProducto){
-    this.tipoProducto = data;
+  editar(data:Presentacion){
+    this.presentacionClass = data;
 
     this.vistaBotonRegistro = false;
     this.vistaBotonEdicion = true;
 
-    this.tipo = this.tipoProducto.tipo;
-    this.clsEstado =  (this.tipoProducto.activo === 1) ?  {name: "Activo", code: this.tipoProducto.activo} : {name: "Inactivo", code: this.tipoProducto.activo};
+    this.presentacion = this.presentacionClass.presentacion;
+    this.clsEstado =  (this.presentacionClass.activo === 1) ?  {name: "Activo", code: this.presentacionClass.activo} : {name: "Inactivo", code: this.presentacionClass.activo};
 
-    this.tipoFrm = 'Editar Tipo de Producto' 
+    this.tipoFrm = 'Editar Presentación' 
 
     this.vistaRegistro = true;
 
     this.setFocusTipo();
   }
 
-  eliminar(data: TipoProducto, event: Event){
+  eliminar(data:Presentacion, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -244,15 +244,15 @@ export class TipoProductoComponent implements OnInit {
     
     this.vistaCarga = true;
 
-    this.tipoProducto.tipo = this.tipo.toString().trim();
-    this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    this.presentacionClass.presentacion = this.presentacion.toString().trim();
+    this.presentacionClass.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.tipoProductoService.registrar(this.tipoProducto).subscribe(() => {
+    this.presentacionService.registrar(this.presentacionClass).subscribe(() => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha registrado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Presentación se ha registrado satisfactoriamente'});
    });
 
   }
@@ -260,44 +260,44 @@ export class TipoProductoComponent implements OnInit {
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.tipoProducto.tipo = this.tipo.toString().trim();
-    this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    this.presentacionClass.presentacion = this.presentacion.toString().trim();
+    this.presentacionClass.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.tipoProductoService.modificar(this.tipoProducto).subscribe(() => {
+    this.presentacionService.modificar(this.presentacionClass).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha editado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Presentación se ha editado satisfactoriamente'});
    });
 
   }
 
-  eliminarConfirmado(data: TipoProducto){
+  eliminarConfirmado(data:Presentacion){
     this.vistaCarga = true;
-    this.tipoProductoService.eliminar(data.id).subscribe(() => {
+    this.presentacionService.eliminar(data.id).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
         this.page--;
       }
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha eliminado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Presentación se ha eliminado satisfactoriamente'});
    });
 
   }
 
 
-  alta(data: TipoProducto, event: Event){
+  alta(data:Presentacion, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
-      message: '¿Está seguro de Activar el tipo de producto?',
+      message: '¿Está seguro de Activar la presentación?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Activación',
       accept: () => {
-        let msj : string = 'El tipo de producto se ha activado satisfactoriamente';
+        let msj : string = 'La Presentación se ha activado satisfactoriamente';
         let valor: number = 1;
        this.altaBaja(data, valor, msj);
       },
@@ -307,15 +307,15 @@ export class TipoProductoComponent implements OnInit {
     
   }
 
-  baja(data: TipoProducto, event: Event){
+  baja(data:Presentacion, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
-      message: '¿Está seguro de Desactivar el registro?',
+      message: '¿Está seguro de Desactivar la presentación?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Desactivación',
       accept: () => {
-        let msj : string = 'El tipo de producto se ha desactivado satisfactoriamente';
+        let msj : string = 'La Presentación se ha desactivado satisfactoriamente';
         let valor: number = 0;
         this.altaBaja(data, valor, msj);
       },
@@ -325,15 +325,14 @@ export class TipoProductoComponent implements OnInit {
     
   }
 
-  altaBaja(data: TipoProducto, valor: number, msj: string){
+  altaBaja(data:Presentacion, valor: number, msj: string){
     //this.vistaCarga = true;
     
-    this.tipoProductoService.altaBaja(data.id, valor).subscribe(() => {
+    this.presentacionService.altaBaja(data.id, valor).subscribe(() => {
       this.loading = true; 
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
    });
-
 
   }
 

@@ -11,13 +11,13 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-            <h4>Gestión de Tipos de Productos</h4>
+            <h4>Gestión de Bancos</h4>
             <div class="p-fluid">
-                <blockquote>Aquí puede gestionar los tipos de productos que desee definir, un tipo de producto es similar a una categoría de producto, sirve para que pueda tener un mejor orden de los los productos</blockquote>
+                <blockquote>Aquí puede gestionar los bancos que desee definir, los bancos permitiran registrar los pagos con depósitos bancarios o cheques</blockquote>
             </div>
             <br>
     
-            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Tipo de Producto" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Banco" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
     
         </div>
     </div>
@@ -29,9 +29,16 @@
             <div class="p-fluid box">
 
                 <div class="p-field p-grid">
-                    <label for="tipo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Tipo de Producto</label>
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Banco</label>
                     <div class="p-col-12 p-md-10">
-                        <input id="tipo" type="text" pInputText [(ngModel)]="tipo" #inputTipo maxLength="250">
+                        <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre maxLength="250">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="dir" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Dirección del Banco</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="dir" type="text" pInputText [(ngModel)]="dir" #inputNombre maxLength="250">
                     </div>
                 </div>
 
@@ -56,36 +63,48 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-             <h5>Listado de Tipos de Productos Registrados</h5>
-        <!-- <div class="p-mb-3">
+             <h5>Listado de Bancos Registrados</h5>
+       <!-- <div class="p-mb-3">
             <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
             <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
             <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
         </div>-->
-        <p-table [value]="tipoProductos"  [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
-        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
+
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+        <p-table [value]="bancos" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
             <ng-template pTemplate="header">
                 <tr>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 71%; color:white;">Tipo de Producto</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 35%; color:white;">Banco</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 36%; color:white;">Dirección</th>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Estado</th>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 14%; color:white;">Gestión</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-tipoProductos let-rowIndex="rowIndex" >
+            <ng-template pTemplate="body" let-bancos let-rowIndex="rowIndex" >
                 <tr>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{tipoProductos.tipo}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{bancos.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{bancos.dir}}</td>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;"><span class="p-column-title">Estado</span>
-                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="tipoProductos.activo === 1" value="Activo"></p-tag>
-                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="tipoProductos.activo === 0" value="Inactivo"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="bancos.activo === 1" value="Activo"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="bancos.activo === 0" value="Inactivo"></p-tag>
                     </td>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
     
-                        <button (click)="editar(tipoProductos, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        <button *ngIf="tipoProductos.borrado === 0" (click)="eliminar(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        <button *ngIf="tipoProductos.activo === 0" (click)="alta(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        <button *ngIf="tipoProductos.activo === 1" (click)="baja(tipoProductos , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Tipo de Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button (click)="editar(bancos, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Banco" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="bancos.borrado === 0" (click)="eliminar(bancos , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Banco" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="bancos.activo === 0" (click)="alta(bancos , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Banco" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="bancos.activo === 1" (click)="baja(bancos , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Banco" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
                         
                     </td>
                 </tr>

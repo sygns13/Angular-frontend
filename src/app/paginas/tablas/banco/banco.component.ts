@@ -1,27 +1,27 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
-import { TipoProductoService } from '../../../_service/tipo_producto.service';
+import {BancoService } from '../../../_service/banco.service';
 import { switchMap } from 'rxjs/operators';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Message} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
-import { TipoProducto } from '../../../_model/tipo_producto';
+import {Banco } from '../../../_model/banco';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
-  selector: 'app-tipoproducto',
-  templateUrl: './tipoproducto.component.html',
-  styleUrls: ['./tipoproducto.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  selector: 'app-banco',
+  templateUrl: './banco.component.html',
+  styleUrls: ['./banco.component.scss']
 })
-export class TipoProductoComponent implements OnInit {
+export class BancoComponent implements OnInit {
 
-  @ViewChild('inputTipo', { static: false }) inputTipo: ElementRef;
+  @ViewChild('inputNombre', { static: false }) inputNombre: ElementRef;
 
   vistaRegistro: boolean = false;
 
 
-  tipo: String = '';
+  nombre: String = '';
+  dir: String = '';
   clsEstado: any = null;
 
   estados: any[] = [
@@ -30,7 +30,7 @@ export class TipoProductoComponent implements OnInit {
   ];
 
 
-  tipoProducto = new TipoProducto();
+  banco = new Banco();
 
   page: number = 0;
   first: number = 0;
@@ -42,12 +42,12 @@ export class TipoProductoComponent implements OnInit {
   totalRecords: number = 0;
   numberElements: number = 0;
 
-  tipoProductos: any[] = [];
+  bancos: any[] = [];
 
   msgs: Message[] = [];
   position: string;
 
-  tipoFrm: String = 'Nuevo Tipo de Producto';
+  tipoFrm: String = 'Nuevo Banco';
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
   vistaCarga : boolean = true;
@@ -56,11 +56,11 @@ export class TipoProductoComponent implements OnInit {
   txtBuscar: String = '';
 
 
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private tipoProductoService: TipoProductoService,
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private bancoService:BancoService,
                 private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
-        { label: 'Gestión de Tipos de Productos', routerLink: ['/tablas/tipoProducto'] }
+        { label: 'Gestión de Bancos', routerLink: ['/tablas/banco'] }
     ]);
 
 }
@@ -98,17 +98,17 @@ export class TipoProductoComponent implements OnInit {
   setFocusTipo() {    
 
     this.changeDetectorRef.detectChanges();
-    this.inputTipo.nativeElement.focus();
+    this.inputNombre.nativeElement.focus();
 
   }
 
   //Carga de Data
-/*
+  /*
   listarMain() {
 
-    this.tipoProductoService.listar().subscribe(data => {
+    this.bancoService.listar().subscribe(data => {
       
-      this.tipoProductos = data;
+      this.bancos = data;
     });
   }*/
 
@@ -123,8 +123,8 @@ export class TipoProductoComponent implements OnInit {
 
   listarPageMain(p: number, s:number) {
 
-    this.tipoProductoService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
-      this.tipoProductos = data.content;
+    this.bancoService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
+      this.bancos = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
       this.numberElements = data.numberOfElements;
@@ -147,8 +147,7 @@ export class TipoProductoComponent implements OnInit {
 
     this.vistaBotonRegistro = true;
     this.vistaBotonEdicion = false;
-    
-    this.tipoFrm = 'Nuevo Tipo de Producto' 
+    this.tipoFrm = 'Nuevo Banco' 
     this.vistaRegistro = true;
 
     this.cancelar();
@@ -156,9 +155,10 @@ export class TipoProductoComponent implements OnInit {
 
   cancelar() {
 
-    this.tipoProducto = new TipoProducto();
+    this.banco = new Banco();
 
-    this.tipo = '';
+    this.nombre = '';
+    this.dir = '';
     this.clsEstado = null;
 
     this.setFocusTipo();
@@ -167,26 +167,23 @@ export class TipoProductoComponent implements OnInit {
 
   cerrar(){
     this.vistaRegistro = false;
-
   }
 
-  editar(data: TipoProducto){
-    this.tipoProducto = data;
+  editar(data:Banco){
+    this.banco = data;
 
     this.vistaBotonRegistro = false;
     this.vistaBotonEdicion = true;
-
-    this.tipo = this.tipoProducto.tipo;
-    this.clsEstado =  (this.tipoProducto.activo === 1) ?  {name: "Activo", code: this.tipoProducto.activo} : {name: "Inactivo", code: this.tipoProducto.activo};
-
-    this.tipoFrm = 'Editar Tipo de Producto' 
-
+    this.nombre = this.banco.nombre;
+    this.dir = this.banco.dir;
+    this.clsEstado =  (this.banco.activo === 1) ?  {name: "Activo", code: this.banco.activo} : {name: "Inactivo", code: this.banco.activo};
+    this.tipoFrm = 'Editar Banco' 
     this.vistaRegistro = true;
 
     this.setFocusTipo();
   }
 
-  eliminar(data: TipoProducto, event: Event){
+  eliminar(data:Banco, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -244,96 +241,105 @@ export class TipoProductoComponent implements OnInit {
     
     this.vistaCarga = true;
 
-    this.tipoProducto.tipo = this.tipo.toString().trim();
-    this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    this.banco.nombre = this.nombre.toString().trim();
+    this.banco.dir = this.dir.toString().trim();
+    this.banco.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.tipoProductoService.registrar(this.tipoProducto).subscribe(() => {
+    this.bancoService.registrar(this.banco).subscribe(() => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha registrado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha registrado satisfactoriamente'});
    });
-
   }
 
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.tipoProducto.tipo = this.tipo.toString().trim();
-    this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
-
-    this.tipoProductoService.modificar(this.tipoProducto).subscribe(() => {
+    this.banco.nombre = this.nombre.toString().trim();
+    this.banco.dir = this.dir.toString().trim();
+    this.banco.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    this.bancoService.modificar(this.banco).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha editado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha editado satisfactoriamente'});
    });
-
   }
 
-  eliminarConfirmado(data: TipoProducto){
+  eliminarConfirmado(data:Banco){
     this.vistaCarga = true;
-    this.tipoProductoService.eliminar(data.id).subscribe(() => {
+    this.bancoService.eliminar(data.id).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
         this.page--;
       }
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha eliminado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha eliminado satisfactoriamente'});
    });
-
   }
+  
 
-
-  alta(data: TipoProducto, event: Event){
+  alta(data:Banco, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
-      message: '¿Está seguro de Activar el tipo de producto?',
+      message: '¿Está seguro de Activar el banco?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Activación',
       accept: () => {
-        let msj : string = 'El tipo de producto se ha activado satisfactoriamente';
+        let msj : string = 'El Banco se ha activado satisfactoriamente';
         let valor: number = 1;
-       this.altaBaja(data, valor, msj);
-      },
-      reject: () => {
-      }
-  });
+        this.altaBaja(data, valor, msj);
+        },
+        reject: () => {
+        }
+    });
     
   }
 
-  baja(data: TipoProducto, event: Event){
+  baja(data:Banco, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
-      message: '¿Está seguro de Desactivar el registro?',
+      message: '¿Está seguro de Desactivar el banco?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Desactivación',
       accept: () => {
-        let msj : string = 'El tipo de producto se ha desactivado satisfactoriamente';
+        let msj : string = 'El Banco se ha desactivado satisfactoriamente';
         let valor: number = 0;
         this.altaBaja(data, valor, msj);
-      },
-      reject: () => {
-      }
-  });
+        },
+        reject: () => {
+        }
+    });
     
   }
 
-  altaBaja(data: TipoProducto, valor: number, msj: string){
+  /*
+  altaBaja(data:Banco, valor: number, msj: string){
     //this.vistaCarga = true;
     
-    this.tipoProductoService.altaBaja(data.id, valor).subscribe(() => {
-      this.loading = true; 
-      this.listarPageMain(this.page, this.rows);
+    this.bancoService.altaBaja(data.id, valor).pipe(switchMap(() => {
+      return this.bancoService.listar();
+    })).subscribe(data => {
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+      this.bancos = data;
+      //this.vistaCarga = false;
+    });
 
+  }*/
+
+  altaBaja(data:Banco, valor: number, msj: string){
+    this.bancoService.altaBaja(data.id, valor).subscribe(() => {
+       this.loading = true; 
+       this.listarPageMain(this.page, this.rows);
+       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
+    });
 
   }
 

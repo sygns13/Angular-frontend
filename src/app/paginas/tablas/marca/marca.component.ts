@@ -1,27 +1,27 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
-import { TipoProductoService } from '../../../_service/tipo_producto.service';
+import {MarcaService } from '../../../_service/marca.service';
 import { switchMap } from 'rxjs/operators';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Message} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
-import { TipoProducto } from '../../../_model/tipo_producto';
+import {Marca } from '../../../_model/marca';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
-  selector: 'app-tipoproducto',
-  templateUrl: './tipoproducto.component.html',
-  styleUrls: ['./tipoproducto.component.scss'],
+  selector: 'app-marca',
+  templateUrl: './marca.component.html',
+  styleUrls: ['./marca.component.scss'],
   providers: [ConfirmationService, MessageService]
 })
-export class TipoProductoComponent implements OnInit {
+export class MarcaComponent implements OnInit {
 
-  @ViewChild('inputTipo', { static: false }) inputTipo: ElementRef;
+  @ViewChild('inputNombre', { static: false }) inputNombre: ElementRef;
 
   vistaRegistro: boolean = false;
 
 
-  tipo: String = '';
+  nombre: String = '';
   clsEstado: any = null;
 
   estados: any[] = [
@@ -30,7 +30,7 @@ export class TipoProductoComponent implements OnInit {
   ];
 
 
-  tipoProducto = new TipoProducto();
+  marca = new Marca();
 
   page: number = 0;
   first: number = 0;
@@ -42,12 +42,12 @@ export class TipoProductoComponent implements OnInit {
   totalRecords: number = 0;
   numberElements: number = 0;
 
-  tipoProductos: any[] = [];
+  marcas: any[] = [];
 
   msgs: Message[] = [];
   position: string;
 
-  tipoFrm: String = 'Nuevo Tipo de Producto';
+  tipoFrm: String = 'Nueva Marca';
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
   vistaCarga : boolean = true;
@@ -56,11 +56,11 @@ export class TipoProductoComponent implements OnInit {
   txtBuscar: String = '';
 
 
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private tipoProductoService: TipoProductoService,
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private marcaService:MarcaService,
                 private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
-        { label: 'Gestión de Tipos de Productos', routerLink: ['/tablas/tipoProducto'] }
+        { label: 'Gestión de Marcas', routerLink: ['/tablas/marca'] }
     ]);
 
 }
@@ -87,7 +87,6 @@ export class TipoProductoComponent implements OnInit {
   }
 
   isLastPage(): boolean {
-      //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
       return this.isLast;
   }
 
@@ -98,7 +97,7 @@ export class TipoProductoComponent implements OnInit {
   setFocusTipo() {    
 
     this.changeDetectorRef.detectChanges();
-    this.inputTipo.nativeElement.focus();
+    this.inputNombre.nativeElement.focus();
 
   }
 
@@ -106,9 +105,9 @@ export class TipoProductoComponent implements OnInit {
 /*
   listarMain() {
 
-    this.tipoProductoService.listar().subscribe(data => {
+    this.marcaService.listar().subscribe(data => {
       
-      this.tipoProductos = data;
+      this.marcas = data;
     });
   }*/
 
@@ -123,8 +122,8 @@ export class TipoProductoComponent implements OnInit {
 
   listarPageMain(p: number, s:number) {
 
-    this.tipoProductoService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
-      this.tipoProductos = data.content;
+    this.marcaService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
+      this.marcas = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
       this.numberElements = data.numberOfElements;
@@ -140,6 +139,7 @@ export class TipoProductoComponent implements OnInit {
     this.listarPageMain(this.page , this.rows);
   }
 
+
   //Funciones crud
 
 
@@ -148,7 +148,7 @@ export class TipoProductoComponent implements OnInit {
     this.vistaBotonRegistro = true;
     this.vistaBotonEdicion = false;
     
-    this.tipoFrm = 'Nuevo Tipo de Producto' 
+    this.tipoFrm = 'Nueva Marca' 
     this.vistaRegistro = true;
 
     this.cancelar();
@@ -156,9 +156,9 @@ export class TipoProductoComponent implements OnInit {
 
   cancelar() {
 
-    this.tipoProducto = new TipoProducto();
+    this.marca = new Marca();
 
-    this.tipo = '';
+    this.nombre = '';
     this.clsEstado = null;
 
     this.setFocusTipo();
@@ -170,23 +170,23 @@ export class TipoProductoComponent implements OnInit {
 
   }
 
-  editar(data: TipoProducto){
-    this.tipoProducto = data;
+  editar(data:Marca){
+    this.marca = data;
 
     this.vistaBotonRegistro = false;
     this.vistaBotonEdicion = true;
 
-    this.tipo = this.tipoProducto.tipo;
-    this.clsEstado =  (this.tipoProducto.activo === 1) ?  {name: "Activo", code: this.tipoProducto.activo} : {name: "Inactivo", code: this.tipoProducto.activo};
+    this.nombre = this.marca.nombre;
+    this.clsEstado =  (this.marca.activo === 1) ?  {name: "Activo", code: this.marca.activo} : {name: "Inactivo", code: this.marca.activo};
 
-    this.tipoFrm = 'Editar Tipo de Producto' 
+    this.tipoFrm = 'Editar Marca' 
 
     this.vistaRegistro = true;
 
     this.setFocusTipo();
   }
 
-  eliminar(data: TipoProducto, event: Event){
+  eliminar(data:Marca, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -244,60 +244,72 @@ export class TipoProductoComponent implements OnInit {
     
     this.vistaCarga = true;
 
-    this.tipoProducto.tipo = this.tipo.toString().trim();
-    this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    this.marca.nombre = this.nombre.toString().trim();
+    this.marca.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.tipoProductoService.registrar(this.tipoProducto).subscribe(() => {
+    this.marcaService.registrar(this.marca).subscribe(() => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha registrado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Marca se ha registrado satisfactoriamente'});
    });
+    
+    
+    /*
+    pipe(switchMap(() => {
+      return this.marcaService.listar();
+    })).subscribe(data => {
+      this.vistaCarga = false;
+      //this.marcaService.marcas.next(data);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail:'La Marca se ha registrado satisfactoriamente'});
+      this.cancelar();
+      this.marcas = data;
+    });*/
 
   }
 
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.tipoProducto.tipo = this.tipo.toString().trim();
-    this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    this.marca.nombre = this.nombre.toString().trim();
+    this.marca.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.tipoProductoService.modificar(this.tipoProducto).subscribe(() => {
+    this.marcaService.modificar(this.marca).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha editado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Marca se ha editado satisfactoriamente'});
    });
 
   }
 
-  eliminarConfirmado(data: TipoProducto){
+  eliminarConfirmado(data:Marca){
     this.vistaCarga = true;
-    this.tipoProductoService.eliminar(data.id).subscribe(() => {
+    this.marcaService.eliminar(data.id).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
         this.page--;
       }
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha eliminado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Marca se ha eliminado satisfactoriamente'});
    });
 
   }
 
 
-  alta(data: TipoProducto, event: Event){
+  alta(data:Marca, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
-      message: '¿Está seguro de Activar el tipo de producto?',
+      message: '¿Está seguro de Activar la marca?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Activación',
       accept: () => {
-        let msj : string = 'El tipo de producto se ha activado satisfactoriamente';
+        let msj : string = 'La Marca se ha activado satisfactoriamente';
         let valor: number = 1;
        this.altaBaja(data, valor, msj);
       },
@@ -307,15 +319,15 @@ export class TipoProductoComponent implements OnInit {
     
   }
 
-  baja(data: TipoProducto, event: Event){
+  baja(data:Marca, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
-      message: '¿Está seguro de Desactivar el registro?',
+      message: '¿Está seguro de Desactivar la marca?',
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Desactivación',
       accept: () => {
-        let msj : string = 'El tipo de producto se ha desactivado satisfactoriamente';
+        let msj : string = 'La Marca se ha desactivado satisfactoriamente';
         let valor: number = 0;
         this.altaBaja(data, valor, msj);
       },
@@ -325,15 +337,14 @@ export class TipoProductoComponent implements OnInit {
     
   }
 
-  altaBaja(data: TipoProducto, valor: number, msj: string){
+  altaBaja(data:Marca, valor: number, msj: string){
     //this.vistaCarga = true;
     
-    this.tipoProductoService.altaBaja(data.id, valor).subscribe(() => {
+    this.marcaService.altaBaja(data.id, valor).subscribe(() => {
       this.loading = true; 
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
    });
-
 
   }
 
