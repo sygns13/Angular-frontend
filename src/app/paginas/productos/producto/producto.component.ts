@@ -6,6 +6,11 @@ import { Producto } from './../../../_model/producto';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Message} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
+import { LazyLoadEvent } from 'primeng/api';
+import { TipoProducto } from './../../../_model/tipo_producto';
+import { Marca } from './../../../_model/marca';
+import { Presentacion } from './../../../_model/presentacion';
+
 
 @Component({
   selector: 'app-producto',
@@ -27,6 +32,17 @@ export class ProductoComponent implements OnInit {
     {name: 'Inactivo', code: '0'}
   ];
 
+  prioridades: any[] = [
+    {name: 'Alta', code: '1'},
+    {name: 'Normal', code: '2'},
+    {name: 'baja', code: '3'}
+  ];
+
+  tiposISC: any[] = [
+    {name: 'Porcentual % (0 a 100)', code: '1'},
+    {name: 'Valor Fijo', code: '2'}
+  ];
+
   clsTipoProducto: any = null;
   clsMarca: any = null;
   clsPresentacion: any = null;
@@ -38,12 +54,12 @@ export class ProductoComponent implements OnInit {
   codigoUnidad: string = '';
   codigoProducto: string = '';
   composicion: string = '';
-  prioridad: string = '';
+  prioridad: any =  {name: 'Normal', code: '2'};
   ubicacion: string = '';
-  activoLotes: number = null;
-  afectoIsc: number = null;
-  tipoTasaIsc: number = null;
-  tasaIsc: number = null;
+  activoLotes: number = 1;
+  afectoIsc: number = 0;
+  tipoTasaIsc: any = null;
+  tasaIsc: number = 1;
   afectoIgv: number = null;
   activo: any = null;
 
@@ -51,8 +67,15 @@ export class ProductoComponent implements OnInit {
 
   productos: any[] = [];
 
-  first = 0;
-  rows = 10;
+  page: number = 0;
+  first: number = 0;
+  last: number = 0;
+  rows: number = 10;
+
+  isFirst: boolean = true;
+  isLast: boolean = false;
+  totalRecords: number = 0;
+  numberElements: number = 0;
 
   msgs: Message[] = [];
   position: string;
@@ -61,6 +84,17 @@ export class ProductoComponent implements OnInit {
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
   vistaCarga : boolean = true;
+
+  loading: boolean = true; 
+  txtBuscar: String = '';
+
+  selectedProduct: Producto;
+  verAsignarUnidad: boolean = false;
+  verGestionStock: boolean = false;
+
+  vistaCarga2: boolean = true;
+
+  message:string;
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private productoService: ProductoService,
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
@@ -75,29 +109,33 @@ export class ProductoComponent implements OnInit {
     this.getTipoProductos();
     this.getMarcas();
     this.getPresentaciones();
-    this.listarMain();
+    this.listarPageMain(this.page, this.rows);
     this.primengConfig.ripple = true;
     this.vistaCarga = false;
   }
 
   next() {
-    this.first = this.first + this.rows;
+    this.page++;
+    this.listarPageMain(this.page, this.rows);
   }
 
   prev() {
-      this.first = this.first - this.rows;
+      this.page--;
+      this.listarPageMain(this.page, this.rows);
   }
 
   reset() {
       this.first = 0;
+      this.listarPageMain(this.page, this.rows);
   }
 
   isLastPage(): boolean {
-      return this.productos ? this.first > (this.productos.length - this.rows): true;
+      //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
+      return this.isLast;
   }
 
   isFirstPage(): boolean {
-      return this.productos ? this.first === 0 : true;
+      return this.isFirst;
   }
 
   setFocusNombre() {    
@@ -145,13 +183,43 @@ export class ProductoComponent implements OnInit {
     });
   }
 
+  /*
   listarMain() {
 
     this.productoService.listar().subscribe(data => {
       
       this.productos = data;
     });
+  }*/
+
+  loadData(event: LazyLoadEvent) { 
+    this.loading = true; 
+    this.rows = event.rows;
+    this.page = event.first / this.rows;
+
+    this.listarPageMain(this.page, this.rows);
+
   }
+
+  listarPageMain(p: number, s:number) {
+
+    this.productoService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
+      this.productos = data.content;
+      this.isFirst = data.first;
+      this.isLast = data.last;
+      this.numberElements = data.numberOfElements;
+      this.first = (p * s);
+      this.last = (p * s) + this.numberElements;
+      this.totalRecords = data.totalElements;
+      this.loading = false;
+    });
+  }
+
+  buscar(){
+    this.page = 0;
+    this.listarPageMain(this.page , this.rows);
+  }
+
 
   //Funciones crud
 
@@ -181,13 +249,13 @@ export class ProductoComponent implements OnInit {
     this.codigoUnidad = '';
     this.codigoProducto = '';
     this.composicion = '';
-    this.prioridad = '';
+    this.prioridad = {name: 'Normal', code: '2'};
     this.ubicacion = '';
-    this.activoLotes = null;
-    this.afectoIsc = null;
+    this.activoLotes = 1;
+    this.afectoIsc = 0;
     this.tipoTasaIsc = null;
     this.tasaIsc = null;
-    this.afectoIgv = null;
+    this.afectoIgv = 1;
     this.activo= null;
 
 
@@ -218,15 +286,32 @@ export class ProductoComponent implements OnInit {
     this.codigoUnidad = this.producto.codigoUnidad;
     this.codigoProducto = this.producto.codigoProducto;
     this.composicion = this.producto.composicion;
-    this.prioridad = this.producto.prioridad;
+
+    if(this.producto.prioridad == "1"){
+      this.prioridad = {name: "Alta", code: this.producto.prioridad};
+    }else if(this.producto.prioridad == "2"){
+      this.prioridad = {name: "Normal", code: this.producto.prioridad};
+    }else if(this.producto.prioridad == "3"){
+      this.prioridad = {name: "Baja", code: this.producto.prioridad};
+    }else{
+      this.prioridad = {name: "Normal", code: "2"};
+    }
+
+    if(this.producto.tipoTasaIsc == 1){
+      this.tipoTasaIsc = {name: "Porcentual % (0 a 100)", code: this.producto.tipoTasaIsc};
+    }else if(this.producto.tipoTasaIsc == 2){
+      this.tipoTasaIsc = {name: "Valor Fijo", code: this.producto.tipoTasaIsc};
+    }else{
+      this.tipoTasaIsc = null;
+    }
+
+
     this.ubicacion = this.producto.ubicacion;
     this.activoLotes = this.producto.activoLotes;
     this.afectoIsc = this.producto.afectoIsc;
-    this.tipoTasaIsc = this.producto.tipoTasaIsc;
     this.tasaIsc = this.producto.tasaIsc;
     this.afectoIgv = this.producto.afectoIgv;
     this.activo = this.producto.activo;
-
 
 
     this.activo =  (this.producto.activo === 1) ?  {name: "Activo", code: this.producto.activo} : {name: "Inactivo", code: this.producto.activo};
@@ -239,23 +324,6 @@ export class ProductoComponent implements OnInit {
 
   }
 
-  eliminar(data: Producto, event: Event){
-    this.confirmationService.confirm({
-      key: 'confirmDialog',
-      target: event.target,
-      message: '¿Está seguro de Eliminar el registro? - Nota: Este proceso no podrá ser revertido',
-      icon: 'pi pi-exclamation-triangle',
-      header: 'Confirmación Eliminación',
-      accept: () => {
-       //this.eliminarConfirmado(data);
-      },
-      reject: () => {
-      }
-  });
-    
-  }
-
-
   registrar(event: Event) {
     this.confirmationService.confirm({
         key: 'confirmDialog',
@@ -266,7 +334,7 @@ export class ProductoComponent implements OnInit {
         accept: () => {
           //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
          // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
-        // this.registrarConfirmado();
+          this.registrarConfirmado();
         },
         reject: () => {
          // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
@@ -284,34 +352,183 @@ export class ProductoComponent implements OnInit {
         accept: () => {
           //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
          // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
-        // this.editarConfirmado();
+          this.editarConfirmado();
         },
         reject: () => {
          // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
         }
     });
   }
-/*
+
+  eliminar(data:Producto, event: Event){
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Eliminar el registro? - Nota: Este proceso no podrá ser revertido',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Eliminación',
+      accept: () => {
+       this.eliminarConfirmado(data);
+      },
+      reject: () => {
+      }
+  });
+    
+  }
+
   registrarConfirmado(){
     
     this.vistaCarga = true;
 
+    let tipoProductoBase = new TipoProducto();
+    let marcaBase = new Marca();
+    let presentacionBase = new Presentacion();
+
+    tipoProductoBase.id = parseInt((this.clsTipoProducto != null) ? this.clsTipoProducto.code : "0");
+    marcaBase.id =  parseInt((this.clsMarca != null) ? this.clsMarca.code : "0");
+    presentacionBase.id =  parseInt((this.clsPresentacion != null) ? this.clsPresentacion.code : "0");
+
     this.producto.nombre = this.nombre.toString().trim();
-    this.producto.codigo = this.codigo.toString().trim();
-    this.producto.direccion = this.direccion.toString().trim();
-    this.producto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
-    this.producto.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
+    this.producto.tipoProducto = tipoProductoBase;
+    this.producto.marca = marcaBase;
+    this.producto.stockMinimo = this.stockMinimo;
+    this.producto.precioUnidad = this.precioUnidad;
+    this.producto.precioCompra = this.precioCompra;
+    this.producto.fecha = this.fecha.toString().trim();
+    this.producto.codigoUnidad = this.codigoProducto;
+    this.producto.codigoProducto = this.codigoProducto;
+    this.producto.presentacion = presentacionBase;
+    this.producto.composicion = this.composicion.toString().trim();
+    this.producto.prioridad = (this.prioridad != null) ? this.prioridad.code : "1";
+    this.producto.ubicacion = this.ubicacion.toString().trim();
+    this.producto.activoLotes = this.activoLotes;
+    this.producto.afectoIsc = this.afectoIsc;
+    this.producto.tipoTasaIsc = parseInt((this.tipoTasaIsc != null) ? this.tipoTasaIsc.code : 1);
+    this.producto.tasaIsc = this.tasaIsc;
+    this.producto.afectoIgv = this.afectoIgv;
+    this.producto.activo = parseInt((this.activo != null) ? this.activo.code : "1");
 
-    this.productoService.registrar(this.producto).pipe(switchMap(() => {
-      return this.productoService.listar();
-    })).subscribe(data => {
+    this.productoService.registrar(this.producto).subscribe(() => {
       this.vistaCarga = false;
-      //this.productoService.productos.next(data);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail:'El Producto se ha registrado satisfactoriamente'});
+      this.loading = true; 
       this.cancelar();
-      this.productos = data;
-    });
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Producto se ha registrado satisfactoriamente'});
+   });
 
-  }*/
+  }
+
+  editarConfirmado(){
+    this.vistaCarga = true;
+
+    let tipoProductoEdit = new Producto();
+    tipoProductoEdit = JSON.parse(JSON.stringify(this.producto));
+
+    let tipoProductoBase = new TipoProducto();
+    let marcaBase = new Marca();
+    let presentacionBase = new Presentacion();
+
+    tipoProductoBase.id = parseInt((this.clsTipoProducto != null) ? this.clsTipoProducto.code : "0");
+    marcaBase.id =  parseInt((this.clsMarca != null) ? this.clsMarca.code : "0");
+    presentacionBase.id =  parseInt((this.clsPresentacion != null) ? this.clsPresentacion.code : "0");
+
+
+    tipoProductoEdit.nombre = this.nombre.toString().trim();
+    tipoProductoEdit.tipoProducto = tipoProductoBase;
+    tipoProductoEdit.marca = marcaBase;
+    tipoProductoEdit.stockMinimo = this.stockMinimo;
+    tipoProductoEdit.precioUnidad = this.precioUnidad;
+    tipoProductoEdit.precioCompra = this.precioCompra;
+    tipoProductoEdit.fecha = this.fecha.toString().trim();
+    tipoProductoEdit.codigoUnidad = this.codigoProducto;
+    tipoProductoEdit.codigoProducto = this.codigoProducto;
+    tipoProductoEdit.presentacion = presentacionBase;
+    tipoProductoEdit.composicion = this.composicion.toString().trim();
+    tipoProductoEdit.prioridad = (this.prioridad != null) ? this.prioridad.code : "1";
+    tipoProductoEdit.ubicacion = this.ubicacion.toString().trim();
+    tipoProductoEdit.activoLotes = this.activoLotes;
+    tipoProductoEdit.afectoIsc = this.afectoIsc;
+    tipoProductoEdit.tipoTasaIsc = parseInt((this.tipoTasaIsc != null) ? this.tipoTasaIsc.code : 1);
+    tipoProductoEdit.tasaIsc = this.tasaIsc;
+    tipoProductoEdit.afectoIgv = this.afectoIgv;
+    tipoProductoEdit.activo = parseInt((this.activo != null) ? this.activo.code : "1");
+
+
+    this.productoService.modificar(tipoProductoEdit).subscribe(() => {
+      this.loading = true; 
+      this.vistaCarga = false;
+      this.cancelar();
+      this.cerrar();
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Producto se ha editado satisfactoriamente'});
+   });
+  }
+
+
+
+  eliminarConfirmado(data:Producto){
+    this.vistaCarga = true;
+    this.productoService.eliminar(data.id).subscribe(() => {
+      this.loading = true; 
+      this.vistaCarga = false;
+      if(this.numberElements <= 1 && this.page > 0){
+        this.page--;
+      }
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Producto se ha eliminado satisfactoriamente'});
+   });
+  }
+
+
+
+  //Funciones Componentes Hijos
+  gestionStocks(): void{
+
+    console.log(this.selectedProduct);
+
+  }
+
+  codigosVentaMayor(): void{
+    if(this.selectedProduct == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione un producto haciendo click en su fila correspondiente para registrar códigos por unidades'});
+
+    }else{
+      this.vistaCarga2 = false;
+      this.verAsignarUnidad  = true;
+    }
+  }
+
+  cerrarFormularioUnidadsProducto($event) {
+
+    
+     //productoCambiado: Producto = $event;
+     this.loading = true;
+
+     this.selectedProduct  = null;
+     this.verAsignarUnidad  = false;
+     this.vistaCarga2 = true;
+     this.listarPageMain(this.page, this.rows);
+  }
+
+  cerrarFormularioStocksProducto($event) {
+    this.message = $event
+  }
+
+
+
+
+
+
+
+  //Utilitarios
+  soloNumeros(e : any): boolean {
+    let key=e.charCode; 
+        if((key >= 48 && key <= 57) || (key==8) || (key==35) || (key==34) || (key==46)){
+            return true;
+        }
+        else{
+            e.preventDefault();
+        }
+  }
 
 }

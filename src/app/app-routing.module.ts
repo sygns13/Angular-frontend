@@ -12,6 +12,9 @@ import {PresentacionComponent} from './paginas/tablas/presentacion/presentacion.
 import {UnidadComponent} from './paginas/tablas/unidad/unidad.component';
 import {BancoComponent} from './paginas/tablas/banco/banco.component';
 
+//tablas almacen
+import {ProductoComponent} from './paginas/productos/producto/producto.component';
+
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
 import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
@@ -78,6 +81,12 @@ const routes: Routes = [
      {path: 'presentaciones', component: PresentacionComponent},
      {path: 'unidades', component: UnidadComponent},
      {path: 'bancos', component: BancoComponent},
+    ]
+  },
+  {
+    path: 'almacen', component: AppMainComponent,
+    children: [
+     {path: 'productos', component: ProductoComponent}
     ]
   }
 ];

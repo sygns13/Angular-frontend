@@ -42,4 +42,8 @@ export class ProductoService extends GenericService<Producto> {
     return this.http.get<Presentacion[]>(`${this.urlGetPresentacion}`);
   }
 
+  listarPageable(p: number, s:number, txtBuscar:String){
+    return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
+  }
+
 }

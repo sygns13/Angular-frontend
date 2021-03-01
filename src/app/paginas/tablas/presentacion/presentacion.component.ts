@@ -260,10 +260,13 @@ export class PresentacionComponent implements OnInit {
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.presentacionClass.presentacion = this.presentacion.toString().trim();
-    this.presentacionClass.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    let presentacionEdit = new Presentacion();
+    presentacionEdit = JSON.parse(JSON.stringify(this.presentacionClass));
 
-    this.presentacionService.modificar(this.presentacionClass).subscribe(() => {
+    presentacionEdit.presentacion = this.presentacion.toString().trim();
+    presentacionEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+
+    this.presentacionService.modificar(presentacionEdit).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();

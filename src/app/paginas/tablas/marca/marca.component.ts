@@ -272,10 +272,13 @@ export class MarcaComponent implements OnInit {
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.marca.nombre = this.nombre.toString().trim();
-    this.marca.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    let marcaEdit = new Marca();
+    marcaEdit = JSON.parse(JSON.stringify(this.marca));
 
-    this.marcaService.modificar(this.marca).subscribe(() => {
+    marcaEdit.nombre = this.nombre.toString().trim();
+    marcaEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+
+    this.marcaService.modificar(marcaEdit).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();

@@ -260,10 +260,13 @@ export class TipoProductoComponent implements OnInit {
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.tipoProducto.tipo = this.tipo.toString().trim();
-    this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    let tipoProductoEdit = new TipoProducto();
+    tipoProductoEdit = JSON.parse(JSON.stringify(this.tipoProducto));
 
-    this.tipoProductoService.modificar(this.tipoProducto).subscribe(() => {
+    tipoProductoEdit.tipo = this.tipo.toString().trim();
+    tipoProductoEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+
+    this.tipoProductoService.modificar(tipoProductoEdit).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();

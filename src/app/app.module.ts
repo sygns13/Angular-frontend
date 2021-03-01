@@ -160,6 +160,10 @@ import { UnidadComponent } from './paginas/tablas/unidad/unidad.component';
 import { BancoComponent } from './paginas/tablas/banco/banco.component';
 import { ProductoComponent } from './paginas/productos/producto/producto.component';
 
+import { DecimalesPipe } from './_pipes/decimales.pipe';
+import { AsignarunidadesComponent } from './paginas/productos/asignarunidades/asignarunidades.component';
+import { StocksComponent } from './paginas/productos/stocks/stocks.component';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -308,7 +312,10 @@ import { ProductoComponent } from './paginas/productos/producto/producto.compone
         PresentacionComponent,
         UnidadComponent,
         BancoComponent,
-        ProductoComponent
+        ProductoComponent,
+        DecimalesPipe,
+        AsignarunidadesComponent,
+        StocksComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

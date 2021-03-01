@@ -257,10 +257,13 @@ export class BancoComponent implements OnInit {
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.banco.nombre = this.nombre.toString().trim();
-    this.banco.dir = this.dir.toString().trim();
-    this.banco.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
-    this.bancoService.modificar(this.banco).subscribe(() => {
+    let bancoEdit = new Banco();
+    bancoEdit = JSON.parse(JSON.stringify(this.banco));
+
+    bancoEdit.nombre = this.nombre.toString().trim();
+    bancoEdit.dir = this.dir.toString().trim();
+    bancoEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    this.bancoService.modificar(bancoEdit).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();

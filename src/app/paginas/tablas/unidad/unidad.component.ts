@@ -279,12 +279,15 @@ export class UnidadComponent implements OnInit {
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.unidad.nombre = this.nombre.toString().trim();
-    this.unidad.cantidad = +this.cantidad;
-    this.unidad.abreviatura = this.abreviatura.toString().trim();
-    this.unidad.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    let unidadEdit = new Unidad();
+    unidadEdit = JSON.parse(JSON.stringify(this.unidad));
 
-    this.unidadService.modificar(this.unidad).subscribe(() => {
+    unidadEdit.nombre = this.nombre.toString().trim();
+    unidadEdit.cantidad = +this.cantidad;
+    unidadEdit.abreviatura = this.abreviatura.toString().trim();
+    unidadEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+
+    this.unidadService.modificar(unidadEdit).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();

@@ -402,13 +402,16 @@ export class LocalComponent implements OnInit {
   editarConfirmado(){
     this.vistaCarga = true;
 
-    this.almacen.nombre = this.nombre.toString().trim();
-    this.almacen.codigo = this.codigo.toString().trim();
-    this.almacen.direccion = this.direccion.toString().trim();
-    this.almacen.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
-    this.almacen.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
+    let almacenEdit = new Almacen();
+    almacenEdit = JSON.parse(JSON.stringify(this.almacen));
 
-    this.almacenService.modificar(this.almacen).subscribe(() => {
+    almacenEdit.nombre = this.nombre.toString().trim();
+    almacenEdit.codigo = this.codigo.toString().trim();
+    almacenEdit.direccion = this.direccion.toString().trim();
+    almacenEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
+    almacenEdit.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
+
+    this.almacenService.modificar(almacenEdit).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
