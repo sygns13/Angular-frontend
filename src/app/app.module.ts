@@ -163,6 +163,8 @@ import { ProductoComponent } from './paginas/productos/producto/producto.compone
 import { DecimalesPipe } from './_pipes/decimales.pipe';
 import { AsignarunidadesComponent } from './paginas/productos/asignarunidades/asignarunidades.component';
 import { StocksComponent } from './paginas/productos/stocks/stocks.component';
+import { LeftpathPipe } from './_pipes/leftpath.pipe';
+import { PassfechavistaPipe } from './_pipes/passfechavista.pipe';
 
 @NgModule({
     imports: [
@@ -315,7 +317,9 @@ import { StocksComponent } from './paginas/productos/stocks/stocks.component';
         ProductoComponent,
         DecimalesPipe,
         AsignarunidadesComponent,
-        StocksComponent
+        StocksComponent,
+        LeftpathPipe,
+        PassfechavistaPipe
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

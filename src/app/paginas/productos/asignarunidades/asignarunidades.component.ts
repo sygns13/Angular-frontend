@@ -136,8 +136,8 @@ export class AsignarunidadesComponent implements OnInit {
 
     this.nombre = this.detalleUnidad.unidad.nombre;
     this.cantidad = this.detalleUnidad.unidad.cantidad;
-    this.precioUnidad =  this.detalleUnidad.precio;
-    this.precioCompra = this.detalleUnidad.costoCompra
+    this.precioUnidad =  this.mostrarNumeroMethod(this.detalleUnidad.precio);
+    this.precioCompra = this.mostrarNumeroMethod(this.detalleUnidad.costoCompra);
     this.codigoProducto = this.detalleUnidad.codigoUnidad;
 
     this.disabledBtnSave = false;
@@ -158,6 +158,13 @@ export class AsignarunidadesComponent implements OnInit {
   }
 
   mostrarNumeroMethod(value: any){  
+    if(value != null && value != undefined){
+      value=parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "");
+    }
+    return value;
+  }
+
+  mostrarNumeroMethodconComas(value: any){  
     if(value != null && value != undefined){
       value=parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -219,8 +226,8 @@ export class AsignarunidadesComponent implements OnInit {
     detalleUnidadEdit.almacenId = parseInt((this.clsAlmacen != null) ? this.clsAlmacen.code : null);
     detalleUnidadEdit.productoId = this.producto.id;
     detalleUnidadEdit.codigoUnidad = this.codigoProducto;
-    detalleUnidadEdit.precio = this.precioUnidad;
-    detalleUnidadEdit.costoCompra = this.precioCompra;
+    detalleUnidadEdit.precio = this.mostrarNumeroMethod(this.precioUnidad);
+    detalleUnidadEdit.costoCompra = this.mostrarNumeroMethod(this.precioCompra);
 
     this.asignarUnidadService.registrar(detalleUnidadEdit).subscribe(() => {
       this.vistaCarga = false;

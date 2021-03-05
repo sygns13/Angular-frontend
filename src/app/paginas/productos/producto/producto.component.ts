@@ -280,8 +280,8 @@ export class ProductoComponent implements OnInit {
 
     this.nombre = this.producto.nombre;
     this.stockMinimo = this.producto.stockMinimo;
-    this.precioUnidad = this.producto.precioUnidad;
-    this.precioCompra = this.producto.precioCompra;
+    this.precioUnidad = this.mostrarNumeroMethod(this.producto.precioUnidad);
+    this.precioCompra = this.mostrarNumeroMethod(this.producto.precioCompra);
     this.fecha = this.producto.fecha;
     this.codigoUnidad = this.producto.codigoUnidad;
     this.codigoProducto = this.producto.codigoProducto;
@@ -392,8 +392,8 @@ export class ProductoComponent implements OnInit {
     this.producto.tipoProducto = tipoProductoBase;
     this.producto.marca = marcaBase;
     this.producto.stockMinimo = this.stockMinimo;
-    this.producto.precioUnidad = this.precioUnidad;
-    this.producto.precioCompra = this.precioCompra;
+    this.producto.precioUnidad = this.mostrarNumeroMethod(this.precioUnidad);
+    this.producto.precioCompra = this.mostrarNumeroMethod(this.precioCompra);
     this.producto.fecha = this.fecha.toString().trim();
     this.producto.codigoUnidad = this.codigoProducto;
     this.producto.codigoProducto = this.codigoProducto;
@@ -437,8 +437,8 @@ export class ProductoComponent implements OnInit {
     tipoProductoEdit.tipoProducto = tipoProductoBase;
     tipoProductoEdit.marca = marcaBase;
     tipoProductoEdit.stockMinimo = this.stockMinimo;
-    tipoProductoEdit.precioUnidad = this.precioUnidad;
-    tipoProductoEdit.precioCompra = this.precioCompra;
+    tipoProductoEdit.precioUnidad = this.mostrarNumeroMethod(this.precioUnidad);
+    tipoProductoEdit.precioCompra = this.mostrarNumeroMethod(this.precioCompra);
     tipoProductoEdit.fecha = this.fecha.toString().trim();
     tipoProductoEdit.codigoUnidad = this.codigoProducto;
     tipoProductoEdit.codigoProducto = this.codigoProducto;
@@ -484,7 +484,13 @@ export class ProductoComponent implements OnInit {
   //Funciones Componentes Hijos
   gestionStocks(): void{
 
-    console.log(this.selectedProduct);
+    if(this.selectedProduct == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione un producto haciendo click en su fila correspondiente para inicializar Stocks'});
+
+    }else{
+      this.vistaCarga2 = false;
+      this.verGestionStock  = true;
+    }
 
   }
 
@@ -511,7 +517,13 @@ export class ProductoComponent implements OnInit {
   }
 
   cerrarFormularioStocksProducto($event) {
-    this.message = $event
+    //productoCambiado: Producto = $event;
+    this.loading = true;
+
+    this.selectedProduct  = null;
+    this.verGestionStock  = false;
+    this.vistaCarga2 = true;
+    this.listarPageMain(this.page, this.rows);
   }
 
 
@@ -529,6 +541,20 @@ export class ProductoComponent implements OnInit {
         else{
             e.preventDefault();
         }
+  }
+
+  mostrarNumeroMethod(value: any){  
+    if(value != null && value != undefined){
+      value=parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "");
+    }
+    return value;
+  }
+
+  mostrarNumeroMethodconComas(value: any){  
+    if(value != null && value != undefined){
+      value=parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    return value;
   }
 
 }
