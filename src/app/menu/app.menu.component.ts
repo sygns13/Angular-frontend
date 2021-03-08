@@ -40,9 +40,9 @@ export class AppMenuComponent implements OnInit {
                 label: 'Gestión de Almacén', icon: 'pi pi-fw pi-inbox',
                 items: [
                     {label: 'Catálogo de Productos', icon: 'pi pi-fw pi-camera', routerLink: ['/almacen/productos']},
-                    {label: 'Inventario', icon: 'pi pi-fw pi-briefcase', routerLink: ['utilities/display']},
+                    {label: 'Inventario', icon: 'pi pi-fw pi-briefcase', routerLink: ['/almacen/inventario']},
                     {label: 'Gestión de Lotes y Stock', icon: 'pi pi-fw pi-sort', routerLink: ['utilities/elevation']},
-                    {label: 'Movimientos Libres de Productos', icon: 'pi pi-fw pi-undo', routerLink: ['utilities/flexbox']},
+                   /* {label: 'Movimientos Libres de Productos', icon: 'pi pi-fw pi-undo', routerLink: ['utilities/flexbox']}, */
                     {label: 'Productos Bajos de Stock', icon: 'pi pi-fw pi-angle-double-down', routerLink: ['utilities/icons']},
                     {label: 'productos Vencidos', icon: 'pi pi-fw pi-backward', routerLink: ['utilities/text']},
                 ]

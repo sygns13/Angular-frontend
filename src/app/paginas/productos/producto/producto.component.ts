@@ -35,7 +35,7 @@ export class ProductoComponent implements OnInit {
   prioridades: any[] = [
     {name: 'Alta', code: '1'},
     {name: 'Normal', code: '2'},
-    {name: 'baja', code: '3'}
+    {name: 'Baja', code: '3'}
   ];
 
   tiposISC: any[] = [

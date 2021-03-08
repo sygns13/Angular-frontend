@@ -1,0 +1,286 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+</div>
+
+<p-toast></p-toast>
+
+<div class="p-grid">
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Gestión de Productos</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede gestionar los productos que desee definir, los productos permitiran registrar Stocks por Local y poder realizar transacciones ventas, compras, salidas de almacén, e ingresos de los mismos</blockquote>
+            </div>
+            <br>
+
+
+
+  
+            <button (click)="verFiltros()" pButton pRipple type="button" icon="pi pi-plus" label="Ver Filtros de Datos" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+            <button (click)="exportarInventarioXls()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Inventario Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Inventario PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexXls()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+
+
+            <ng-template #filtrosDatos [ngIf]="vistaRegistro">
+
+                <br>
+                <br>
+
+                <h5>{{tipoFrm}}</h5>
+                <div class="p-fluid box">
+
+                    <div class="p-field p-grid">
+                        <label for="tipoProducto" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Producto</label>
+                        <div class="p-col-12 p-md-10">
+                            <span class="p-float-label">
+                                <p-dropdown #tinputclsTipoProducto inputId="tipoProducto" [options]="tipoProductos" [(ngModel)]="clsTipoProducto" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                    <label>TODOS</label>
+                            </span>
+                        </div>
+                    </div>
+    
+                    <div class="p-field p-grid">
+                        <label for="marca" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Marca</label>
+                        <div class="p-col-12 p-md-10">
+                            <span class="p-float-label">
+                                <p-dropdown #inputclsMarca inputId="marca" [options]="marcas" [(ngModel)]="clsMarca" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                    <label>TODOS</label>
+                            </span>
+                        </div>
+                    </div>
+
+                <div class="p-field p-grid">
+                    <label for="marca" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Presentación de Producto</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown #inputclsPresentacion inputId="marca" [options]="presentaciones" [(ngModel)]="clsPresentacion" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>TODOS</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Código de Producto</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="codigo" type="text" pInputText [(ngModel)]="codigoProducto" #inputCodigo maxLength="200" placeholder="Ingrese Datos para Aplicar el Filtro">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Producto</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre maxLength="150" placeholder="Ingrese Datos para Aplicar el Filtro">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="composicion" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Composición del Producto</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="composicion" type="text" pInputText [(ngModel)]="composicion" #inputComposicion maxLength="500" placeholder="Ingrese Datos para Aplicar el Filtro">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="prioridad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Prioridad</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #inputPrioridad inputId="prioridad" [options]="prioridades" [(ngModel)]="prioridad" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}"></p-dropdown>
+                                <label>TODAS</label>
+                        </span>
+                    </div>
+
+                    <label for="ubicacion" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Ubicación (Ubicación del Producto en el Local)</label>
+                    <div class="p-col-12 p-md-6">
+                        <input id="ubicacion" type="text" pInputText [(ngModel)]="ubicacion" #inputUbicacion maxLength="100" placeholder="Ingrese Datos para Aplicar el Filtro">
+                    </div>
+
+                </div>
+
+                </div>
+
+                <br>
+            <button (click)="buscarConFiltros($event)" pButton pRipple type="button" icon="pi pi-save" label="Realizar Búsqueda" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button (click)="limpiarFiltros()" pButton pRipple type="button" icon="pi pi-times-circle" label="Limpiar Filtros" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button (click)="cerrarFiltros()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar Filtros" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+
+            </ng-template>
+    
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Inventario General de Productos</h5>
+
+
+             <div class="p-fluid box" style="padding-bottom:25px;">
+
+                <div class="p-field p-grid">
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local - Sucursal para Filtrar los Datos</label><br>
+                    <div class="p-col-12 p-md-12">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>GENERAL TODOS</label>
+                        </span>
+                    </div>
+                </div>
+                </div>
+        
+        
+                <div class="p-fluid box" style="padding-bottom:25px;" *ngIf="usarFiltroConsulta">
+                    <div class="p-field p-grid">
+                        <div class="p-col-12 p-md-12">
+                            <h3>Filtros Opcionales</h3>
+                        </div>
+        
+                        <div *ngIf="usarFiltroConsulta1" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Tipo de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta1" style="font-size: 15px;" class="p-col-12 p-md-10">{{tipo_producto_idlabel}}</div>
+        
+                        <div *ngIf="usarFiltroConsulta2" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Marca de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta2" style="font-size: 15px;" class="p-col-12 p-md-10">{{marca_idlabel}}</div>
+        
+                        <div *ngIf="usarFiltroConsulta3" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Presentación de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta3" style="font-size: 15px;" class="p-col-12 p-md-10">{{presentacion_idlabel}}</div>
+        
+                        <div *ngIf="usarFiltroConsulta4" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Código de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta4" style="font-size: 15px;" class="p-col-12 p-md-10">{{codigoProducto_idlabel}}</div>
+        
+                        <div *ngIf="usarFiltroConsulta5" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Nombre de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta5" style="font-size: 15px;" class="p-col-12 p-md-10">{{nombre_idlabel}}</div>
+        
+                        <div *ngIf="usarFiltroConsulta6" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Composición de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta6" style="font-size: 15px;" class="p-col-12 p-md-10">{{composicion_idlabel}}</div>
+        
+                        <div *ngIf="usarFiltroConsulta7" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Prioridad de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta7" style="font-size: 15px;" class="p-col-12 p-md-10">{{prioridad_idlabel}}</div>
+        
+                        <div *ngIf="usarFiltroConsulta8" style="font-size: 15px;" class="p-col-12 p-md-2"><b>Ubicación de Producto:</b></div>
+                        <div *ngIf="usarFiltroConsulta8" style="font-size: 15px;" class="p-col-12 p-md-10">{{ubicacion_idlabel}}</div>
+        
+                    </div>
+                </div>
+                <p-table [value]="inventarios" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" 
+                selectionMode="single" [(selection)]="selectedProduct" dataKey="producto.id" [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px'}">
+
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:184px;">
+                        <col style="width:115px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:140px;">
+                        <col style="width:46px;">
+                        <col style="width:46px;">
+                        <col style="width:57px;">
+                        <col style="width:75px;">
+                        <col style="width:80px;">
+                        <col style="width:85px;">
+                        <col style="width:85px;">
+                        <col style="width:85px;">
+                        <col style="width:67px;">
+                        <col style="width:67px;">
+                    </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local - Sucursal</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">IGV</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ISC</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lotes</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Prioridad</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Ubicación</th>
+
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Precio de Venta</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Costo de Compra</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Utilidad Unitaria</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Mínimo</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-productoInventario let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="productoInventario">
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.codigoUnidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.tipoProducto.tipo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.marca.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.presentacion.presentacion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"> {{productoInventario.producto.composicion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.almacen.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productoInventario.producto.afectoIgv === 1" value="Grab"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="primary" *ngIf="productoInventario.producto.afectoIgv === 0" value="Ina"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productoInventario.producto.afectoIgv === 2" value="Exo"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productoInventario.producto.afectoIsc === 1" value="Si"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productoInventario.producto.afectoIsc === 0" value="No"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productoInventario.producto.activoLotes === 1" value="Si"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productoInventario.producto.activoLotes === 0" value="No"></p-tag>
+                        </td>
+    
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">
+                            <ng-template [ngIf]="productoInventario.producto.prioridad == '1'">
+                                Alta
+                            </ng-template>
+                            <ng-template [ngIf]="productoInventario.producto.prioridad == '2'">
+                                Normal
+                            </ng-template>
+                            <ng-template [ngIf]="productoInventario.producto.prioridad == '3'">
+                                Baja
+                            </ng-template>
+                        </td>
+                       
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.ubicacion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.precioUnidad | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.precioCompra | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.precioUnidad - productoInventario.producto.precioCompra | DecimalesTransform}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.stockMinimo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.stock.cantidad}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+
+
+
+
+
+
+</div>

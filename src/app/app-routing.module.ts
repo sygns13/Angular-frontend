@@ -14,6 +14,7 @@ import {BancoComponent} from './paginas/tablas/banco/banco.component';
 
 //tablas almacen
 import {ProductoComponent} from './paginas/productos/producto/producto.component';
+import {InventarioComponent} from './paginas/almacen/inventario/inventario.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -86,7 +87,8 @@ const routes: Routes = [
   {
     path: 'almacen', component: AppMainComponent,
     children: [
-     {path: 'productos', component: ProductoComponent}
+     {path: 'productos', component: ProductoComponent},
+     {path: 'inventario', component: InventarioComponent},
     ]
   }
 ];

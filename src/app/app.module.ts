@@ -165,6 +165,7 @@ import { AsignarunidadesComponent } from './paginas/productos/asignarunidades/as
 import { StocksComponent } from './paginas/productos/stocks/stocks.component';
 import { LeftpathPipe } from './_pipes/leftpath.pipe';
 import { PassfechavistaPipe } from './_pipes/passfechavista.pipe';
+import { InventarioComponent } from './paginas/almacen/inventario/inventario.component';
 
 @NgModule({
     imports: [
@@ -319,7 +320,8 @@ import { PassfechavistaPipe } from './_pipes/passfechavista.pipe';
         AsignarunidadesComponent,
         StocksComponent,
         LeftpathPipe,
-        PassfechavistaPipe
+        PassfechavistaPipe,
+        InventarioComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
