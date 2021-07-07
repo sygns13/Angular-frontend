@@ -1,0 +1,239 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+</div>
+
+<p-toast></p-toast>
+
+<div class="p-grid">
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Gestión de Ingresos y Salidas de Productos Libres</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede registrar el ingreso y salida de productos de forma libre, solo indicando el motivo</blockquote>
+            </div>
+            <br>
+
+            <button  (click)="cargarRegistro()" pButton pRipple type="button" icon="pi pi-plus" label="Nuevo Registro" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="cancelCargarRegistro()"  pButton pRipple type="button" icon="pi pi-plus" label="Cancelar" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+
+    
+        </div>
+    </div>
+
+
+
+    <div class="p-col-12" *ngIf="vistaRegistro">
+        <div class="card  p-shadow-10">
+            <h5>{{tipoFrm}}</h5>
+            <div class="p-fluid box">
+
+                <div class="p-field p-grid">
+                    <div style="font-size: 15px;" class="p-col-12 p-md-2"><b>Nombre de Producto:</b></div>
+                    <!-- <div style="font-size: 15px;" class="p-col-12 p-md-10"><b>{{selectedProduct.producto.nombre}}</b></div> -->
+                    <div style="font-size: 18px; color: #1f2d7d;" class="p-col-12 p-md-4"><b>{{selectedProduct.producto.nombre}}</b></div>
+
+                    <div style="font-size: 15px;" class="p-col-12 p-md-2"><b>Trabaja con Lotes:</b></div>
+                    <div style="font-size: 18px; color: #1f2d7d;" class="p-col-12 p-md-4"><b>{{trabajaLotes}}</b></div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="estado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Registro:</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="tipos" [options]="tipos" [(ngModel)]="tipo" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}" (onChange)="cambioTipoRegistro($event)"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="almacen_registo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Local - Sucursal:</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputClsAlmacenRegistro inputId="almacen_registo" [options]="almacens_registo"  [(ngModel)]="clsAlmacen_registro" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true" (onChange)="cambioLocal($event)"></p-dropdown>
+                                <label>Seleccione un Local - Sucursal</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid" style="padding-top: 10px;" *ngIf="divLote">
+                    <label for="estado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Lote:</label>
+                    <div class="p-col-12 p-md-4">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="lotes" [options]="lotes" [(ngModel)]="clsLote" optionLabel="name" [autoDisplayFirst]="false" [filter]="true" [style]="{'height':'31px'}" (onChange)="cambioLote($event)"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+
+                    <label for="estado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" *ngIf="divNuevoLote">Nombre del Nuevo Lote:</label>
+                    <div class="p-col-12 p-md-4" *ngIf="divNuevoLote">
+                        <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre maxLength="250">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid" *ngIf="divLote">
+                    <label for="fechaIngreso" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Fecha de Ingreso del Lote</label>
+                    <div class="p-col-12 p-md-4">
+                        <p-inputMask id="fechaIngreso" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaIngreso" #inputFechaIngreso [disabled]="!divNuevoLote">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="fechaVencimiento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{labelFechavencimientoLote}}</label>
+                    <div class="p-col-12 p-md-4">
+                        <p-inputMask id="fechaVencimiento" inputId="inputmask2" mask="99/99/9999" [(ngModel)]="fechaVencimiento" #inputFechaVencimiento [disabled]="!divNuevoLote">
+                        </p-inputMask>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+
+                    <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" *ngIf="!divNuevoLote">{{labelCantidadTotal}}</label>
+                    <div class="p-col-12 p-md-2" *ngIf="!divNuevoLote">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidadTotalLote" (keypress)="soloNumeros($event)" maxLength="25" [disabled]="!divNuevoLote">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{tipoCantidad}}</label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" (keypress)="soloNumeros($event)" maxLength="25" #inputCantidad (ngModelChange)="cambioCantidad($event)">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" *ngIf="!divNuevoLote">{{labelCantidadTotalFinal}}</label>
+                    <div class="p-col-12 p-md-2" *ngIf="!divNuevoLote">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidadTotalProcesado" (keypress)="soloNumeros($event)" maxLength="25" [disabled]="!divNuevoLote">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" >{{labelMotivo}}</label>
+                    <div class="p-col-12 p-md-10" >
+                        <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="motivo"></textarea>
+                    </div>
+                </div>
+
+            </div>
+    
+            <br>
+            <button (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button  (click)="cancelCargarRegistro()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado General de Productos</h5>
+
+
+             <div class="p-fluid box" >
+
+                <div class="p-field p-grid">
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local - Sucursal para Filtrar los Datos</label><br>
+                    <div class="p-col-12 p-md-12">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>GENERAL TODOS</label>
+                        </span>
+                    </div>
+                </div>
+                </div>
+
+                <div class="p-mb-3" style="padding-bottom:25px;">
+                    <div class="p-inputgroup">
+                        <button pButton pRipple type="button" label="Buscar" (click)="eventoBuscar()"></button>
+                        <span class="p-float-label">
+                            <input type="text" pInputText [(ngModel)]="palabraClave" (keyup.enter)="eventoBuscar()"/>
+                            <label>Palabra Clave</label>
+                        </span>
+                    </div>
+                </div>
+
+                <p-table [value]="inventarios" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" 
+                selectionMode="single" [(selection)]="selectedProduct" dataKey="producto.id" [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}" (onRowSelect)="onSelectFila($event)" >
+
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:184px;">
+                        <col style="width:115px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:140px;">
+                        <col style="width:57px;">
+                        <col style="width:67px;">
+                        <col style="width:67px;">
+                    </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local - Sucursal</th>
+                       
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lotes</th>
+
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Mínimo</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-productoInventario let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="productoInventario">
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.codigoUnidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.tipoProducto.tipo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.marca.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.presentacion.presentacion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"> {{productoInventario.producto.composicion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.almacen.nombre}}</td>
+
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productoInventario.producto.activoLotes === 1" value="Si"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productoInventario.producto.activoLotes === 0" value="No"></p-tag>
+                        </td>
+    
+
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.stockMinimo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.stock.cantidad}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+
+
+
+
+
+
+</div>

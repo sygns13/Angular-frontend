@@ -20,4 +20,8 @@ export class LoteService extends GenericService<Lote> {
   constructor(protected http: HttpClient) { 
     super(http, `${environment.HOST}/lotes`);
   }
+
+  registrarNuevoLote(t: Lote) {
+    return this.http.post(`${this.url}/ingresolote`, t);
+  }
 }

@@ -11,4 +11,5 @@ export class Lote {
     unidadId: number;
     activo: number;
     borrado: number;
+    motivo: string;
 }

@@ -341,16 +341,18 @@ evaluarFiltros(usarFiltroConsulta : boolean){
       this.filtroInventario.prioridad = this.prioridad.code;
       this.usarFiltroConsulta7 = true;
 
-      if(this.prioridad == '1'){
-        this.prioridad_idlabel = 'ALTA';
+      console.log(this.prioridad);
+
+      if(this.prioridad.code == '1'){
+        this.prioridad_idlabel = this.prioridad.name;
       }
 
-      if(this.prioridad == '2'){
-        this.prioridad_idlabel = 'NORMAL';
+      if(this.prioridad.code == '2'){
+        this.prioridad_idlabel = this.prioridad.name;
       }
 
-      if(this.prioridad == '3'){
-        this.prioridad_idlabel = 'BAJA';
+      if(this.prioridad.code == '3'){
+        this.prioridad_idlabel = this.prioridad.name;
       }
     }else{
       this.usarFiltroConsulta7 = false;

@@ -11,9 +11,9 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-            <h4>Gestión de Productos</h4>
+            <h4>Inventario de Productos</h4>
             <div class="p-fluid">
-                <blockquote>Aquí puede gestionar los productos que desee definir, los productos permitiran registrar Stocks por Local y poder realizar transacciones ventas, compras, salidas de almacén, e ingresos de los mismos</blockquote>
+                <blockquote>Aquí se puede visualizar el inventario de productos, y realizar consultas aplicando filtros y exportalas en formatos pdf, y excel</blockquote>
             </div>
             <br>
 
@@ -127,11 +127,11 @@
              <div class="p-fluid box" style="padding-bottom:25px;">
 
                 <div class="p-field p-grid">
-                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local - Sucursal para Filtrar los Datos</label><br>
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local - Sucursal</label><br>
                     <div class="p-col-12 p-md-12">
                         <span class="p-float-label">
                             <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
-                                <label>GENERAL TODOS</label>
+                                <label>SELECCIONE</label>
                         </span>
                     </div>
                 </div>
@@ -184,16 +184,16 @@
                         <col style="width:153px;">
                         <col style="width:153px;">
                         <col style="width:140px;">
-                        <col style="width:46px;">
-                        <col style="width:46px;">
-                        <col style="width:57px;">
-                        <col style="width:75px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
                         <col style="width:80px;">
                         <col style="width:85px;">
                         <col style="width:85px;">
-                        <col style="width:85px;">
-                        <col style="width:67px;">
-                        <col style="width:67px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
                     </colgroup>
                 </ng-template>
 
@@ -206,62 +206,62 @@
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local - Sucursal</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">IGV</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ISC</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lotes</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Prioridad</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Ubicación</th>
-
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Almacén</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Actual</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Mínimo</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Precio de Venta</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Costo de Compra</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Utilidad Unitaria</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Mínimo</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Prioridad</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Ubicación</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">IGV</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ISC</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lotes</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-productoInventario let-rowIndex="rowIndex">
-                    <tr [pSelectableRow]="productoInventario">
+                <ng-template pTemplate="body" let-productos let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="productos">
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.nombre}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.codigoUnidad}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.tipoProducto.tipo}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.marca.nombre}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.presentacion.presentacion}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"> {{productoInventario.producto.composicion}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.almacen.nombre}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
-                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productoInventario.producto.afectoIgv === 1" value="Grab"></p-tag>
-                            <p-tag styleClass="p-mr-2" severity="primary" *ngIf="productoInventario.producto.afectoIgv === 0" value="Ina"></p-tag>
-                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productoInventario.producto.afectoIgv === 2" value="Exo"></p-tag>
-                        </td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
-                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productoInventario.producto.afectoIsc === 1" value="Si"></p-tag>
-                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productoInventario.producto.afectoIsc === 0" value="No"></p-tag>
-                        </td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
-                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productoInventario.producto.activoLotes === 1" value="Si"></p-tag>
-                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productoInventario.producto.activoLotes === 0" value="No"></p-tag>
-                        </td>
-    
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.codigoUnidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.tipoProducto.tipo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.marca.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.presentacion.presentacion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"> {{productos.producto.composicion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.almacen.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.stock.cantidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.stockMinimo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.precioUnidad | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.precioCompra | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.precioUnidad - productos.producto.precioCompra | DecimalesTransform}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">
-                            <ng-template [ngIf]="productoInventario.producto.prioridad == '1'">
+                            <ng-template [ngIf]="productos.producto.prioridad == '1'">
                                 Alta
                             </ng-template>
-                            <ng-template [ngIf]="productoInventario.producto.prioridad == '2'">
+                            <ng-template [ngIf]="productos.producto.prioridad == '2'">
                                 Normal
                             </ng-template>
-                            <ng-template [ngIf]="productoInventario.producto.prioridad == '3'">
+                            <ng-template [ngIf]="productos.producto.prioridad == '3'">
                                 Baja
                             </ng-template>
                         </td>
                        
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.ubicacion}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.precioUnidad | currency:'PEN':'S/.'}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.precioCompra | currency:'PEN':'S/.'}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.precioUnidad - productoInventario.producto.precioCompra | DecimalesTransform}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.producto.stockMinimo}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoInventario.stock.cantidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productos.producto.ubicacion}}</td>
+
+
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productos.producto.afectoIgv === 1" value="Grab"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="primary" *ngIf="productos.producto.afectoIgv === 0" value="Ina"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productos.producto.afectoIgv === 2" value="Exo"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productos.producto.afectoIsc === 1" value="Si"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productos.producto.afectoIsc === 0" value="No"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                            <p-tag styleClass="p-mr-2" severity="success" *ngIf="productos.producto.activoLotes === 1" value="Si"></p-tag>
+                            <p-tag styleClass="p-mr-2" severity="warning" *ngIf="productos.producto.activoLotes === 0" value="No"></p-tag>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>

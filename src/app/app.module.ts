@@ -166,6 +166,7 @@ import { StocksComponent } from './paginas/productos/stocks/stocks.component';
 import { LeftpathPipe } from './_pipes/leftpath.pipe';
 import { PassfechavistaPipe } from './_pipes/passfechavista.pipe';
 import { InventarioComponent } from './paginas/almacen/inventario/inventario.component';
+import { GestionlotesComponent } from './paginas/almacen/gestionlotes/gestionlotes.component';
 
 @NgModule({
     imports: [
@@ -321,7 +322,8 @@ import { InventarioComponent } from './paginas/almacen/inventario/inventario.com
         StocksComponent,
         LeftpathPipe,
         PassfechavistaPipe,
-        InventarioComponent
+        InventarioComponent,
+        GestionlotesComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
