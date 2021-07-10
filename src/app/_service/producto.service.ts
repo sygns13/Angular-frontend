@@ -51,4 +51,8 @@ export class ProductoService extends GenericService<Producto> {
     return this.http.post<any>(`${this.url}/productosbajostock`, filtros);
   }
 
+  getProductosVencidos(filtros: FiltroGeneral) {
+    return this.http.post<any>(`${this.url}/productosvencidos`, filtros);
+  }
+
 }

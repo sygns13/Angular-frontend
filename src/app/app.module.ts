@@ -168,6 +168,7 @@ import { PassfechavistaPipe } from './_pipes/passfechavista.pipe';
 import { InventarioComponent } from './paginas/almacen/inventario/inventario.component';
 import { GestionlotesComponent } from './paginas/almacen/gestionlotes/gestionlotes.component';
 import { ProductosbajostockComponent } from './paginas/almacen/productosbajostock/productosbajostock.component';
+import { ProductosvencidosComponent } from './paginas/almacen/productosvencidos/productosvencidos.component';
 
 @NgModule({
     imports: [
@@ -325,7 +326,8 @@ import { ProductosbajostockComponent } from './paginas/almacen/productosbajostoc
         PassfechavistaPipe,
         InventarioComponent,
         GestionlotesComponent,
-        ProductosbajostockComponent
+        ProductosbajostockComponent,
+        ProductosvencidosComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

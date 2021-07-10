@@ -554,7 +554,7 @@ export class GestionlotesComponent implements OnInit {
 
   registrarNuevoLote(){
     
-    this.vistaCarga = true;
+    
     //detalleUnidadEdit = JSON.parse(JSON.stringify(this.detalleUnidad));
 
     let lote = new Lote();
@@ -562,10 +562,19 @@ export class GestionlotesComponent implements OnInit {
     if(this.fechaIngreso != null &&  this.fechaIngreso.length == 10){
       const fechaIng = moment(this.fechaIngreso, 'DD/MM/YYYY');
       if(!fechaIng.isValid){
-        this.messageService.add({severity:'danger', summary:'Alerta', detail: 'La fecha de Ingreso indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Ingreso indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
         return false;
       }
       lote.fechaIngreso = fechaIng.format('YYYY-MM-DD');
+
+      if(lote.fechaIngreso == null || lote.fechaIngreso.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Ingreso indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+    }
+    else{
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Ingreso indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return false;
     }
     
 
@@ -577,15 +586,22 @@ export class GestionlotesComponent implements OnInit {
 
       const fechaVenc = moment(this.fechaVencimiento, 'DD/MM/YYYY');
       if(!fechaVenc.isValid){
-        this.messageService.add({severity:'danger', summary:'Alerta', detail: 'La fecha de Vencimiento indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Vencimiento indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
         return false;
       }
       lote.fechaVencimiento = fechaVenc.format('YYYY-MM-DD');
       lote.activoVencimiento = 1;
+
+      if(lote.fechaVencimiento == null || lote.fechaVencimiento.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Vencimiento indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
     }
     else{
       lote.activoVencimiento = 0;
     }
+
+    this.vistaCarga = true;
 
     lote.productoId = this.selectedProduct.producto.id;
     lote.cantidad = this.cantidad;

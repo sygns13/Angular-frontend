@@ -17,6 +17,7 @@ import {ProductoComponent} from './paginas/productos/producto/producto.component
 import {InventarioComponent} from './paginas/almacen/inventario/inventario.component';
 import {GestionlotesComponent} from './paginas/almacen/gestionlotes/gestionlotes.component';
 import {ProductosbajostockComponent} from './paginas/almacen/productosbajostock/productosbajostock.component';
+import {ProductosvencidosComponent} from './paginas/almacen/productosvencidos/productosvencidos.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -93,6 +94,7 @@ const routes: Routes = [
      {path: 'inventario', component: InventarioComponent},
      {path: 'gestion_stocks', component: GestionlotesComponent},
      {path: 'productos_bajo_stock', component: ProductosbajostockComponent},
+     {path: 'productos_vencidos', component: ProductosvencidosComponent},
     ]
   }
 ];

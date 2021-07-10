@@ -3,4 +3,7 @@ export class FiltroGeneral {
     palabraClave: string;
     page: number;
     size: number;
+    tipo: number;
+    fechaInicio: string;
+    fechaFinal: string;
 }
