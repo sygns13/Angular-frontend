@@ -111,7 +111,7 @@ export class GestionlotesComponent implements OnInit {
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService , private stockService: StockService, private loteService: LoteService) {
     this.breadcrumbService.setItems([
     { label: 'Almacén' },
-    { label: 'Gestión de Salida e Ingreso de Productos', routerLink: ['/almacen/productos'] }
+    { label: 'Gestión de Salida e Ingreso de Productos', routerLink: ['/almacen/gestion_stocks'] }
     ]);
 
 }

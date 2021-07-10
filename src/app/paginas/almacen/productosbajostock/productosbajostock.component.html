@@ -1,0 +1,124 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+</div>
+
+<p-toast></p-toast>
+
+<div class="p-grid">
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Productos Bajos de Stock</h4>
+            <div class="p-fluid">
+                <blockquote>Reporte de Productos Bajos de Stock</blockquote>
+            </div>
+            <br>
+
+            <button (click)="exportarInventarioXls()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+
+
+
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Productos Bajos de Stock</h5>
+
+
+             <div class="p-fluid box" >
+
+                <div class="p-field p-grid">
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Local - Sucursal</label><br>
+                    <div class="p-col-12 p-md-12">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+                </div>
+
+                <div class="p-mb-3" style="padding-bottom:25px;">
+                    <div class="p-inputgroup">
+                        <button pButton pRipple type="button" label="Buscar" (click)="eventoBuscar()"></button>
+                        <span class="p-float-label">
+                            <input type="text" pInputText [(ngModel)]="palabraClave" (keyup.enter)="eventoBuscar()"/>
+                            <label>Palabra Clave</label>
+                        </span>
+                    </div>
+                </div>
+
+                <p-table [value]="productosBajoStocks" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" dataKey="producto.id" [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}" >
+
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:184px;">
+                        <col style="width:115px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:140px;">
+                        <col style="width:67px;">
+                        <col style="width:67px;">
+                    </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local - Sucursal</th>
+
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Mínimo</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Disponible</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-productoBajoStock let-rowIndex="rowIndex">
+                    <tr >
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.codigoUnidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.tipoProducto.tipo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.marca.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.presentacion.presentacion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"> {{productoBajoStock.producto.composicion}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{clsAlmacen != null ? clsAlmacen.name : ""}}</td>
+    
+
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.stockMinimo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; color:rgb(196, 62, 62);">{{productoBajoStock.stock.cantidad}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> 
+    
+    
+        <!-- <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog> -->
+    
+
+
+
+
+
+
+</div>

@@ -7,6 +7,7 @@ import { Producto } from './../_model/producto';
 import { TipoProducto } from './../_model/tipo_producto';
 import { Marca } from './../_model/marca';
 import { Presentacion } from './../_model/presentacion';
+import { FiltroGeneral } from '../_util/filtro_general';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,10 @@ export class ProductoService extends GenericService<Producto> {
 
   listarPageable(p: number, s:number, txtBuscar:String){
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
+  }
+
+  getProductosBajoStock(filtros: FiltroGeneral) {
+    return this.http.post<any>(`${this.url}/productosbajostock`, filtros);
   }
 
 }
