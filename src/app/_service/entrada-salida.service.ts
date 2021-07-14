@@ -10,6 +10,7 @@ import { Presentacion } from './../_model/presentacion';
 import { EntradaSalida } from './../_model/entrada_salida';
 import { FiltroGeneral } from '../_util/filtro_general';
 import { Almacen } from '../_model/almacen';
+import { RetiroEntradaDTO } from '../_model/retiro_entrada_dto';
 
 
 @Injectable({
@@ -24,5 +25,9 @@ export class EntradaSalidaService extends GenericService<EntradaSalida> {
 
   constructor(protected http: HttpClient) { 
     super(http, `${environment.HOST}/retiroentradaproducto`);
+  }
+
+  getListaEntradaSalidaProductos(filtros: FiltroGeneral) {
+    return this.http.post<any>(`${this.url}/listar`, filtros);
   }
 }

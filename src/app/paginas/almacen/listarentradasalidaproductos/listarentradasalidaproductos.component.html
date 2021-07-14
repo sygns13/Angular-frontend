@@ -1,0 +1,174 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+</div>
+
+<p-toast></p-toast>
+
+<div class="p-grid">
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Movimientos Libres de Productos</h4>
+            <div class="p-fluid">
+                <blockquote>En este módulo se encuentra el reporte del listado de Entradas y Salidas Libres de Productos</blockquote>
+            </div>
+            <br>
+
+            <button (click)="nuevoRegistro()" pButton pRipple type="button" icon="pi pi-plus" label="Nuevo Registro" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarInventarioXls()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+
+
+
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Movimientos Libres de Productoss</h5>
+
+
+             <div class="p-fluid box" >
+
+                <div class="p-field p-grid">
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Local - Sucursal</label>
+                    <div class="p-col-12 p-md-12">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+                
+
+                <div class="p-mb-3">
+                    <div class="p-inputgroup">
+                        <button pButton pRipple type="button" label="Buscar" (click)="eventoBuscar()"></button>
+                        <span class="p-float-label">
+                            <input type="text" pInputText [(ngModel)]="palabraClave" (keyup.enter)="eventoBuscar()"/>
+                            <label>Palabra Clave</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="tipos" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Movimiento</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="tipos" [options]="tipos" (onChange)="cambioTipos($event)" [(ngModel)]="clsTipo" optionLabel="name" [autoDisplayFirst]="false" [filter]="false"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"  style="justify-content: space-evenly;"><div style="float: right;">Desde:</div></label>
+                    <div class="p-col-12 p-md-2" >
+                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaInicio" #inputFechaIngreso (onChange)="cambioTipos($event)">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="fechaFin" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"  style="justify-content: space-evenly;">Hasta:</label>
+                    <div class="p-col-12 p-md-2" >
+                        <p-inputMask id="fechaFin" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaFinal" #inputFechaIngreso (onChange)="cambioTipos($event)">
+                        </p-inputMask>
+                    </div>
+                </div>
+            </div>
+
+                <button   (click)="buscarPorFechas($event)" pButton pRipple type="button" icon="pi pi-search" label="Buscar" class="p-button-raised p-mr-2 p-mb-2"></button>
+
+                <br>
+                <br>
+
+                
+
+                <p-table [value]="movimientoProductos" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" dataKey="producto.id" [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}" >
+
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+
+                        <col style="width:184px;">
+                        <col style="width:115px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:130px;">
+
+                        <col style="width:140px;">
+                        <col style="width:130px;">
+
+                        <col style="width:100px;">
+                        <col style="width:80px;">
+                        <col style="width:300px;">
+                        <col style="width:100px;">
+                    </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Hora</th>
+
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
+
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local - Sucursal</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lote</th>
+
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Movimiento</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Cantidad</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Motivo</th>
+                        <th style="text-align: center; background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Usuario</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-movimientoProducto let-rowIndex="rowIndex">
+                    <tr >
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.retiroEntradaProducto.fecha | passfechavistaTransform}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.retiroEntradaProducto.hora}}</td>
+
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.producto.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.producto.codigoUnidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.producto.tipoProducto.tipo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.producto.marca.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.producto.presentacion.presentacion}}</td>
+
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.almacen.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.lote.nombre}}</td>
+
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.retiroEntradaProducto.tipo == 1 ? 'Ingreso' : 'Salida'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.retiroEntradaProducto.cantidadReal}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.retiroEntradaProducto.motivo}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{movimientoProducto.user.name}}</td>
+                        
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> 
+    
+    
+        <!-- <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog> -->
+    
+
+
+
+
+
+
+</div>

@@ -16,6 +16,7 @@ import {BancoComponent} from './paginas/tablas/banco/banco.component';
 import {ProductoComponent} from './paginas/productos/producto/producto.component';
 import {InventarioComponent} from './paginas/almacen/inventario/inventario.component';
 import {GestionlotesComponent} from './paginas/almacen/gestionlotes/gestionlotes.component';
+import {ListarentradasalidaproductosComponent} from './paginas/almacen/listarentradasalidaproductos/listarentradasalidaproductos.component';
 import {ProductosbajostockComponent} from './paginas/almacen/productosbajostock/productosbajostock.component';
 import {ProductosvencidosComponent} from './paginas/almacen/productosvencidos/productosvencidos.component';
 
@@ -93,6 +94,7 @@ const routes: Routes = [
      {path: 'productos', component: ProductoComponent},
      {path: 'inventario', component: InventarioComponent},
      {path: 'gestion_stocks', component: GestionlotesComponent},
+     {path: 'reporte_stocks', component: ListarentradasalidaproductosComponent},
      {path: 'productos_bajo_stock', component: ProductosbajostockComponent},
      {path: 'productos_vencidos', component: ProductosvencidosComponent},
     ]
