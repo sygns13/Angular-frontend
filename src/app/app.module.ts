@@ -170,6 +170,7 @@ import { GestionlotesComponent } from './paginas/almacen/gestionlotes/gestionlot
 import { ProductosbajostockComponent } from './paginas/almacen/productosbajostock/productosbajostock.component';
 import { ProductosvencidosComponent } from './paginas/almacen/productosvencidos/productosvencidos.component';
 import { ListarentradasalidaproductosComponent } from './paginas/almacen/listarentradasalidaproductos/listarentradasalidaproductos.component';
+import { ClienteComponent } from './paginas/ventas/cliente/cliente.component';
 
 @NgModule({
     imports: [
@@ -329,7 +330,8 @@ import { ListarentradasalidaproductosComponent } from './paginas/almacen/listare
         GestionlotesComponent,
         ProductosbajostockComponent,
         ProductosvencidosComponent,
-        ListarentradasalidaproductosComponent
+        ListarentradasalidaproductosComponent,
+        ClienteComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

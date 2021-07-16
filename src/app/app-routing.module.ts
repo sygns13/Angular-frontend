@@ -20,6 +20,9 @@ import {ListarentradasalidaproductosComponent} from './paginas/almacen/listarent
 import {ProductosbajostockComponent} from './paginas/almacen/productosbajostock/productosbajostock.component';
 import {ProductosvencidosComponent} from './paginas/almacen/productosvencidos/productosvencidos.component';
 
+//tablas ventas
+import {ClienteComponent} from './paginas/ventas/cliente/cliente.component';
+
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
 import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
@@ -97,6 +100,12 @@ const routes: Routes = [
      {path: 'reporte_stocks', component: ListarentradasalidaproductosComponent},
      {path: 'productos_bajo_stock', component: ProductosbajostockComponent},
      {path: 'productos_vencidos', component: ProductosvencidosComponent},
+    ]
+  },
+  {
+    path: 'ventas', component: AppMainComponent,
+    children: [
+     {path: 'clientes', component: ClienteComponent}
     ]
   }
 ];

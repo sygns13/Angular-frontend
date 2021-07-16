@@ -50,7 +50,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Ventas', icon: 'pi pi-fw pi-shopping-cart',
                 items: [
-                    {label: 'Clientes', icon: 'pi pi-fw pi-users', routerLink: ['/uikit/formlayout']},
+                    {label: 'Clientes', icon: 'pi pi-fw pi-users', routerLink: ['/ventas/clientes']},
                     {label: 'Realizar Venta', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['utilities/display']},
                     {label: 'Ventas Realizadas', icon: 'pi pi-fw pi-inbox', routerLink: ['utilities/elevation']},
                     {label: 'Resúmenes de Ventas', icon: 'pi pi-fw pi-sliders-h', routerLink: ['utilities/flexbox']},

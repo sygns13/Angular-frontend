@@ -1,0 +1,176 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    
+    <p-toast></p-toast>
+    
+    <div class="p-grid" >
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Registro de Clientes</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede registrar los clientes que desee definir, los clientes son necesarios para el registro de venta ya que tienen que seleccionarse para poder registrar las ventas</blockquote>
+            </div>
+            <br>
+    
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Cliente" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+    
+    
+    <div class="p-col-12" *ngIf="vistaRegistro">
+        <div class="card  p-shadow-10">
+            <h5>{{tipoFrm}}</h5>
+            <div class="p-fluid box">
+
+
+                <div class="p-field p-grid">
+                    <label for="tipoDocumento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Documento de Identidad</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoDocumento inputId="tipoDocumento" [options]="tipoDocumentos" [(ngModel)]="clsTipoDocumento" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                    <label for="tipoDocumento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Documento de Identidad</label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="codigo" type="text" pInputText [(ngModel)]="documento" #inputCodigo maxLength="45">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Cliente</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre maxLength="500">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="direccion" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Dirección</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="direccion" type="text" pInputText [(ngModel)]="direccion" #inputDireccion maxLength="500">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="telefono" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Telefono</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="telefono" type="text" pInputText [(ngModel)]="telefono" #inputTelefono maxLength="25">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="correo1" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Correo Electrónico 1</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="correo1" type="text" pInputText [(ngModel)]="correo1" #inputCorreo1 maxLength="1000">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="correo2" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Correo Electrónico 2</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="correo2" type="text" pInputText [(ngModel)]="correo2" #inputCorreo2 maxLength="1000">
+                    </div>
+                </div>
+
+
+            </div>
+    
+            <br>
+            <button *ngIf="vistaBotonRegistro" (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonRegistro"  (click)="cancelar()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonEdicion" (click)="modificar($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="cerrar()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Clientes Registrados</h5>
+       <!-- <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>-->
+
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+        <p-table [value]="clientes" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}" >
+
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col style="width:60px;">
+                    <col style="width:200px;">
+                    <col style="width:150px;">
+                    <col style="width:100px;">
+                    <col style="width:180px;">
+                    <col style="width:80px;">
+                    <col style="width:170px;">
+                    <col style="width:170px;">
+                    <col style="width:67px;">
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Cliente</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 1</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 2</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Gestión</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cliente let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.tipoDocumento.descripcion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.documento}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.direccion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.telefono}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo2}}</td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
+    
+                        <button (click)="editar(cliente, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Cliente" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+
+                        <button *ngIf="cliente.borrado === 0" (click)="eliminar(cliente , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Cliente" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+                                 <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                                 <!-- <p-messages [value]="msgs"></p-messages> -->
+    
+    </div>
