@@ -1,0 +1,213 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    
+    <p-toast></p-toast>
+    
+    <div class="p-grid" >
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Catálogo de Servicio</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede registrar el catálogo de servicios de su organización que desee definir. Con los productos podrá registrar ventas a clientes de los mismos</blockquote>
+            </div>
+            <br>
+    
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Servicio" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+    
+    
+    <div class="p-col-12" *ngIf="vistaRegistro">
+        <div class="card  p-shadow-10">
+            <h5>{{tipoFrm}}</h5>
+            <div class="p-fluid box">
+
+                <div class="p-field p-grid">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Servicio</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="nombre" type="text" pInputText [(ngModel)]="nombre" #inputNombre maxLength="2000">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="codigo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Código</label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="codigo" type="text" pInputText [(ngModel)]="codigo" #inputCodigo maxLength="200">
+                    </div>
+
+                    <label for="precioUnidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Precio del Servicio</label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="precioUnidad" type="text" pInputText [(ngModel)]="precioUnidad" #inputPrecioUnidad maxLength="25"  (keypress)="soloNumeros($event)">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="dir" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">IGV (18%):</label>
+                        <div class="p-col-12 p-md-1">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="afectoIgv" value="1" [(ngModel)]="afectoIgv" id="activoGravado"></p-radioButton>
+                                <label for="afectoIgv1">Gravado</label>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-1">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="afectoIgv" value="2" [(ngModel)]="afectoIgv" id="activoExonerado"></p-radioButton>
+                                <label for="afectoIgv2">Exonerado</label>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-1">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="afectoIgv" value="0" [(ngModel)]="afectoIgv" id="activoInafecto"></p-radioButton>
+                                <label for="afectoIgv3">Inafecto</label>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="dir" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">ICS:</label>
+                        <div class="p-col-12 p-md-1">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="afectoIsc" value="1" [(ngModel)]="afectoIsc" id="activoAfecto"></p-radioButton>
+                                <label for="afectoIsc1">Afecto</label>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-1">
+                            <div class="p-field-radiobutton">
+                                <p-radioButton name="afectoIsc" value="0" [(ngModel)]="afectoIsc" id="activoINAFECTO"></p-radioButton>
+                                <label for="afectoIsc2">Inafecto</label>
+                            </div>
+                        </div>
+                </div>
+
+
+                <div class="p-field p-grid" *ngIf="afectoIsc == 1">
+                    <label for="tiposISC" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Tasa ISC</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown inputId="tiposISC" [options]="tiposISC" [(ngModel)]="tipoTasaIsc" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}" #inputTiposISC></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                    
+                    <label for="tasaIsc" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tasa del ISC</label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="tasaIsc" type="text" pInputText [(ngModel)]="tasaIsc" #inputTasaIsc maxLength="25" (keypress)="soloNumeros($event)">
+                    </div>
+                </div>
+
+
+                <div class="p-field p-grid">
+                    <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" >Descripción del Servicio</label>
+                    <div class="p-col-12 p-md-10" >
+                        <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="descripcion"></textarea>
+                    </div>
+                </div>
+
+            </div>
+    
+            <br>
+            <button *ngIf="vistaBotonRegistro" (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonRegistro"  (click)="cancelar()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonEdicion" (click)="modificar($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="cerrar()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Servicios Registrados</h5>
+       <!-- <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>-->
+
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+        <p-table [value]="servicios" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines"  [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col style="width:60px;">
+                    <col style="width:200px;">
+                    <col style="width:100px;">
+                    <col style="width:250px;">
+                    <col style="width:150px;">
+                    <col style="width:80px;">
+                    <col style="width:80px;">
+                    <col style="width:100px;">
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Servicio</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Descripción</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Precio</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">IGV</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ISC</th>
+            
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Gestión</th>
+                </tr>
+            </ng-template>
+
+
+            <ng-template pTemplate="body" let-servicioFila let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.codigo}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.descripcion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.precioUnidad | currency:'PEN':'S/.'}}</td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                        <p-tag styleClass="p-mr-2" severity="success" *ngIf="servicioFila.afectoIgv === 1" value="Grabado"></p-tag>
+                        <p-tag styleClass="p-mr-2" severity="primary" *ngIf="servicioFila.afectoIgv === 0" value="Inafecto"></p-tag>
+                        <p-tag styleClass="p-mr-2" severity="warning" *ngIf="servicioFila.afectoIgv === 2" value="Exonerado"></p-tag>
+                    </td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                                <p-tag styleClass="p-mr-2" severity="success" *ngIf="servicioFila.afectoIsc === 1" value="Si"></p-tag>
+                                <p-tag styleClass="p-mr-2" severity="warning" *ngIf="servicioFila.afectoIsc === 0" value="No"></p-tag>
+                    </td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
+    
+                        <button (click)="editar(servicioFila, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="servicioFila.borrado === 0" (click)="eliminar(servicioFila , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+                                 <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                                 <!-- <p-messages [value]="msgs"></p-messages> -->
+    
+    </div>

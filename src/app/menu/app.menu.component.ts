@@ -26,7 +26,7 @@ export class AppMenuComponent implements OnInit {
                 ]*/
             },
             {
-                label: 'Tablas Base', icon: 'pi pi-fw pi-inbox',
+                label: 'Tablas Base', icon: 'pi pi-fw pi-folder-open',
                 items: [
                     {label: 'Gestión de Locales', icon: 'pi pi-fw pi-home', routerLink: ['/tablas/locales']},
                     {label: 'Tipos de Productos', icon: 'pi pi-fw pi-list', routerLink: ['/tablas/tipo_productos']},
@@ -37,7 +37,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Gestión de Almacén', icon: 'pi pi-fw pi-inbox',
+                label: 'Almacén', icon: 'pi pi-fw pi-inbox',
                 items: [
                     {label: 'Catálogo de Productos', icon: 'pi pi-fw pi-camera', routerLink: ['/almacen/productos']},
                     {label: 'Inventario', icon: 'pi pi-fw pi-briefcase', routerLink: ['/almacen/inventario']},
@@ -48,10 +48,16 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
+                label: 'Servicios', icon: 'pi pi-fw pi-calendar',
+                items: [
+                    {label: 'Catálogo de Servicios', icon: 'pi pi-fw pi-camera', routerLink: ['/servicios/catalogo']},
+                ]
+            },
+            {
                 label: 'Ventas', icon: 'pi pi-fw pi-shopping-cart',
                 items: [
                     {label: 'Clientes', icon: 'pi pi-fw pi-users', routerLink: ['/ventas/clientes']},
-                    {label: 'Realizar Venta', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['utilities/display']},
+                    {label: 'Realizar Venta', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/ventas/venta']},
                     {label: 'Ventas Realizadas', icon: 'pi pi-fw pi-inbox', routerLink: ['utilities/elevation']},
                     {label: 'Resúmenes de Ventas', icon: 'pi pi-fw pi-sliders-h', routerLink: ['utilities/flexbox']},
                     {label: 'Cuentas por Cobrar', icon: 'pi pi-fw pi-money-bill', routerLink: ['utilities/icons']}

@@ -20,8 +20,12 @@ import {ListarentradasalidaproductosComponent} from './paginas/almacen/listarent
 import {ProductosbajostockComponent} from './paginas/almacen/productosbajostock/productosbajostock.component';
 import {ProductosvencidosComponent} from './paginas/almacen/productosvencidos/productosvencidos.component';
 
+//tablas servicios
+import {CatalogoComponent} from './paginas/servicios/catalogo/catalogo.component';
+
 //tablas ventas
 import {ClienteComponent} from './paginas/ventas/cliente/cliente.component';
+import {VentaComponent} from './paginas/ventas/venta/venta.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -103,9 +107,16 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'servicios', component: AppMainComponent,
+    children: [
+     {path: 'catalogo', component: CatalogoComponent},
+    ]
+  },
+  {
     path: 'ventas', component: AppMainComponent,
     children: [
-     {path: 'clientes', component: ClienteComponent}
+     {path: 'clientes', component: ClienteComponent},
+     {path: 'venta', component: VentaComponent}
     ]
   }
 ];
