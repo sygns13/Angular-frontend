@@ -12,11 +12,11 @@ export class ServicioService extends GenericService<Servicio> {
 
   servicios = new Subject<Servicio[]>();
 
-  protected url: string = `${environment.HOST}/servicios`
+  protected url: string = `${environment.HOST}/api/backend/servicios`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/servicios`);
+    super(http, `${environment.HOST}/api/backend/servicios`);
   }
 
   listarPageable(p: number, s:number, txtBuscar:String){

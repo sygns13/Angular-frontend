@@ -1,10 +1,10 @@
 <div [ngClass]="{'layout-inline-menu': true, 'layout-inline-menu-active':appMain.inlineMenuActive[key]}" [ngStyle]="style" [class]="styleClass">
     <a class="layout-inline-menu-action p-d-flex p-dir-row p-ai-center" [ngClass]="appMain.isHorizontal() ? 'p-p-3 p-p-lg-1 p-py-3' : 'p-p-3'" (click)="onClick($event)"
         pTooltip="Marco Rios" [tooltipDisabled]="isTooltipDisabled">
-        <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style="width: 32px; height: 32px;">
+        <img src="assets/demo/images/avatar/avatar2.png" alt="avatar" style="width: 32px; height: 32px;">
         <span class="p-d-flex p-flex-column" [ngClass]="{'p-ml-2': !app.isRTL, 'p-mr-2': app.isRTL}">
-            <span class="p-text-bold">Marco Rios Orellana</span>
-            <small>Tipo de Usuario</small>
+            <span class="p-text-bold">{{usuario}}</span>
+            <small>{{tipo_usuario}}</small>
         </span>
         <i class="layout-inline-menu-icon pi pi-angle-down" [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}"></i>
     </a>

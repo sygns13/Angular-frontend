@@ -12,11 +12,11 @@ export class BancoService extends GenericService<Banco>  {
 
   bancos = new Subject<Banco[]>();
 
-  protected url: string = `${environment.HOST}/bancos`
+  protected url: string = `${environment.HOST}/api/backend/bancos`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/bancos`);
+    super(http, `${environment.HOST}/api/backend/bancos`);
   }
 
   altaBaja(id: number, valor: number) {

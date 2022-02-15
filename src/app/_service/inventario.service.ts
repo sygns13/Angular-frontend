@@ -18,16 +18,16 @@ export class InventarioService extends GenericService<InventarioDTO>  {
 
   inventario = new Subject<InventarioDTO[]>();
 
-  private urlGetProducto: string = `${environment.HOST}/productos/tipos`
-  private urlGetMarca: string = `${environment.HOST}/productos/marcas`
-  private urlGetPresentacion: string = `${environment.HOST}/productos/presentaciones`
-  protected urlAlmacen: string = `${environment.HOST}/detalleunidadproducto`
+  private urlGetProducto: string = `${environment.HOST}/api/backend/productos/tipos`
+  private urlGetMarca: string = `${environment.HOST}/api/backend/productos/marcas`
+  private urlGetPresentacion: string = `${environment.HOST}/api/backend/productos/presentaciones`
+  protected urlAlmacen: string = `${environment.HOST}/api/backend/detalleunidadproducto`
 
-  protected url: string = `${environment.HOST}/productos`
+  protected url: string = `${environment.HOST}/api/backend/productos`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/productos`);
+    super(http, `${environment.HOST}/api/backend/productos`);
   }
 
   getTipoProductos() {

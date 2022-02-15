@@ -15,10 +15,10 @@ export class LoteService extends GenericService<Lote> {
 
   mensajeCambio = new Subject<string>();
 
-  protected url: string = `${environment.HOST}/lotes`
+  protected url: string = `${environment.HOST}/api/backend/lotes`
  
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/lotes`);
+    super(http, `${environment.HOST}/api/backend/lotes`);
   }
 
   registrarNuevoLote(t: Lote) {

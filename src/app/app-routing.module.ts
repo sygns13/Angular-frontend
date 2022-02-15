@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+//login
+import { LoginComponent } from './paginas/login/login/login.component';
+
 //Fondo Principal padre
 import {AppMainComponent} from './menu/app.main.component';
 
@@ -68,24 +71,33 @@ import {AppCrudComponent} from './pages/app.crud.component';
 import {AppCalendarComponent} from './pages/app.calendar.component';
 import {AppInvoiceComponent} from './pages/app.invoice.component';
 import {AppHelpComponent} from './pages/app.help.component';
+import { GuardService } from './_service/guard.service';
+
+//Errores y seguridad de navegacion
+import { Not403Component } from './paginas/errors/not403/not403.component';
+import { Not404Component } from './paginas/errors/not404/not404.component';
 
 
 const routes: Routes = [
 
   {
-    path: '', component: AppMainComponent,
+    path: '', redirectTo: 'login', pathMatch:'full'
+    
+  },
+  {
+    path: 'login', component: LoginComponent,
     children: [
      /* {path: '', component: DashboardComponent}, */
     ]
   },
   {
-    path: 'principal', component: AppMainComponent,
+    path: 'principal', component: AppMainComponent, canActivate: [GuardService] /*,
     children: [
-     /* {path: 'principal', component: DashboardComponent}, */
-    ]
+      {path: 'principal', component: DashboardComponent}, 
+    ]*/
   },
   {
-    path: 'tablas', component: AppMainComponent,
+    path: 'tablas', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'locales', component: LocalComponent},
      {path: 'tipo_productos', component: TipoProductoComponent},
@@ -96,7 +108,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'almacen', component: AppMainComponent,
+    path: 'almacen', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'productos', component: ProductoComponent},
      {path: 'inventario', component: InventarioComponent},
@@ -107,17 +119,23 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'servicios', component: AppMainComponent,
+    path: 'servicios', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'catalogo', component: CatalogoComponent},
     ]
   },
   {
-    path: 'ventas', component: AppMainComponent,
+    path: 'ventas', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'clientes', component: ClienteComponent},
      {path: 'venta', component: VentaComponent}
     ]
+  },
+  { path: 'not-403', component: Not403Component },
+  { path: 'not-404', component: Not404Component },
+  {
+    path: '**',
+    redirectTo: 'not-404'
   }
 ];
 

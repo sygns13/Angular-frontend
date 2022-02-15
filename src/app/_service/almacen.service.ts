@@ -20,10 +20,10 @@ export class AlmacenService extends GenericService<Almacen> {
 
   mensajeCambio = new Subject<string>();
 
-  protected url: string = `${environment.HOST}/almacens`
-  private urlGetDepartamento: string = `${environment.HOST}/almacens/departamentos`
-  private urlGetProvincia: string = `${environment.HOST}/almacens/provincias`
-  private urlGetDistrito: string = `${environment.HOST}/almacens/distritos`
+  protected url: string = `${environment.HOST}/api/backend/almacens`
+  private urlGetDepartamento: string = `${environment.HOST}/api/backend/almacens/departamentos`
+  private urlGetProvincia: string = `${environment.HOST}/api/backend/almacens/provincias`
+  private urlGetDistrito: string = `${environment.HOST}/api/backend/almacens/distritos`
 
   constructor(protected http: HttpClient) { 
     super(http, `${environment.HOST}/almacens`);

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -173,6 +173,17 @@ import { ListarentradasalidaproductosComponent } from './paginas/almacen/listare
 import { ClienteComponent } from './paginas/ventas/cliente/cliente.component';
 import { VentaComponent } from './paginas/ventas/venta/venta.component';
 import { CatalogoComponent } from './paginas/servicios/catalogo/catalogo.component';
+import { LoginComponent } from './paginas/login/login/login.component';
+
+import { JwtModule } from "@auth0/angular-jwt";
+import { environment } from 'src/environments/environment';
+import { Not403Component } from './paginas/errors/not403/not403.component';
+import { Not404Component } from './paginas/errors/not404/not404.component';
+import { ServerErrorsInterceptor } from './shared/server-errors.interceptor';
+
+export function tokenGetter() {
+    return sessionStorage.getItem(environment.TOKEN_NAME);
+  }
 
 @NgModule({
     imports: [
@@ -262,7 +273,14 @@ import { CatalogoComponent } from './paginas/servicios/catalogo/catalogo.compone
         VirtualScrollerModule,
         AppCodeModule,
         ProgressSpinnerModule,
-        BlockUIModule
+        BlockUIModule,
+        JwtModule.forRoot({
+            config: {
+              tokenGetter: tokenGetter,
+              allowedDomains: [environment.HOST.substring(7)],
+              disallowedRoutes: [`http://${environment.HOST.substring(7)}/api/security/login/enviarCorreo`, `http://${environment.HOST.substring(7)}/api/security/oauth/token` , `http://${environment.HOST.substring(7)}/api/security/tokens/anular`],
+            },
+          }),
     ],
     declarations: [
         AppComponent,
@@ -335,11 +353,19 @@ import { CatalogoComponent } from './paginas/servicios/catalogo/catalogo.compone
         ListarentradasalidaproductosComponent,
         ClienteComponent,
         VentaComponent,
-        CatalogoComponent
+        CatalogoComponent,
+        LoginComponent,
+        Not403Component,
+        Not404Component
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, ConfirmationService, MessageService
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, ConfirmationService, MessageService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: ServerErrorsInterceptor,
+          multi: true
+        }
     ],
     bootstrap: [AppComponent]
 })

@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { AppMainComponent } from './app.main.component';
 import { AppComponent } from '../app.component';
+import { JwtHelperService } from "@auth0/angular-jwt";
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-inline-menu',
@@ -44,7 +46,27 @@ export class AppInlineMenuComponent {
 
     active: boolean;
 
+    usuario: string = '';
+
+    tipo_usuario: string = '';
+
     constructor(public appMain: AppMainComponent, public app: AppComponent) { }
+
+    ngOnInit(): void {
+
+        const helper = new JwtHelperService();
+    let token = sessionStorage.getItem(environment.TOKEN_NAME);
+
+    const decodedToken = helper.decodeToken(token);
+    this.usuario = decodedToken.user_name;
+    this.tipo_usuario = decodedToken.authorities[0];
+
+    /*
+    this.menuService.listarPorUsuario(this.usuario).subscribe(data => {
+      this.menuService.setMenuCambio(data);
+    });*/
+
+    }
 
     onClick(event) {
         this.appMain.onInlineMenuClick(event, this.key);

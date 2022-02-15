@@ -13,11 +13,11 @@ export class AsignarUnidadService extends GenericService<UnidadProducto> {
 
   unidadProductos = new Subject<UnidadProducto[]>();
 
-  protected url: string = `${environment.HOST}/detalleunidadproducto`
+  protected url: string = `${environment.HOST}/api/backend/detalleunidadproducto`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/detalleunidadproducto`);
+    super(http, `${environment.HOST}/api/backend/detalleunidadproducto`);
   }
 
   getAlmacens() {

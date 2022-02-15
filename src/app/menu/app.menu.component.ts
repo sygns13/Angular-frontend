@@ -57,7 +57,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Ventas', icon: 'pi pi-fw pi-shopping-cart',
                 items: [
                     {label: 'Clientes', icon: 'pi pi-fw pi-users', routerLink: ['/ventas/clientes']},
-                    {label: 'Realizar Venta', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/ventas/venta']},
+                    {label: 'Venta de Productos', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/ventas/venta']},
                     {label: 'Ventas Realizadas', icon: 'pi pi-fw pi-inbox', routerLink: ['utilities/elevation']},
                     {label: 'Resúmenes de Ventas', icon: 'pi pi-fw pi-sliders-h', routerLink: ['utilities/flexbox']},
                     {label: 'Cuentas por Cobrar', icon: 'pi pi-fw pi-money-bill', routerLink: ['utilities/icons']}

@@ -72,11 +72,11 @@
                     
                         <div class="p-fluid box">
                     <div class="p-field p-grid">
-                        <label for="almacen_registo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Local - Sucursal</label>
+                        <label for="almacen_registo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Local</label>
                         <div class="p-col-12 p-md-10">
                             <span class="p-float-label">
                                 <p-dropdown #tinputClsAlmacenRegistro inputId="almacen_registo" [options]="almacens_registo"  [(ngModel)]="clsAlmacen_registro" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
-                                    <label>Seleccione un Local - Sucursal</label>
+                                    <label>Seleccione un Local</label>
                             </span>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
             <div class="p-fluid box" style="padding-bottom:25px;">
 
                 <div class="p-field p-grid">
-                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local - Sucursal para Filtrar los Datos</label><br>
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
                     <div class="p-col-12 p-md-12">
                         <span class="p-float-label">
                             <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
@@ -159,7 +159,7 @@
                     <p-table [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="background-color:#575d63; vertical-align: middle; font-size: 13px; border:1px solid #ddd; color:white; text-align: center;">Local - Sucursal: {{sucursal.name}}</th>  
+                                <th style="background-color:#575d63; vertical-align: middle; font-size: 13px; border:1px solid #ddd; color:white; text-align: center;">Local: {{sucursal.name}}</th>  
                             </tr>
                         </ng-template>
                     </p-table>
@@ -204,7 +204,7 @@
                                 </tr>
                                 <tr  *ngIf="sucursal.code == datoTotal.idAlmacen && datoTotal.total == 0">
                                     <td style="border:1px solid #ddd; vertical-align: middle; font-size: 12px; padding: 2px; text-align:center;">
-                                        No se encuentran Lotes del Producto en este Local - Sucursal
+                                        No se encuentran Lotes del Producto en este Local
                                     </td>
                                 </tr>   
                             </ng-template>
@@ -219,7 +219,7 @@
                     <p-table [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="background-color:#575d63; vertical-align: middle; font-size: 13px; border:1px solid #ddd; color:white; text-align: center;">Local - Sucursal: {{clsAlmacen.name}}</th>  
+                                <th style="background-color:#575d63; vertical-align: middle; font-size: 13px; border:1px solid #ddd; color:white; text-align: center;">Local: {{clsAlmacen.name}}</th>  
                             </tr>
                         </ng-template>
                     </p-table>
@@ -264,7 +264,7 @@
                                 </tr>
                                 <tr  *ngIf="clsAlmacen.code == datoTotal.idAlmacen && datoTotal.total == 0">
                                     <td style="border:1px solid #ddd; vertical-align: middle; font-size: 12px; padding: 2px; text-align:center;">
-                                        No se encuentran Lotes del Producto en este Local - Sucursal
+                                        No se encuentran Lotes del Producto en este Local
                                     </td>
                                 </tr>   
                             </ng-template>
@@ -282,7 +282,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N°</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 55%; color:white;">Local - Sucursal</th>
+                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 55%; color:white;">Local</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Código Domicilio Fiscal</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Cantidad</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 10%; color:white;">Gestión</th>
@@ -291,7 +291,7 @@
                         <ng-template pTemplate="body" let-detStock let-rowIndex="rowIndex">
                             <tr>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local - Sucursal</span>  {{detStock.almacen.nombre}}</td>
+                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local</span>  {{detStock.almacen.nombre}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código Domicilio Fiscal</span>  {{detStock.almacen.codigo}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Cantidad</span>  
                                     <ng-template [ngIf]="detStock.editar == 0"  [ngIfElse]="elseEdit">
@@ -335,7 +335,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N°</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 20%; color:white;">Local - Sucursal</th>
+                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 20%; color:white;">Local</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Código Domicilio Fiscal</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 10%; color:white;">Cantidad</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 10%; color:white;">Gestión</th>
@@ -344,7 +344,7 @@
                         <ng-template pTemplate="body" let-detStock let-rowIndex="rowIndex">
                             <tr *ngIf="clsAlmacen.code == detStock.almacen.id">
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local - Sucursal</span>  {{detStock.almacen.nombre}}</td>
+                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local</span>  {{detStock.almacen.nombre}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código Domicilio Fiscal</span>  {{detStock.almacen.codigo}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Cantidad</span>
                                     <ng-template [ngIf]="detStock.editar == 0"  [ngIfElse]="elseEdit">

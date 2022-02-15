@@ -247,13 +247,24 @@ export class TipoProductoComponent implements OnInit {
     this.tipoProducto.tipo = this.tipo.toString().trim();
     this.tipoProducto.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.tipoProductoService.registrar(this.tipoProducto).subscribe(() => {
+    this.tipoProductoService.registrar(this.tipoProducto).subscribe({
+      next: c => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha registrado satisfactoriamente'});
-   });
+      },
+      error: error => {
+        console.log('Error complete');
+        this.vistaCarga = false;
+      },
+      complete: () => {
+        //this.messageService.add({severity:'warn', summary:'Advertencia', detail: 'El nombre del Tipo de Producto debe de tener mínimo 01 caracter y máximo 250, '});
+        this.vistaCarga = false;
+        console.log('Request complete');
+      }
+    });
 
   }
 
@@ -266,20 +277,31 @@ export class TipoProductoComponent implements OnInit {
     tipoProductoEdit.tipo = this.tipo.toString().trim();
     tipoProductoEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.tipoProductoService.modificar(tipoProductoEdit).subscribe(() => {
+    this.tipoProductoService.modificar(tipoProductoEdit).subscribe({
+      next: c => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha editado satisfactoriamente'});
-   });
+    },
+    error: error => {
+      console.log('Error complete');
+      this.vistaCarga = false;
+    },
+    complete: () => {
+      this.vistaCarga = false;
+      console.log('Request complete');
+    }
+  });
 
   }
 
   eliminarConfirmado(data: TipoProducto){
     this.vistaCarga = true;
-    this.tipoProductoService.eliminar(data.id).subscribe(() => {
+    this.tipoProductoService.eliminar(data.id).subscribe({
+      next: c => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
@@ -287,7 +309,16 @@ export class TipoProductoComponent implements OnInit {
       }
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El tipo de producto se ha eliminado satisfactoriamente'});
-   });
+    },
+    error: error => {
+      console.log('Error complete');
+      this.vistaCarga = false;
+    },
+    complete: () => {
+      this.vistaCarga = false;
+      console.log('Request complete');
+    }
+  });
 
   }
 
@@ -329,13 +360,24 @@ export class TipoProductoComponent implements OnInit {
   }
 
   altaBaja(data: TipoProducto, valor: number, msj: string){
-    //this.vistaCarga = true;
+    this.vistaCarga = true;
     
-    this.tipoProductoService.altaBaja(data.id, valor).subscribe(() => {
+    this.tipoProductoService.altaBaja(data.id, valor).subscribe({
+      next: c => {
       this.loading = true; 
+      this.vistaCarga = false;
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+      },
+      error: error => {
+        console.log('Error complete');
+        this.vistaCarga = false;
+      },
+      complete: () => {
+        this.vistaCarga = false;
+        console.log('Request complete');
+      }
+    });
 
 
   }

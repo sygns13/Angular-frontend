@@ -24,10 +24,10 @@ export class StockService extends GenericService<Stock> {
 
   mensajeCambio = new Subject<string>();
 
-  protected url: string = `${environment.HOST}/stocks`
+  protected url: string = `${environment.HOST}/api/backend/stocks`
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/stocks`);
+    super(http, `${environment.HOST}/api/backend/stocks`);
   }
 
   getAlmacens() {

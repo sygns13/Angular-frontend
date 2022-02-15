@@ -51,11 +51,11 @@
                 </div>
 
                 <div class="p-field p-grid">
-                    <label for="almacen_registo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Local - Sucursal:</label>
+                    <label for="almacen_registo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Local:</label>
                     <div class="p-col-12 p-md-10">
                         <span class="p-float-label">
                             <p-dropdown #tinputClsAlmacenRegistro inputId="almacen_registo" [options]="almacens_registo"  [(ngModel)]="clsAlmacen_registro" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true" (onChange)="cambioLocal($event)"></p-dropdown>
-                                <label>Seleccione un Local - Sucursal</label>
+                                <label>Seleccione un Local</label>
                         </span>
                     </div>
                 </div>
@@ -139,7 +139,7 @@
              <div class="p-fluid box" >
 
                 <div class="p-field p-grid">
-                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local - Sucursal para Filtrar los Datos</label><br>
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
                     <div class="p-col-12 p-md-12">
                         <span class="p-float-label">
                             <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
@@ -188,7 +188,7 @@
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local - Sucursal</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local</th>
                        
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lotes</th>
 

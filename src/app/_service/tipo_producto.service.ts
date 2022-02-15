@@ -12,11 +12,11 @@ export class TipoProductoService extends GenericService<TipoProducto> {
 
   tipoProductos = new Subject<TipoProducto[]>();
 
-  protected url: string = `${environment.HOST}/tipoproductos`
+  protected url: string = `${environment.HOST}/api/backend/tipoproductos`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/tipoproductos`);
+    super(http, `${environment.HOST}/api/backend/tipoproductos`);
   }
 
   altaBaja(id: number, valor: number) {

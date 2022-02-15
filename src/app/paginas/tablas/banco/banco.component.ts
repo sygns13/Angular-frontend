@@ -245,13 +245,30 @@ export class BancoComponent implements OnInit {
     this.banco.dir = this.dir.toString().trim();
     this.banco.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.bancoService.registrar(this.banco).subscribe(() => {
+    /* this.bancoService.registrar(this.banco).subscribe(() => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha registrado satisfactoriamente'});
-   });
+   }); */
+   this.bancoService.registrar(this.banco).subscribe({
+    next: c => {
+      this.vistaCarga = false;
+      this.loading = true; 
+      this.cancelar();
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha registrado satisfactoriamente'});
+    },
+    error: error => {
+      console.log('Error complete');
+      this.vistaCarga = false;
+    },
+    complete: () => {
+      this.vistaCarga = false;
+      console.log('Request complete');
+    }
+  });
   }
 
   editarConfirmado(){
@@ -263,19 +280,29 @@ export class BancoComponent implements OnInit {
     bancoEdit.nombre = this.nombre.toString().trim();
     bancoEdit.dir = this.dir.toString().trim();
     bancoEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
-    this.bancoService.modificar(bancoEdit).subscribe(() => {
+    this.bancoService.modificar(bancoEdit).subscribe({
+      next: c => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha editado satisfactoriamente'});
-   });
+    },
+    error: error => {
+      console.log('Error complete');
+      this.vistaCarga = false;
+    },
+    complete: () => {
+      this.vistaCarga = false;
+      console.log('Request complete');
+    }
+  });
   }
 
   eliminarConfirmado(data:Banco){
     this.vistaCarga = true;
-    this.bancoService.eliminar(data.id).subscribe(() => {
+    /* this.bancoService.eliminar(data.id).subscribe(() => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
@@ -283,7 +310,25 @@ export class BancoComponent implements OnInit {
       }
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha eliminado satisfactoriamente'});
-   });
+   }); */
+   this.bancoService.eliminar(data.id).subscribe({
+    next: c => {
+      this.loading = true; 
+      this.vistaCarga = false;
+      if(this.numberElements <= 1 && this.page > 0){
+        this.page--;
+      }
+      this.listarPageMain(this.page, this.rows);
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha eliminado satisfactoriamente'});
+    },
+    error: error => {
+      this.vistaCarga = false;
+    },
+    complete: () => {
+      this.vistaCarga = false;
+      console.log('Request complete');
+    }
+  });
   }
   
 
@@ -338,10 +383,21 @@ export class BancoComponent implements OnInit {
   }*/
 
   altaBaja(data:Banco, valor: number, msj: string){
-    this.bancoService.altaBaja(data.id, valor).subscribe(() => {
+    this.vistaCarga = true;
+    this.bancoService.altaBaja(data.id, valor).subscribe({
+      next: c => {
        this.loading = true; 
+       this.vistaCarga = false;
        this.listarPageMain(this.page, this.rows);
        this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
+      },
+      error: error => {
+        this.vistaCarga = false;
+      },
+      complete: () => {
+        this.vistaCarga = false;
+        console.log('Request complete');
+      }
     });
 
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { AppComponent } from 'src/app/app.component';
 
 import { switchMap } from 'rxjs/operators';
 import {ConfirmationService, MessageService} from 'primeng/api';
@@ -21,11 +22,81 @@ export class VentaComponent implements OnInit {
 
   vistaCarga : boolean = true;
 
-  constructor() { }
+  nombreLocal: string = 'Nombre Local';
+
+  nombreCliente: string = '';
+  codigoProducto: string = '';
+  txtBuscarProducto: string = '';
+  txtBuscarDocCliente: string = '';
+  nombreDocIdentidad: string = 'LIBRETA ELECTORAL O DNI';
+
+  detalleVentas: any[] = [];
+
+  page: number = 0;
+  first: number = 0;
+  rows: number = 10;
+
+  OpGravada: string = '';
+  OpExonerada: string = '';
+  OpInafecta: string = '';
+  TotalISC: string = '';
+  TotalIGV: string = '';
+  TotalICBPER: string = '';
+  ImporteTotal: string = '';
+
+  constructor(public app: AppComponent) { }
 
   ngOnInit(): void {
 
     this.vistaCarga = false;
+  }
+
+  next() {
+    this.first = this.first + this.rows;
+  }
+
+  prev() {
+      this.first = this.first - this.rows;
+  }
+
+  reset() {
+      this.first = 0;
+  }
+
+  isLastPage(): boolean {
+      return this.detalleVentas ? this.first === (this.detalleVentas.length - this.rows): true;
+  }
+
+  isFirstPage(): boolean {
+      return this.detalleVentas ? this.first === 0 : true;
+  }
+
+
+  buscarCliente(): void{
+    
+  }
+
+  buscarProducto(): void{
+    
+  }
+
+  buscarDocCliente(): void{
+    
+  }
+
+  cobrarVenta(): void{
+    
+  }
+  nuevaVenta(): void{
+    
+  }
+
+  cancelarVenta(event: Event): void{
+    
+  }
+
+  cerrarVenta(event: Event): void{
+    
   }
 
 }

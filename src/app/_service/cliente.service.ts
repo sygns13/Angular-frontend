@@ -13,11 +13,11 @@ export class ClienteService extends GenericService<Cliente>  {
 
   clientes = new Subject<Cliente[]>();
 
-  protected url: string = `${environment.HOST}/clientes`
+  protected url: string = `${environment.HOST}/api/backend/clientes`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/clientes`);
+    super(http, `${environment.HOST}/api/backend/clientes`);
   }
 
   altaBaja(id: number, valor: number) {

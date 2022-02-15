@@ -10,13 +10,219 @@
     <div class="p-col-12">
         <div class="card  p-shadow-10">
             <h4>Registro de Ventas</h4>
-            <div class="p-fluid">
-                <blockquote>Aquí puede registrar los clientes que desee definir, los clientes son necesarios para el registro de venta ya que tienen que seleccionarse para poder registrar las ventas</blockquote>
+            <div class="p-fluid box">
+            <!-- <div class="p-fluid">
+                    <blockquote>Aquí puede registrar los clientes que desee definir, los clientes son necesarios para el registro de venta ya que tienen que seleccionarse para poder registrar las ventas</blockquote>
+                </div>
+                <br>
+        
+                <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Cliente" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button> -->
+
+                <div class="p-field p-grid">
+                    <label for="local" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"><b>Local:</b></label>
+                    <div class="p-col-12 p-md-10">
+                            <span class="person-tag teal-bgcolor p-p-1 fs-small" style="color: #f7f7f7;font-weight: 500; font-size: 15px!important;">{{nombreLocal}}</span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="numVenta" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>N° de Venta: 123456789</b></label>
+                    <label for="nombreCliente" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"><b>Cliente:</b></label>
+                    <div class="p-col-12 p-md-7">
+                        <input id="nombreCliente" type="text" pInputText [(ngModel)]="nombreCliente" #inputNombreCliente [disabled]="true">
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <button (click)="buscarCliente()" pButton pRipple type="button" icon="pi pi-search" label="Seleeccionar Cliente" class="p-button-raised p-button-info"></button>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="p-field p-grid">
+                    <label for="codigoProducto" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Agregar Productos por Código</b></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="codigoProducto" type="text" pInputText [(ngModel)]="codigoProducto" #inputcodigoProducto placeholder="Inserte el código y enter">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <div class="p-col-12 p-md-6" style="padding-top: 6px;
+                    padding-bottom: 6px;">
+                        <div class="p-inputgroup">
+                            <button pButton pRipple type="button" label="Buscar Producto" (click)="buscarProducto()" style="width: 150px;"></button>
+                            <span class="p-float-label">
+                                <input type="text" pInputText [(ngModel)]="txtBuscarProducto" (keyup.enter)="buscarProducto()"/>
+                                <label>Texto de búsqueda de producto</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12 p-md-4" style="padding-top: 6px;
+                    padding-bottom: 6px;">
+                        <div class="p-inputgroup">
+                            <button pButton pRipple type="button" label="Buscar Cliente" (click)="buscarDocCliente()" style="width: 150px;"></button>
+                            <span class="p-float-label">
+                                <input type="text" pInputText [(ngModel)]="txtBuscarDocCliente" (keyup.enter)="buscarDocCliente()"/>
+                                <label>Documento de Identidad</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12 p-md-2" style="text-align: center; padding-top: 6px;
+                    padding-bottom: 6px;">
+                        <span class="person-tag pink-bgcolor p-p-1 fs-small" style="color: #f7f7f7;
+                        font-weight: 500;
+                        min-height: 100%;
+                        display: inline-flex;
+                        align-items: center;
+                        font-size: 15px!important;">{{nombreDocIdentidad}}</span>
+                    </div>
+                </div>
             </div>
-            <br>
+
+            <h5>Listado de Productos a la Venta</h5>
+
+            <p-table [value]="detalleVentas" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"   
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines"  [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col style="width:60px;">
+                    <col style="width:60px;">
+                    <col style="width:100px;">
+                    <col style="width:250px;">
+                    <col style="width:100px;">
+                    <col style="width:150px;">
+                    <col style="width:80px;">
+                    <col style="width:80px;">
+                    <col style="width:100px;">
+                    <col style="width:100px;">
+                    <col style="width:100px;">
+                    <col style="width:100px;">
+                    <col style="width:100px;">
+                    <col style="width:100px;">
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Gestión</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Descripción del Producto</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Unidad</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lote</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha de Vencimiento</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Cantidad</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Precio Unitario</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Descuento</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">IGV</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ISC</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Importe de Venta</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ICBPER</th>
+
+                </tr>
+            </ng-template>
+
+
+            <ng-template pTemplate="body" let-servicioFila let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
     
-            <!-- <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Cliente" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button> -->
-    
+                        <button (click)="editar(servicioFila, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="servicioFila.borrado === 0" (click)="eliminar(servicioFila , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Producto" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        
+                    </td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.codigo}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.producto}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.unidad}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.lote}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.fechaVencimiento}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.cantidad}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.precioUnidad | currency:'PEN':'S/.'}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.descuento | currency:'PEN':'S/.'}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.igv | currency:'PEN':'S/.'}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.isc | currency:'PEN':'S/.'}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.importeVenta | currency:'PEN':'S/.'}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{servicioFila.icbper | currency:'PEN':'S/.'}}</td>
+                   
+                </tr>
+            </ng-template>
+        </p-table>
+        <br>
+
+        <div class="p-fluid box">
+
+            <div class="p-field p-grid" style="margin-bottom: 0px;">
+                <div class="p-col-12 p-md-9"></div>
+                <label for="OpGravada" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Op. Gravada:</label>
+                <div class="p-col-12 p-md-2">
+                    <input id="OpGravada" type="text" pInputText [(ngModel)]="OpGravada" #inputOpGravada [disabled]="true">
+                </div>
+            </div>
+            <div class="p-field p-grid" style="margin-bottom: 0px;">
+                <div class="p-col-12 p-md-9"></div>
+                <label for="OpExonerada" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Op. Exonerada:</label>
+                <div class="p-col-12 p-md-2">
+                    <input id="OpExonerada" type="text" pInputText [(ngModel)]="OpExonerada" #inputOpExonerada [disabled]="true">
+                </div>
+            </div>
+            <div class="p-field p-grid" style="margin-bottom: 0px;">
+                <div class="p-col-12 p-md-9"></div>
+                <label for="OpInafecta" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Op. Inafecta:</label>
+                <div class="p-col-12 p-md-2">
+                    <input id="OpInafecta" type="text" pInputText [(ngModel)]="OpInafecta" #inputOpInafecta [disabled]="true">
+                </div>
+            </div>
+            <div class="p-field p-grid" style="margin-bottom: 0px;">
+                <div class="p-col-12 p-md-9"></div>
+                <label for="TotalISC" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">ISC:</label>
+                <div class="p-col-12 p-md-2">
+                    <input id="TotalISC" type="text" pInputText [(ngModel)]="TotalISC" #inputTotalISC [disabled]="true">
+                </div>
+            </div>
+            <div class="p-field p-grid" style="margin-bottom: 0px;">
+                <div class="p-col-12 p-md-9"></div>
+                <label for="TotalIGV" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">IGV:</label>
+                <div class="p-col-12 p-md-2">
+                    <input id="TotalIGV" type="text" pInputText [(ngModel)]="TotalIGV" #inputTotalIGV [disabled]="true">
+                </div>
+            </div>
+            <div class="p-field p-grid" style="margin-bottom: 0px;">
+                <div class="p-col-12 p-md-9"></div>
+                <label for="TotalICBPER" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">ICBPER:</label>
+                <div class="p-col-12 p-md-2">
+                    <input id="TotalICBPER" type="text" pInputText [(ngModel)]="TotalICBPER" #inputTotalICBPER [disabled]="true">
+                </div>
+            </div>
+            <div class="p-field p-grid" style="margin-bottom: 0px;">
+                <div class="p-col-12 p-md-9"></div>
+                <label for="ImporteTotal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"><b>Importe Total:</b></label>
+                <div class="p-col-12 p-md-2">
+                    <input id="ImporteTotal" type="text" pInputText [(ngModel)]="ImporteTotal" #inputImporteTotal [disabled]="true">
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+            <button (click)="cobrarVenta()" pButton pRipple type="button" icon="pi pi-money-bill" label="Cobrar Venta" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button (click)="nuevaVenta()" pButton pRipple type="button" icon="pi pi-plus" label="Nueva Venta" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="cancelarVenta($event)" pButton pRipple type="button" icon="pi pi-times-circle" label="Resetear Venta" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button (click)="cerrarVenta($event)" pButton pRipple type="button" icon="pi pi-sign-out" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+
+
         </div>
     </div>
+
+    <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+
 </div>

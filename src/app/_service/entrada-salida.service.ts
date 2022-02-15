@@ -20,11 +20,11 @@ export class EntradaSalidaService extends GenericService<EntradaSalida> {
 
   EntradaSalida = new Subject<EntradaSalida[]>();
 
-  protected url: string = `${environment.HOST}/retiroentradaproducto`;
+  protected url: string = `${environment.HOST}/api/backend/retiroentradaproducto`;
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/retiroentradaproducto`);
+    super(http, `${environment.HOST}/api/backend/retiroentradaproducto`);
   }
 
   getListaEntradaSalidaProductos(filtros: FiltroGeneral) {

@@ -12,11 +12,11 @@ export class MarcaService extends GenericService<Marca> {
 
   marcas = new Subject<Marca[]>();
 
-  protected url: string = `${environment.HOST}/marcas`
+  protected url: string = `${environment.HOST}/api/backend/marcas`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/marcas`);
+    super(http, `${environment.HOST}/api/backend/marcas`);
   }
 
   altaBaja(id: number, valor: number) {

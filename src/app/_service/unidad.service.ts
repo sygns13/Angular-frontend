@@ -12,11 +12,11 @@ export class UnidadService extends GenericService<Unidad>  {
 
   unidads = new Subject<Unidad[]>();
 
-  protected url: string = `${environment.HOST}/unidads`
+  protected url: string = `${environment.HOST}/api/backend/unidads`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/unidads`);
+    super(http, `${environment.HOST}/api/backend/unidads`);
   }
 
   altaBaja(id: number, valor: number) {
