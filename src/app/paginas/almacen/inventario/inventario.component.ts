@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { switchMap } from 'rxjs/operators';
@@ -18,7 +18,8 @@ import { FiltroInventario } from './../../../_util/filtro_inventario';
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class InventarioComponent implements OnInit {
 

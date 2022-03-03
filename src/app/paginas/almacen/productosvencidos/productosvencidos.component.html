@@ -83,10 +83,10 @@
 
                 
 
-                <p-table [value]="productosVencidos" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
-                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" dataKey="producto.id" [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}" >
+                <p-table [value]="productosVencidos" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" dataKey="producto.id" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" >
 
-                <ng-template pTemplate="colgroup" let-columns>
+                <!-- <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
                         <col style="width:60px;">
                         <col style="width:184px;">
@@ -100,22 +100,22 @@
                         <col style="width:80px;">
                         <col style="width:100px;">
                     </colgroup>
-                </ng-template>
+                </ng-template> -->
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lote</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lote</th>
 
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock del Lote</th>
-                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha de Vencimiento</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock del Lote</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha de Vencimiento</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-productosVencidos let-rowIndex="rowIndex">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { AppComponent } from 'src/app/app.component';
 
@@ -16,7 +16,8 @@ import { TipoDocumento } from './../../../_model/tipo_documento';
   selector: 'app-venta',
   templateUrl: './venta.component.html',
   styleUrls: ['./venta.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class VentaComponent implements OnInit {
 

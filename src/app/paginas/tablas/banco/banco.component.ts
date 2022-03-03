@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import {BancoService } from '../../../_service/banco.service';
 import { switchMap } from 'rxjs/operators';
@@ -11,7 +11,8 @@ import { LazyLoadEvent } from 'primeng/api';
 @Component({
   selector: 'app-banco',
   templateUrl: './banco.component.html',
-  styleUrls: ['./banco.component.scss']
+  styleUrls: ['./banco.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class BancoComponent implements OnInit {
 

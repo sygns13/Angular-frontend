@@ -107,10 +107,10 @@
                 </span>
             </div>
         </div>
-        <p-table [value]="clientes" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
-            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}" >
+        <p-table [value]="clientes" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" >
 
-            <ng-template pTemplate="colgroup" let-columns>
+            <!-- <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                     <col style="width:60px;">
                     <col style="width:200px;">
@@ -122,19 +122,19 @@
                     <col style="width:170px;">
                     <col style="width:67px;">
                 </colgroup>
-            </ng-template>
+            </ng-template> -->
 
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Cliente</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 1</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 2</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Gestión</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Cliente</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 1</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 2</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Gestión</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-cliente let-rowIndex="rowIndex" >

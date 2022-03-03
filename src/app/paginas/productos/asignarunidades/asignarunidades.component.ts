@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter,  ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter,  ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { switchMap } from 'rxjs/operators';
@@ -18,7 +18,8 @@ import { UnidadProducto } from './../../../_model/unidad_producto';
   selector: 'app-asignarunidades',
   templateUrl: './asignarunidades.component.html',
   styleUrls: ['./asignarunidades.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AsignarunidadesComponent implements OnInit {
 

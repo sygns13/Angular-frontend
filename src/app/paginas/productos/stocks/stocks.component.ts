@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter,  ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter,  ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { switchMap } from 'rxjs/operators';
@@ -26,7 +26,8 @@ import { Almacen } from './../../../_model/almacen';
   selector: 'app-stocks',
   templateUrl: './stocks.component.html',
   styleUrls: ['./stocks.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class StocksComponent implements OnInit {
 

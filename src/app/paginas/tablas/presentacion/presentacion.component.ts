@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import {PresentacionService } from '../../../_service/presentacion.service';
 import { switchMap } from 'rxjs/operators';
@@ -12,7 +12,8 @@ import { LazyLoadEvent } from 'primeng/api';
   selector: 'app-presentacion',
   templateUrl: './presentacion.component.html',
   styleUrls: ['./presentacion.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PresentacionComponent implements OnInit {
 

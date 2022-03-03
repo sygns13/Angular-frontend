@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { AlmacenService } from './../../../_service/almacen.service';
 import { switchMap } from 'rxjs/operators';
@@ -12,7 +12,8 @@ import { LazyLoadEvent } from 'primeng/api';
   selector: 'app-local',
   templateUrl: './local.component.html',
   styleUrls: ['./local.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LocalComponent implements OnInit {
 

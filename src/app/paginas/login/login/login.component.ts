@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { LoginService } from 'src/app/_service/login.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -7,7 +7,8 @@ import {CardModule} from 'primeng/card';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {
 

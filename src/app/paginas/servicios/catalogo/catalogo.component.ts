@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import {switchMap } from 'rxjs/operators';
 import {ConfirmationService, MessageService} from 'primeng/api';
@@ -13,7 +13,8 @@ import {ServicioService } from './../../../_service/servicio.service';
   selector: 'app-catalogo',
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class CatalogoComponent implements OnInit {
 

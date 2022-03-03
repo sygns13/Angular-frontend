@@ -137,9 +137,9 @@
                 </span>
             </div>
         </div>
-        <p-table [value]="servicios" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
-            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines"  [scrollable]="true" [style]="{width:'100%', 'padding-right': '0px!important'}">
-            <ng-template pTemplate="colgroup" let-columns>
+        <p-table [value]="servicios" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}">
+           <!--  <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                     <col style="width:60px;">
                     <col style="width:200px;">
@@ -150,19 +150,19 @@
                     <col style="width:80px;">
                     <col style="width:100px;">
                 </colgroup>
-            </ng-template>
+            </ng-template> -->
 
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Servicio</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Descripción</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Precio</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">IGV</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ISC</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Servicio</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Descripción</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Precio</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">IGV</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">ISC</th>
             
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Gestión</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Gestión</th>
                 </tr>
             </ng-template>
 

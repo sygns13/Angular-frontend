@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { switchMap } from 'rxjs/operators';
@@ -26,7 +26,8 @@ import { Router } from '@angular/router';
   selector: 'app-listarentradasalidaproductos',
   templateUrl: './listarentradasalidaproductos.component.html',
   styleUrls: ['./listarentradasalidaproductos.component.scss'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ListarentradasalidaproductosComponent implements OnInit {
 
