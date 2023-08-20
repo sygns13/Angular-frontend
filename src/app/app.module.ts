@@ -23,7 +23,7 @@ import {ChartModule} from 'primeng/chart';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ChipModule} from 'primeng/chip';
 import {ChipsModule} from 'primeng/chips';
-import {CodeHighlighterModule} from 'primeng/codehighlighter';
+/* import {CodeHighlighterModule} from 'primeng/codehighlighter'; */
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {ColorPickerModule} from 'primeng/colorpicker';
@@ -34,7 +34,7 @@ import {DividerModule} from 'primeng/divider';
 import {DropdownModule} from 'primeng/dropdown';
 import {FieldsetModule} from 'primeng/fieldset';
 import {FileUploadModule} from 'primeng/fileupload';
-import {FullCalendarModule} from 'primeng/fullcalendar';
+/* import {FullCalendarModule} from 'primeng/fullcalendar'; */
 import {GalleriaModule} from 'primeng/galleria';
 import {InplaceModule} from 'primeng/inplace';
 import {InputNumberModule} from 'primeng/inputnumber';
@@ -43,7 +43,7 @@ import {InputSwitchModule} from 'primeng/inputswitch';
 import {InputTextModule} from 'primeng/inputtext';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {KnobModule} from 'primeng/knob';
-import {LightboxModule} from 'primeng/lightbox';
+/* import {LightboxModule} from 'primeng/lightbox'; */
 import {ListboxModule} from 'primeng/listbox';
 import {MegaMenuModule} from 'primeng/megamenu';
 import {MenuModule} from 'primeng/menu';
@@ -207,7 +207,7 @@ export function tokenGetter() {
         CheckboxModule,
         ChipModule,
         ChipsModule,
-        CodeHighlighterModule,
+        /* CodeHighlighterModule, */
         ConfirmDialogModule,
         ConfirmPopupModule,
         ColorPickerModule,
@@ -218,7 +218,7 @@ export function tokenGetter() {
         DropdownModule,
         FieldsetModule,
         FileUploadModule,
-        FullCalendarModule,
+        /* FullCalendarModule, */
         GalleriaModule,
         InplaceModule,
         InputNumberModule,
@@ -227,7 +227,7 @@ export function tokenGetter() {
         InputTextModule,
         InputTextareaModule,
         KnobModule,
-        LightboxModule,
+        /* LightboxModule, */
         ListboxModule,
         MegaMenuModule,
         MenuModule,
