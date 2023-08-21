@@ -31,4 +31,12 @@ export class ClienteService extends GenericService<Cliente>  {
   getTipoDocumentos(){
     return this.http.get<any>(`${this.url}/tipodocumentos`);
   }
+
+  getByDocument(document:String){
+    return this.http.get<Cliente>(`${this.url}/getbydoc/${document}`);
+  }
+
+  registrarRetCliente(cliente: Cliente) {
+    return this.http.post<Cliente>(this.url, cliente);
+  }
 }
