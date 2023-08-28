@@ -84,7 +84,7 @@
 
         <div class="p-field p-grid">
           <label for="numVenta" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-            ><b>N° de Venta: {{ venta.numero }}</b></label
+            ><b>N° de Venta: {{ venta.numeroVenta }}</b></label
           >
           <label for="nombreCliente" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"
             ><b>Cliente:</b></label
@@ -132,7 +132,8 @@
             class="p-col-12 p-md-2"
             style="text-align: center; padding-top: 6px; padding-bottom: 6px"
           >
-            <span
+            <span 
+              *ngIf="nombreDocIdentidad != null && nombreDocIdentidad.length > 0"
               class="person-tag pink-bgcolor p-p-1 fs-small"
               style="
                 color: #f7f7f7;
@@ -859,7 +860,8 @@
         <div class="p-mb-3"></div>
         </div>
     <p-footer>
-        <button pButton pRipple type="button" icon="pi pi-check" (click)="displayClient=false" label="Yes" class="p-button-text"></button>
-        <button pButton pRipple type="button" icon="pi pi-times" (click)="displayClient=false" label="No" class="p-button-text"></button>
+        <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayClient=false" label="Yes" class="p-button-text"></button> -->
+        <button (click)="displayClient=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+        <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayClient=false" label="No" class="p-button-text"></button> -->
     </p-footer>
 </p-dialog>

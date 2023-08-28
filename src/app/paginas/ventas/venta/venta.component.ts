@@ -10,11 +10,13 @@ import { LazyLoadEvent } from 'primeng/api';
 
 import { GestionloteService } from 'src/app/_service/gestionlote.service';
 import { ClienteService } from './../../../_service/cliente.service';
+import { VentaService } from './../../../_service/venta.service';
 import { Cliente } from './../../../_model/cliente';
 import { TipoDocumento } from './../../../_model/tipo_documento';
 import { Venta } from './../../../_model/venta';
 import { Almacen } from 'src/app/_model/almacen';
 import { Comprobante } from 'src/app/_model/comprobante';
+import { DetalleVenta } from 'src/app/_model/detalle_venta';
 
 @Component({
   selector: 'app-venta',
@@ -46,7 +48,7 @@ export class VentaComponent implements OnInit {
   txtBuscarDocCliente: string = '';
   nombreDocIdentidad: string = '';
 
-  detalleVentas: any[] = [];
+  detalleVentas: DetalleVenta[] = [];
 
   page: number = 0;
   first: number = 0;
@@ -97,7 +99,7 @@ export class VentaComponent implements OnInit {
   newCliente = new Cliente();
 
   constructor(public app: AppComponent, private gestionloteService: GestionloteService, private messageService: MessageService, private clienteService: ClienteService,
-              private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService) { }
+              private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService , private ventaService: VentaService) { }
 
   ngOnInit(): void {
 
@@ -152,15 +154,52 @@ export class VentaComponent implements OnInit {
   seleccionarLocal(): void{
 
     if(this.clsAlmacen != null){
-      this.venta.cliente = new Cliente();
-      this.venta.comprobante = new Comprobante();
       this.venta.almacen = new Almacen();
       this.venta.almacen.id = this.clsAlmacen.code;
       this.venta.almacen.nombre = this.clsAlmacen.name;
+      this.venta.subtotalInafecto = 0;
+      this.venta.subtotalAfecto = 0;
+      this.venta.igv = 0;
 
-      this.verFrmVenta = true;
-      this.vistaCarga = false;
-      this.verFrmAlmacen = false;
+      this.venta.cliente = null;
+      this.venta.comprobante = null;
+
+      this.txtBuscarDocCliente = "";
+      this.txtBuscarCliente = "";
+      this.displayClient = false;
+      this.nombreDocIdentidad = "";
+
+      this.ventaService.registrarRetVenta(this.venta).subscribe({
+        next: (data) => {
+          if(data != null && data.id != null){
+            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+            this.venta.id = data.id;
+            this.venta.fecha = data.fecha;
+            this.venta.subtotalInafecto = data.subtotalInafecto;
+            this.venta.subtotalAfecto = data.subtotalAfecto;
+            this.venta.igv = data.igv;
+            this.venta.estado = data.estado;
+            this.venta.pagado = data.pagado;
+            this.venta.hora = data.hora;
+            this.venta.tipo = data.tipo;
+            this.venta.numeroVenta = data.numeroVenta;
+
+            this.venta.cliente = new Cliente();
+            this.venta.comprobante = new Comprobante();
+            this.detalleVentas = [];
+            this.venta.detalleVentas = this.detalleVentas;
+  
+            this.verFrmVenta = true;
+            this.vistaCarga = false;
+            this.verFrmAlmacen = false;
+          }
+        },
+        error: (err) => {
+          console.log(err);
+        }        
+     });
+
+      
     }
     else{
       this.messageService.add({severity:'warn', summary:'Advertencia', detail: 'No ha seleccionado un Local o Sucursal Válido'});
@@ -259,11 +298,25 @@ export class VentaComponent implements OnInit {
   aceptarCliente(registro){
     //console.log(registro);
     if(registro != null){
-      this.txtBuscarCliente = "";
-      this.txtBuscarDocCliente = "";
-      this.displayClient = false;
+
       this.venta.cliente = registro;
-      this.nombreDocIdentidad = this.venta.cliente.tipoDocumento.tipo;
+        this.ventaService.modificarCliente(this.venta).subscribe({
+          next: (dataUdpCliente) => {
+            if(dataUdpCliente != null && dataUdpCliente.id != null){
+
+              this.venta.cliente = dataUdpCliente.cliente;
+              
+              this.txtBuscarCliente = "";
+              this.txtBuscarDocCliente = "";
+              this.displayClient = false;
+              this.nombreDocIdentidad = registro.tipoDocumento.tipo;
+              console.log(this.nombreDocIdentidad);
+            }
+          },
+          error: (errUdpCliente) => {
+            console.log(errUdpCliente);
+          }        
+       });
     }
   }
 
@@ -275,10 +328,26 @@ export class VentaComponent implements OnInit {
     this.clienteService.getByDocument(this.txtBuscarDocCliente).subscribe({
       
       next: (data) => {
+
         this.venta.cliente = data;
-        this.nombreDocIdentidad = this.venta.cliente.tipoDocumento.tipo;
-        this.txtBuscarCliente = "";
-        this.displayClient = false;
+        this.ventaService.modificarCliente(this.venta).subscribe({
+          next: (dataUdpCliente) => {
+            if(dataUdpCliente != null && dataUdpCliente.id != null){
+
+              this.venta.cliente = dataUdpCliente.cliente;
+              
+              this.txtBuscarCliente = "";
+              this.txtBuscarDocCliente = "";
+              this.displayClient = false;
+              this.nombreDocIdentidad = data.tipoDocumento.tipo;
+            }
+          },
+          error: (errUdpCliente) => {
+            console.log(errUdpCliente);
+          }        
+       });
+
+       
       },
       error: (err) => {
         this.txtBuscarDocCliente = "";
@@ -356,12 +425,25 @@ export class VentaComponent implements OnInit {
   
     this.clienteService.registrarRetCliente(this.newCliente).subscribe(data => {
       if(data != null){
-        this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-        this.txtBuscarCliente = "";
-        this.txtBuscarDocCliente = "";
-        this.displayClient = false;
+
         this.venta.cliente = data;
-        this.nombreDocIdentidad = this.venta.cliente.tipoDocumento.tipo;
+        this.ventaService.modificarCliente(this.venta).subscribe({
+          next: (dataUdpCliente) => {
+            if(dataUdpCliente != null && dataUdpCliente.id != null){
+
+              this.venta.cliente = dataUdpCliente.cliente;
+              this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+              this.txtBuscarCliente = "";
+              this.txtBuscarDocCliente = "";
+              this.displayClient = false;
+              this.nombreDocIdentidad = data.tipoDocumento.tipo;
+            }
+          },
+          error: (errUdpCliente) => {
+            console.log(errUdpCliente);
+          }        
+       });
+
       }
    });
   

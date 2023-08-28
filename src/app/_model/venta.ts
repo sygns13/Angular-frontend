@@ -1,6 +1,7 @@
 import { Comprobante } from './comprobante';
 import { Cliente } from "./cliente";
 import { Almacen } from './almacen';
+import { DetalleVenta } from './detalle_venta';
 
 export class Venta {
     id: number;
@@ -17,5 +18,6 @@ export class Venta {
     almacen: Almacen;
     activo: number;
     borrado: number;
-    numero: number;
+    numeroVenta: string;
+    detalleVentas: DetalleVenta[];
 }
