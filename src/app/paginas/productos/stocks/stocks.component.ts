@@ -20,6 +20,7 @@ import { Stock } from 'src/app/_model/stock';
 import { Lote } from 'src/app/_model/lote';
 import * as moment from 'moment';
 import { Almacen } from './../../../_model/almacen';
+import { LotesChangeOrden } from 'src/app/_model/lotes_change_orden';
 
 
 @Component({
@@ -87,7 +88,7 @@ export class StocksComponent implements OnInit {
      }
 
      ngOnInit(): void {
-      this.getAlmacens();
+      this.getDatosmain();
       this.primengConfig.ripple = true;
       this.vistaCarga = false;
   
@@ -102,29 +103,35 @@ export class StocksComponent implements OnInit {
     }
 
     //Carga de Data:
-  getAlmacens() {
+    getDatosmain() {
 
     this.clsAlmacen = null;
     this.almacens = [];
     this.almacens_registo = [];
 
-    this.stockService.getAlmacens().subscribe(data => {
-
+    this.stockService.getAlmacensProducts(this.producto.id).subscribe(data => {
       this.almacens.push({name: "General - Todas", code: 0});
       this.clsAlmacen = {name: "General - Todas", code: 0};
 
       this.fechaIngresoBD= data.fechaIngreso;
 
       data.almacens.forEach(almacen => {
+        this.stockLoteDTOs = almacen.productosStocks.respuesta;
+        this.cantidadTotal = almacen.productosStocks.cantidadTotal;
+        let _total = this.calcularTotalesN(almacen);
+
         this.almacens.push({name: almacen.nombre, code: almacen.id});
-        this.almacens_registo.push({name: almacen.nombre, code: almacen.id});
+        this.almacens_registo.push({name: almacen.nombre, code: almacen.id, codigo: almacen.codigo, stockLoteDTOs: this.stockLoteDTOs, cantidadTotal : this.cantidadTotal, calcTotales: _total, editar : 0});
+        this.loading = false;
       });
-      this.getDatosmain();
+      //this.getDatosmain();
+      this.calcTotales = this.calcularTotalesN2(data.almacens);
 
     });
+    this.cancelFormulario();
   }
 
-  getDatosmain(){
+  /* getDatosmain(){
 
       this.stockService.listarDTO(this.clsAlmacen.code, this.producto.id).subscribe(data => {
         this.stockLoteDTOs = data.respuesta;
@@ -135,7 +142,7 @@ export class StocksComponent implements OnInit {
       });
     this.cancelFormulario();
 
-  }
+  } */
 
   cambioSucursal(event: Event){
 
@@ -173,6 +180,35 @@ export class StocksComponent implements OnInit {
     }
     return totales;
 
+ } 
+
+  calcularTotalesN(almacen: any) {
+
+    let totales = [];
+
+
+    if(this.producto.activoLotes == 1){
+      totales.push({idAlmacen: almacen.id, total: almacen.productosStocks.cantidadTotal});
+    }
+    return totales;
+
+ } 
+
+ calcularTotalesN2(almacens: any) {
+
+  let totales = [];
+  if(this.producto.activoLotes != 1){
+    let total: number = 0;
+    almacens.forEach(datoStock => {
+          if(datoStock.productosStocks.cantidadTotal != null){
+            total = total + datoStock.productosStocks.cantidadTotal;
+          }
+       });
+
+     totales.push({label: 'Cantidad Total en Stock', total: total});
+  }
+
+  return totales;
  } 
 
   //Funciones Botones Lotes
@@ -434,26 +470,84 @@ export class StocksComponent implements OnInit {
     });
     }
 
+    subirOrden(data:StockLoteDTO, index, key0, event: Event){
+      this.confirmationService.confirm({
+        key: 'confirmDialog',
+        target: event.target,
+        message: '¿Está seguro de Subir de orden el Lote?',
+        icon: 'pi pi-exclamation-triangle',
+        header: 'Confirmación Modificar Orden',
+        accept: () => {
+
+          let stockLotetDTOEdit = new LotesChangeOrden();
+          stockLotetDTOEdit.lote1 = data.lote;
+          let almacen = this.almacens_registo[key0];
+          console.log(almacen);
+          let stockLoteDTO = almacen.stockLoteDTOs[index - 1];
+          console.log(stockLoteDTO);
+          stockLotetDTOEdit.lote2 = stockLoteDTO.lote;
+          this.modificarOrdenConfirmado(stockLotetDTOEdit);
+        },
+        reject: () => {
+        }
+      });
+      
+    }
+
+    bajarOrden(data:StockLoteDTO, index, key0, event: Event){
+      this.confirmationService.confirm({
+        key: 'confirmDialog',
+        target: event.target,
+        message: '¿Está seguro de Subir de orden el Lote?',
+        icon: 'pi pi-exclamation-triangle',
+        header: 'Confirmación Modificar Orden',
+        accept: () => {
+
+          let stockLotetDTOEdit = new LotesChangeOrden();
+          stockLotetDTOEdit.lote1 = data.lote;
+          let almacen = this.almacens_registo[key0];
+          let stockLoteDTO = almacen.stockLoteDTOs[index + 1];
+          stockLotetDTOEdit.lote2 = stockLoteDTO.lote;
+          this.modificarOrdenConfirmado(stockLotetDTOEdit);
+        },
+        reject: () => {
+        }
+      });
+      
+    }
+
+    modificarOrdenConfirmado(data:LotesChangeOrden){
+      this.vistaCarga = true;
+      this.loteService.modificarOrden(data).subscribe(() => {
+        this.loading = true; 
+        this.vistaCarga = false;
+        this.getDatosmain();
+        this.messageService.add({severity:'success', summary:'Confirmado', detail: 'Se ha modificado el orden del Lote satisfactoriamente'});
+    });
+    }
+
 
 
 
 
 
 //Funciones Botones Stock
-  editarStock(data:StockLoteDTO){
+  editarStock(data:any){
+
+    console.log(data);
 
     let stockLotetDTOEdit = new StockLoteDTO();
-    stockLotetDTOEdit = JSON.parse(JSON.stringify(data));
+    stockLotetDTOEdit = JSON.parse(JSON.stringify(data.stockLoteDTOs[0]));
 
     this.stock = stockLotetDTOEdit.stock;
     this.stock.almacenId = stockLotetDTOEdit.almacen.id;
 
-    this.stockLoteDTOs.forEach(stockLoteDTOIndividual => {
-      if(stockLotetDTOEdit.almacen.id == stockLoteDTOIndividual.almacen.id){
-        stockLoteDTOIndividual.editar = 1;
+    this.almacens_registo.forEach(almacens => {
+      if(stockLotetDTOEdit.almacen.id == almacens.code){
+        almacens.editar = 1;
       }
       else{
-        stockLoteDTOIndividual.editar = 0;
+        almacens.editar = 0;
       }
     });
 

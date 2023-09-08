@@ -30,6 +30,10 @@ export class StockService extends GenericService<Stock> {
     super(http, `${environment.HOST}/api/backend/stocks`);
   }
 
+  getAlmacensProducts(idProd: number) {
+    return this.http.get<any>(`${this.url}/almacens-producto/${idProd}`);
+  }
+
   getAlmacens() {
     return this.http.get<any>(`${this.url}/almacens`);
   }

@@ -164,10 +164,10 @@
                         </ng-template>
                     </p-table>
             
-                    <p-table [value]="stockLoteDTOs" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
+                    <p-table [value]="sucursal.stockLoteDTOs" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N°</th>
+                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N° Orden</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 25%; color:white;">Lote</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Fecha de Ingreso</th>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Fecha de Vencimiento</th>
@@ -177,8 +177,8 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-detlotes let-rowIndex="rowIndex"  >
-                            <tr *ngIf="sucursal.code == detlotes.almacen.id">
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
+                            <tr >
+                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N° Orden</span> {{rowIndex+1}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Lote</span>  {{detlotes.lote.nombre}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha de Ingreso</span>  {{detlotes.lote.fechaIngreso | passfechavistaTransform}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha de Vencimiento</span>  {{detlotes.lote.fechaVencimiento | passfechavistaTransform}}</td>
@@ -187,6 +187,8 @@
     
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
                 
+                                    <button  *ngIf="rowIndex > 0" (click)="subirOrden(detlotes, rowIndex, key0, $event)" pButton pRipple type="button" icon="pi pi-arrow-up" class="p-button-rounded p-button-secondary p-mr-2 p-mb-2" pTooltip="Subir Orden de Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                                    <button *ngIf="(rowIndex+1) < sucursal.stockLoteDTOs.length" (click)="bajarOrden(detlotes, rowIndex, key0, $event)" pButton pRipple type="button" icon="pi pi-arrow-down" class="p-button-rounded p-button-info p-mr-2 p-mb-2" pTooltip="Bajar Orden de Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
                                     <button (click)="editar(detlotes, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
                                     <button (click)="eliminar(detlotes , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
                                     
@@ -195,14 +197,15 @@
                         </ng-template>
                         
                     </p-table>
+
                     <p-table [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines"  [loading]="loading">
                         <ng-template  pTemplate="header">
-                            <ng-template  ngFor let-datoTotal [ngForOf]="calcTotales">
-                                <tr *ngIf="sucursal.code == datoTotal.idAlmacen && datoTotal.total > 0">
+                            <ng-template  ngFor let-datoTotal [ngForOf]="sucursal.calcTotales">
+                                <tr *ngIf="datoTotal.total > 0">
                                     <td style="background-color:#575d63; vertical-align: middle; font-size: 1rem; border:1px solid #ddd;padding: 5px; width: 80%;  text-align: center; color:white; font-weight:bold;">Total</td>
                                     <td style="background-color:#575d63; vertical-align: middle; font-size: 1rem; border:1px solid #ddd;padding: 5px; width: 20%; text-align: left; color:white; font-weight:bold;">{{datoTotal.total}}</td>
                                 </tr>
-                                <tr  *ngIf="sucursal.code == datoTotal.idAlmacen && datoTotal.total == 0">
+                                <tr  *ngIf="datoTotal.total == 0">
                                     <td style="border:1px solid #ddd; vertical-align: middle; font-size: 12px; padding: 2px; text-align:center;">
                                         No se encuentran Lotes del Producto en este Local
                                     </td>
@@ -212,9 +215,9 @@
                     </p-table>
 
                 </div>
-            </ng-template>
+                </ng-template>
         
-            <ng-template #elseLoteAlmacen>
+                <ng-template #elseLoteAlmacen>
             
                     <p-table [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines">
                         <ng-template pTemplate="header">
@@ -224,52 +227,60 @@
                         </ng-template>
                     </p-table>
             
-                    <p-table [value]="stockLoteDTOs" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N°</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 25%; color:white;">Lote</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Fecha de Ingreso</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Fecha de Vencimiento</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 20%; color:white;">Código</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 10%; color:white;">Cantidad</th>
-                                <th style="background-color: #575d63; border: 1px solid #ddd; width: 10%; color:white;">Gestión</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-detlotes let-rowIndex="rowIndex">
-                            <tr *ngIf="clsAlmacen.code == detlotes.almacen.id">
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Lote</span>  {{detlotes.lote.nombre}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha de Ingreso</span>  {{detlotes.lote.fechaIngreso | passfechavistaTransform}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha de Vencimiento</span>  {{detlotes.lote.fechaVencimiento | passfechavistaTransform}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código</span>  {{detlotes.almacen.id | leftpathTransform:3 }} - {{detlotes.lote.id | leftpathTransform:8 }}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Cantidad</span>  {{detlotes.lote.cantidad}}</td>
-    
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
+                    <div style="padding-bottom:20px;">
+                        <div *ngFor="let sucursal of almacens_registo ; let key0=index"  >
+                            <div *ngIf="clsAlmacen.code == sucursal.code">
+                                <p-table [value]="sucursal.stockLoteDTOs" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N° Orden</th>
+                                            <th style="background-color: #575d63; border: 1px solid #ddd; width: 25%; color:white;">Lote</th>
+                                            <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Fecha de Ingreso</th>
+                                            <th style="background-color: #575d63; border: 1px solid #ddd; width: 15%; color:white;">Fecha de Vencimiento</th>
+                                            <th style="background-color: #575d63; border: 1px solid #ddd; width: 20%; color:white;">Código</th>
+                                            <th style="background-color: #575d63; border: 1px solid #ddd; width: 10%; color:white;">Cantidad</th>
+                                            <th style="background-color: #575d63; border: 1px solid #ddd; width: 10%; color:white;">Gestión</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-detlotes let-rowIndex="rowIndex">
+                                        <tr>
+                                            <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N° Orden</span> {{rowIndex+1}}</td>
+                                            <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Lote</span>  {{detlotes.lote.nombre}}</td>
+                                            <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha de Ingreso</span>  {{detlotes.lote.fechaIngreso | passfechavistaTransform}}</td>
+                                            <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha de Vencimiento</span>  {{detlotes.lote.fechaVencimiento | passfechavistaTransform}}</td>
+                                            <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código</span>  {{detlotes.almacen.id | leftpathTransform:3 }} - {{detlotes.lote.id | leftpathTransform:8 }}</td>
+                                            <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Cantidad</span>  {{detlotes.lote.cantidad}}</td>
                 
-                                    <button (click)="editar(detlotes, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                                    <button (click)="eliminar(detlotes , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                                    
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
+                                            <td style="border: 1px solid #ddd; font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
+                            
+                                                <button  *ngIf="rowIndex > 0" (click)="subirOrden(detlotes, rowIndex, key0, $event)" pButton pRipple type="button" icon="pi pi-arrow-up" class="p-button-rounded p-button-secondary p-mr-2 p-mb-2" pTooltip="Subir Orden de Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                                                <button *ngIf="(rowIndex+1) < sucursal.stockLoteDTOs.length" (click)="bajarOrden(detlotes, rowIndex, key0, $event)" pButton pRipple type="button" icon="pi pi-arrow-down" class="p-button-rounded p-button-info p-mr-2 p-mb-2" pTooltip="Bajar Orden de Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                                                <button (click)="editar(detlotes, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                                                <button (click)="eliminar(detlotes , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Lote" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                                                
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
 
-                    <p-table [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines"  [loading]="loading">
-                        <ng-template  pTemplate="header">
-                            <ng-template  ngFor let-datoTotal [ngForOf]="calcTotales">
-                                <tr *ngIf="clsAlmacen.code == datoTotal.idAlmacen && datoTotal.total > 0">
-                                    <td style="background-color:#575d63; vertical-align: middle; font-size: 1rem; border:1px solid #ddd;padding: 5px; width: 80%;  text-align: center; color:white; font-weight:bold;">Total</td>
-                                    <td style="background-color:#575d63; vertical-align: middle; font-size: 1rem; border:1px solid #ddd;padding: 5px; width: 20%; text-align: left; color:white; font-weight:bold;">{{datoTotal.total}}</td>
-                                </tr>
-                                <tr  *ngIf="clsAlmacen.code == datoTotal.idAlmacen && datoTotal.total == 0">
-                                    <td style="border:1px solid #ddd; vertical-align: middle; font-size: 12px; padding: 2px; text-align:center;">
-                                        No se encuentran Lotes del Producto en este Local
-                                    </td>
-                                </tr>   
-                            </ng-template>
-                        </ng-template>
-                    </p-table>
+                                <p-table [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines"  [loading]="loading">
+                                    <ng-template  pTemplate="header">
+                                        <ng-template  ngFor let-datoTotal [ngForOf]="sucursal.calcTotales">
+                                            <tr *ngIf="datoTotal.total > 0">
+                                                <td style="background-color:#575d63; vertical-align: middle; font-size: 1rem; border:1px solid #ddd;padding: 5px; width: 80%;  text-align: center; color:white; font-weight:bold;">Total</td>
+                                                <td style="background-color:#575d63; vertical-align: middle; font-size: 1rem; border:1px solid #ddd;padding: 5px; width: 20%; text-align: left; color:white; font-weight:bold;">{{datoTotal.total}}</td>
+                                            </tr>
+                                            <tr  *ngIf="datoTotal.total == 0">
+                                                <td style="border:1px solid #ddd; vertical-align: middle; font-size: 12px; padding: 2px; text-align:center;">
+                                                    No se encuentran Lotes del Producto en este Local
+                                                </td>
+                                            </tr>   
+                                        </ng-template>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
 
                 </ng-template>
             </ng-template>
@@ -278,7 +289,7 @@
                 <ng-template [ngIf]="clsAlmacen == null || clsAlmacen.code ==0" [ngIfElse]="elseLoteStock">
             
             
-                    <p-table [value]="stockLoteDTOs" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
+                    <p-table [value]="almacens_registo" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N°</th>
@@ -291,11 +302,11 @@
                         <ng-template pTemplate="body" let-detStock let-rowIndex="rowIndex">
                             <tr>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local</span>  {{detStock.almacen.nombre}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código Domicilio Fiscal</span>  {{detStock.almacen.codigo}}</td>
+                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local</span>  {{detStock.name}}</td>
+                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código Domicilio Fiscal</span>  {{detStock.codigo}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Cantidad</span>  
                                     <ng-template [ngIf]="detStock.editar == 0"  [ngIfElse]="elseEdit">
-                                        {{detStock.stock.cantidad}}
+                                        {{detStock.cantidadTotal}}
                                     </ng-template>
                                     <ng-template #elseEdit>
                                         <span class="p-float-label">
@@ -329,9 +340,8 @@
             
                 </ng-template>
                 <ng-template #elseLoteStock>  
-            
-            
-                    <p-table [value]="stockLoteDTOs" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
+
+                    <p-table [value]="almacens_registo" [paginator]="false"  styleClass="p-datatable-responsive-demo p-datatable-gridlines" [loading]="loading">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="background-color: #575d63; border: 1px solid #ddd; width: 5%; color:white;">N°</th>
@@ -342,13 +352,13 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-detStock let-rowIndex="rowIndex">
-                            <tr *ngIf="clsAlmacen.code == detStock.almacen.id">
+                            <tr *ngIf="clsAlmacen.code == detStock.code">
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local</span>  {{detStock.almacen.nombre}}</td>
-                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código Domicilio Fiscal</span>  {{detStock.almacen.codigo}}</td>
+                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Local</span>  {{detStock.name}}</td>
+                                <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Código Domicilio Fiscal</span>  {{detStock.codigo}}</td>
                                 <td style="border: 1px solid #ddd; font-size: 1rem; padding: 5px;"><span class="p-column-title">Cantidad</span>
                                     <ng-template [ngIf]="detStock.editar == 0"  [ngIfElse]="elseEdit">
-                                        {{detStock.stock.cantidad}}
+                                        {{detStock.cantidadTotal}}
                                     </ng-template>
                                     <ng-template #elseEdit>
                                         <span class="p-float-label">
@@ -367,8 +377,8 @@
                                 </td>
                             </tr>
                         </ng-template> 
-                    </p-table>
-            
+                    </p-table>          
+        
                 </ng-template>  
             
             </ng-template>
