@@ -8,6 +8,7 @@ import { TipoProducto } from './../_model/tipo_producto';
 import { Marca } from './../_model/marca';
 import { Presentacion } from './../_model/presentacion';
 import { FiltroGeneral } from '../_util/filtro_general';
+import { FiltroProductosVenta } from '../_util/filtro_productos_venta';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,9 @@ export class ProductoService extends GenericService<Producto> {
 
   productos = new Subject<Producto[]>();
 
-  private urlGetProducto: string = `${environment.HOST}/api/backend/productos/tipos`
-  private urlGetMarca: string = `${environment.HOST}/api/backend/productos/marcas`
-  private urlGetPresentacion: string = `${environment.HOST}/api/backend/productos/presentaciones`
+  //private urlGetProducto: string = `${environment.HOST}/api/backend/productos/tipos`
+  //private urlGetMarca: string = `${environment.HOST}/api/backend/productos/marcas`
+  //private urlGetPresentacion: string = `${environment.HOST}/api/backend/productos/presentaciones`
 
   protected url: string = `${environment.HOST}/api/backend/productos`
   mensajeCambio = new Subject<string>();
@@ -31,17 +32,17 @@ export class ProductoService extends GenericService<Producto> {
     return this.http.get(`${this.url}/altabaja/${id}/${valor}`);
   }
 
-  getTipoProductos() {
+  /* getTipoProductos() {
     return this.http.get<TipoProducto[]>(`${this.urlGetProducto}`);
-  }
+  } */
 
-  getMarcas() {
+  /* getMarcas() {
     return this.http.get<Marca[]>(`${this.urlGetMarca}`);
-  }
+  } */
 
-  getPresentaciones() {
+  /* getPresentaciones() {
     return this.http.get<Presentacion[]>(`${this.urlGetPresentacion}`);
-  }
+  } */
 
   listarPageable(p: number, s:number, txtBuscar:String){
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
@@ -53,6 +54,10 @@ export class ProductoService extends GenericService<Producto> {
 
   getProductosVencidos(filtros: FiltroGeneral) {
     return this.http.post<any>(`${this.url}/productosvencidos`, filtros);
+  }
+
+  getProductosVenta(filtros: FiltroProductosVenta) {
+    return this.http.post<any>(`${this.url}/productosventa`, filtros);
   }
 
 }

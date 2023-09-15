@@ -1,3 +1,4 @@
+import { ProductoService } from './../../../_service/producto.service';
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { AppComponent } from 'src/app/app.component';
@@ -11,12 +12,21 @@ import { LazyLoadEvent } from 'primeng/api';
 import { GestionloteService } from 'src/app/_service/gestionlote.service';
 import { ClienteService } from './../../../_service/cliente.service';
 import { VentaService } from './../../../_service/venta.service';
+import { UnidadService } from '../../../_service/unidad.service';
+import { StockService } from '../../../_service/stock.service';
+
 import { Cliente } from './../../../_model/cliente';
 import { TipoDocumento } from './../../../_model/tipo_documento';
 import { Venta } from './../../../_model/venta';
 import { Almacen } from 'src/app/_model/almacen';
 import { Comprobante } from 'src/app/_model/comprobante';
 import { DetalleVenta } from 'src/app/_model/detalle_venta';
+
+import { ProductoVentas } from 'src/app/_model/producto_ventas';
+import { FiltroProductosVenta } from 'src/app/_util/filtro_productos_venta';
+import {Unidad } from '../../../_model/unidad';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-venta',
@@ -30,12 +40,21 @@ export class VentaComponent implements OnInit {
   @ViewChild('inputBuscar', { static: false }) inputBuscar: ElementRef;
   @ViewChild('inputBuscarDocCliente', { static: false }) inputBuscarDocCliente: ElementRef;
   @ViewChild('inputNombreClienteReg', { static: false }) inputNombreClienteReg: ElementRef;
+  @ViewChild('inputBuscarProductos', { static: false }) inputBuscarProductos: ElementRef;
+  @ViewChild('inputcantidadProductoLotes', { static: false }) inputcantidadProductoLotes: ElementRef;
+  @ViewChild('inputcantidadDescuento', { static: false }) inputcantidadDescuento: ElementRef;
+  @ViewChild('inputcantidadProductoStocks', { static: false }) inputcantidadProductoStocks: ElementRef;
+  @ViewChild('inputcantidadDescuentoStock', { static: false }) inputcantidadDescuentoStock: ElementRef;
 
   vistaCarga : boolean = true;
   verFrmVenta : boolean = false;
   verFrmAlmacen : boolean = false;
   displayClient : boolean = false;
   vistaRegistroCliente : boolean = false;
+  displayProductsToVentas : boolean = false;
+  displayAddProductsLotes : boolean = false;
+  displayAddProductsNoLotes : boolean = false;
+  activeProductLote: boolean = false;
 
   almacens: any[] = [];
   clsAlmacen: any = null;
@@ -44,7 +63,6 @@ export class VentaComponent implements OnInit {
 
   
   codigoProducto: string = '';
-  txtBuscarProducto: string = '';
   txtBuscarDocCliente: string = '';
   nombreDocIdentidad: string = '';
 
@@ -98,12 +116,67 @@ export class VentaComponent implements OnInit {
 
   newCliente = new Cliente();
 
+  //Estructuras de Productos
+
+  productosVentas: any[] = [];
+  filtroProductosVenta: FiltroProductosVenta = new FiltroProductosVenta();
+
+  pageProductosToVentas: number = 0;
+  firstProductosToVentas: number = 0;
+  lastProductosToVentas: number = 0;
+  rowsProductosToVentas: number = 10;
+  isFirstProductosToVentas: boolean = true;
+  isLastProductosToVentas: boolean = false;
+  totalRecordsProductosToVentas: number = 0;
+  numberElementsProductosToVentas: number = 0;
+  loadingProductosToVentas: boolean = true; 
+
+  txtBuscarProducto: string = '';
+
+  selectedProductVenta: ProductoVentas;
+
+  unidads: any[] = [];
+  clsUnidad: any = null;
+  
+  lotesProducto: any[] = [];
+  clsLote: any = null;
+  fechaVencimiento: string = '';
+  cantLote: number = null;
+  cantUnitLote: number = null;
+
+
+  lotesProductoBack: any[] = [];
+
+  cantidadProductoLotes: number = 1;
+  
+  tiposDescuento: any[] = [
+    {name: '% (0 a 100)', code: '1'},
+    {name: 'Valor Fijo', code: '2'}
+  ];
+  
+  clsTiposDescuento: any = null;
+  cantidadDescuento: number = 0;
+  precioUnitario: string = null;
+  precioTotal: string = null;
+  
+  cantStock: number = null;
+  cantUnitStock: number = null;
+
+  stocksProductoBack: any[] = [];
+  
+  cantidadProductoStocks: number = 1;
+  cantidadDescuentoStock: number = 0;
+  
+
+
   constructor(public app: AppComponent, private gestionloteService: GestionloteService, private messageService: MessageService, private clienteService: ClienteService,
-              private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService , private ventaService: VentaService) { }
+              private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService , private ventaService: VentaService,
+              private productoService: ProductoService, private unidadService:UnidadService, private stockService: StockService) { }
 
   ngOnInit(): void {
 
     this.getAlmacens();
+    this.getUnidads();
     this.vistaCarga = false;
     this.verFrmAlmacen = true;
 
@@ -114,7 +187,7 @@ export class VentaComponent implements OnInit {
     this.getTipoDocumentos();
     
   }
-
+/* 
   next() {
     this.first = this.first + this.rows;
   }
@@ -133,7 +206,7 @@ export class VentaComponent implements OnInit {
 
   isFirstPage(): boolean {
       return this.detalleVentas ? this.first === 0 : true;
-  }
+  } */
 
   getAlmacens() {
 
@@ -147,6 +220,22 @@ export class VentaComponent implements OnInit {
       }
       data.forEach(almacen => {
         this.almacens.push({name: almacen.nombre, code: almacen.id});
+      });
+    });
+  }
+
+  getUnidads() {
+
+    this.clsUnidad = null;
+    this.unidads = [];
+
+    this.unidadService.listarAll().subscribe(data => {
+      data.forEach(unidad => {
+        this.unidads.push({name: unidad.nombre, code: unidad.id});
+
+        if(unidad.cantidad == 1){
+          this.clsUnidad = {name: unidad.nombre, code: unidad.id};
+        }
       });
     });
   }
@@ -168,6 +257,7 @@ export class VentaComponent implements OnInit {
       this.txtBuscarCliente = "";
       this.displayClient = false;
       this.nombreDocIdentidad = "";
+      this.displayProductsToVentas = false;
 
       this.ventaService.registrarRetVenta(this.venta).subscribe({
         next: (data) => {
@@ -222,7 +312,9 @@ export class VentaComponent implements OnInit {
   }
 
   buscarCliente(): void{
+    this.displayClient = false;
     this.displayClient = true;
+    this.selectedClient = null;
     this.setFocusBuscar();
     this.buscarClientes();
   }
@@ -256,7 +348,7 @@ export class VentaComponent implements OnInit {
   
   }
 
-  nextClientes() {
+ /*  nextClientes() {
     this.pageClientes++;
     this.listarPageClientes(this.pageClientes, this.rowsClientes);
   }
@@ -269,7 +361,7 @@ export class VentaComponent implements OnInit {
   resetClientes() {
       this.firstClientes = 0;
       this.listarPageClientes(this.pageClientes, this.rowsClientes);
-  }
+  } */
   
   isLastPageClientes(): boolean {
       //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
@@ -449,11 +541,389 @@ export class VentaComponent implements OnInit {
   
   }
 
+  setFocusBuscarProducto() {    
+    this.changeDetectorRef.detectChanges();
+    this.inputBuscarProductos.nativeElement.focus();
+  }
 
 
-  buscarProducto(): void{
+  buscarProducto() {
+
+    this.filtroProductosVenta.almacenId = this.venta.almacen.id;
+    this.filtroProductosVenta.size = 10;
+
+    this.displayProductsToVentas = false;
+    this.displayProductsToVentas = true;
+    this.selectedProductVenta = null
+    this.buscarProductos();
+    this.setFocusBuscarProducto();
     
   }
+
+  buscarProductos(): void{
+    this.cerrarProducto();
+    this.loadingProductosToVentas = true; 
+    this.filtroProductosVenta.palabraClave = this.txtBuscarProducto;
+    this.filtroProductosVenta.unidadId = parseInt((this.clsUnidad != null) ? this.clsUnidad.code : 0);
+    this.filtroProductosVenta.page = 0;
+    this.listarPageProductosToVentas();
+  }
+
+  cerrarProducto(){
+    //this.vistaRegistroCliente = false;
+    console.log("aqui");
+  }
+
+  loadDataProductosToVentas(event: LazyLoadEvent) { 
+    this.loadingProductosToVentas = true; 
+    this.filtroProductosVenta.size = event.rows;
+    this.filtroProductosVenta.page = event.first / this.rows;
+  
+    this.listarPageProductosToVentas();
+  
+  }
+
+  listarPageProductosToVentas() {
+
+    this.productoService.getProductosVenta(this.filtroProductosVenta).subscribe(data => {
+      this.productosVentas = data.content;
+      this.isFirstProductosToVentas = data.first;
+      this.isLastProductosToVentas = data.last;
+      this.numberElementsProductosToVentas = data.numberOfElements;
+      this.firstProductosToVentas = (this.filtroProductosVenta.page * this.filtroProductosVenta.size);
+      this.lastProductosToVentas = (this.filtroProductosVenta.page * this.filtroProductosVenta.size) + this.numberElementsProductosToVentas;
+      this.totalRecordsProductosToVentas = data.totalElements;
+      this.loadingProductosToVentas = false;
+    });
+  }
+
+  aceptarProducto(registro){
+    console.log(registro);
+    this.selectedProductVenta = registro;
+    this.activeProductLote = registro.producto.activoLotes == 1;
+    this.lotesProducto = [];
+    this.clsLote = null;
+
+    this.cantidadProductoLotes = 1;
+    this.clsTiposDescuento = {name: "% (0 a 100)", code: '1'};;
+    this.cantidadDescuento = 0;
+
+    this.stockService.listarStocksVentas(this.venta.almacen.id, registro.producto.id).subscribe(data => {
+      console.log(data);
+
+      if(this.activeProductLote){
+
+        this.lotesProductoBack = data.respuesta;
+
+        let isFirst = true;
+        data.respuesta.forEach(registroLote => {
+          this.lotesProducto.push({name: registroLote.lote.nombre, code: registroLote.lote.id});
+  
+          if(isFirst){
+            this.clsLote = {name: registroLote.lote.nombre, code: registroLote.lote.id};
+            if(registroLote.lote.activoVencimiento == 1){
+              const fechaVenc = moment(registroLote.lote.fechaVencimiento, 'YYYY-MM-DD');
+              this.fechaVencimiento = fechaVenc.format('DD/MM/YYYY');
+            } else {
+              this.fechaVencimiento = "NO APLICA";
+            }
+
+            this.cantUnitLote = registroLote.lote.cantidad;
+            this.cantLote = this.floor10(registroLote.lote.cantidad / registro.detalleUnidadProducto.unidad.cantidad, -2);
+            
+            isFirst = false;
+          }
+        });
+
+        this.displayAddProductsLotes = true;
+        this.setFocusCantProductos();
+        this.calcularPreciosZ();
+
+        let precioUnit = this.selectedProductVenta.detalleUnidadProducto.precio;
+        this.precioUnitario = precioUnit.toFixed(2);
+
+      }
+
+      else{
+
+        this.stocksProductoBack = data.respuesta;
+
+        data.respuesta.forEach(registroStock => {
+
+          this.cantUnitStock = registroStock.stock.cantidad;
+          this.cantStock = this.floor10(registroStock.stock.cantidad / registro.detalleUnidadProducto.unidad.cantidad, -2);
+
+        });
+
+        this.displayAddProductsNoLotes = true;
+        this.setFocusCantProductosStocks();
+        this.calcularPreciosStocksZ();
+
+        let precioUnit = this.selectedProductVenta.detalleUnidadProducto.precio;
+        this.precioUnitario = precioUnit.toFixed(2);
+
+      }
+    });
+  }
+
+  cambioLotes(): void{
+
+    this.lotesProductoBack.forEach(registroLote => {
+
+      if(registroLote.lote.id == this.clsLote.code){
+
+        if(registroLote.lote.activoVencimiento == 1){
+          const fechaVenc = moment(registroLote.lote.fechaVencimiento, 'YYYY-MM-DD');
+          this.fechaVencimiento = fechaVenc.format('DD/MM/YYYY');
+        } else {
+          this.fechaVencimiento = "NO APLICA";
+        }
+
+        this.cantUnitLote = registroLote.lote.cantidad;
+        this.cantLote = this.floor10(registroLote.lote.cantidad / this.selectedProductVenta.detalleUnidadProducto.unidad.cantidad, -2);
+
+        this.setFocusCantProductos();
+        
+        return;
+      }
+    });
+
+  }
+
+  changeTipoDescuento(): void {
+    this.cantidadDescuento = 0;
+    this.calcularPreciosZ();
+  }
+
+
+  decimalAdjust(type, value, exp): number {
+    type = String(type);
+    if (!["round", "floor", "ceil"].includes(type)) {
+      throw new TypeError(
+        "The type of decimal adjustment must be one of 'round', 'floor', or 'ceil'.",
+      );
+    }
+    exp = Number(exp);
+    value = Number(value);
+    if (exp % 1 !== 0 || Number.isNaN(value)) {
+      return NaN;
+    } else if (exp === 0) {
+      return Math[type](value);
+    }
+    const [magnitude, exponent = 0] = value.toString().split("e");
+    const adjustedValue = Math[type](`${magnitude}e${exponent - exp}`);
+    // Shift back
+    const [newMagnitude, newExponent = 0] = adjustedValue.toString().split("e");
+    return Number(`${newMagnitude}e${+newExponent + exp}`);
+  }
+
+
+  calcularPreciosZ(): void {
+    //console.log("entra calculos");
+
+    this.precioTotal = null;
+
+    if( this.cantidadProductoLotes == null || this.cantidadProductoLotes < 0){
+      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+      this.setFocusCantProductos();
+      return;
+    }   
+    
+    let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoLotes;
+
+    if(this.clsTiposDescuento.code == '1'){
+      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > 100){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
+          this.setFocusCantidadDescuento();
+          return;
+      }
+
+      precioTotal = precioTotal - (precioTotal * this.cantidadDescuento / 100);
+
+    }
+
+    if(this.clsTiposDescuento.code == '2'){
+      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > precioTotal){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
+          this.setFocusCantidadDescuento();
+          return;
+      }
+
+      precioTotal = precioTotal - this.cantidadDescuento;
+
+    }
+      
+      this.precioTotal = precioTotal.toFixed(2); 
+  }
+
+
+  calcularPrecios(event: Event): void {
+    //console.log("entra calculos");
+
+    this.precioTotal = null;
+
+    if( this.cantidadProductoLotes == null || this.cantidadProductoLotes < 0){
+      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+      this.setFocusCantProductos();
+      return;
+    }   
+    
+    let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoLotes;
+
+    if(this.clsTiposDescuento.code == '1'){
+      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > 100){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
+          this.setFocusCantidadDescuento();
+          return;
+      }
+
+      precioTotal = precioTotal - (precioTotal * this.cantidadDescuento / 100);
+
+    }
+
+    if(this.clsTiposDescuento.code == '2'){
+      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > precioTotal){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
+          this.setFocusCantidadDescuento();
+          return;
+      }
+
+      precioTotal = precioTotal - this.cantidadDescuento;
+
+    }
+      
+      this.precioTotal = precioTotal.toFixed(2); 
+  }
+
+  calcularPreciosStocksZ(): void{
+    this.precioTotal = null;
+
+    if( this.cantidadProductoStocks == null || this.cantidadProductoStocks < 0){
+      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+      this.setFocusCantProductosStocks();
+      return;
+    }   
+    
+    let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoStocks;
+
+    if(this.clsTiposDescuento.code == '1'){
+      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > 100){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
+          this.setFocusCantidadDescuentoStocks();
+          return;
+      }
+
+      precioTotal = precioTotal - (precioTotal * this.cantidadDescuentoStock / 100);
+
+    }
+
+    if(this.clsTiposDescuento.code == '2'){
+      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > precioTotal){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
+          this.setFocusCantidadDescuentoStocks();
+          return;
+      }
+
+      precioTotal = precioTotal - this.cantidadDescuentoStock;
+
+    }
+      
+      this.precioTotal = precioTotal.toFixed(2); 
+  }
+
+  calcularPreciosStocks(event: Event): void{
+    this.precioTotal = null;
+
+    if( this.cantidadProductoStocks == null || this.cantidadProductoStocks < 0){
+      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+      this.setFocusCantProductosStocks();
+      return;
+    }   
+    
+    let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoStocks;
+
+    if(this.clsTiposDescuento.code == '1'){
+      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > 100){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
+          this.setFocusCantidadDescuentoStocks();
+          return;
+      }
+
+      precioTotal = precioTotal - (precioTotal * this.cantidadDescuentoStock / 100);
+
+    }
+
+    if(this.clsTiposDescuento.code == '2'){
+      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > precioTotal){
+          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
+          this.setFocusCantidadDescuentoStocks();
+          return;
+      }
+
+      precioTotal = precioTotal - this.cantidadDescuentoStock;
+
+    }
+      
+      this.precioTotal = precioTotal.toFixed(2); 
+  }
+
+  changeTipoDescuentoStock(): void {
+    this.cantidadDescuentoStock = 0;
+    this.calcularPreciosStocksZ();
+  }
+
+  agregarProducto(): void{
+
+  }
+
+  agregarProductoStock(): void{
+
+  }
+
+  round10(value, exp): number{
+    return this.decimalAdjust("round", value, exp);
+  }
+
+  floor10 (value, exp): number{
+    return this.decimalAdjust("floor", value, exp);
+  }
+
+  ceil10 (value, exp): number{
+    return this.decimalAdjust("ceil", value, exp);
+  }
+
+
+  setFocusCantProductos() {    
+    this.changeDetectorRef.detectChanges();
+    //this.inputcantidadProductoLotes.nativeElement.focus();
+    this.inputcantidadProductoLotes.nativeElement.select();
+  }
+
+  
+  setFocusCantidadDescuento() {    
+    this.changeDetectorRef.detectChanges();
+    //this.inputcantidadProductoLotes.nativeElement.focus();
+    this.inputcantidadDescuento.nativeElement.select();
+  }
+
+  setFocusCantProductosStocks() {    
+    this.changeDetectorRef.detectChanges();
+    //this.inputcantidadProductoLotes.nativeElement.focus();
+    this.inputcantidadProductoStocks.nativeElement.select();
+  }
+
+  
+  setFocusCantidadDescuentoStocks() {    
+    this.changeDetectorRef.detectChanges();
+    //this.inputcantidadProductoLotes.nativeElement.focus();
+    this.inputcantidadDescuentoStock.nativeElement.select();
+  }
+
+
+
+  /* buscarProducto(): void{
+    
+  } */
 
   cobrarVenta(): void{
     

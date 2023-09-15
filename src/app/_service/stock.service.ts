@@ -40,4 +40,8 @@ export class StockService extends GenericService<Stock> {
   listarDTO(idAlmacen: number, idProd: number){
     return this.http.get<any>(`${this.url}/${idAlmacen}/${idProd}`);
   }
+
+  listarStocksVentas(idAlmacen: number, idProd: number){
+    return this.http.get<any>(`${this.url}/almacen-productos/${idAlmacen}/${idProd}`);
+  }
 }

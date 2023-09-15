@@ -818,50 +818,520 @@
             </div>
             
 
-            <p-table [value]="clientes" [resizableColumns]="true" [paginator]="true" [rows]="rowsClientes" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="firstClientes"  [(totalRecords)]="totalRecordsClientes" [loading]="loadingClientes" (onLazyLoad)="loadDataClientes($event)"
-            currentPageReportTemplate="Mostrando {{firstClientes}} a {{lastClientes}} de {{totalRecordsClientes}} registros" [rowsPerPageOptions]="[25]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" 
+          <p-table [value]="clientes" [resizableColumns]="true" [paginator]="true" [rows]="rowsClientes" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="firstClientes"  [(totalRecords)]="totalRecordsClientes" [loading]="loadingClientes" (onLazyLoad)="loadDataClientes($event)"
+            currentPageReportTemplate="Mostrando {{firstClientes}} a {{lastClientes}} de {{totalRecordsClientes}} registros" [rowsPerPageOptions]="[10]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" 
             selectionMode="single" [(selection)]="selectedClient" dataKey="id">
 
 
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Cliente</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 1</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 2</th>
-                    <!-- <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Gestión</th> -->
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-cliente let-rowIndex="rowIndex" >
-                <tr [pSelectableRow]="cliente" (dblclick)="aceptarCliente(cliente)">
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.nombre}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.tipoDocumento.descripcion}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.documento}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.direccion}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.telefono}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo1}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo2}}</td>
+          <ng-template pTemplate="header">
+              <tr>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Cliente</th>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 1</th>
+                  <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 2</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-cliente let-rowIndex="rowIndex" >
+              <tr [pSelectableRow]="cliente" (dblclick)="aceptarCliente(cliente)">
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.nombre}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.tipoDocumento.descripcion}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.documento}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.direccion}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.telefono}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo1}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo2}}</td>
+              </tr>
+          </ng-template>
+      </p-table>
+      <div class="p-mb-3"></div>
+      </div>
+  <p-footer>
+      <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayClient=false" label="Yes" class="p-button-text"></button> -->
+      <button (click)="displayClient=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+      <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayClient=false" label="No" class="p-button-text"></button> -->
+  </p-footer>
+</p-dialog>
 
-                    <!-- <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
-    
-                        <button (click)="editar(cliente, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Cliente" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
 
-                        <button *ngIf="cliente.borrado === 0" (click)="eliminar(cliente , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Cliente" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        
-                    </td> -->
-                </tr>
-            </ng-template>
-        </p-table>
-        <div class="p-mb-3"></div>
+
+
+
+
+
+
+
+
+
+
+<p-dialog header="Buscar Productos Para Ventas" [(visible)]="displayProductsToVentas" [modal]="true" [style]="{ 'min-height':'500px', width: '70vw' }" [draggable]="false" [resizable]="false">
+    <div class="p-col-12">
+            <!-- <div class="p-mb-3" style="margin-top: 5px;"> -->
+            <div class="p-field p-grid" style="margin-top: 5px;">
+              <div class="p-col-12 p-md-5" >
+                <div class="p-inputgroup">
+                    <button pButton pRipple type="button" label="Buscar" (click)="buscarProductos()"></button>
+                    <span class="p-float-label" style="margin-right: 10px;" >
+                        <input type="text" pInputText [(ngModel)]="txtBuscarProducto" (keyup.enter)="buscarProductos()" #inputBuscarProductos/>
+                        <label>Palabra Clave</label>
+                    </span>
+                    <!-- <button (click)="nuevoCliente()" pButton pRipple type="button" label="Nuevo Cliente" class="p-button-info" icon="pi pi-plus" style="min-width: 130px;"></button> -->
+                </div>
+            </div>
+
+            
+              <label for="unidad" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Unidades</label>
+              <div class="p-col-12 p-md-2">
+                  <span class="p-float-label">
+                      <p-dropdown #inputclsUnidad inputId="unidad" [options]="unidads" [(ngModel)]="clsUnidad" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px', 'width':'100%'}" [filter]="true" (onChange)="buscarProductos()"></p-dropdown>
+                          <label>Seleccione</label>
+                  </span>
+              </div>
+          </div>
+
+<!-- [(selection)]="selectedProductVenta" -->
+
+      <p-table [value]="productosVentas" [resizableColumns]="true" [paginator]="true" [rows]="rowsProductosToVentas" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="firstProductosToVentas"  [(totalRecords)]="totalRecordsProductosToVentas" [loading]="loadingProductosToVentas" (onLazyLoad)="loadDataProductosToVentas($event)"
+            currentPageReportTemplate="Mostrando {{firstProductosToVentas}} a {{lastProductosToVentas}} de {{totalRecordsProductosToVentas}} registros" [rowsPerPageOptions]="[10]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" 
+            dataKey="producto.id" selectionMode="single" >
+
+
+          <ng-template pTemplate="header">
+              <tr>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Código</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Producto</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Producto</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Composición</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Presentación</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Marca</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Unidad</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Precio de Venta</th>
+                <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Ubicación</th>
+                  <!-- <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Gestión</th> -->
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-registro let-rowIndex="rowIndex" >
+              <tr [pSelectableRow]="registro" (dblclick)="aceptarProducto(registro)">
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.detalleUnidadProducto.codigoUnidad}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.nombre}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.tipoProducto.tipo}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.composicion}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.presentacion.presentacion}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.marca.nombre}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.detalleUnidadProducto.unidad.nombre}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.detalleUnidadProducto.precio | currency:'PEN':'S/.'}}</td>
+                <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.ubicacion}}</td>
+
+                  <!-- <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
+  
+                      <button (click)="editar(cliente, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Cliente" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+
+                      <button *ngIf="cliente.borrado === 0" (click)="eliminar(cliente , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Cliente" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                      
+                  </td> -->
+              </tr>
+          </ng-template>
+      </p-table>
+
+
+
+
+
+      <div class="p-mb-3"></div>
+      </div>
+  <p-footer>
+      <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
+      <button (click)="displayProductsToVentas=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+      <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
+  </p-footer>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+<p-dialog header="Agregar Producto" [(visible)]="displayAddProductsLotes" [modal]="true" [style]="{ 'min-height':'485px', 'width': '80vw' }" [draggable]="false" [resizable]="false">
+  <div class="p-col-12">
+          <!-- <div class="p-mb-3" style="margin-top: 5px;"> -->
+
+          <div class="p-field p-grid">
+            <label for="local" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"
+              ><b>Producto:</b></label
+            >
+            <div class="p-col-12 p-md-3" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag teal-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.producto.presentacion.presentacion }} {{ selectedProductVenta.producto.nombre }} {{ selectedProductVenta.producto.marca.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>Unidad de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>N° de Items de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+              class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.cantidad }}</span
+              >
+            </div>
+          </div>
+
+
+
+        <div class="p-field p-grid" style="margin-top: 35px;">
+            <label for="lote" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Lote</label>
+            <div class="p-col-12 p-md-2">
+                <span class="p-float-label">
+                    <p-dropdown #inputclsLote inputId="lote" [options]="lotesProducto" [(ngModel)]="clsLote" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px', 'width':'100%'}" [filter]="true" (onChange)="cambioLotes()"></p-dropdown>
+                        <label>Seleccione</label>
+                </span>
+            </div>
+
+            <label for="fecha_vencimiento" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">F. de Vencimiento</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="fecha_vencimiento"
+                type="text"
+                pInputText
+                [(ngModel)]="fechaVencimiento"
+                #inputFechaVencimiento
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="cant_lote" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Empaque Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_lote"
+                type="text"
+                pInputText
+                [(ngModel)]="cantLote"
+                #inputCantidadLote
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="cant_unit_lote" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Unidades Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_unit_lote"
+                type="text"
+                pInputText
+                [(ngModel)]="cantUnitLote"
+                #inputCantidadUnitariaLote
+                [readonly]="true"
+              />
+            </div>
         </div>
-    <p-footer>
-        <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayClient=false" label="Yes" class="p-button-text"></button> -->
-        <button (click)="displayClient=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
-        <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayClient=false" label="No" class="p-button-text"></button> -->
-    </p-footer>
+
+
+        <hr>
+
+        <div class="p-field p-grid" style="margin-top: 45px;">
+
+          <label for="cant_producto" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Cantidad</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_producto"
+                type="text"
+                pInputText
+                [(ngModel)]="cantidadProductoLotes"
+                #inputcantidadProductoLotes
+                (change)="calcularPrecios($event)"
+              />
+            </div>
+
+          <label for="descuento_producto" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Descuento</label>
+            <div class="p-col-12 p-md-2">
+
+              <div class="p-inputgroup">
+
+                <span class="p-float-label" style="width: 70%;">
+                    <p-dropdown (onChange)="changeTipoDescuento()" inputId="descuento_producto" [options]="tiposDescuento" [(ngModel)]="clsTiposDescuento" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width': '100%'}" #inputTiposDescuento ></p-dropdown>
+                        <label>Seleccione</label>
+                </span>
+                <span class="p-float-label">
+                  <input
+                    id="cant_descuento"
+                    type="text"
+                    pInputText
+                    [(ngModel)]="cantidadDescuento"
+                    #inputcantidadDescuento
+                    (change)="calcularPrecios($event)"
+                    
+                  />
+                </span>
+              </div>
+            </div>
+
+            <label for="precioUnitario" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Unitario</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="precioUnitario"
+                type="text"
+                pInputText
+                [(ngModel)]="precioUnitario"
+                #inputPrecioUnitario
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="precioTotal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Total</label>
+            <div class="p-col-12 p-md-1">
+              <input
+                id="precioTotal"
+                type="text"
+                pInputText
+                [(ngModel)]="precioTotal"
+                #inputPrecioTotal
+                [readonly]="true"
+              />
+            </div>
+        </div>
+
+
+
+
+
+
+    <div class="p-mb-3" style="margin-top: 45px;"></div>
+
+    <br>
+
+    <button
+        (click)="agregarProducto()"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-check-square"
+        label="Agregar Producto"
+        class="p-button-raised p-mr-2 p-mb-2"
+      ></button>
+    </div>
+  <p-footer>
+      <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
+      <button (click)="displayAddProductsLotes=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+      <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
+  </p-footer>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p-dialog header="Agregar Producto" [(visible)]="displayAddProductsNoLotes" [modal]="true" [style]="{'width': '80vw' }" [draggable]="false" [resizable]="false">
+  <div class="p-col-12">
+          <!-- <div class="p-mb-3" style="margin-top: 5px;"> -->
+
+          <div class="p-field p-grid">
+            <label for="local" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"
+              ><b>Producto:</b></label
+            >
+            <div class="p-col-12 p-md-3" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag teal-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.producto.presentacion.presentacion }} {{ selectedProductVenta.producto.nombre }} {{ selectedProductVenta.producto.marca.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>Unidad de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>N° de Items de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+              class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.cantidad }}</span
+              >
+            </div>
+          </div>
+
+
+
+        <div class="p-field p-grid" style="margin-top: 35px;">
+
+            
+
+            <label for="cant_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Empaque Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_stock"
+                type="text"
+                pInputText
+                [(ngModel)]="cantStock"
+                #inputCantidadStock
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="cant_unit_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Unidades Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_unit_stock"
+                type="text"
+                pInputText
+                [(ngModel)]="cantUnitStock"
+                #inputCantidadUnitariaStock
+                [readonly]="true"
+              />
+            </div>
+        </div>
+
+
+        <hr>
+
+        <div class="p-field p-grid" style="margin-top: 45px;">
+
+          <label for="cant_producto_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Cantidad</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_producto_stock"
+                type="text"
+                pInputText
+                [(ngModel)]="cantidadProductoStocks"
+                #inputcantidadProductoStocks
+                (change)="calcularPreciosStocks($event)"
+              />
+            </div>
+
+          <label for="descuento_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Descuento</label>
+            <div class="p-col-12 p-md-2">
+
+              <div class="p-inputgroup">
+
+                <span class="p-float-label" style="width: 70%;">
+                    <p-dropdown (onChange)="changeTipoDescuentoStock()" inputId="descuento_stock" [options]="tiposDescuento" [(ngModel)]="clsTiposDescuento" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width': '100%'}" #inputTiposDescuento ></p-dropdown>
+                        <label>Seleccione</label>
+                </span>
+                <span class="p-float-label">
+                  <input
+                    id="cant_descuento_stock"
+                    type="text"
+                    pInputText
+                    [(ngModel)]="cantidadDescuentoStock"
+                    #inputcantidadDescuentoStock
+                    (change)="calcularPreciosStocks($event)"
+                    
+                  />
+                </span>
+              </div>
+            </div>
+
+            <label for="precioUnitario" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Unitario</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="precioUnitario"
+                type="text"
+                pInputText
+                [(ngModel)]="precioUnitario"
+                #inputPrecioUnitario
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="precioTotal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Total</label>
+            <div class="p-col-12 p-md-1">
+              <input
+                id="precioTotal"
+                type="text"
+                pInputText
+                [(ngModel)]="precioTotal"
+                #inputPrecioTotal
+                [readonly]="true"
+              />
+            </div>
+        </div>
+
+
+
+
+
+
+    <div class="p-mb-3" style="margin-top: 45px;"></div>
+
+    <br>
+
+    <button
+        (click)="agregarProductoStock()"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-check-square"
+        label="Agregar Producto"
+        class="p-button-raised p-mr-2 p-mb-2"
+      ></button>
+    </div>
+  <p-footer>
+      <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
+      <button (click)="displayAddProductsNoLotes=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+      <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
+  </p-footer>
 </p-dialog>

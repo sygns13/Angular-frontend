@@ -26,4 +26,8 @@ export class TipoProductoService extends GenericService<TipoProducto> {
   listarPageable(p: number, s:number, txtBuscar:String){
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
   }
+
+  listarAll(){
+    return this.http.get<TipoProducto[]>(`${this.url}/listar-all`);
+  }
 }

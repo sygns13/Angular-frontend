@@ -26,4 +26,8 @@ export class PresentacionService extends GenericService<Presentacion> {
   listarPageable(p: number, s:number, txtBuscar:String){
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
   }
+
+  listarAll(){
+    return this.http.get<Presentacion[]>(`${this.url}/listar-all`);
+  }
 }

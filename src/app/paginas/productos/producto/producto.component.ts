@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { ProductoService } from './../../../_service/producto.service';
+import { MarcaService } from './../../../_service/marca.service';
+import { TipoProductoService } from './../../../_service/tipo_producto.service';
+import { PresentacionService } from './../../../_service/presentacion.service';
 import { switchMap } from 'rxjs/operators';
 import { Producto } from './../../../_model/producto';
 import {ConfirmationService, MessageService} from 'primeng/api';
@@ -98,7 +101,8 @@ export class ProductoComponent implements OnInit {
   message:string;
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private productoService: ProductoService,
-    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
+    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService, private marcaService: MarcaService,
+    private tipoProductoService: TipoProductoService, private presentacionService: PresentacionService) {
     this.breadcrumbService.setItems([
     { label: 'Almacén' },
     { label: 'Gestión de Productos', routerLink: ['/almacen/productos'] }
@@ -153,7 +157,7 @@ export class ProductoComponent implements OnInit {
     this.clsTipoProducto = null;
     this.tipoProductos = [];
 
-    this.productoService.getTipoProductos().subscribe(data => {
+    this.tipoProductoService.listarAll().subscribe(data => {
       data.forEach(tipoProd => {
         this.tipoProductos.push({name: tipoProd.tipo, code: tipoProd.id});
       });
@@ -165,7 +169,7 @@ export class ProductoComponent implements OnInit {
     this.clsMarca = null;
     this.marcas = [];
 
-    this.productoService.getMarcas().subscribe(data => {
+    this.marcaService.listarAll().subscribe(data => {
       data.forEach(marca => {
         this.marcas.push({name: marca.nombre, code: marca.id});
       });
@@ -177,7 +181,7 @@ export class ProductoComponent implements OnInit {
     this.clsPresentacion = null;
     this.presentaciones = [];
 
-    this.productoService.getPresentaciones().subscribe(data => {
+    this.presentacionService.listarAll().subscribe(data => {
       data.forEach(presentacion => {
         this.presentaciones.push({name: presentacion.presentacion, code: presentacion.id});
       });
