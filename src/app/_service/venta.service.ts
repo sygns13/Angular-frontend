@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { Cliente } from './../_model/cliente';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { DetalleVenta } from '../_model/detalle_venta';
+import { ProductoAddVenta } from '../_model/producto_add_venta';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +26,27 @@ export class VentaService extends GenericService<Venta>{
     return this.http.post<Venta>(this.url, venta);
   }
 
+  modificarVenta(venta: Venta) {
+    return this.http.put<Venta>(`${this.url}`, venta);
+  }
+
   modificarCliente(venta: Venta) {
     return this.http.put<Venta>(`${this.url}/updateclient`, venta);
+  }
+
+  agregarProductoAVenta(detalleVenta: DetalleVenta) {
+    return this.http.post<Venta>(`${this.url}/add-detalle-venta`, detalleVenta);
+  }
+
+  agregarProductoAVentaPorCodigo(productoAddVenta: ProductoAddVenta) {
+    return this.http.post<Venta>(`${this.url}/add-producto-venta`, productoAddVenta);
+  }
+
+  deleteProductoAVenta(detalleVenta: DetalleVenta) {
+    return this.http.post<Venta>(`${this.url}/delete-detalle-venta`, detalleVenta);
+  }
+
+  modificarProductoAVenta(detalleVenta: DetalleVenta) {
+    return this.http.post<Venta>(`${this.url}/modificar-detalle-venta`, detalleVenta);
   }
 }

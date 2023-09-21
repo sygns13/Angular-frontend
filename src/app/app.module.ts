@@ -161,6 +161,7 @@ import { BancoComponent } from './paginas/tablas/banco/banco.component';
 import { ProductoComponent } from './paginas/productos/producto/producto.component';
 
 import { DecimalesPipe } from './_pipes/decimales.pipe';
+import { OnlydecimalesPipe } from './_pipes/onlydecimales.pipe';
 import { AsignarunidadesComponent } from './paginas/productos/asignarunidades/asignarunidades.component';
 import { StocksComponent } from './paginas/productos/stocks/stocks.component';
 import { LeftpathPipe } from './_pipes/leftpath.pipe';
@@ -180,6 +181,7 @@ import { environment } from 'src/environments/environment';
 import { Not403Component } from './paginas/errors/not403/not403.component';
 import { Not404Component } from './paginas/errors/not404/not404.component';
 import { ServerErrorsInterceptor } from './shared/server-errors.interceptor';
+import { SoloNumerosDirective } from './solo-numeros.directive';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -342,6 +344,7 @@ export function tokenGetter() {
         BancoComponent,
         ProductoComponent,
         DecimalesPipe,
+        OnlydecimalesPipe,
         AsignarunidadesComponent,
         StocksComponent,
         LeftpathPipe,
@@ -356,7 +359,8 @@ export function tokenGetter() {
         CatalogoComponent,
         LoginComponent,
         Not403Component,
-        Not404Component
+        Not404Component,
+        SoloNumerosDirective
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

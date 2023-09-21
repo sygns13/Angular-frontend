@@ -10,7 +10,11 @@ export class Venta {
     comprobante: Comprobante;
     subtotalInafecto: number;
     subtotalAfecto: number;
+    subtotalExonerado: number;
+    totalMonto: number;
+    totalAfectoIsc: number;
     igv: number;
+    isc: number;
     estado: number;
     pagado: number;
     hora: string;
@@ -20,4 +24,6 @@ export class Venta {
     borrado: number;
     numeroVenta: string;
     detalleVentas: DetalleVenta[];
+    cantidadIcbper: number;
+    montoIcbper: number;
 }

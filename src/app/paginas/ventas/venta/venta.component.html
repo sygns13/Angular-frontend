@@ -185,6 +185,7 @@
               type="text"
               pInputText
               [(ngModel)]="codigoProducto"
+              (keyup.enter)="agregarProductoPorCodigo()"
               #inputcodigoProducto
               placeholder="Inserte el código y enter"
             />
@@ -215,6 +216,29 @@
           </div>
         </div>
 
+        <div class="p-field p-grid">
+          <label for="txticbper" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+            ><b>Cantidad de Bolsas de Plástico</b></label
+          >
+          <div class="p-col-12 p-md-4">
+            <input
+              id="txticbper"
+              type="text"
+              pInputText
+              [(ngModel)]="venta.cantidadIcbper"
+              (keypress)="soloNumerosNaturales($event)"
+              #inputcantidadICBPER
+              placeholder="Inserte cantidad"
+              (change)="modificarCantidadICBPER($event)"
+            />
+          </div>
+
+          <div
+            class="p-col-12 p-md-6"
+          >
+          </div>
+        </div>
+
       </div>
 
       <h5>Listado de Productos a la Venta</h5>
@@ -222,7 +246,7 @@
       <p-table
         [value]="detalleVentas"
         [resizableColumns]="true"
-        [paginator]="true"
+        [paginator]="false"
         [rows]="rows"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
@@ -231,8 +255,9 @@
         responsiveLayout="scroll"
         [style]="{ width: '100%', 'padding-right': '0px!important' }"
       >
+      <!--
         <ng-template pTemplate="colgroup" let-columns>
-          <!-- <colgroup>
+           <colgroup>
                     <col style="width:60px;">
                     <col style="width:60px;">
                     <col style="width:100px;">
@@ -247,8 +272,8 @@
                     <col style="width:100px;">
                     <col style="width:100px;">
                     <col style="width:100px;">
-                </colgroup> -->
-        </ng-template>
+                </colgroup> 
+        </ng-template> -->
 
         <ng-template pTemplate="header">
           <tr>
@@ -352,7 +377,7 @@
             >
               Descuento
             </th>
-            <th
+          <!--   <th
               pResizableColumn
               style="
                 background-color: rgb(80, 148, 216);
@@ -371,7 +396,7 @@
               "
             >
               ISC
-            </th>
+            </th> -->
             <th
               pResizableColumn
               style="
@@ -382,7 +407,7 @@
             >
               Importe de Venta
             </th>
-            <th
+            <!-- <th
               pResizableColumn
               style="
                 background-color: rgb(80, 148, 216);
@@ -391,11 +416,11 @@
               "
             >
               ICBPER
-            </th>
+            </th> -->
           </tr>
         </ng-template>
 
-        <ng-template pTemplate="body" let-servicioFila let-rowIndex="rowIndex">
+        <ng-template pTemplate="body" let-detalleVenta let-rowIndex="rowIndex">
           <tr>
             <td
               style="
@@ -406,7 +431,7 @@
               "
             >
               <button
-                (click)="editar(servicioFila, $event)"
+                (click)="editarDV(detalleVenta, $event)"
                 pButton
                 pRipple
                 type="button"
@@ -417,8 +442,8 @@
                 style="height: 2rem; width: 2rem"
               ></button>
               <button
-                *ngIf="servicioFila.borrado === 0"
-                (click)="eliminar(servicioFila, $event)"
+                *ngIf="detalleVenta.borrado === 0"
+                (click)="eliminarDV(detalleVenta, $event)"
                 pButton
                 pRipple
                 type="button"
@@ -437,7 +462,7 @@
                 padding: 5px;
               "
             >
-              {{ rowIndex }}
+              {{ rowIndex + 1 }}
             </td>
             <td
               style="
@@ -446,7 +471,7 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.codigo }}
+              {{ detalleVenta.producto.codigoProducto }}
             </td>
             <td
               style="
@@ -455,7 +480,7 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.producto }}
+              {{ detalleVenta.producto.presentacion.presentacion }} {{ detalleVenta.producto.nombre }} {{ detalleVenta.producto.marca.nombre }}
             </td>
             <td
               style="
@@ -464,7 +489,7 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.unidad }}
+              {{ detalleVenta.unidad }}
             </td>
             <td
               style="
@@ -473,7 +498,14 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.lote }}
+              <ng-template [ngIf]="detalleVenta.lote.id != null">
+                {{ detalleVenta.lote.nombre }}
+              </ng-template>
+
+              <ng-template [ngIf]="detalleVenta.lote.id == null">
+                No Aplica
+              </ng-template>
+              
             </td>
             <td
               style="
@@ -482,7 +514,16 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.fechaVencimiento }}
+              <ng-template [ngIf]="detalleVenta.lote.id != null">
+                {{ detalleVenta.lote.fechaVencimiento }}
+                <ng-template [ngIf]="detalleVenta.lote.fechaVencimiento == null">
+                  No Aplica
+                </ng-template>
+              </ng-template>
+              
+              <ng-template [ngIf]="detalleVenta.lote.id == null">
+                No Aplica
+              </ng-template>
             </td>
             <td
               style="
@@ -491,7 +532,7 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.cantidad }}
+              {{ detalleVenta.cantidad }}
             </td>
             <td
               style="
@@ -500,7 +541,7 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.precioUnidad | currency : "PEN" : "S/." }}
+              {{ detalleVenta.precioVenta | currency : "PEN" : "S/." }}
             </td>
             <td
               style="
@@ -509,7 +550,22 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.descuento | currency : "PEN" : "S/." }}
+              <ng-template [ngIf]="detalleVenta.tipDescuento == 2">
+                {{ detalleVenta.descuento | currency : "PEN" : "S/." }}
+              </ng-template>
+
+              <ng-template [ngIf]="detalleVenta.tipDescuento == 1">
+                {{ detalleVenta.descuento | OnlyDecimalesTransform }} %
+              </ng-template>
+            </td>
+           <!--  <td
+              style="
+                border: 1px solid rgb(221, 221, 221);
+                font-size: 1rem;
+                padding: 5px;
+              "
+            >
+              
             </td>
             <td
               style="
@@ -518,8 +574,8 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.igv | currency : "PEN" : "S/." }}
-            </td>
+              
+            </td> -->
             <td
               style="
                 border: 1px solid rgb(221, 221, 221);
@@ -527,26 +583,17 @@
                 padding: 5px;
               "
             >
-              {{ servicioFila.isc | currency : "PEN" : "S/." }}
+              {{ detalleVenta.precioTotal | currency : "PEN" : "S/." }}
             </td>
-            <td
+           <!--  <td
               style="
                 border: 1px solid rgb(221, 221, 221);
                 font-size: 1rem;
                 padding: 5px;
               "
             >
-              {{ servicioFila.importeVenta | currency : "PEN" : "S/." }}
-            </td>
-            <td
-              style="
-                border: 1px solid rgb(221, 221, 221);
-                font-size: 1rem;
-                padding: 5px;
-              "
-            >
-              {{ servicioFila.icbper | currency : "PEN" : "S/." }}
-            </td>
+              {{ detalleVenta.icbper | currency : "PEN" : "S/." }}
+            </td> -->
           </tr>
         </ng-template>
       </p-table>
@@ -1072,6 +1119,7 @@
                 type="text"
                 pInputText
                 [(ngModel)]="cantidadProductoLotes"
+                (keypress)="soloNumerosNaturales($event)"
                 #inputcantidadProductoLotes
                 (change)="calcularPrecios($event)"
               />
@@ -1092,6 +1140,7 @@
                     type="text"
                     pInputText
                     [(ngModel)]="cantidadDescuento"
+                    appSoloNumeros
                     #inputcantidadDescuento
                     (change)="calcularPrecios($event)"
                     
@@ -1147,6 +1196,198 @@
   <p-footer>
       <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
       <button (click)="displayAddProductsLotes=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+      <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Editar Producto" [(visible)]="displayEditProductsLotes" [modal]="true" [style]="{ 'min-height':'485px', 'width': '80vw' }" [draggable]="false" [resizable]="false">
+  <div class="p-col-12">
+          <!-- <div class="p-mb-3" style="margin-top: 5px;"> -->
+
+          <div class="p-field p-grid">
+            <label for="local" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"
+              ><b>Producto:</b></label
+            >
+            <div class="p-col-12 p-md-3" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag teal-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.producto.presentacion.presentacion }} {{ selectedProductVenta.producto.nombre }} {{ selectedProductVenta.producto.marca.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>Unidad de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>N° de Items de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+              class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.cantidad }}</span
+              >
+            </div>
+          </div>
+
+
+
+        <div class="p-field p-grid" style="margin-top: 35px;">
+            <label for="lote" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Lote</label>
+            <div class="p-col-12 p-md-2">
+                <span class="p-float-label">
+                    <p-dropdown #inputclsLote inputId="lote" [options]="lotesProducto" [(ngModel)]="clsLote" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px', 'width':'100%'}" [filter]="true" (onChange)="cambioLotes()"></p-dropdown>
+                        <label>Seleccione</label>
+                </span>
+            </div>
+
+            <label for="fecha_vencimiento" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">F. de Vencimiento</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="fecha_vencimiento"
+                type="text"
+                pInputText
+                [(ngModel)]="fechaVencimiento"
+                #inputFechaVencimiento
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="cant_lote" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Empaque Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_lote"
+                type="text"
+                pInputText
+                [(ngModel)]="cantLote"
+                #inputCantidadLote
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="cant_unit_lote" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Unidades Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_unit_lote"
+                type="text"
+                pInputText
+                [(ngModel)]="cantUnitLote"
+                #inputCantidadUnitariaLote
+                [readonly]="true"
+              />
+            </div>
+        </div>
+
+
+        <hr>
+
+        <div class="p-field p-grid" style="margin-top: 45px;">
+
+          <label for="cant_producto" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Cantidad</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_producto"
+                type="text"
+                pInputText
+                [(ngModel)]="cantidadProductoLotes"
+                (keypress)="soloNumerosNaturales($event)"
+                #inputcantidadProductoLotes
+                (change)="calcularPrecios($event)"
+              />
+            </div>
+
+          <label for="descuento_producto" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Descuento</label>
+            <div class="p-col-12 p-md-2">
+
+              <div class="p-inputgroup">
+
+                <span class="p-float-label" style="width: 70%;">
+                    <p-dropdown (onChange)="changeTipoDescuento()" inputId="descuento_producto" [options]="tiposDescuento" [(ngModel)]="clsTiposDescuento" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width': '100%'}" #inputTiposDescuento ></p-dropdown>
+                        <label>Seleccione</label>
+                </span>
+                <span class="p-float-label">
+                  <input
+                    id="cant_descuento"
+                    type="text"
+                    pInputText
+                    [(ngModel)]="cantidadDescuento"
+                    appSoloNumeros
+                    #inputcantidadDescuento
+                    (change)="calcularPrecios($event)"
+                    
+                  />
+                </span>
+              </div>
+            </div>
+
+            <label for="precioUnitario" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Unitario</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="precioUnitario"
+                type="text"
+                pInputText
+                [(ngModel)]="precioUnitario"
+                #inputPrecioUnitario
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="precioTotal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Total</label>
+            <div class="p-col-12 p-md-1">
+              <input
+                id="precioTotal"
+                type="text"
+                pInputText
+                [(ngModel)]="precioTotal"
+                #inputPrecioTotal
+                [readonly]="true"
+              />
+            </div>
+        </div>
+
+
+
+
+
+
+    <div class="p-mb-3" style="margin-top: 45px;"></div>
+
+    <br>
+
+    <button
+        (click)="modificarProducto()"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-check-square"
+        label="Editar Producto"
+        class="p-button-raised p-mr-2 p-mb-2"
+      ></button>
+    </div>
+  <p-footer>
+      <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
+      <button (click)="displayEditProductsLotes=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
       <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
   </p-footer>
 </p-dialog>
@@ -1257,6 +1498,7 @@
                 type="text"
                 pInputText
                 [(ngModel)]="cantidadProductoStocks"
+                (keypress)="soloNumerosNaturales($event)"
                 #inputcantidadProductoStocks
                 (change)="calcularPreciosStocks($event)"
               />
@@ -1277,6 +1519,7 @@
                     type="text"
                     pInputText
                     [(ngModel)]="cantidadDescuentoStock"
+                    appSoloNumeros
                     #inputcantidadDescuentoStock
                     (change)="calcularPreciosStocks($event)"
                     
@@ -1332,6 +1575,181 @@
   <p-footer>
       <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
       <button (click)="displayAddProductsNoLotes=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+      <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Editar Producto" [(visible)]="displayEditProductsNoLotes" [modal]="true" [style]="{'width': '80vw' }" [draggable]="false" [resizable]="false">
+  <div class="p-col-12">
+          <!-- <div class="p-mb-3" style="margin-top: 5px;"> -->
+
+          <div class="p-field p-grid">
+            <label for="local" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"
+              ><b>Producto:</b></label
+            >
+            <div class="p-col-12 p-md-3" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag teal-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.producto.presentacion.presentacion }} {{ selectedProductVenta.producto.nombre }} {{ selectedProductVenta.producto.marca.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>Unidad de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+                class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.nombre }}</span
+              >
+            </div>
+
+            <label for="local" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+              ><b>N° de Items de Empaque:</b></label
+            >
+            <div class="p-col-12 p-md-2" *ngIf="selectedProductVenta != null">
+              <span
+              class="person-tag indigo-bgcolor p-p-1 fs-small"
+                style="
+                  color: #f7f7f7;
+                  font-weight: 500;
+                  font-size: 15px !important;
+                "
+                >{{ selectedProductVenta.detalleUnidadProducto.unidad.cantidad }}</span
+              >
+            </div>
+          </div>
+
+
+
+        <div class="p-field p-grid" style="margin-top: 35px;">
+
+            
+
+            <label for="cant_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Empaque Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_stock"
+                type="text"
+                pInputText
+                [(ngModel)]="cantStock"
+                #inputCantidadStock
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="cant_unit_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Items x Unidades Disponibles</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_unit_stock"
+                type="text"
+                pInputText
+                [(ngModel)]="cantUnitStock"
+                #inputCantidadUnitariaStock
+                [readonly]="true"
+              />
+            </div>
+        </div>
+
+
+        <hr>
+
+        <div class="p-field p-grid" style="margin-top: 45px;">
+
+          <label for="cant_producto_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Cantidad</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="cant_producto_stock"
+                type="text"
+                pInputText
+                [(ngModel)]="cantidadProductoStocks"
+                (keypress)="soloNumerosNaturales($event)"
+                #inputcantidadProductoStocks
+                (change)="calcularPreciosStocks($event)"
+              />
+            </div>
+
+          <label for="descuento_stock" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Descuento</label>
+            <div class="p-col-12 p-md-2">
+
+              <div class="p-inputgroup">
+
+                <span class="p-float-label" style="width: 70%;">
+                    <p-dropdown (onChange)="changeTipoDescuentoStock()" inputId="descuento_stock" [options]="tiposDescuento" [(ngModel)]="clsTiposDescuento" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width': '100%'}" #inputTiposDescuento ></p-dropdown>
+                        <label>Seleccione</label>
+                </span>
+                <span class="p-float-label">
+                  <input
+                    id="cant_descuento_stock"
+                    type="text"
+                    pInputText
+                    [(ngModel)]="cantidadDescuentoStock"
+                    appSoloNumeros
+                    #inputcantidadDescuentoStock
+                    (change)="calcularPreciosStocks($event)"
+                    
+                  />
+                </span>
+              </div>
+            </div>
+
+            <label for="precioUnitario" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Unitario</label>
+            <div class="p-col-12 p-md-2">
+              <input
+                id="precioUnitario"
+                type="text"
+                pInputText
+                [(ngModel)]="precioUnitario"
+                #inputPrecioUnitario
+                [readonly]="true"
+              />
+            </div>
+
+            <label for="precioTotal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Precio Total</label>
+            <div class="p-col-12 p-md-1">
+              <input
+                id="precioTotal"
+                type="text"
+                pInputText
+                [(ngModel)]="precioTotal"
+                #inputPrecioTotal
+                [readonly]="true"
+              />
+            </div>
+        </div>
+
+
+
+
+
+
+    <div class="p-mb-3" style="margin-top: 45px;"></div>
+
+    <br>
+
+    <button
+        (click)="modificarProductoStock()"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-check-square"
+        label="Agregar Producto"
+        class="p-button-raised p-mr-2 p-mb-2"
+      ></button>
+    </div>
+  <p-footer>
+      <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
+      <button (click)="displayEditProductsNoLotes=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
       <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
   </p-footer>
 </p-dialog>
