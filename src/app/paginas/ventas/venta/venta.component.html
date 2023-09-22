@@ -91,6 +91,7 @@
           >
           <div class="p-col-12 p-md-7">
             <input
+              *ngIf="venta != null && venta.cliente != null"
               id="nombreCliente"
               type="text"
               pInputText
@@ -120,6 +121,7 @@
           >
           <div class="p-col-12 p-md-3">
             <input
+              *ngIf="venta != null && venta.cliente != null"
               id="documentoCliente"
               type="text"
               pInputText

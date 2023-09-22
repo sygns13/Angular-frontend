@@ -309,6 +309,8 @@ export class VentaComponent implements OnInit {
             this.verFrmVenta = true;
             this.vistaCarga = false;
             this.verFrmAlmacen = false;
+
+            this.setFocusCodigoProducto();
           }
         },
         error: (err) => {
@@ -466,8 +468,8 @@ export class VentaComponent implements OnInit {
               this.venta.tipo = data.tipo;
               this.venta.numeroVenta = data.numeroVenta;
 
-              this.venta.cliente = new Cliente();
-              this.venta.comprobante = new Comprobante();
+              this.venta.cliente = data.cliente;
+              this.venta.comprobante = data.comprobante;
               this.detalleVentas = data.detalleVentas;
               this.venta.detalleVentas = this.detalleVentas;
 
@@ -986,8 +988,8 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = new Cliente();
-          this.venta.comprobante = new Comprobante();
+          this.venta.cliente = data.cliente;
+          this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
 
@@ -1061,8 +1063,8 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = new Cliente();
-          this.venta.comprobante = new Comprobante();
+          this.venta.cliente = data.cliente;
+          this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
 
@@ -1141,8 +1143,8 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = new Cliente();
-          this.venta.comprobante = new Comprobante();
+          this.venta.cliente = data.cliente;
+          this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
 
@@ -1213,8 +1215,8 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = new Cliente();
-          this.venta.comprobante = new Comprobante();
+          this.venta.cliente = data.cliente;
+          this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
 
@@ -1385,8 +1387,8 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = new Cliente();
-          this.venta.comprobante = new Comprobante();
+          this.venta.cliente = data.cliente;
+          this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
 
@@ -1453,8 +1455,8 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = new Cliente();
-          this.venta.comprobante = new Comprobante();
+          this.venta.cliente = data.cliente;
+          this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
 
@@ -1529,19 +1531,170 @@ export class VentaComponent implements OnInit {
     
   } */
 
+  limpiarDatos(): void{
+    this.activeProductLote = false;
+    this.displayEditProductsLotes = false;
+    this.displayEditProductsNoLotes = false;
+  
+    this.venta = new Venta();
+  
+    
+    this.codigoProducto = '';
+    this.txtBuscarDocCliente = '';
+    this.nombreDocIdentidad = '';
+    this.cantIcbper = 0;
+  
+    this.detalleVentas = [];
+  
+    this.OpGravada = '';
+    this.OpExonerada = '';
+    this.OpInafecta = '';
+    this.TotalISC = '';
+    this.TotalIGV = '';
+    this.TotalICBPER = '';
+    this.ImporteTotal = '';
+  
+  
+    this.txtBuscarCliente = '';
+    this.clientes = [];
+  
+    this.pageClientes = 0;
+    this.firstClientes = 0;
+    this.lastClientes = 0;
+    this.rowsClientes = 10;
+    this.isFirstClientes = true;
+    this.isLastClientes = false;
+    this.totalRecordsClientes = 0;
+    this.numberElementsClientes = 0;
+    this.loadingClientes = true; 
+  
+    this.selectedClient = null;
+  
+    //Reg Cliente
+  
+    this.nombreCliente = '';
+    this.tipo_documento_idCliente = null;
+    this.documentoCliente = '';
+    this.direccionCliente = '';
+    this.telefonoCliente = '';
+    this.correo1Cliente = '';
+    this.correo2Cliente = '';
+  
+    this.newCliente = new Cliente();
+  
+    //Estructuras de Productos
+  
+    this.productosVentas = [];
+    this.filtroProductosVenta = new FiltroProductosVenta();
+  
+    this.pageProductosToVentas = 0;
+    this.firstProductosToVentas = 0;
+    this.lastProductosToVentas = 0;
+    this.rowsProductosToVentas = 10;
+    this.isFirstProductosToVentas = true;
+    this.isLastProductosToVentas = false;
+    this.totalRecordsProductosToVentas = 0;
+    this.numberElementsProductosToVentas = 0;
+    this.loadingProductosToVentas = true; 
+  
+    this.txtBuscarProducto = '';
+  
+    this.selectedProductVenta = null;
+    
+    this.lotesProducto = [];
+    this.clsLote = null;
+    this.fechaVencimiento = '';
+    this.cantLote = null;
+    this.cantUnitLote = null;
+  
+  
+    this.lotesProductoBack= [];
+    this.indexLote = 0;
+  
+    this.cantidadProductoLotes = 1;
+  
+    this.cantidadDescuento = 0;
+    this.precioUnitario = null;
+    this.precioTotal = null;
+    
+    this.cantStock = null;
+    this.cantUnitStock = null;
+  
+    this.stocksProductoBack = [];
+    
+    this.cantidadProductoStocks = 1;
+    this.cantidadDescuentoStock = 0;
+  
+  
+    //Detalle Ventas
+  
+    this.detalleVentaGestion = new DetalleVenta();
+  }
+
   cobrarVenta(): void{
     
   }
   nuevaVenta(): void{
+    //nueva venta
+    this.limpiarDatos();
+    this.seleccionarLocal();
     
   }
 
   cancelarVenta(event: Event): void{
-    
+
+    this.ventaService.resetVenta(this.venta).subscribe({
+      next: (data) => {
+        if(data != null && data.id != null){
+          //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+          this.venta.id = data.id;
+          this.venta.fecha = data.fecha;
+          this.venta.subtotalInafecto = data.subtotalInafecto;
+          this.venta.subtotalAfecto = data.subtotalAfecto;
+          this.venta.subtotalExonerado = data.subtotalExonerado;
+          this.venta.totalMonto = data.totalMonto;
+          this.venta.totalAfectoIsc = data.totalAfectoIsc;
+          this.venta.igv = data.igv;
+          this.venta.isc = data.isc;
+          this.venta.estado = data.estado;
+          this.venta.pagado = data.pagado;
+          this.venta.hora = data.hora;
+          this.venta.tipo = data.tipo;
+          this.venta.numeroVenta = data.numeroVenta;
+
+          this.venta.cliente = new Cliente();
+          this.venta.comprobante = data.comprobante;
+          this.detalleVentas = data.detalleVentas;
+          this.venta.detalleVentas = this.detalleVentas;
+
+
+          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+          this.OpGravada = opGrabada.toFixed(2);
+          this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+          this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+          this.TotalISC = this.venta.isc.toFixed(2);
+          this.TotalIGV = this.venta.igv.toFixed(2);
+          this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+
+          this.venta.montoIcbper = data.montoIcbper;
+          this.venta.cantidadIcbper = data.cantidadIcbper;
+          this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+
+          this.codigoProducto = "";
+          this.setFocusCodigoProducto();
+
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }        
+   });
+  
   }
 
   cerrarVenta(event: Event): void{
 
+      this.limpiarDatos();
       this.verFrmAlmacen = true;
       this.verFrmVenta = false;
       this.vistaCarga = false;

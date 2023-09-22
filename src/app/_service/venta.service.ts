@@ -49,4 +49,8 @@ export class VentaService extends GenericService<Venta>{
   modificarProductoAVenta(detalleVenta: DetalleVenta) {
     return this.http.post<Venta>(`${this.url}/modificar-detalle-venta`, detalleVenta);
   }
+
+  resetVenta(venta: Venta) {
+    return this.http.put<Venta>(`${this.url}/resetventa`, venta);
+  }
 }
