@@ -61,7 +61,7 @@ export class MarcaComponent implements OnInit {
                 private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
-        { label: 'Gestión de Marcas', routerLink: ['/tablas/marca'] }
+        { label: 'Gestión de Marcas', routerLink: ['/tablas/marcas'] }
     ]);
 
 }

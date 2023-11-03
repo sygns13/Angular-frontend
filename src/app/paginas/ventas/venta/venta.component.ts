@@ -183,7 +183,12 @@ export class VentaComponent implements OnInit {
 
   constructor(public app: AppComponent, private gestionloteService: GestionloteService, private messageService: MessageService, private clienteService: ClienteService,
               private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService , private ventaService: VentaService,
-              private productoService: ProductoService, private unidadService:UnidadService, private stockService: StockService) { }
+              private productoService: ProductoService, private unidadService:UnidadService, private stockService: StockService, private breadcrumbService: AppBreadcrumbService) {
+                this.breadcrumbService.setItems([
+                  { label: 'Ventas' },
+                  { label: 'Venta de Productos', routerLink: ['/ventas/venta'] }
+                  ]);
+               }
 
   ngOnInit(): void {
 

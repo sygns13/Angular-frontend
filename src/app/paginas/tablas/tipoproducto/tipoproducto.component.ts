@@ -61,7 +61,7 @@ export class TipoProductoComponent implements OnInit {
                 private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
-        { label: 'Gestión de Tipos de Productos', routerLink: ['/tablas/tipoProducto'] }
+        { label: 'Gestión de Tipos de Productos', routerLink: ['/tablas/tipo_productos'] }
     ]);
 
 }

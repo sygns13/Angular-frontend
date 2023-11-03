@@ -1,0 +1,161 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    
+    <p-toast></p-toast>
+    
+    <div class="p-grid" >
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Formulario de Inicio de Comprobantes</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede iniciar Comprobantes en General o Por Sucursal</blockquote>
+            </div>
+            <br>
+    
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Inicio de Comprobante" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+    
+    
+    <div class="p-col-12" *ngIf="vistaRegistro">
+        <div class="card  p-shadow-10">
+            <h5>{{tipoFrm}}</h5>
+            <div class="p-fluid box">
+
+                <div class="p-field p-grid">
+                    <label for="tipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Comprobante</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoComprobante inputId="tipoComprobante" [options]="tipoComprobantes" [(ngModel)]="clsTipoComprobante" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>Seleccione ...</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="almacen" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Almacen</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoComprobante inputId="almacen" [options]="almacenes" [(ngModel)]="clsAlmacen_registro" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>GENERAL (TODOS LOS LOCALES)</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="letraSerie" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Letra de la Serie</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="letraSerie" type="text" pInputText [(ngModel)]="letraSerie" #inputletraSerie maxLength="1" appSoloLetras placeholder="A">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="numSerie" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Número de la Serie</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="numSerie" type="text" pInputText [(ngModel)]="numSerie" #inputNumSerie maxLength="2" appSoloNumeros placeholder="1">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="numero" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Número Inicial del Comprobante</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="numero" type="text" pInputText [(ngModel)]="numero" #inputNumero maxLength="8"  appSoloNumerosEnteros placeholder="1">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="estado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="estado" [options]="estados" [(ngModel)]="clsEstado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+    
+            <br>
+            <button *ngIf="vistaBotonRegistro" (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonRegistro"  (click)="cancelar()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonEdicion" (click)="modificar($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="cerrar()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Comprobantes Iniciados Registrados</h5>
+       <!-- <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>-->
+
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+        <p-table [value]="initComprobantes" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Tipo de Comprobante</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 25%; color:white;">Sucursal de Comprobante</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Serie</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Número Inicial</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Número Actual</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Estado</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Gestión</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-initComprobante let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  {{initComprobante.tipoComprobante.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Sucursal</span>  {{initComprobante.almacen.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Serie</span>  {{initComprobante.letraSerieStr}}{{initComprobante.numSerieStr}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Número Inicial</span>  {{initComprobante.numeroStr}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Número Actual</span>  {{initComprobante.numeroActualStr}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;"><span class="p-column-title">Estado</span>
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="initComprobante.activo === 1" value="Activo"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="initComprobante.activo === 0" value="Inactivo"></p-tag>
+                    </td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
+    
+                        <button (click)="editar(initComprobante, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Inicio de Comprobante" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="initComprobante.borrado === 0" (click)="eliminar(initComprobante , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Inicio de Comprobante" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="initComprobante.activo === 0" (click)="alta(initComprobante , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Inicio de Comprobante" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="initComprobante.activo === 1" (click)="baja(initComprobante , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Inicio de Comprobante" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+                                 <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                                 <!-- <p-messages [value]="msgs"></p-messages> -->
+    
+    </div>

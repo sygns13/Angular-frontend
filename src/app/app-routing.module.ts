@@ -30,6 +30,9 @@ import {CatalogoComponent} from './paginas/servicios/catalogo/catalogo.component
 import {ClienteComponent} from './paginas/ventas/cliente/cliente.component';
 import {VentaComponent} from './paginas/ventas/venta/venta.component';
 
+//tablas caja
+import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
+
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
 import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
@@ -129,6 +132,13 @@ const routes: Routes = [
     children: [
      {path: 'clientes', component: ClienteComponent},
      {path: 'venta', component: VentaComponent}
+    ]
+  },
+  {
+    path: 'caja', component: AppMainComponent, canActivate: [GuardService],
+    children: [
+     {path: 'init-comprobantes', component: InitcomprobanteComponent},
+     /* {path: 'venta', component: VentaComponent} */
     ]
   },
   { path: 'not-403', component: Not403Component },

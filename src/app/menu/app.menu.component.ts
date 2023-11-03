@@ -78,7 +78,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {label: 'Registro de Movimientos', icon: 'pi pi-fw pi-sort-numeric-down-alt', routerLink: ['/uikit/formlayout']},
                     {label: 'Caja Diaria', icon: 'pi pi-fw pi-table', routerLink: ['utilities/display']},
-                    {label: 'Iniciar Comprobantes', icon: 'pi pi-fw pi-file', routerLink: ['utilities/elevation']}
+                    {label: 'Iniciar Comprobantes', icon: 'pi pi-fw pi-file', routerLink: ['/caja/init-comprobantes']}
                 ]
             },
             {

@@ -56,4 +56,8 @@ export class AlmacenService extends GenericService<Almacen> {
   listarPageable(p: number, s:number, txtBuscar:String){
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
   }
+
+  listarAll(){
+    return this.http.get<Almacen[]>(`${this.url}/listar-all`);
+  }
 }

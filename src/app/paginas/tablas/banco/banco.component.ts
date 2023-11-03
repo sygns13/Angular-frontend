@@ -61,7 +61,7 @@ export class BancoComponent implements OnInit {
                 private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
-        { label: 'Gestión de Bancos', routerLink: ['/tablas/banco'] }
+        { label: 'Gestión de Bancos', routerLink: ['/tablas/bancos'] }
     ]);
 
 }
