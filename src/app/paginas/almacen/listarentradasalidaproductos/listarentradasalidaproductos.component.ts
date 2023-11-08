@@ -16,7 +16,7 @@ import { GestionloteService } from 'src/app/_service/gestionlote.service';
 import { FiltroGeneral } from './../../../_util/filtro_general';
 import { StockService } from './../../../_service/stock.service';
 import { LoteService } from './../../../_service/lote.service';
-import { EntradaSalidaService } from './../../../_service/entrada-salida.service';
+import { EntradaSalidaService } from '../../../_service/entrada_salida.service';
 import { Lote } from 'src/app/_model/lote';
 import * as moment from 'moment';
 import { Router } from '@angular/router';

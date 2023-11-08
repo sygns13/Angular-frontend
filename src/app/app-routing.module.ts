@@ -32,6 +32,7 @@ import {VentaComponent} from './paginas/ventas/venta/venta.component';
 
 //tablas caja
 import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
+import {DetallemetodopagoComponent} from './paginas/caja/detallemetodopago/detallemetodopago.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -138,6 +139,7 @@ const routes: Routes = [
     path: 'caja', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'init-comprobantes', component: InitcomprobanteComponent},
+     {path: 'metodos-pagos', component: DetallemetodopagoComponent},
      /* {path: 'venta', component: VentaComponent} */
     ]
   },

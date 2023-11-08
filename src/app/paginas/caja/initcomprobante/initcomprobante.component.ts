@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
-import { InitComprobanteService } from '../../../_service/init-comprobante.service';
-import { TipoComprobanteService } from '../../../_service/tipo-comprobante.service';
+import { InitComprobanteService } from '../../../_service/init_comprobante.service';
+import { TipoComprobanteService } from '../../../_service/tipo_comprobante.service';
 import { AlmacenService } from '../../../_service/almacen.service';
 import { switchMap } from 'rxjs/operators';
 import { ConfirmationService, MessageService} from 'primeng/api';
@@ -25,7 +25,7 @@ export class InitcomprobanteComponent implements OnInit {
   vistaRegistro: boolean = false;
 
 
-  letraSerie: String = '';
+  letraSerie: string = '';
   numSerie: number = 0;
   numero: number = 0;
   clsTipoComprobante: any = null;
@@ -57,13 +57,13 @@ export class InitcomprobanteComponent implements OnInit {
   msgs: Message[] = [];
   position: string;
 
-  tipoFrm: String = 'Nuevo Inicio de Comprobante';
+  tipoFrm: string = 'Nuevo Inicio de Comprobante';
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
   vistaCarga : boolean = true;
 
   loading: boolean = true; 
-  txtBuscar: String = '';
+  txtBuscar: string = '';
 
   tipo_comprobante_id: number = 0;
   almacen_id: number = -1;
@@ -72,9 +72,10 @@ export class InitcomprobanteComponent implements OnInit {
   almacenes: any[] = [];
 
 
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private initComprobanteService:InitComprobanteService,
-                private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService
-                , private tipoComprobanteService: TipoComprobanteService, private almacenService: AlmacenService) {
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef,
+                private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
+                private tipoComprobanteService: TipoComprobanteService, private almacenService: AlmacenService,
+                private initComprobanteService:InitComprobanteService) {
     this.breadcrumbService.setItems([
         { label: 'Caja' },
         { label: 'Iniciar Comprobantes', routerLink: ['/caja/init-comprobantes'] }

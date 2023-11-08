@@ -185,6 +185,7 @@ import { SoloNumerosDirective } from './solo-numeros.directive';
 import { InitcomprobanteComponent } from './paginas/caja/initcomprobante/initcomprobante.component';
 import { SoloNumerosEnterosDirective } from './solo-numeros-enteros.directive';
 import { SoloLetrasDirective } from './solo-letras.directive';
+import { DetallemetodopagoComponent } from './paginas/caja/detallemetodopago/detallemetodopago.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -366,7 +367,8 @@ export function tokenGetter() {
         SoloNumerosDirective,
         InitcomprobanteComponent,
         SoloNumerosEnterosDirective,
-        SoloLetrasDirective
+        SoloLetrasDirective,
+        DetallemetodopagoComponent
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

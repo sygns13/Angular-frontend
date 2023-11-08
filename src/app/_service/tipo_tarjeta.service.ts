@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
 import { HttpClient } from '@angular/common/http';
-import { Banco } from './../_model/banco';
+import { TipoTarjeta } from '../_model/tipo_tarjeta';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class BancoService extends GenericService<Banco>  {
+export class TipoTarjetaService extends GenericService<TipoTarjeta>{
 
-  bancos = new Subject<Banco[]>();
+  tipoTarjetas = new Subject<TipoTarjeta[]>();
 
-  protected url: string = `${environment.HOST}/api/backend/bancos`
+  protected url: string = `${environment.HOST}/api/backend/tipotarjetas`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/api/backend/bancos`);
+    super(http, `${environment.HOST}/api/backend/tipotarjetas`);
   }
 
   altaBaja(id: number, valor: number) {
-    return this.http.get(`${this.url}/altabaja/${id}/${valor}`);
+    return this.http.patch(`${this.url}/altabaja/${id}/${valor}`, null);
   }
 
   listarPageable(p: number, s:number, txtBuscar:String){
@@ -28,6 +29,6 @@ export class BancoService extends GenericService<Banco>  {
   }
 
   listarAll(){
-    return this.http.get<Banco[]>(`${this.url}/listar-all`);
+    return this.http.get<TipoTarjeta[]>(`${this.url}/listar-all`);
   }
 }
