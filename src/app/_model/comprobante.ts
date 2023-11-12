@@ -1,11 +1,11 @@
-import { TipoComprobante } from "./tipo_comprobante";
+import { InitComprobante } from "./init_comprobante";
 
 export class Comprobante {
     id: number;
     serie: string;
     numero: string;
     cantidadDigitos: number;
-    tipoComprobante: TipoComprobante;
+    initComprobante: InitComprobante;
     estado: string;
     activo: number;
     borrado: number;

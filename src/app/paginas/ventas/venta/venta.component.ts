@@ -1,3 +1,4 @@
+import { CobroVentaService } from './../../../_service/cobro_venta.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
@@ -14,6 +15,12 @@ import { ClienteService } from './../../../_service/cliente.service';
 import { VentaService } from './../../../_service/venta.service';
 import { UnidadService } from '../../../_service/unidad.service';
 import { StockService } from '../../../_service/stock.service';
+import { TipoComprobanteService } from '../../../_service/tipo_comprobante.service';
+import { InitComprobanteService } from '../../../_service/init_comprobante.service';
+import { MetodoPagoService } from '../../../_service/metodo_pago.service';
+import { BancoService } from '../../../_service/banco.service';
+import { TipoTarjetaService } from '../../../_service/tipo_tarjeta.service';
+import { DetalleMetodoPagoService } from '../../../_service/detalle_metodo_pago.service';
 
 import { Cliente } from './../../../_model/cliente';
 import { TipoDocumento } from './../../../_model/tipo_documento';
@@ -22,6 +29,11 @@ import { Almacen } from 'src/app/_model/almacen';
 import { Comprobante } from 'src/app/_model/comprobante';
 import { DetalleVenta } from 'src/app/_model/detalle_venta';
 import { DetalleUnidadProducto } from 'src/app/_model/detalle_unidad_producto';
+import { TipoComprobante } from '../../../_model/tipo_comprobante';
+import { InitComprobante } from '../../../_model/init_comprobante';
+import { MetodoPago } from '../../../_model/metodo_pago';
+import { DetalleMetodoPago } from '../../../_model/detalle_metodo_pago';
+import { CobroVenta } from './../../../_model/cobro_venta';
 
 import { ProductoVentas } from 'src/app/_model/producto_ventas';
 import { FiltroProductosVenta } from 'src/app/_util/filtro_productos_venta';
@@ -48,6 +60,7 @@ export class VentaComponent implements OnInit {
   @ViewChild('inputcantidadProductoStocks', { static: false }) inputcantidadProductoStocks: ElementRef;
   @ViewChild('inputcantidadDescuentoStock', { static: false }) inputcantidadDescuentoStock: ElementRef;
   @ViewChild('inputcodigoProducto', { static: false }) inputcodigoProducto: ElementRef;
+  @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
 
   vistaCarga : boolean = true;
   verFrmVenta : boolean = false;
@@ -65,6 +78,7 @@ export class VentaComponent implements OnInit {
   clsAlmacen: any = null;
 
   venta: Venta = new Venta();
+  cobroVenta: CobroVenta = new CobroVenta();
 
   
   codigoProducto: string = '';
@@ -178,12 +192,44 @@ export class VentaComponent implements OnInit {
   //Detalle Ventas
 
   detalleVentaGestion: DetalleVenta = new DetalleVenta();
+
+  //Cobrar
+  displayConfirmarPago : boolean = false;
+  tipoComprobantes: any[] = [];
+  clsTipoComprobante: any = null;
+  serieComprobantes: any[] = [];
+  clsSerieComprobante: any = null;
+  clsMetodoPago: any = null;
+  metodoPagos: any[] = [];
+
+  bancos: any[] = [];
+  clsBanco: any = null;
+
+  numeroCuentas: any[] = [];
+  clsNumeroCuenta: any = null;
+  numeroOperacion: string = '';
+
+  tipoTarjetas: any[] = [];
+  clsTipoTarjeta: any = null;
+  numeroTarjeta: string = '';
+  numeroCheque: string = '';
+  
+  numeroCelulares: any[] = [];
+  clsNumeroCelular: any = null;
+  //initComprobantes: InitComprobante[] = [];
+
+  montoVenta: string = null;
+  montoAbonado: number = null;
+  montoVuelto: string = null;
   
 
 
   constructor(public app: AppComponent, private gestionloteService: GestionloteService, private messageService: MessageService, private clienteService: ClienteService,
               private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService , private ventaService: VentaService,
-              private productoService: ProductoService, private unidadService:UnidadService, private stockService: StockService, private breadcrumbService: AppBreadcrumbService) {
+              private productoService: ProductoService, private unidadService:UnidadService, private stockService: StockService, private breadcrumbService: AppBreadcrumbService,
+              private tipoComprobanteService: TipoComprobanteService, private initComprobanteService:InitComprobanteService, private metodoPagoService:MetodoPagoService,
+              private tipoTarjetaService: TipoTarjetaService, private bancoService: BancoService, private detalleMetodoPagoService: DetalleMetodoPagoService,
+              private cobroVentaService: CobroVentaService) {
                 this.breadcrumbService.setItems([
                   { label: 'Ventas' },
                   { label: 'Venta de Productos', routerLink: ['/ventas/venta'] }
@@ -204,26 +250,6 @@ export class VentaComponent implements OnInit {
     this.getTipoDocumentos();
     
   }
-/* 
-  next() {
-    this.first = this.first + this.rows;
-  }
-
-  prev() {
-      this.first = this.first - this.rows;
-  }
-
-  reset() {
-      this.first = 0;
-  }
-
-  isLastPage(): boolean {
-      return this.detalleVentas ? this.first === (this.detalleVentas.length - this.rows): true;
-  }
-
-  isFirstPage(): boolean {
-      return this.detalleVentas ? this.first === 0 : true;
-  } */
 
   getAlmacens() {
 
@@ -280,8 +306,6 @@ export class VentaComponent implements OnInit {
       this.nombreDocIdentidad = "";
       this.displayProductsToVentas = false;
       this.venta.cantidadIcbper = 0;
-
-      console.log("aca1");
 
       this.ventaService.registrarRetVenta(this.venta).subscribe({
         next: (data) => {
@@ -382,20 +406,6 @@ export class VentaComponent implements OnInit {
   
   }
 
- /*  nextClientes() {
-    this.pageClientes++;
-    this.listarPageClientes(this.pageClientes, this.rowsClientes);
-  }
-  
-  prevClientes() {
-      this.pageClientes--;
-      this.listarPageClientes(this.pageClientes, this.rowsClientes);
-  }
-  
-  resetClientes() {
-      this.firstClientes = 0;
-      this.listarPageClientes(this.pageClientes, this.rowsClientes);
-  } */
   
   isLastPageClientes(): boolean {
       //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
@@ -426,8 +436,12 @@ export class VentaComponent implements OnInit {
     this.inputNombreClienteReg.nativeElement.focus();
   }
 
+  setFocusMontoAbonado() {    
+    this.changeDetectorRef.detectChanges();
+    this.inputmontoAbonado.nativeElement.focus();
+  }
+
   aceptarCliente(registro){
-    //console.log(registro);
     if(registro != null){
 
       this.venta.cliente = registro;
@@ -441,7 +455,6 @@ export class VentaComponent implements OnInit {
               this.txtBuscarDocCliente = "";
               this.displayClient = false;
               this.nombreDocIdentidad = registro.tipoDocumento.tipo;
-              console.log(this.nombreDocIdentidad);
             }
           },
           error: (errUdpCliente) => {
@@ -452,7 +465,6 @@ export class VentaComponent implements OnInit {
   }
 
   modificarCantidadICBPER(event: Event){
-    //console.log(registro);
     if(this.venta != null){
         this.ventaService.modificarVenta(this.venta).subscribe({
           next: (data) => {
@@ -500,9 +512,6 @@ export class VentaComponent implements OnInit {
   }
 
   buscarDocCliente() {
-
-    //this.messageService.add({severity:'warn', summary:'Confirmado', detail: 'El Producto se ha editado satisfactoriamente'});
-    /* this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Warn', detail: 'Message Content' }); */
 
     this.clienteService.getByDocument(this.txtBuscarDocCliente).subscribe({
       
@@ -648,7 +657,6 @@ export class VentaComponent implements OnInit {
   }
 
   buscarProductos(): void{
-    this.cerrarProducto();
     this.loadingProductosToVentas = true; 
     this.filtroProductosVenta.palabraClave = this.txtBuscarProducto;
     this.filtroProductosVenta.unidadId = parseInt((this.clsUnidad != null) ? this.clsUnidad.code : 0);
@@ -656,10 +664,6 @@ export class VentaComponent implements OnInit {
     this.listarPageProductosToVentas();
   }
 
-  cerrarProducto(){
-    //this.vistaRegistroCliente = false;
-    console.log("aqui");
-  }
 
   loadDataProductosToVentas(event: LazyLoadEvent) { 
     this.loadingProductosToVentas = true; 
@@ -685,7 +689,6 @@ export class VentaComponent implements OnInit {
   }
 
   aceptarProducto(registro){
-    console.log(registro);
     this.selectedProductVenta = registro;
     this.activeProductLote = registro.producto.activoLotes == 1;
     this.lotesProducto = [];
@@ -698,7 +701,6 @@ export class VentaComponent implements OnInit {
     this.cantidadDescuentoStock = 0;
 
     this.stockService.listarStocksVentas(this.venta.almacen.id, registro.producto.id).subscribe(data => {
-      console.log(data);
 
       if(this.activeProductLote){
 
@@ -812,7 +814,6 @@ export class VentaComponent implements OnInit {
 
 
   calcularPreciosZ(): void {
-    //console.log("entra calculos");
 
     this.precioTotal = null;
 
@@ -851,7 +852,6 @@ export class VentaComponent implements OnInit {
 
 
   calcularPrecios(event: Event): void {
-    //console.log("entra calculos");
 
     this.precioTotal = null;
 
@@ -1047,7 +1047,6 @@ export class VentaComponent implements OnInit {
     this.detalleVentaGestion.activo = 1;
     this.detalleVentaGestion.borrado = 0;
 
-    console.log(this.detalleVentaGestion);
 
     this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
       next: (data) => {
@@ -1089,8 +1088,6 @@ export class VentaComponent implements OnInit {
           this.displayProductsToVentas = false;
           this.displayAddProductsNoLotes = false;
           this.displayAddProductsLotes = false;
-
-          console.log(this.detalleVentas);
 
         }
       },
@@ -1127,7 +1124,6 @@ export class VentaComponent implements OnInit {
     this.detalleVentaGestion.activo = 1;
     this.detalleVentaGestion.borrado = 0;
 
-    console.log(this.detalleVentaGestion);
 
     this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
       next: (data) => {
@@ -1170,8 +1166,6 @@ export class VentaComponent implements OnInit {
           this.displayAddProductsNoLotes = false;
           this.displayAddProductsLotes = false;
 
-          console.log(this.detalleVentas);
-
         }
       },
       error: (err) => {
@@ -1199,7 +1193,6 @@ export class VentaComponent implements OnInit {
 
    detalleVenta.ventaIdReference = this.venta.id;
 
-    console.log(detalleVenta);
 
     this.ventaService.deleteProductoAVenta(detalleVenta).subscribe({
       next: (data) => {
@@ -1242,7 +1235,6 @@ export class VentaComponent implements OnInit {
           this.displayAddProductsNoLotes = false;
           this.displayAddProductsLotes = false;
 
-          console.log(this.detalleVentas);
 
         }
       },
@@ -1254,7 +1246,6 @@ export class VentaComponent implements OnInit {
 
   editarDV(detalleVenta:DetalleVenta, event: Event){
 
-    console.log(detalleVenta);
     this.detalleVentaGestion = new DetalleVenta();
     this.detalleVentaGestion = detalleVenta;
     this.selectedProductVenta = new ProductoVentas();
@@ -1296,7 +1287,6 @@ export class VentaComponent implements OnInit {
     }
 
     this.stockService.listarStocksVentasEdit(this.venta.almacen.id, detalleVenta.producto.id, loteIdAdd).subscribe(data => {
-      console.log(data);
 
       if(this.activeProductLote){
 
@@ -1371,7 +1361,6 @@ export class VentaComponent implements OnInit {
     this.detalleVentaGestion.activo = 1;
     this.detalleVentaGestion.borrado = 0;
 
-    console.log(this.detalleVentaGestion);
 
     this.ventaService.modificarProductoAVenta(this.detalleVentaGestion).subscribe({
       next: (data) => {
@@ -1410,11 +1399,8 @@ export class VentaComponent implements OnInit {
           this.venta.cantidadIcbper = data.cantidadIcbper;
           this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
 
-          //this.displayProductsToVentas = false;
           this.displayEditProductsLotes = false;
-          //this.displayAddProductsLotes = false;
 
-          console.log(this.detalleVentas);
 
         }
       },
@@ -1439,7 +1425,6 @@ export class VentaComponent implements OnInit {
     this.detalleVentaGestion.precioTotal = +this.precioTotal;
     this.detalleVentaGestion.lote = null;
 
-    console.log(this.detalleVentaGestion);
 
     this.ventaService.modificarProductoAVenta(this.detalleVentaGestion).subscribe({
       next: (data) => {
@@ -1481,7 +1466,6 @@ export class VentaComponent implements OnInit {
           //this.displayProductsToVentas = false;
           this.displayEditProductsNoLotes = false;
 
-          console.log(this.detalleVentas);
 
         }
       },
@@ -1529,12 +1513,6 @@ export class VentaComponent implements OnInit {
     //this.inputcantidadProductoLotes.nativeElement.focus();
     this.inputcantidadDescuentoStock.nativeElement.select();
   }
-
-
-
-  /* buscarProducto(): void{
-    
-  } */
 
   limpiarDatos(): void{
     this.activeProductLote = false;
@@ -1634,9 +1612,209 @@ export class VentaComponent implements OnInit {
     //Detalle Ventas
   
     this.detalleVentaGestion = new DetalleVenta();
+
+    //Cobro Venta
+    this.displayConfirmarPago = false;
+
+    this.displayConfirmarPago = false;
+    this.tipoComprobantes = [];
+    this.clsTipoComprobante = null;
+    this.serieComprobantes = [];
+    this.clsSerieComprobante = null;
+    this.clsMetodoPago = null;
+    this.metodoPagos = [];
+
+    this.bancos = [];
+    this.clsBanco = null;
+
+    this.numeroCuentas = [];
+    this.clsNumeroCuenta = null;
+    this.numeroOperacion = '';
+
+    this.tipoTarjetas = [];
+    this.clsTipoTarjeta = null;
+    this.numeroTarjeta = '';
+    this.numeroCheque = '';
+    
+    this.numeroCelulares = [];
+    this.clsNumeroCelular = null;
+    //initComprobantes: InitComprobante[] = [];
+
+    this.montoVenta = null;
+    this.montoAbonado = null;
+    this.montoVuelto = null;
+  }
+
+  getTipoComprobantes() {
+
+    this.clsTipoComprobante = null;
+    this.tipoComprobantes = [];
+    let isFirst = true;
+
+    this.tipoComprobanteService.listarAll().subscribe(data => {
+      data.forEach(tipoComprobante => {
+        this.tipoComprobantes.push({name: tipoComprobante.nombre, code: tipoComprobante.id});
+        if(isFirst){
+          this.clsTipoComprobante = {name: tipoComprobante.nombre, code: tipoComprobante.id};
+          this.buscarSeriesComprobantes();
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+  buscarSeriesComprobantes() {
+
+    this.clsSerieComprobante = null;
+    this.serieComprobantes = [];
+    let isFirst = true;
+
+    let tipo_comprobante_id = parseInt((this.clsTipoComprobante != null) ? this.clsTipoComprobante.code : "0");
+
+    this.initComprobanteService.listarAll(tipo_comprobante_id, this.venta.almacen.id).subscribe(data => {
+      data.forEach(initComprobantes => {
+        this.serieComprobantes.push({name: initComprobantes.letraSerieStr + initComprobantes.numSerieStr, code: initComprobantes.id});
+        if(isFirst){
+          this.clsSerieComprobante = {name: initComprobantes.letraSerieStr + initComprobantes.numSerieStr, code: initComprobantes.id};
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+  getMetodoPagos() {
+  
+    this.clsMetodoPago = null;
+    this.metodoPagos = [];
+    let isFirst = true;
+
+    //this.metodoPagos.push({name: 'GENERAL (TODOS LOS LOCALES)', code: 0});
+
+    this.metodoPagoService.listarAll().subscribe(data => {
+      data.forEach(metodoPago => {
+          this.metodoPagos.push({name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId});
+          if(isFirst){
+            this.clsMetodoPago = {name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId};
+            this.buscarBancos();
+            isFirst = false;
+          }
+      });
+    });
+  }
+
+  getDataMetodosPagos(){
+
+    if(this.clsMetodoPago.tipoId == 'WT' || this.clsMetodoPago.tipoId == 'CH'){
+      this.buscarBancos();
+      this.numeroCheque = "";
+    }
+    if(this.clsMetodoPago.tipoId == 'CC'){
+      this.buscarTipoTarjetas();
+    }
+    if(this.clsMetodoPago.tipoId == 'EW'){
+      this.buscarCelulares();
+    }
+  }
+
+  buscarBancos() {
+  
+    this.clsBanco = null;
+    this.bancos = [];
+    let isFirst = true;
+    this.numeroOperacion = '';
+
+    this.bancoService.listarAll().subscribe(data => {
+      data.forEach(banco => {
+        this.bancos.push({name: banco.nombre, code: banco.id});
+        if(isFirst){
+          this.clsBanco = {name: banco.nombre, code: banco.id};
+          this.buscarCuentas();
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+  buscarTipoTarjetas() {
+  
+    this.clsTipoTarjeta = null;
+    this.tipoTarjetas = [];
+    let isFirst = true;
+    this.numeroTarjeta = '';
+
+    this.tipoTarjetaService.listarAll().subscribe(data => {
+      data.forEach(data => {
+        this.tipoTarjetas.push({name: data.nombre, code: data.id, sigla: data.sigla});
+        if(isFirst){
+          this.clsTipoTarjeta = {name: data.nombre, code: data.id, sigla: data.sigla};
+          //this.buscarCuentas();
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+  buscarCuentas() {
+  
+    this.clsNumeroCuenta = null;
+    this.numeroCuentas = [];
+    let isFirst = true;
+
+    let metodos_pago_id = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
+    let banco_id = parseInt((this.clsBanco != null) ? this.clsBanco.code : "0");
+
+    this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
+      data.forEach(numeroCuenta => {
+        this.numeroCuentas.push({name: numeroCuenta.numeroCuenta, code: numeroCuenta.id});
+        if(isFirst){
+          this.clsNumeroCuenta = {name: numeroCuenta.numeroCuenta, code: numeroCuenta.id};
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+  buscarCelulares() {
+  
+    this.clsNumeroCelular = null;
+    this.numeroCelulares = [];
+    let isFirst = true;
+    this.numeroOperacion = '';
+
+    let metodos_pago_id = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
+    let banco_id = 0;
+
+    this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
+      data.forEach(data => {
+        this.numeroCelulares.push({name: data.numeroCelular, code: data.id});
+        if(isFirst){
+          this.clsNumeroCelular = {name: data.numeroCelular, code: data.id};
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+  calcularMontos(event: Event): void {
+    let importe = this.floor10(this.venta.totalMonto, -2);
+    let vuelto =  this.montoAbonado - importe;
+    this.montoVuelto = vuelto.toFixed(2);
   }
 
   cobrarVenta(): void{
+
+    this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+    this.montoAbonado = this.venta.totalMonto;
+    this.montoVuelto = "0.00";
+    this.numeroCheque = "";
+
+    this.getTipoComprobantes();
+    this.getMetodoPagos();
+
+    this.displayConfirmarPago = false;
+    this.displayConfirmarPago = true;
+
+    this.setFocusMontoAbonado();
     
   }
   nuevaVenta(): void{
@@ -1704,6 +1882,72 @@ export class VentaComponent implements OnInit {
       this.verFrmVenta = false;
       this.vistaCarga = false;
     
+  }
+
+  confirmarPago(): void{
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Confirma que desea realizar el Cobro de la Venta?',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Cobro de Venta',
+      accept: () => {
+       this.confirmarPagoConfirmado();
+      },
+      reject: () => {
+      }
+    });
+  }
+
+  confirmarPagoConfirmado(): void{
+    this.cobroVenta = new CobroVenta();
+    let metodoPago = new MetodoPago();
+
+    let metodoPagoId = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
+    let tipoId = this.clsMetodoPago != null ? this.clsMetodoPago.tipoId : "";
+    let metodoPagoName = this.clsMetodoPago != null ? this.clsMetodoPago.name : "";
+
+    metodoPago.id = metodoPagoId;
+    metodoPago.tipoId = tipoId;
+    metodoPago.nombre = metodoPagoName;
+
+    this.cobroVenta.venta = this.venta;
+    this.cobroVenta.importe = this.montoAbonado;
+
+    let tipoTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.name : "";
+    let siglaTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.sigla : "";
+
+    let banco = this.clsBanco != null ? this.clsBanco.name : "";
+    let numeroCuenta = this.clsNumeroCuenta != null ? this.clsNumeroCuenta.name : "";
+    let numeroCelular = this.clsNumeroCelular != null ? this.clsNumeroCelular.name : "";
+
+    let initComprobanteId = parseInt((this.clsSerieComprobante != null) ? this.clsSerieComprobante.code : "0");
+
+    this.cobroVenta.tipoTarjeta = tipoTarjeta;
+    this.cobroVenta.siglaTarjeta = siglaTarjeta;
+    this.cobroVenta.numeroTarjeta = this.numeroTarjeta;
+    this.cobroVenta.banco = banco;
+    this.cobroVenta.numeroCuenta = numeroCuenta;
+    this.cobroVenta.numeroCelular = numeroCelular;
+    this.cobroVenta.numeroCheque = this.numeroCheque;
+    this.cobroVenta.codigoOperacion = this.numeroOperacion;
+    this.cobroVenta.initComprobanteId = initComprobanteId;
+    this.cobroVenta.metodoPago = metodoPago;
+
+    this.ventaService.cobroVenta(this.cobroVenta).subscribe({
+      next: (data) => {
+        if(data != null && data.id != null){
+          //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+          this.cobroVenta = data;
+          this.displayConfirmarPago = false;
+          this.nuevaVenta();
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }        
+   });
+
   }
 
 

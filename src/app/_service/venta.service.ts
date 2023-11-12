@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DetalleVenta } from '../_model/detalle_venta';
 import { ProductoAddVenta } from '../_model/producto_add_venta';
+import { CobroVenta } from '../_model/cobro_venta';
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +53,9 @@ export class VentaService extends GenericService<Venta>{
 
   resetVenta(venta: Venta) {
     return this.http.put<Venta>(`${this.url}/resetventa`, venta);
+  }
+
+  cobroVenta(cobroVenta: CobroVenta) {
+    return this.http.post<CobroVenta>(`${this.url}/cobrarventa`, cobroVenta);
   }
 }

@@ -27,7 +27,7 @@ export class InitComprobanteService extends GenericService<InitComprobante> {
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}&tipo_comprobante_id=${tipo_comprobante_id}&almacen_id=${almacen_id}`);
   }
 
-  listarAll(){
-    return this.http.get<InitComprobante[]>(`${this.url}/listar-all`);
+  listarAll(tipo_comprobante_id: number, almacen_id: number){
+    return this.http.get<InitComprobante[]>(`${this.url}/listar-all?tipo_comprobante_id=${tipo_comprobante_id}&almacen_id=${almacen_id}`);
   }
 }

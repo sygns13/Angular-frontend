@@ -1,16 +1,15 @@
+import { CobroVenta } from './../_model/cobro_venta';
 import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
 import { HttpClient } from '@angular/common/http';
-import { DetalleMetodoPago } from '../_model/detalle_metodo_pago';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-
 @Injectable({
   providedIn: 'root'
 })
-export class DetalleMetodoPagoService extends GenericService<DetalleMetodoPago>{
+export class CobroVentaService extends GenericService<CobroVenta>{
 
-  detalleMetodoPago = new Subject<DetalleMetodoPago[]>();
+  detalleMetodoPago = new Subject<CobroVenta[]>();
 
   protected url: string = `${environment.HOST}/api/backend/detalle-metodo-pago`
   mensajeCambio = new Subject<string>();
@@ -28,6 +27,6 @@ export class DetalleMetodoPagoService extends GenericService<DetalleMetodoPago>{
   }
 
   listarAll(metodos_pago_id: number, banco_id: number){
-    return this.http.get<DetalleMetodoPago[]>(`${this.url}/listar-all?metodos_pago_id=${metodos_pago_id}&banco_id=${banco_id}`);
+    return this.http.get<CobroVenta[]>(`${this.url}/listar-all?metodos_pago_id=${metodos_pago_id}&banco_id=${banco_id}`);
   }
 }
