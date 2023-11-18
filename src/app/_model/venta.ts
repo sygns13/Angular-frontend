@@ -16,6 +16,7 @@ export class Venta {
     igv: number;
     isc: number;
     estado: number;
+    estadoStr: string;
     pagado: number;
     hora: string;
     tipo: number;

@@ -7,6 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 
 import { ConfirmationService, MessageService } from "primeng/api";
+import { CurrencyPipe } from '@angular/common';
 
 import {AccordionModule} from 'primeng/accordion';
 import {AutoCompleteModule} from 'primeng/autocomplete';
@@ -186,6 +187,8 @@ import { InitcomprobanteComponent } from './paginas/caja/initcomprobante/initcom
 import { SoloNumerosEnterosDirective } from './solo-numeros-enteros.directive';
 import { SoloLetrasDirective } from './solo-letras.directive';
 import { DetallemetodopagoComponent } from './paginas/caja/detallemetodopago/detallemetodopago.component';
+import { VentasrealizadasComponent } from './paginas/ventas/ventasrealizadas/ventasrealizadas.component';
+import { VerventaComponent } from './paginas/ventas/verventa/verventa.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -368,11 +371,14 @@ export function tokenGetter() {
         InitcomprobanteComponent,
         SoloNumerosEnterosDirective,
         SoloLetrasDirective,
-        DetallemetodopagoComponent
+        DetallemetodopagoComponent,
+        VentasrealizadasComponent,
+        VerventaComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, ConfirmationService, MessageService,
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, ConfirmationService, MessageService, OnlydecimalesPipe,
+        CurrencyPipe, PassfechavistaPipe, 
         {
           provide: HTTP_INTERCEPTORS,
           useClass: ServerErrorsInterceptor,

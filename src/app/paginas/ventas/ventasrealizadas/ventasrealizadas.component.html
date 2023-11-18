@@ -1,0 +1,193 @@
+<div class="p-grid" *ngIf="vistaCarga && vistaCarga2">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+</div>
+
+<p-toast *ngIf="vistaCarga2"></p-toast>
+
+<div class="p-grid" *ngIf="vistaCarga2">
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Ventas Realizadas</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí se visualizan todas las ventas registradas de Bienes y Servicios</blockquote>
+            </div>
+            <br>
+
+
+            <button (click)="actualizarVentas()" pButton pRipple type="button" icon="pi pi-refresh" label="Actualizar" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+            <button (click)="nuevaVenta()" pButton pRipple type="button" icon="pi pi-plus" label="Nueva Venta" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="verVenta()" pButton pRipple type="button" icon="pi pi-file" label="Ver Venta" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="printVenta()" pButton pRipple type="button" icon="pi pi-print" label="Imprimir Venta" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="edittVenta()" pButton pRipple type="button" icon="pi pi-pencil" label="Editar Venta" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button (click)="cobrarVenta()" pButton pRipple type="button" icon="pi pi-dollar" label="Cobrar" class="p-button-raised p-button-help p-mr-2 p-mb-2"></button>
+            <button (click)="genComprobanteVenta()" pButton pRipple type="button" icon="pi pi-file-edit" label="Generar Comprobante" class="p-button-raised p-button-help p-mr-2 p-mb-2"></button>
+            <button (click)="anularVenta()" pButton pRipple type="button" icon="pi pi-times" label="Anular Venta" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+            <button (click)="eliminarVenta()" pButton pRipple type="button" icon="pi pi-trash" label="Eliminar Venta" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+
+            <button style="float: right" (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button style="float: right" (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-file-excel" label="Exportar a Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+<!-- 
+  
+            
+            
+            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Inventario PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexXls()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+-->
+    
+        </div>
+    </div>
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Ventas</h5>
+
+
+             <div class="p-fluid box" style="padding-top:15px; padding-bottom:25px;">
+
+                <div class="p-field p-grid">
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Sucursal</label>
+                    <div class="p-col-12 p-md-11">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioFiltros($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>SELECCIONE</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Deste</label>
+                    <div class="p-col-12 p-md-2">
+                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaInicio" #inputFechaInicio [style]="{'height':'31px'}">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="fechaFinal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Hasta</label>
+                    <div class="p-col-12 p-md-2">
+                        <p-inputMask id="fechaFinal" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaFinal" #inputFechaFinal [style]="{'height':'31px'}">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="tipoVentas" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Tipo de Venta</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #inputClsTipoVenta inputId="tipoVentas" [options]="tipoVentas" (onChange)="cambioFiltros($event)" [(ngModel)]="clsTipoVenta" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>TODOS</label>
+                        </span>
+                    </div>
+
+                    <label for="estadoVentas" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Estado de Venta</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #inputClsEstadoVenta inputId="estadoVentas" [options]="estadoVentas" (onChange)="cambioFiltros($event)" [(ngModel)]="clsEstadoVenta" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>TODOS</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="estadoVentas" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Palabra Clave</label>
+                    <div class="p-col-12 p-md-11">
+                        <div class="p-inputgroup">
+                            <button pButton pRipple type="button" label="Buscar" (click)="buscar()" [style]="{'height':'31px'}"></button>
+                            <span class="p-float-label">
+                                <input #inputTxtBuscar type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()" [style]="{'height':'31px'}"/>
+                                <label>Número de Venta, Cliente, Comprobante, Usuario</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        
+                <p-table [value]="ventas" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" 
+                selectionMode="single" [(selection)]="selectedVenta" dataKey="id" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px'}">
+
+<!--                 <ng-template pTemplate="colgroup" let-columns pTemplate="headergrouped">
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:184px;">
+                        <col style="width:115px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:140px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:85px;">
+                        <col style="width:85px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                    </colgroup>
+                </ng-template> -->
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Sucursal</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N° de Venta</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Hora</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Estado</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Comprobante</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Cliente</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Monto (S/.)</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Usuario</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">E. Sunat</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Estado de Envío a Sunat</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-venta let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="venta">
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.almacen.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.numeroVenta}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">
+                            <ng-template [ngIf]="venta.tipo == '1'">
+                                Venta de Bienes
+                            </ng-template>
+                            <ng-template [ngIf]="venta.tipo == '2'">
+                                Venta de Servicios
+                            </ng-template>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.fecha | passfechavistaTransform}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.hora}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.8rem; padding: 5px;">{{venta.estadoStr}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.comprobante != null ? venta.comprobante.initComprobante.tipoComprobante.nombre + " " + venta.comprobante.serie + "-" + venta.comprobante.numero : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.cliente != null ? venta.cliente.nombre + " " + venta.cliente.tipoDocumento.tipo + " " + venta.cliente.documento  : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.totalMonto | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{venta.user.name}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;"></td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;"></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+            <p-footer>
+                <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+            </p-footer>
+        </p-confirmDialog>
+    
+
+</div>
+
+
+<div *ngIf="!vistaCarga2">
+    <app-verventa *ngIf="verFrmVenta" [venta]="selectedVenta" (cerrarFormVerVenta)="cerrarFormularioVerVenta($event)"></app-verventa>
+</div>

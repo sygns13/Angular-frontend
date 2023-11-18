@@ -485,7 +485,11 @@ export class VentaComponent implements OnInit {
               this.venta.tipo = data.tipo;
               this.venta.numeroVenta = data.numeroVenta;
 
-              this.venta.cliente = data.cliente;
+              if(data.cliente != null){
+                this.venta.cliente = data.cliente;
+              } else {
+                this.venta.cliente = new Cliente();
+              }
               this.venta.comprobante = data.comprobante;
               this.detalleVentas = data.detalleVentas;
               this.venta.detalleVentas = this.detalleVentas;
@@ -993,7 +997,11 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = data.cliente;
+          if(data.cliente != null){
+            this.venta.cliente = data.cliente;
+          } else {
+            this.venta.cliente = new Cliente();
+          }
           this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
@@ -1067,7 +1075,11 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = data.cliente;
+          if(data.cliente != null){
+            this.venta.cliente = data.cliente;
+          } else {
+            this.venta.cliente = new Cliente();
+          }
           this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
@@ -1144,7 +1156,11 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = data.cliente;
+          if(data.cliente != null){
+            this.venta.cliente = data.cliente;
+          } else {
+            this.venta.cliente = new Cliente();
+          }
           this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
@@ -1213,7 +1229,11 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = data.cliente;
+          if(data.cliente != null){
+            this.venta.cliente = data.cliente;
+          } else {
+            this.venta.cliente = new Cliente();
+          }
           this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
@@ -1381,7 +1401,11 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = data.cliente;
+          if(data.cliente != null){
+            this.venta.cliente = data.cliente;
+          } else {
+            this.venta.cliente = new Cliente();
+          }
           this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;
@@ -1445,7 +1469,11 @@ export class VentaComponent implements OnInit {
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = data.cliente;
+          if(data.cliente != null){
+            this.venta.cliente = data.cliente;
+          } else {
+            this.venta.cliente = new Cliente();
+          }
           this.venta.comprobante = data.comprobante;
           this.detalleVentas = data.detalleVentas;
           this.venta.detalleVentas = this.detalleVentas;

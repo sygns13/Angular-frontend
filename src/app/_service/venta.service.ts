@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { DetalleVenta } from '../_model/detalle_venta';
 import { ProductoAddVenta } from '../_model/producto_add_venta';
 import { CobroVenta } from '../_model/cobro_venta';
+import { FiltroVenta } from '../_util/filtro_venta';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +58,9 @@ export class VentaService extends GenericService<Venta>{
 
   cobroVenta(cobroVenta: CobroVenta) {
     return this.http.post<CobroVenta>(`${this.url}/cobrarventa`, cobroVenta);
+  }
+
+  getVentas(filtro: FiltroVenta, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get-ventas?page=${p}&size=${s}`, filtro);
   }
 }

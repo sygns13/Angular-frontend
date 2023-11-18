@@ -29,6 +29,7 @@ import {CatalogoComponent} from './paginas/servicios/catalogo/catalogo.component
 //tablas ventas
 import {ClienteComponent} from './paginas/ventas/cliente/cliente.component';
 import {VentaComponent} from './paginas/ventas/venta/venta.component';
+import {VentasrealizadasComponent} from './paginas/ventas/ventasrealizadas/ventasrealizadas.component';
 
 //tablas caja
 import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
@@ -132,7 +133,8 @@ const routes: Routes = [
     path: 'ventas', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'clientes', component: ClienteComponent},
-     {path: 'venta', component: VentaComponent}
+     {path: 'venta', component: VentaComponent},
+     {path: 'venta_realizada', component: VentasrealizadasComponent},
     ]
   },
   {
