@@ -16,6 +16,7 @@ import { Presentacion } from './../../../_model/presentacion';
 import { Venta } from './../../../_model/venta';
 import { VentaService } from './../../../_service/venta.service';
 import { FiltroVenta } from './../../../_util/filtro_venta';
+import { VentaServiceData } from './../../../_servicesdata/venta.service';
 import * as moment from 'moment';
 
 @Component({
@@ -85,7 +86,8 @@ export class VentasrealizadasComponent implements OnInit{
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private ventaService: VentaService, 
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
-    private almacenService: AlmacenService, private router: Router) {
+    private almacenService: AlmacenService, private router: Router,
+    private ventaServiceData: VentaServiceData) {
     this.breadcrumbService.setItems([
       { label: 'Ventas' },
       { label: 'Ventas Realizadas', routerLink: ['/ventas/venta_realizada'] }
@@ -239,11 +241,13 @@ export class VentasrealizadasComponent implements OnInit{
 
   //Buttons Administratives
   actualizarVentas(): void{
+    this.selectedVenta  = null;
     this.evaluarFiltros();
     this.listarPageMain(this.page, this.rows);
   }
   
   nuevaVenta(): void{
+    this.ventaServiceData.setVentaStore(null);
     this.router.navigateByUrl('/ventas/venta');
   }
   
@@ -252,11 +256,9 @@ export class VentasrealizadasComponent implements OnInit{
       this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione una Venta haciendo click en su fila correspondiente'});
 
     }else{
-      //console.log(this.selectedVenta);
       this.vistaCarga2 = false;
       this.verFrmVenta  = true;
     }
-    //this.vistaCarga2 = false;
   }
 
   printVenta(): void{
@@ -264,7 +266,28 @@ export class VentasrealizadasComponent implements OnInit{
   }
 
   edittVenta(): void{
-
+    if(this.selectedVenta == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione una Venta haciendo click en su fila correspondiente'});
+      return;
+    }
+    if(this.selectedVenta.estado == 0){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede editar una Venta Anulada'});
+      return;
+    }
+    if(this.selectedVenta.estado == 2){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede editar una Venta Facturada No Cobrada'});
+      return;
+    }
+    if(this.selectedVenta.estado == 3){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede editar una Venta Facturada Cobrada Parcialmente'});
+      return;
+    }
+    if(this.selectedVenta.estado == 4){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede editar una Venta Facturada Cobrada Total'});
+      return;
+    }
+    this.ventaServiceData.setVentaStore(this.selectedVenta);
+    this.router.navigateByUrl('/ventas/venta');
   }
 
   cobrarVenta(): void{

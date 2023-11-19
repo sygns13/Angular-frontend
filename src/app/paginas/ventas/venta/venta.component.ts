@@ -1,12 +1,12 @@
 import { CobroVentaService } from './../../../_service/cobro_venta.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { AppBreadcrumbService } from '../../../menu/app.breadcrumb.service';
 import { AppComponent } from 'src/app/app.component';
 
 import { switchMap } from 'rxjs/operators';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {Message} from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Message } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { LazyLoadEvent } from 'primeng/api';
 
@@ -21,6 +21,7 @@ import { MetodoPagoService } from '../../../_service/metodo_pago.service';
 import { BancoService } from '../../../_service/banco.service';
 import { TipoTarjetaService } from '../../../_service/tipo_tarjeta.service';
 import { DetalleMetodoPagoService } from '../../../_service/detalle_metodo_pago.service';
+import { VentaServiceData } from './../../../_servicesdata/venta.service';
 
 import { Cliente } from './../../../_model/cliente';
 import { TipoDocumento } from './../../../_model/tipo_documento';
@@ -61,6 +62,8 @@ export class VentaComponent implements OnInit {
   @ViewChild('inputcantidadDescuentoStock', { static: false }) inputcantidadDescuentoStock: ElementRef;
   @ViewChild('inputcodigoProducto', { static: false }) inputcodigoProducto: ElementRef;
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
+
+  labelTitle: string = 'Registro de Ventas';
 
   vistaCarga : boolean = true;
   verFrmVenta : boolean = false;
@@ -222,6 +225,8 @@ export class VentaComponent implements OnInit {
   montoAbonado: number = null;
   montoVuelto: string = null;
   
+  //Edición de Ventas
+  idVentaEdit: number = null;
 
 
   constructor(public app: AppComponent, private gestionloteService: GestionloteService, private messageService: MessageService, private clienteService: ClienteService,
@@ -229,7 +234,7 @@ export class VentaComponent implements OnInit {
               private productoService: ProductoService, private unidadService:UnidadService, private stockService: StockService, private breadcrumbService: AppBreadcrumbService,
               private tipoComprobanteService: TipoComprobanteService, private initComprobanteService:InitComprobanteService, private metodoPagoService:MetodoPagoService,
               private tipoTarjetaService: TipoTarjetaService, private bancoService: BancoService, private detalleMetodoPagoService: DetalleMetodoPagoService,
-              private cobroVentaService: CobroVentaService) {
+              private cobroVentaService: CobroVentaService, private ventaServiceData: VentaServiceData) {
                 this.breadcrumbService.setItems([
                   { label: 'Ventas' },
                   { label: 'Venta de Productos', routerLink: ['/ventas/venta'] }
@@ -240,15 +245,29 @@ export class VentaComponent implements OnInit {
 
     this.getAlmacens();
     this.getUnidads();
+    this.getTipoDocumentos();
     this.vistaCarga = false;
     this.verFrmAlmacen = true;
 
+    //Verificar si hay venta en curso
+    this.ventaServiceData.getVentaStore().subscribe((data) => {
+      if(data != null){
+        this.idVentaEdit = data.id;
+      }
+    });
+
     //inicializar subclases de venta
-    this.venta.cliente = new Cliente();
-    this.venta.comprobante = new Comprobante();
-    this.venta.almacen = new Almacen();
-    this.getTipoDocumentos();
-    
+    if(this.idVentaEdit == null){
+
+      this.venta = new Venta();
+      this.venta.cliente = new Cliente();
+      this.venta.comprobante = new Comprobante();
+      this.venta.almacen = new Almacen();
+    } else {
+      this.editarVenta();
+      this.ventaServiceData.setVentaStore(null);
+      this.idVentaEdit = null;
+    }
   }
 
   getAlmacens() {
@@ -284,6 +303,8 @@ export class VentaComponent implements OnInit {
   }
 
   seleccionarLocal(): void{
+
+    this.labelTitle = 'Registro de Ventas';
 
     if(this.clsAlmacen != null){
       this.venta.almacen = new Almacen();
@@ -352,6 +373,73 @@ export class VentaComponent implements OnInit {
     else{
       this.messageService.add({severity:'warn', summary:'Advertencia', detail: 'No ha seleccionado un Local o Sucursal Válido'});
     }
+    
+  }
+
+  editarVenta(): void{
+
+    this.ventaService.listarPorId(this.idVentaEdit).subscribe(data => {
+      if(data != null && data.id != null){
+
+        this.venta = data;
+
+        
+        this.labelTitle = "Edición de Venta";
+        this.clsAlmacen.code = this.venta.almacen.id;
+        this.clsAlmacen.name = this.venta.almacen.nombre;
+
+        
+        
+        this.venta.id = data.id;
+        this.venta.fecha = data.fecha;
+        this.venta.subtotalInafecto = data.subtotalInafecto;
+        this.venta.subtotalAfecto = data.subtotalAfecto;
+        this.venta.subtotalExonerado = data.subtotalExonerado;
+        this.venta.totalMonto = data.totalMonto;
+        this.venta.totalAfectoIsc = data.totalAfectoIsc;
+        this.venta.igv = data.igv;
+        this.venta.isc = data.isc;
+        this.venta.estado = data.estado;
+        this.venta.pagado = data.pagado;
+        this.venta.hora = data.hora;
+        this.venta.tipo = data.tipo;
+        this.venta.numeroVenta = data.numeroVenta;
+
+        if(data.cliente != null){
+          this.venta.cliente = data.cliente;
+        } else {
+          this.venta.cliente = new Cliente();
+        }
+        this.venta.comprobante = data.comprobante;
+        this.detalleVentas = data.detalleVentas;
+        this.venta.detalleVentas = this.detalleVentas;
+
+
+        let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+        this.OpGravada = opGrabada.toFixed(2);
+        this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+        this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+        this.TotalISC = this.venta.isc.toFixed(2);
+        this.TotalIGV = this.venta.igv.toFixed(2);
+        this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+
+        this.venta.montoIcbper = data.montoIcbper;
+        this.venta.cantidadIcbper = data.cantidadIcbper;
+        this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+
+        this.codigoProducto = "";
+        
+
+        this.displayClient = false;
+        this.displayProductsToVentas = false;
+
+        this.verFrmVenta = true;
+        this.vistaCarga = false;
+        this.verFrmAlmacen = false;
+
+        this.setFocusCodigoProducto();
+      }
+    });
     
   }
 
