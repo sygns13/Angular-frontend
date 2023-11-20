@@ -328,6 +328,15 @@ export class VentaComponent implements OnInit {
       this.displayProductsToVentas = false;
       this.venta.cantidadIcbper = 0;
 
+      this.verFrmVenta = true;
+      this.vistaCarga = false;
+      this.verFrmAlmacen = false;
+
+      this.venta.cliente = new Cliente();
+      this.venta.comprobante = new Comprobante();
+
+      this.setFocusCodigoProducto();
+/* 
       this.ventaService.registrarRetVenta(this.venta).subscribe({
         next: (data) => {
           if(data != null && data.id != null){
@@ -367,7 +376,7 @@ export class VentaComponent implements OnInit {
           console.log(err);
         }        
      });
-
+ */
       
     }
     else{
@@ -375,6 +384,60 @@ export class VentaComponent implements OnInit {
     }
     
   }
+
+/* iniciarVentaT(): Promise<any>{
+    return this.ventaService.registrarRetVenta(this.venta).toPromise()
+    .then(response => response as Venta)
+    .catch();
+} */
+
+iniciarVentaT2(): Promise<any>{
+  return new Promise((resolve, reject) => {
+    if(this.venta.id == null){
+      this.venta.cliente = null;
+      this.venta.comprobante = null;
+      this.ventaService.registrarRetVenta(this.venta).subscribe({
+        next: (data) => {
+          if(data != null && data.id != null){
+            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+            this.venta.id = data.id;
+            this.venta.fecha = data.fecha;
+            this.venta.subtotalInafecto = data.subtotalInafecto;
+            this.venta.subtotalAfecto = data.subtotalAfecto;
+            this.venta.subtotalExonerado = data.subtotalExonerado;
+            this.venta.totalMonto = data.totalMonto;
+            this.venta.totalAfectoIsc = data.totalAfectoIsc;
+            this.venta.igv = data.igv;
+            this.venta.isc = data.isc;
+            this.venta.estado = data.estado;
+            this.venta.pagado = data.pagado;
+            this.venta.hora = data.hora;
+            this.venta.tipo = data.tipo;
+            this.venta.numeroVenta = data.numeroVenta;
+            this.venta.montoIcbper = data.montoIcbper;
+            this.venta.cantidadIcbper = data.cantidadIcbper;
+
+            this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+
+            this.venta.cliente = new Cliente();
+            this.venta.comprobante = new Comprobante();
+            this.detalleVentas = [];
+            this.venta.detalleVentas = this.detalleVentas;
+            resolve(this.venta);
+  
+            
+          }
+        },
+        error: (err) => {
+          console.log(err);
+        }        
+     });
+    }
+    else{
+      resolve(this.venta);
+    }
+  });
+}
 
   editarVenta(): void{
 
@@ -532,7 +595,13 @@ export class VentaComponent implements OnInit {
   aceptarCliente(registro){
     if(registro != null){
 
-      this.venta.cliente = registro;
+      /* if(this.venta.id == null){
+        this.iniciarVentaT().then((v) => {
+          
+        });
+      } */
+      this.iniciarVentaT2().then((v) => {
+        this.venta.cliente = registro;
         this.ventaService.modificarCliente(this.venta).subscribe({
           next: (dataUdpCliente) => {
             if(dataUdpCliente != null && dataUdpCliente.id != null){
@@ -549,90 +618,97 @@ export class VentaComponent implements OnInit {
             console.log(errUdpCliente);
           }        
        });
+      });
+
+      
     }
   }
 
   modificarCantidadICBPER(event: Event){
-    if(this.venta != null){
-        this.ventaService.modificarVenta(this.venta).subscribe({
-          next: (data) => {
-            if(data != null && data.id != null){
 
-              this.venta.id = data.id;
-              this.venta.fecha = data.fecha;
-              this.venta.subtotalInafecto = data.subtotalInafecto;
-              this.venta.subtotalAfecto = data.subtotalAfecto;
-              this.venta.subtotalExonerado = data.subtotalExonerado;
-              this.venta.totalMonto = data.totalMonto;
-              this.venta.totalAfectoIsc = data.totalAfectoIsc;
-              this.venta.igv = data.igv;
-              this.venta.isc = data.isc;
-              this.venta.estado = data.estado;
-              this.venta.pagado = data.pagado;
-              this.venta.hora = data.hora;
-              this.venta.tipo = data.tipo;
-              this.venta.numeroVenta = data.numeroVenta;
 
-              if(data.cliente != null){
-                this.venta.cliente = data.cliente;
-              } else {
-                this.venta.cliente = new Cliente();
+    this.cantIcbper = this.venta.cantidadIcbper;
+    this.iniciarVentaT2().then((v) => {
+      if(this.venta != null && v.id != null){
+        this.venta.cantidadIcbper = this.cantIcbper;
+          this.ventaService.modificarVenta(this.venta).subscribe({
+            next: (data) => {
+              if(data != null && data.id != null){
+
+                this.venta.id = data.id;
+                this.venta.fecha = data.fecha;
+                this.venta.subtotalInafecto = data.subtotalInafecto;
+                this.venta.subtotalAfecto = data.subtotalAfecto;
+                this.venta.subtotalExonerado = data.subtotalExonerado;
+                this.venta.totalMonto = data.totalMonto;
+                this.venta.totalAfectoIsc = data.totalAfectoIsc;
+                this.venta.igv = data.igv;
+                this.venta.isc = data.isc;
+                this.venta.estado = data.estado;
+                this.venta.pagado = data.pagado;
+                this.venta.hora = data.hora;
+                this.venta.tipo = data.tipo;
+                this.venta.numeroVenta = data.numeroVenta;
+
+                if(data.cliente != null){
+                  this.venta.cliente = data.cliente;
+                } else {
+                  this.venta.cliente = new Cliente();
+                }
+                this.venta.comprobante = data.comprobante;
+                this.detalleVentas = data.detalleVentas;
+                this.venta.detalleVentas = this.detalleVentas;
+
+
+                let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+                this.OpGravada = opGrabada.toFixed(2);
+                this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+                this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+                this.TotalISC = this.venta.isc.toFixed(2);
+                this.TotalIGV = this.venta.igv.toFixed(2);
+                this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+
+                this.venta.montoIcbper = data.montoIcbper;
+                this.venta.cantidadIcbper = data.cantidadIcbper;
+                this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
               }
-              this.venta.comprobante = data.comprobante;
-              this.detalleVentas = data.detalleVentas;
-              this.venta.detalleVentas = this.detalleVentas;
-
-
-              let opGrabada = this.venta.subtotalAfecto - this.venta.igv
-              this.OpGravada = opGrabada.toFixed(2);
-              this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
-              this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
-              this.TotalISC = this.venta.isc.toFixed(2);
-              this.TotalIGV = this.venta.igv.toFixed(2);
-              this.ImporteTotal = this.venta.totalMonto.toFixed(2);
-
-              this.venta.montoIcbper = data.montoIcbper;
-              this.venta.cantidadIcbper = data.cantidadIcbper;
-              this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
-            }
-          },
-          error: (errUdpCliente) => {
-            console.log(errUdpCliente);
-          }        
-       });
-    }
+            },
+            error: (errUdpCliente) => {
+              console.log(errUdpCliente);
+            }        
+        });
+      }
+    });
   }
 
   buscarDocCliente() {
 
-    this.clienteService.getByDocument(this.txtBuscarDocCliente).subscribe({
-      
-      next: (data) => {
+    this.iniciarVentaT2().then((v) => {
+      this.clienteService.getByDocument(this.txtBuscarDocCliente).subscribe({
+        next: (data) => {        
+              this.venta.cliente = data;
+              this.ventaService.modificarCliente(this.venta).subscribe({
+                next: (dataUdpCliente) => {
+                  if(dataUdpCliente != null && dataUdpCliente.id != null){
 
-        this.venta.cliente = data;
-        this.ventaService.modificarCliente(this.venta).subscribe({
-          next: (dataUdpCliente) => {
-            if(dataUdpCliente != null && dataUdpCliente.id != null){
-
-              this.venta.cliente = dataUdpCliente.cliente;
-              
-              this.txtBuscarCliente = "";
-              this.txtBuscarDocCliente = "";
-              this.displayClient = false;
-              this.nombreDocIdentidad = data.tipoDocumento.tipo;
-            }
-          },
-          error: (errUdpCliente) => {
-            console.log(errUdpCliente);
-          }        
-       });
-
-       
-      },
-      error: (err) => {
-        this.txtBuscarDocCliente = "";
-        this.setFocusBuscarDocCliente();
-      }
+                    this.venta.cliente = dataUdpCliente.cliente;
+                    
+                    this.txtBuscarCliente = "";
+                    this.txtBuscarDocCliente = "";
+                    this.displayClient = false;
+                    this.nombreDocIdentidad = data.tipoDocumento.tipo;
+                  }
+                },
+                error: (errUdpCliente) => {
+                  console.log(errUdpCliente);
+                }        
+            });       
+        },
+        error: (err) => {
+          this.txtBuscarDocCliente = "";
+          this.setFocusBuscarDocCliente();
+        }
+      });
     });
   }
 
@@ -688,44 +764,48 @@ export class VentaComponent implements OnInit {
   registrarConfirmadoCliente(){
     
     this.vistaCargaCliente = true;
-  
     let tipoDocumentoBase = new TipoDocumento();
-  
     tipoDocumentoBase.id = parseInt((this.clsTipoDocumentoCliente != null) ? this.clsTipoDocumentoCliente.code : "0");
-  
-  
-    this.newCliente.nombre = this.nombreCliente.toString().trim();
-    this.newCliente.tipoDocumento = tipoDocumentoBase;
-    this.newCliente.documento = this.documentoCliente;
-    this.newCliente.direccion = this.direccionCliente;
-    this.newCliente.telefono = this.telefonoCliente;
-    this.newCliente.correo1 = this.correo1Cliente;
-    this.newCliente.correo2 = this.correo2Cliente;
-  
-  
-    this.clienteService.registrarRetCliente(this.newCliente).subscribe(data => {
-      if(data != null){
 
-        this.venta.cliente = data;
-        this.ventaService.modificarCliente(this.venta).subscribe({
-          next: (dataUdpCliente) => {
-            if(dataUdpCliente != null && dataUdpCliente.id != null){
+    
+  
+  
+        this.newCliente.nombre = this.nombreCliente.toString().trim();
+        this.newCliente.tipoDocumento = tipoDocumentoBase;
+        this.newCliente.documento = this.documentoCliente;
+        this.newCliente.direccion = this.direccionCliente;
+        this.newCliente.telefono = this.telefonoCliente;
+        this.newCliente.correo1 = this.correo1Cliente;
+        this.newCliente.correo2 = this.correo2Cliente;
+      
+      
+      this.clienteService.registrarRetCliente(this.newCliente).subscribe(data => {
+          if(data != null){
 
-              this.venta.cliente = dataUdpCliente.cliente;
-              this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-              this.txtBuscarCliente = "";
-              this.txtBuscarDocCliente = "";
-              this.displayClient = false;
-              this.nombreDocIdentidad = data.tipoDocumento.tipo;
-            }
-          },
-          error: (errUdpCliente) => {
-            console.log(errUdpCliente);
-          }        
-       });
+            this.iniciarVentaT2().then((v) => {
+              this.venta.cliente = data;
+              this.ventaService.modificarCliente(this.venta).subscribe({
+                next: (dataUdpCliente) => {
+                  if(dataUdpCliente != null && dataUdpCliente.id != null){
 
-      }
-   });
+                    this.venta.cliente = dataUdpCliente.cliente;
+                    this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+                    this.txtBuscarCliente = "";
+                    this.txtBuscarDocCliente = "";
+                    this.displayClient = false;
+                    this.nombreDocIdentidad = data.tipoDocumento.tipo;
+                  }
+                },
+                error: (errUdpCliente) => {
+                  console.log(errUdpCliente);
+                }        
+              });
+
+            });
+
+          }
+      });
+    
   
   }
 
@@ -792,6 +872,9 @@ export class VentaComponent implements OnInit {
     this.cantidadDescuento = 0;
     this.cantidadDescuentoStock = 0;
 
+    this.cantUnitLote = null;
+    this.cantLote = null;
+
     this.stockService.listarStocksVentas(this.venta.almacen.id, registro.producto.id).subscribe(data => {
 
       if(this.activeProductLote){
@@ -850,6 +933,9 @@ export class VentaComponent implements OnInit {
   }
 
   cambioLotes(): void{
+
+    this.cantUnitLote = null;
+    this.cantLote = null;
 
     this.lotesProductoBack.forEach((registroLote, index) => {
 
@@ -1060,140 +1146,148 @@ export class VentaComponent implements OnInit {
 
   agregarProductoPorCodigo(): void{
 
-    let productoAddVenta = new ProductoAddVenta();
+    this.iniciarVentaT2().then((v) => {
+      let productoAddVenta = new ProductoAddVenta();
 
-    productoAddVenta.idVenta = this.venta.id;
-    productoAddVenta.codigoUnidad = this.codigoProducto;
+      productoAddVenta.idVenta = v.id;
+      productoAddVenta.codigoUnidad = this.codigoProducto;
 
 
-    this.ventaService.agregarProductoAVentaPorCodigo(productoAddVenta).subscribe({
-      next: (data) => {
-        if(data != null && data.id != null){
-          //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-          this.venta.id = data.id;
-          this.venta.fecha = data.fecha;
-          this.venta.subtotalInafecto = data.subtotalInafecto;
-          this.venta.subtotalAfecto = data.subtotalAfecto;
-          this.venta.subtotalExonerado = data.subtotalExonerado;
-          this.venta.totalMonto = data.totalMonto;
-          this.venta.totalAfectoIsc = data.totalAfectoIsc;
-          this.venta.igv = data.igv;
-          this.venta.isc = data.isc;
-          this.venta.estado = data.estado;
-          this.venta.pagado = data.pagado;
-          this.venta.hora = data.hora;
-          this.venta.tipo = data.tipo;
-          this.venta.numeroVenta = data.numeroVenta;
+      this.ventaService.agregarProductoAVentaPorCodigo(productoAddVenta).subscribe({
+        next: (data) => {
+          if(data != null && data.id != null){
+            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+            this.venta.id = data.id;
+            this.venta.fecha = data.fecha;
+            this.venta.subtotalInafecto = data.subtotalInafecto;
+            this.venta.subtotalAfecto = data.subtotalAfecto;
+            this.venta.subtotalExonerado = data.subtotalExonerado;
+            this.venta.totalMonto = data.totalMonto;
+            this.venta.totalAfectoIsc = data.totalAfectoIsc;
+            this.venta.igv = data.igv;
+            this.venta.isc = data.isc;
+            this.venta.estado = data.estado;
+            this.venta.pagado = data.pagado;
+            this.venta.hora = data.hora;
+            this.venta.tipo = data.tipo;
+            this.venta.numeroVenta = data.numeroVenta;
 
-          if(data.cliente != null){
-            this.venta.cliente = data.cliente;
-          } else {
-            this.venta.cliente = new Cliente();
+            if(data.cliente != null){
+              this.venta.cliente = data.cliente;
+            } else {
+              this.venta.cliente = new Cliente();
+            }
+            this.venta.comprobante = data.comprobante;
+            this.detalleVentas = data.detalleVentas;
+            this.venta.detalleVentas = this.detalleVentas;
+
+
+            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            this.OpGravada = opGrabada.toFixed(2);
+            this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+            this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+            this.TotalISC = this.venta.isc.toFixed(2);
+            this.TotalIGV = this.venta.igv.toFixed(2);
+            this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+
+            this.venta.montoIcbper = data.montoIcbper;
+            this.venta.cantidadIcbper = data.cantidadIcbper;
+            this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+
+            this.codigoProducto = "";
+            this.setFocusCodigoProducto();
+
           }
-          this.venta.comprobante = data.comprobante;
-          this.detalleVentas = data.detalleVentas;
-          this.venta.detalleVentas = this.detalleVentas;
-
-
-          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
-          this.OpGravada = opGrabada.toFixed(2);
-          this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
-          this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
-          this.TotalISC = this.venta.isc.toFixed(2);
-          this.TotalIGV = this.venta.igv.toFixed(2);
-          this.ImporteTotal = this.venta.totalMonto.toFixed(2);
-
-          this.venta.montoIcbper = data.montoIcbper;
-          this.venta.cantidadIcbper = data.cantidadIcbper;
-          this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
-
-          this.codigoProducto = "";
-          this.setFocusCodigoProducto();
-
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      }        
+        },
+        error: (err) => {
+          console.log(err);
+        }        
+    });
    });
   }
 
   agregarProducto(): void{
 
-    this.calcularPreciosZ();
+    if(this.clsLote == null){
+      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Seleccione un lote Disponible'});
+      //this.setFocusLote();
+      return;
+    }
 
-    this.detalleVentaGestion = new DetalleVenta();
+    this.iniciarVentaT2().then((v) => {
 
-    //this.detalleVentaGestion.venta = this.venta;
+      this.calcularPreciosZ();
+      this.detalleVentaGestion = new DetalleVenta();
 
-    this.detalleVentaGestion.ventaIdReference = this.venta.id;
-    this.detalleVentaGestion.producto = this.selectedProductVenta.producto;
-    this.detalleVentaGestion.precioVenta = this.selectedProductVenta.detalleUnidadProducto.precio;
-    this.detalleVentaGestion.precioCompra = this.selectedProductVenta.detalleUnidadProducto.costoCompra;
-    this.detalleVentaGestion.cantidad = this.cantidadProductoLotes;
-    this.detalleVentaGestion.almacenId = this.venta.almacen.id;
-    this.detalleVentaGestion.esGrabado = this.selectedProductVenta.producto.afectoIgv;
-    this.detalleVentaGestion.esIsc = this.selectedProductVenta.producto.afectoIsc;
-    this.detalleVentaGestion.descuento = this.cantidadDescuento;
-    this.detalleVentaGestion.tipDescuento = this.clsTiposDescuento.code;
-    this.detalleVentaGestion.cantidadReal = this.selectedProductVenta.detalleUnidadProducto.unidad.cantidad;
-    this.detalleVentaGestion.unidad = this.selectedProductVenta.detalleUnidadProducto.unidad.nombre;
-    this.detalleVentaGestion.precioTotal = +this.precioTotal;
-    this.detalleVentaGestion.lote = this.lotesProductoBack[this.indexLote].lote;
-    this.detalleVentaGestion.activo = 1;
-    this.detalleVentaGestion.borrado = 0;
+      this.detalleVentaGestion.ventaIdReference = this.venta.id;
+      this.detalleVentaGestion.producto = this.selectedProductVenta.producto;
+      this.detalleVentaGestion.precioVenta = this.selectedProductVenta.detalleUnidadProducto.precio;
+      this.detalleVentaGestion.precioCompra = this.selectedProductVenta.detalleUnidadProducto.costoCompra;
+      this.detalleVentaGestion.cantidad = this.cantidadProductoLotes;
+      this.detalleVentaGestion.almacenId = this.venta.almacen.id;
+      this.detalleVentaGestion.esGrabado = this.selectedProductVenta.producto.afectoIgv;
+      this.detalleVentaGestion.esIsc = this.selectedProductVenta.producto.afectoIsc;
+      this.detalleVentaGestion.descuento = this.cantidadDescuento;
+      this.detalleVentaGestion.tipDescuento = this.clsTiposDescuento.code;
+      this.detalleVentaGestion.cantidadReal = this.selectedProductVenta.detalleUnidadProducto.unidad.cantidad;
+      this.detalleVentaGestion.unidad = this.selectedProductVenta.detalleUnidadProducto.unidad.nombre;
+      this.detalleVentaGestion.precioTotal = +this.precioTotal;
+      this.detalleVentaGestion.lote = this.lotesProductoBack[this.indexLote].lote;
+      this.detalleVentaGestion.activo = 1;
+      this.detalleVentaGestion.borrado = 0;
 
 
-    this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
-      next: (data) => {
-        if(data != null && data.id != null){
-          //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-          this.venta.id = data.id;
-          this.venta.fecha = data.fecha;
-          this.venta.subtotalInafecto = data.subtotalInafecto;
-          this.venta.subtotalAfecto = data.subtotalAfecto;
-          this.venta.subtotalExonerado = data.subtotalExonerado;
-          this.venta.totalMonto = data.totalMonto;
-          this.venta.totalAfectoIsc = data.totalAfectoIsc;
-          this.venta.igv = data.igv;
-          this.venta.isc = data.isc;
-          this.venta.estado = data.estado;
-          this.venta.pagado = data.pagado;
-          this.venta.hora = data.hora;
-          this.venta.tipo = data.tipo;
-          this.venta.numeroVenta = data.numeroVenta;
+      this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
+        next: (data) => {
+          if(data != null && data.id != null){
+            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+            this.venta.id = data.id;
+            this.venta.fecha = data.fecha;
+            this.venta.subtotalInafecto = data.subtotalInafecto;
+            this.venta.subtotalAfecto = data.subtotalAfecto;
+            this.venta.subtotalExonerado = data.subtotalExonerado;
+            this.venta.totalMonto = data.totalMonto;
+            this.venta.totalAfectoIsc = data.totalAfectoIsc;
+            this.venta.igv = data.igv;
+            this.venta.isc = data.isc;
+            this.venta.estado = data.estado;
+            this.venta.pagado = data.pagado;
+            this.venta.hora = data.hora;
+            this.venta.tipo = data.tipo;
+            this.venta.numeroVenta = data.numeroVenta;
 
-          if(data.cliente != null){
-            this.venta.cliente = data.cliente;
-          } else {
-            this.venta.cliente = new Cliente();
+            if(data.cliente != null){
+              this.venta.cliente = data.cliente;
+            } else {
+              this.venta.cliente = new Cliente();
+            }
+            this.venta.comprobante = data.comprobante;
+            this.detalleVentas = data.detalleVentas;
+            this.venta.detalleVentas = this.detalleVentas;
+
+
+            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            this.OpGravada = opGrabada.toFixed(2);
+            this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+            this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+            this.TotalISC = this.venta.isc.toFixed(2);
+            this.TotalIGV = this.venta.igv.toFixed(2);
+            this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+
+            this.venta.montoIcbper = data.montoIcbper;
+            this.venta.cantidadIcbper = data.cantidadIcbper;
+            this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+
+            this.displayProductsToVentas = false;
+            this.displayAddProductsNoLotes = false;
+            this.displayAddProductsLotes = false;
+
           }
-          this.venta.comprobante = data.comprobante;
-          this.detalleVentas = data.detalleVentas;
-          this.venta.detalleVentas = this.detalleVentas;
-
-
-          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
-          this.OpGravada = opGrabada.toFixed(2);
-          this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
-          this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
-          this.TotalISC = this.venta.isc.toFixed(2);
-          this.TotalIGV = this.venta.igv.toFixed(2);
-          this.ImporteTotal = this.venta.totalMonto.toFixed(2);
-
-          this.venta.montoIcbper = data.montoIcbper;
-          this.venta.cantidadIcbper = data.cantidadIcbper;
-          this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
-
-          this.displayProductsToVentas = false;
-          this.displayAddProductsNoLotes = false;
-          this.displayAddProductsLotes = false;
-
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      }        
+        },
+        error: (err) => {
+          console.log(err);
+        }        
+    });
    });
 
 
@@ -1201,80 +1295,84 @@ export class VentaComponent implements OnInit {
 
   agregarProductoStock(): void{
 
-    this.calcularPreciosStocksZ();
+    
+      //this.detalleVentaGestion.venta = this.venta;
 
-    this.detalleVentaGestion = new DetalleVenta();
+      this.iniciarVentaT2().then((v) => {
 
-    //this.detalleVentaGestion.venta = this.venta;
-
-    this.detalleVentaGestion.ventaIdReference = this.venta.id;
-    this.detalleVentaGestion.producto = this.selectedProductVenta.producto;
-    this.detalleVentaGestion.precioVenta = this.selectedProductVenta.detalleUnidadProducto.precio;
-    this.detalleVentaGestion.precioCompra = this.selectedProductVenta.detalleUnidadProducto.costoCompra;
-    this.detalleVentaGestion.cantidad = this.cantidadProductoStocks;
-    this.detalleVentaGestion.almacenId = this.venta.almacen.id;
-    this.detalleVentaGestion.esGrabado = this.selectedProductVenta.producto.afectoIgv;
-    this.detalleVentaGestion.esIsc = this.selectedProductVenta.producto.afectoIsc;
-    this.detalleVentaGestion.descuento = this.cantidadDescuentoStock;
-    this.detalleVentaGestion.tipDescuento = this.clsTiposDescuento.code;
-    this.detalleVentaGestion.cantidadReal = this.selectedProductVenta.detalleUnidadProducto.unidad.cantidad;
-    this.detalleVentaGestion.unidad = this.selectedProductVenta.detalleUnidadProducto.unidad.nombre;
-    this.detalleVentaGestion.precioTotal = +this.precioTotal;
-    this.detalleVentaGestion.lote = null;
-    this.detalleVentaGestion.activo = 1;
-    this.detalleVentaGestion.borrado = 0;
+      this.calcularPreciosStocksZ();
+      this.detalleVentaGestion = new DetalleVenta();
 
 
-    this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
-      next: (data) => {
-        if(data != null && data.id != null){
-          //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-          this.venta.id = data.id;
-          this.venta.fecha = data.fecha;
-          this.venta.subtotalInafecto = data.subtotalInafecto;
-          this.venta.subtotalAfecto = data.subtotalAfecto;
-          this.venta.subtotalExonerado = data.subtotalExonerado;
-          this.venta.totalMonto = data.totalMonto;
-          this.venta.totalAfectoIsc = data.totalAfectoIsc;
-          this.venta.igv = data.igv;
-          this.venta.isc = data.isc;
-          this.venta.estado = data.estado;
-          this.venta.pagado = data.pagado;
-          this.venta.hora = data.hora;
-          this.venta.tipo = data.tipo;
-          this.venta.numeroVenta = data.numeroVenta;
+      this.detalleVentaGestion.ventaIdReference = this.venta.id;
+      this.detalleVentaGestion.producto = this.selectedProductVenta.producto;
+      this.detalleVentaGestion.precioVenta = this.selectedProductVenta.detalleUnidadProducto.precio;
+      this.detalleVentaGestion.precioCompra = this.selectedProductVenta.detalleUnidadProducto.costoCompra;
+      this.detalleVentaGestion.cantidad = this.cantidadProductoStocks;
+      this.detalleVentaGestion.almacenId = this.venta.almacen.id;
+      this.detalleVentaGestion.esGrabado = this.selectedProductVenta.producto.afectoIgv;
+      this.detalleVentaGestion.esIsc = this.selectedProductVenta.producto.afectoIsc;
+      this.detalleVentaGestion.descuento = this.cantidadDescuentoStock;
+      this.detalleVentaGestion.tipDescuento = this.clsTiposDescuento.code;
+      this.detalleVentaGestion.cantidadReal = this.selectedProductVenta.detalleUnidadProducto.unidad.cantidad;
+      this.detalleVentaGestion.unidad = this.selectedProductVenta.detalleUnidadProducto.unidad.nombre;
+      this.detalleVentaGestion.precioTotal = +this.precioTotal;
+      this.detalleVentaGestion.lote = null;
+      this.detalleVentaGestion.activo = 1;
+      this.detalleVentaGestion.borrado = 0;
 
-          if(data.cliente != null){
-            this.venta.cliente = data.cliente;
-          } else {
-            this.venta.cliente = new Cliente();
+
+      this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
+        next: (data) => {
+          if(data != null && data.id != null){
+            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+            this.venta.id = data.id;
+            this.venta.fecha = data.fecha;
+            this.venta.subtotalInafecto = data.subtotalInafecto;
+            this.venta.subtotalAfecto = data.subtotalAfecto;
+            this.venta.subtotalExonerado = data.subtotalExonerado;
+            this.venta.totalMonto = data.totalMonto;
+            this.venta.totalAfectoIsc = data.totalAfectoIsc;
+            this.venta.igv = data.igv;
+            this.venta.isc = data.isc;
+            this.venta.estado = data.estado;
+            this.venta.pagado = data.pagado;
+            this.venta.hora = data.hora;
+            this.venta.tipo = data.tipo;
+            this.venta.numeroVenta = data.numeroVenta;
+
+            if(data.cliente != null){
+              this.venta.cliente = data.cliente;
+            } else {
+              this.venta.cliente = new Cliente();
+            }
+            this.venta.comprobante = data.comprobante;
+            this.detalleVentas = data.detalleVentas;
+            this.venta.detalleVentas = this.detalleVentas;
+
+
+            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            this.OpGravada = opGrabada.toFixed(2);
+            this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+            this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+            this.TotalISC = this.venta.isc.toFixed(2);
+            this.TotalIGV = this.venta.igv.toFixed(2);
+            this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+
+            this.venta.montoIcbper = data.montoIcbper;
+            this.venta.cantidadIcbper = data.cantidadIcbper;
+            this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+
+            this.displayProductsToVentas = false;
+            this.displayAddProductsNoLotes = false;
+            this.displayAddProductsLotes = false;
+
           }
-          this.venta.comprobante = data.comprobante;
-          this.detalleVentas = data.detalleVentas;
-          this.venta.detalleVentas = this.detalleVentas;
-
-
-          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
-          this.OpGravada = opGrabada.toFixed(2);
-          this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
-          this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
-          this.TotalISC = this.venta.isc.toFixed(2);
-          this.TotalIGV = this.venta.igv.toFixed(2);
-          this.ImporteTotal = this.venta.totalMonto.toFixed(2);
-
-          this.venta.montoIcbper = data.montoIcbper;
-          this.venta.cantidadIcbper = data.cantidadIcbper;
-          this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
-
-          this.displayProductsToVentas = false;
-          this.displayAddProductsNoLotes = false;
-          this.displayAddProductsLotes = false;
-
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      }        
+        },
+        error: (err) => {
+          console.log(err);
+        }        
+    });
    });
   }
 
@@ -1374,6 +1472,9 @@ export class VentaComponent implements OnInit {
     this.activeProductLote = detalleVenta.producto.activoLotes == 1;
     this.lotesProducto = [];
     this.clsLote = null;
+
+    this.cantUnitLote = null;
+    this.cantLote = null;
 
     this.cantidadProductoLotes = detalleVenta.cantidad;
     this.cantidadProductoStocks = detalleVenta.cantidad;
@@ -1919,6 +2020,22 @@ export class VentaComponent implements OnInit {
 
   cobrarVenta(): void{
 
+    if(this.venta.id == null){
+      this.messageService.add({severity:'error', summary:'Error', detail: 'No se ha registrado la Venta'});
+      return;
+    }
+
+    if(this.venta.detalleVentas == null || this.venta.detalleVentas.length == 0){
+      this.messageService.add({severity:'error', summary:'Error', detail: 'No se ha agregado ningún producto a la venta'});
+      return;
+    }
+
+    if(this.venta.totalMonto == null || this.venta.totalMonto == 0){
+      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monton de venta igual a cero'});
+      return;
+    }
+
+
     this.ImporteTotal = this.venta.totalMonto.toFixed(2);
     this.montoAbonado = this.venta.totalMonto;
     this.montoVuelto = "0.00";
@@ -1942,53 +2059,55 @@ export class VentaComponent implements OnInit {
 
   cancelarVenta(event: Event): void{
 
-    this.ventaService.resetVenta(this.venta).subscribe({
-      next: (data) => {
-        if(data != null && data.id != null){
-          //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-          this.venta.id = data.id;
-          this.venta.fecha = data.fecha;
-          this.venta.subtotalInafecto = data.subtotalInafecto;
-          this.venta.subtotalAfecto = data.subtotalAfecto;
-          this.venta.subtotalExonerado = data.subtotalExonerado;
-          this.venta.totalMonto = data.totalMonto;
-          this.venta.totalAfectoIsc = data.totalAfectoIsc;
-          this.venta.igv = data.igv;
-          this.venta.isc = data.isc;
-          this.venta.estado = data.estado;
-          this.venta.pagado = data.pagado;
-          this.venta.hora = data.hora;
-          this.venta.tipo = data.tipo;
-          this.venta.numeroVenta = data.numeroVenta;
+    if(this.venta.id != null){
+      this.ventaService.resetVenta(this.venta).subscribe({
+        next: (data) => {
+          if(data != null && data.id != null){
+            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+            this.venta.id = data.id;
+            this.venta.fecha = data.fecha;
+            this.venta.subtotalInafecto = data.subtotalInafecto;
+            this.venta.subtotalAfecto = data.subtotalAfecto;
+            this.venta.subtotalExonerado = data.subtotalExonerado;
+            this.venta.totalMonto = data.totalMonto;
+            this.venta.totalAfectoIsc = data.totalAfectoIsc;
+            this.venta.igv = data.igv;
+            this.venta.isc = data.isc;
+            this.venta.estado = data.estado;
+            this.venta.pagado = data.pagado;
+            this.venta.hora = data.hora;
+            this.venta.tipo = data.tipo;
+            this.venta.numeroVenta = data.numeroVenta;
 
-          this.venta.cliente = new Cliente();
-          this.venta.comprobante = data.comprobante;
-          this.detalleVentas = data.detalleVentas;
-          this.venta.detalleVentas = this.detalleVentas;
+            this.venta.cliente = new Cliente();
+            this.venta.comprobante = data.comprobante;
+            this.detalleVentas = data.detalleVentas;
+            this.venta.detalleVentas = this.detalleVentas;
 
 
-          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
-          this.OpGravada = opGrabada.toFixed(2);
-          this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
-          this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
-          this.TotalISC = this.venta.isc.toFixed(2);
-          this.TotalIGV = this.venta.igv.toFixed(2);
-          this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            this.OpGravada = opGrabada.toFixed(2);
+            this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+            this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+            this.TotalISC = this.venta.isc.toFixed(2);
+            this.TotalIGV = this.venta.igv.toFixed(2);
+            this.ImporteTotal = this.venta.totalMonto.toFixed(2);
 
-          this.venta.montoIcbper = data.montoIcbper;
-          this.venta.cantidadIcbper = data.cantidadIcbper;
-          this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+            this.venta.montoIcbper = data.montoIcbper;
+            this.venta.cantidadIcbper = data.cantidadIcbper;
+            this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
 
-          this.codigoProducto = "";
-          this.setFocusCodigoProducto();
+            this.codigoProducto = "";
+            this.setFocusCodigoProducto();
 
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      }        
-   });
-  
+          }
+        },
+        error: (err) => {
+          console.log(err);
+        }        
+    });
+    
+    }
   }
 
   cerrarVenta(event: Event): void{
@@ -2088,26 +2207,26 @@ export class VentaComponent implements OnInit {
     }
 }
 
-permitirNumerosConDecimales(event: KeyboardEvent, input: number): boolean {
-  const charCode = (event.which) ? event.which : event.keyCode;
-  const valor = String(input);
+  permitirNumerosConDecimales(event: KeyboardEvent, input: number): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    const valor = String(input);
 
-  // Verificar si ya hay un punto decimal en el valor
-  const tieneDecimal = valor.includes('.');
+    // Verificar si ya hay un punto decimal en el valor
+    const tieneDecimal = valor.includes('.');
 
-  if (charCode === 46 && !tieneDecimal) {
-      // Permitir el punto decimal si no hay uno ya
-      return true;
-  } else if (charCode >= 48 && charCode <= 57) {
-      // Permitir números del 0 al 9
-      return true;
-  } else if (charCode === 8 || charCode === 9 || charCode === 37 || charCode === 39 || charCode === 46) {
-      // Permitir teclas de control como backspace, tab, flechas y delete
-      return true;
+    if (charCode === 46 && !tieneDecimal) {
+        // Permitir el punto decimal si no hay uno ya
+        return true;
+    } else if (charCode >= 48 && charCode <= 57) {
+        // Permitir números del 0 al 9
+        return true;
+    } else if (charCode === 8 || charCode === 9 || charCode === 37 || charCode === 39 || charCode === 46) {
+        // Permitir teclas de control como backspace, tab, flechas y delete
+        return true;
+    }
+
+    event.preventDefault();
+    return false;
   }
-
-  event.preventDefault();
-  return false;
-}
 
 }
