@@ -18,7 +18,9 @@
         <div class="p-col-12">
             <div class="card">
                 <div class="p-d-flex p-jc-between">
-                    <h5>N° de Venta {{venta.numeroVenta}}</h5>
+                    <h5>N° de Venta {{venta.numeroVenta}} 
+                        <span *ngIf="venta.estado == 0" class="p-tag p-tag-danger p-ml-2">VENTA ANULADA</span>
+                    </h5>
                 </div>
 
                 <div class="p-d-flex p-jc-between">

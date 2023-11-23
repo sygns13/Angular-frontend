@@ -763,6 +763,24 @@ export class VentasrealizadasComponent implements OnInit{
 
   }
 
+  confirmarAnularVenta(): void{
+
+    this.ventaService.anular(this.selectedVenta.id).subscribe(() => {
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Venta se ha anulado satisfactoriamente'});
+      this.actualizarVentas();
+   });
+
+  }
+
+  confirmarEliminarVenta(): void{
+
+    this.ventaService.eliminar(this.selectedVenta.id).subscribe(() => {
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Venta se ha eliminado satisfactoriamente'});
+      this.actualizarVentas();
+   });
+
+  }
+
 
 
 
@@ -905,10 +923,56 @@ export class VentasrealizadasComponent implements OnInit{
   }
 
   anularVenta(): void{
+    if(this.selectedVenta == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione una Venta haciendo click en su fila correspondiente'});
+      return;
+    }
+    if(this.selectedVenta.estado == 0){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'La venta ya se encuentra Anulada'});
+      return;
+    }
+    if(this.selectedVenta.estado == 1){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede Anular una venta que aun no fue pagada y que no se ha generado ningún comprobante'});
+      return;
+    }
+
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Confirma que desea Anular la Venta? - Este proceso no podrá ser revertido',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Anulación de Venta',
+      accept: () => {
+       this.confirmarAnularVenta();
+      },
+      reject: () => {
+      }
+    });
 
   }
 
   eliminarVenta(): void{
+    if(this.selectedVenta == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione una Venta haciendo click en su fila correspondiente'});
+      return;
+    }
+    if(this.selectedVenta.estado == 0){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede eliminar una Venta Anulada'});
+      return;
+    }
+
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Confirma que desea Eliminar la Venta? - Este proceso no podrá ser revertido',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Eliminación de Venta',
+      accept: () => {
+       this.confirmarEliminarVenta();
+      },
+      reject: () => {
+      }
+    });
 
   }
 

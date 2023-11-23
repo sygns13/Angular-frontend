@@ -67,4 +67,8 @@ export class VentaService extends GenericService<Venta>{
   generateComprobante(venta: Venta) {
     return this.http.put<Venta>(`${this.url}/generarcomprobante`, venta);
   }
+
+  anular(id: number) {
+    return this.http.patch(`${this.url}/anular/${id}`, null);
+  }
 }
