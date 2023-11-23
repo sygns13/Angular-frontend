@@ -419,11 +419,19 @@ iniciarVentaT2(): Promise<any>{
 
             this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
 
-            this.venta.cliente = new Cliente();
+            //this.venta.cliente = new Cliente();
             this.venta.comprobante = new Comprobante();
             this.detalleVentas = [];
             this.venta.detalleVentas = this.detalleVentas;
+
+            if(data.cliente != null){
+              this.venta.cliente = data.cliente;
+            } else {
+              this.venta.cliente = new Cliente();
+            }
             resolve(this.venta);
+
+
   
             
           }
@@ -2173,6 +2181,7 @@ iniciarVentaT2(): Promise<any>{
       next: (data) => {
         if(data != null && data.id != null){
           //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+          this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Venta se ha Cobrado Exitosamente'});
           this.cobroVenta = data;
           this.displayConfirmarPago = false;
           this.nuevaVenta();
