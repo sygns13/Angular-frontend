@@ -27,4 +27,5 @@ export class Venta {
     detalleVentas: DetalleVenta[];
     cantidadIcbper: number;
     montoIcbper: number;
+    initComprobanteId: number;
 }

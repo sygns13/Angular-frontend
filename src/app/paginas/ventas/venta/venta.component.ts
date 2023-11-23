@@ -478,6 +478,7 @@ iniciarVentaT2(): Promise<any>{
 
         if(data.cliente != null){
           this.venta.cliente = data.cliente;
+          this.nombreDocIdentidad = this.venta.cliente.tipoDocumento.tipo;
         } else {
           this.venta.cliente = new Cliente();
         }

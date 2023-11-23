@@ -22,8 +22,11 @@ import { BancoService } from '../../../_service/banco.service';
 import { DetalleMetodoPagoService } from '../../../_service/detalle_metodo_pago.service';
 import { FiltroVenta } from './../../../_util/filtro_venta';
 import { VentaServiceData } from './../../../_servicesdata/venta.service';
+import { ClienteService } from './../../../_service/cliente.service';
 import { CobroVenta } from './../../../_model/cobro_venta';
 import { MetodoPago } from '../../../_model/metodo_pago';
+import { Cliente } from './../../../_model/cliente';
+import { TipoDocumento } from './../../../_model/tipo_documento';
 import * as moment from 'moment';
 
 @Component({
@@ -36,6 +39,8 @@ export class VentasrealizadasComponent implements OnInit{
 
   @ViewChild('inputTxtBuscar', { static: false }) inputTxtBuscar: ElementRef;
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
+  @ViewChild('inputBuscarDocCliente', { static: false }) inputBuscarDocCliente: ElementRef;
+  @ViewChild('inputNombreClienteReg', { static: false }) inputNombreClienteReg: ElementRef;
 
 
   almacens: any[] = [];
@@ -124,6 +129,42 @@ export class VentasrealizadasComponent implements OnInit{
    montoAbonado: number = null;
    montoVuelto: string = null;
 
+   //Generar Comprobante
+   displayGenerateComprobante : boolean = false;
+   nombreDocIdentidad: string = '';
+   txtBuscarDocCliente: string = '';
+   txtBuscarCliente: String = '';
+   displayClient : boolean = false;
+
+   selectedClient: Cliente;
+
+   pageClientes: number = 0;
+  firstClientes: number = 0;
+  lastClientes: number = 0;
+  rowsClientes: number = 10;
+  isFirstClientes: boolean = true;
+  isLastClientes: boolean = false;
+  totalRecordsClientes: number = 0;
+  numberElementsClientes: number = 0;
+  loadingClientes: boolean = true; 
+  vistaRegistroCliente : boolean = false;
+  clientes: any[] = [];
+  vistaBotonRegistroCliente : boolean = false;
+  vistaBotonEdicionCliente : boolean = false;
+  vistaCargaCliente : boolean = true;
+  tipoFrmCliente: String = 'Nuevo Cliente';
+
+  newCliente = new Cliente();
+  clsTipoDocumentoCliente: any = null;
+  nombreCliente: string = '';
+  tipo_documento_idCliente: number = null;
+  documentoCliente: string = '';
+  direccionCliente: string = '';
+  telefonoCliente: string = '';
+  correo1Cliente: string = '';
+  correo2Cliente: string = '';
+  tipoDocumentosCliente: any[] = [];
+
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private ventaService: VentaService, 
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
     private almacenService: AlmacenService, private router: Router,
@@ -132,7 +173,8 @@ export class VentasrealizadasComponent implements OnInit{
     private initComprobanteService:InitComprobanteService,
     private metodoPagoService:MetodoPagoService,
     private bancoService: BancoService,
-    private detalleMetodoPagoService: DetalleMetodoPagoService) {
+    private detalleMetodoPagoService: DetalleMetodoPagoService,
+    private clienteService: ClienteService) {
     this.breadcrumbService.setItems([
       { label: 'Ventas' },
       { label: 'Ventas Realizadas', routerLink: ['/ventas/venta_realizada'] }
@@ -144,7 +186,8 @@ export class VentasrealizadasComponent implements OnInit{
     /* this.getTipoProductos();
     this.getMarcas();
     this.getPresentaciones(); */
-    this.getAlmacens()
+    this.getAlmacens();
+    this.getTipoDocumentos();
     this.primengConfig.ripple = true;
     this.vistaCarga = false;
     this.setFocusBuscar();
@@ -180,6 +223,16 @@ export class VentasrealizadasComponent implements OnInit{
     this.inputTxtBuscar.nativeElement.focus();
   
   }
+
+  setFocusBuscarDocCliente() {    
+    this.changeDetectorRef.detectChanges();
+    this.inputBuscarDocCliente.nativeElement.focus();
+  }
+
+  setFocusNombreCliente() {    
+    this.changeDetectorRef.detectChanges();
+    this.inputNombreClienteReg.nativeElement.focus();
+  }
   
   //Carga de Data
   getAlmacens() {
@@ -201,6 +254,18 @@ export class VentasrealizadasComponent implements OnInit{
     });
   }
 
+  getTipoDocumentos() {
+
+    this.clsTipoDocumentoCliente = null;
+    this.tipoDocumentosCliente = [];
+  
+    this.clienteService.getTipoDocumentos().subscribe(data => {
+      data.forEach(tipoDoc => {
+        this.tipoDocumentosCliente.push({name: tipoDoc.tipo, code: tipoDoc.id});
+      });
+    });
+  }
+
   getTipoComprobantes() {
 
     this.clsTipoComprobante = null;
@@ -214,6 +279,26 @@ export class VentasrealizadasComponent implements OnInit{
           this.clsTipoComprobante = {name: tipoComprobante.nombre, code: tipoComprobante.id};
           this.buscarSeriesComprobantes();
           isFirst = false;
+        }
+      });
+    });
+  }
+
+  getTipoComprobantesGenComprobante() {
+
+    this.clsTipoComprobante = null;
+    this.tipoComprobantes = [];
+    let isFirst = true;
+
+    this.tipoComprobanteService.listarAll().subscribe(data => {
+      data.forEach(tipoComprobante => {
+        if(tipoComprobante.activo != 2){
+          this.tipoComprobantes.push({name: tipoComprobante.nombre, code: tipoComprobante.id});
+          if(isFirst){
+            this.clsTipoComprobante = {name: tipoComprobante.nombre, code: tipoComprobante.id};
+            this.buscarSeriesComprobantes();
+            isFirst = false;
+          }
         }
       });
     });
@@ -450,6 +535,236 @@ export class VentasrealizadasComponent implements OnInit{
 
   }
 
+  buscarDocCliente() {
+
+      this.clienteService.getByDocument(this.txtBuscarDocCliente).subscribe({
+        next: (data) => {        
+              this.venta.cliente = data;
+              this.ventaService.modificarCliente(this.venta).subscribe({
+                next: (dataUdpCliente) => {
+                  if(dataUdpCliente != null && dataUdpCliente.id != null){
+
+                    this.venta.cliente = dataUdpCliente.cliente;
+                    
+                    this.txtBuscarCliente = "";
+                    this.txtBuscarDocCliente = "";
+                    this.displayClient = false;
+                    this.nombreDocIdentidad = data.tipoDocumento.tipo;
+                  }
+                },
+                error: (errUdpCliente) => {
+                  console.log(errUdpCliente);
+                }        
+            });       
+        },
+        error: (err) => {
+          this.txtBuscarDocCliente = "";
+          this.setFocusBuscarDocCliente();
+        }
+      });
+  }
+
+  buscarCliente(): void{
+    this.displayClient = false;
+    this.displayClient = true;
+    this.selectedClient = null;
+    this.setFocusBuscar();
+    this.buscarClientes();
+  }
+
+  buscarClientes(): void{
+    this.cerrarCliente();
+    this.pageClientes = 0;
+    this.listarPageClientes(this.pageClientes , this.rowsClientes);
+  }
+
+
+  listarPageClientes(p: number, s:number) {
+
+    this.clienteService.listarPageable(p, s, this.txtBuscarCliente).subscribe(data => {
+      this.clientes = data.content;
+      this.isFirstClientes = data.first;
+      this.isLastClientes = data.last;
+      this.numberElementsClientes = data.numberOfElements;
+      this.firstClientes = (p * s);
+      this.lastClientes = (p * s) + this.numberElementsClientes;
+      this.totalRecordsClientes = data.totalElements;
+      this.loadingClientes = false;
+    });
+  }
+
+  loadDataClientes(event: LazyLoadEvent) { 
+    this.loadingClientes = true; 
+    this.rowsClientes = event.rows;
+    this.pageClientes = event.first / this.rows;
+  
+    this.listarPageClientes(this.pageClientes, this.rowsClientes);
+  
+  }
+
+  
+  isLastPageClientes(): boolean {
+      //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
+      return this.isLastClientes;
+  }
+  
+  isFirstPageClientes(): boolean {
+      return this.isFirstClientes;
+  }
+
+  nuevoCliente(): void{
+    this.vistaBotonRegistroCliente = true;
+    this.vistaBotonEdicionCliente = false;
+    
+    this.tipoFrmCliente = 'Nuevo Cliente' 
+    this.vistaRegistroCliente = true;
+
+  this.cancelarCliente();
+  }
+
+  cancelarCliente() {
+
+    this.newCliente = new Cliente();
+  
+    this.clsTipoDocumentoCliente = null;
+    this.nombreCliente = '';
+    this.tipo_documento_idCliente = null;
+    this.documentoCliente = '';
+    this.direccionCliente = '';
+    this.telefonoCliente = '';
+    this.correo1Cliente = '';
+    this.correo2Cliente = '';
+  
+    this.setFocusNombreCliente();
+    
+  }
+
+  cerrarCliente(){
+    this.vistaRegistroCliente = false;
+  }
+
+  registrarCliente(event: Event) {
+    this.confirmationService.confirm({
+        key: 'confirmDialog',
+        target: event.target,
+        message: '¿Está seguro de Registrar al Cliente?',
+        icon: 'pi pi-info-circle',
+        header: 'Confirmación Registro',
+        accept: () => {
+          //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
+         // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+          this.registrarConfirmadoCliente();
+        },
+        reject: () => {
+         // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
+        }
+    });
+  }
+
+  registrarConfirmadoCliente(){
+    
+    this.vistaCargaCliente = true;
+    let tipoDocumentoBase = new TipoDocumento();
+    tipoDocumentoBase.id = parseInt((this.clsTipoDocumentoCliente != null) ? this.clsTipoDocumentoCliente.code : "0");
+
+    
+  
+  
+        this.newCliente.nombre = this.nombreCliente.toString().trim();
+        this.newCliente.tipoDocumento = tipoDocumentoBase;
+        this.newCliente.documento = this.documentoCliente;
+        this.newCliente.direccion = this.direccionCliente;
+        this.newCliente.telefono = this.telefonoCliente;
+        this.newCliente.correo1 = this.correo1Cliente;
+        this.newCliente.correo2 = this.correo2Cliente;
+      
+      
+      this.clienteService.registrarRetCliente(this.newCliente).subscribe(data => {
+          if(data != null){
+
+              this.venta.cliente = data;
+              this.ventaService.modificarCliente(this.venta).subscribe({
+                next: (dataUdpCliente) => {
+                  if(dataUdpCliente != null && dataUdpCliente.id != null){
+
+                    this.venta.cliente = dataUdpCliente.cliente;
+                    this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+                    this.txtBuscarCliente = "";
+                    this.txtBuscarDocCliente = "";
+                    this.displayClient = false;
+                    this.nombreDocIdentidad = data.tipoDocumento.tipo;
+                  }
+                },
+                error: (errUdpCliente) => {
+                  console.log(errUdpCliente);
+                }        
+              });
+          }
+      });
+    
+  
+  }
+
+  aceptarCliente(registro){
+    if(registro != null){
+        this.venta.cliente = registro;
+        this.ventaService.modificarCliente(this.venta).subscribe({
+          next: (dataUdpCliente) => {
+            if(dataUdpCliente != null && dataUdpCliente.id != null){
+
+              this.venta.cliente = dataUdpCliente.cliente;
+              
+              this.txtBuscarCliente = "";
+              this.txtBuscarDocCliente = "";
+              this.displayClient = false;
+              this.nombreDocIdentidad = registro.tipoDocumento.tipo;
+            }
+          },
+          error: (errUdpCliente) => {
+            console.log(errUdpCliente);
+          }        
+       });     
+    }
+  }
+
+  GenerarComprobante(): void{
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Confirma que desea generar el Comprobante de Pago de la Venta?',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Generar Comprobante de Pago',
+      accept: () => {
+       this.confirmarGenerarComprobante();
+      },
+      reject: () => {
+      }
+    });
+  }
+
+  confirmarGenerarComprobante(): void{
+
+    let initComprobanteId = parseInt((this.clsSerieComprobante != null) ? this.clsSerieComprobante.code : "0");
+    this.venta.initComprobanteId = initComprobanteId;
+
+    this.ventaService.generateComprobante(this.venta).subscribe({
+      next: (data) => {
+        if(data != null && data.id != null){
+          this.messageService.add({severity:'success', summary:'Confirmado', detail: 'Se ha generado comprobante de la venta Exitosamente'});
+          this.venta = data;
+          this.displayGenerateComprobante = false;
+          this.actualizarVentas();
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }        
+   });
+
+  }
+
+
+
 
   //Buttons Administratives
   actualizarVentas(): void{
@@ -544,6 +859,48 @@ export class VentasrealizadasComponent implements OnInit{
   }
 
   genComprobanteVenta(): void{
+    if(this.selectedVenta == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione una Venta haciendo click en su fila correspondiente'});
+      return;
+    }
+    if(this.selectedVenta.estado == 0){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede generar Comprobante de una Venta Anulada'});
+      return;
+    }
+    if(this.selectedVenta.estado == 1){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede generar Comprobante de una Venta Iniciada'});
+      return;
+    }
+
+    if(this.selectedVenta.comprobante == null || this.selectedVenta.comprobante.id == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede generar Comprobante de una Venta que no tiene Comprobante'});
+      return;
+    }
+    if(this.selectedVenta.comprobante.initComprobante == null || this.selectedVenta.comprobante.initComprobante.id == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede generar Comprobante de una Venta que no tiene Tipo de Comprobante'});
+      return;
+    }
+    if(this.selectedVenta.comprobante.initComprobante.tipoComprobante == null || this.selectedVenta.comprobante.initComprobante.tipoComprobante.id == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede generar Comprobante de una Venta que no tiene Tipo de Comprobante'});
+      return;
+    }
+    if(this.selectedVenta.comprobante.initComprobante.tipoComprobante.activo != 2){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'No se puede generar Comprobante de una Venta que ya tiene Comprobante. Seleccione solo ventas con Nota de Venta'});
+      return;
+    }
+
+    this.venta = this.selectedVenta;
+
+    if(this.venta.cliente != null){
+      this.nombreDocIdentidad = this.venta.cliente.tipoDocumento.tipo;
+    }
+
+    this.getTipoComprobantesGenComprobante();
+
+    this.displayGenerateComprobante = false;
+    this.displayGenerateComprobante = true;
+
+    //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Venta se ha Cobrado Exitosamente'});
 
   }
 

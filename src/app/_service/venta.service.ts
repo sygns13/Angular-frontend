@@ -63,4 +63,8 @@ export class VentaService extends GenericService<Venta>{
   getVentas(filtro: FiltroVenta, p: number, s:number) {
     return this.http.post<any>(`${this.url}/get-ventas?page=${p}&size=${s}`, filtro);
   }
+
+  generateComprobante(venta: Venta) {
+    return this.http.put<Venta>(`${this.url}/generarcomprobante`, venta);
+  }
 }
