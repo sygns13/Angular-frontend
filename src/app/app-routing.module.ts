@@ -32,6 +32,9 @@ import {VentaComponent} from './paginas/ventas/venta/venta.component';
 import {VentasrealizadasComponent} from './paginas/ventas/ventasrealizadas/ventasrealizadas.component';
 import { CobrarComponent } from './paginas/ventas/cobrar/cobrar.component';
 
+//tablas compras
+import { ProveedorComponent } from './paginas/compras/proveedor/proveedor.component';
+
 //tablas caja
 import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
 import {DetallemetodopagoComponent} from './paginas/caja/detallemetodopago/detallemetodopago.component';
@@ -137,6 +140,12 @@ const routes: Routes = [
      {path: 'venta', component: VentaComponent},
      {path: 'venta_realizada', component: VentasrealizadasComponent},
      {path: 'cobrar', component: CobrarComponent},
+    ]
+  },
+  {
+    path: 'compras', component: AppMainComponent, canActivate: [GuardService],
+    children: [
+     {path: 'proveedors', component: ProveedorComponent},
     ]
   },
   {
