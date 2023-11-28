@@ -28,4 +28,7 @@ export class Venta {
     cantidadIcbper: number;
     montoIcbper: number;
     initComprobanteId: number;
+    importeTotal: number;
+    montoCobrado: number;
+    montoPorCobrar: number;
 }

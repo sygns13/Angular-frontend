@@ -71,4 +71,12 @@ export class VentaService extends GenericService<Venta>{
   anular(id: number) {
     return this.http.patch(`${this.url}/anular/${id}`, null);
   }
+
+  getVentasPorCobrar(filtro: FiltroVenta, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get-ventas-cobrar?page=${p}&size=${s}`, filtro);
+  }
+
+  getPagosVentas(id: number, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get-pagos/${id}?page=${p}&size=${s}`, null);
+  }
 }

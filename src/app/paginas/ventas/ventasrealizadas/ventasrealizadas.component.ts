@@ -23,6 +23,7 @@ import { DetalleMetodoPagoService } from '../../../_service/detalle_metodo_pago.
 import { FiltroVenta } from './../../../_util/filtro_venta';
 import { VentaServiceData } from './../../../_servicesdata/venta.service';
 import { ClienteService } from './../../../_service/cliente.service';
+import { TipoTarjetaService } from '../../../_service/tipo_tarjeta.service';
 import { CobroVenta } from './../../../_model/cobro_venta';
 import { MetodoPago } from '../../../_model/metodo_pago';
 import { Cliente } from './../../../_model/cliente';
@@ -174,7 +175,8 @@ export class VentasrealizadasComponent implements OnInit{
     private metodoPagoService:MetodoPagoService,
     private bancoService: BancoService,
     private detalleMetodoPagoService: DetalleMetodoPagoService,
-    private clienteService: ClienteService) {
+    private clienteService: ClienteService,
+    private tipoTarjetaService: TipoTarjetaService) {
     this.breadcrumbService.setItems([
       { label: 'Ventas' },
       { label: 'Ventas Realizadas', routerLink: ['/ventas/venta_realizada'] }
@@ -781,6 +783,68 @@ export class VentasrealizadasComponent implements OnInit{
 
   }
 
+  getDataMetodosPagos(){
+
+    if(this.clsMetodoPago.tipoId == 'WT' || this.clsMetodoPago.tipoId == 'CH'){
+      this.buscarBancos();
+      this.numeroCheque = "";
+    }
+    if(this.clsMetodoPago.tipoId == 'CC'){
+      this.buscarTipoTarjetas();
+    }
+    if(this.clsMetodoPago.tipoId == 'EW'){
+      this.buscarCelulares();
+    }
+  }
+
+
+
+  buscarTipoTarjetas() {
+  
+    this.clsTipoTarjeta = null;
+    this.tipoTarjetas = [];
+    let isFirst = true;
+    this.numeroTarjeta = '';
+
+    this.tipoTarjetaService.listarAll().subscribe(data => {
+      data.forEach(data => {
+        this.tipoTarjetas.push({name: data.nombre, code: data.id, sigla: data.sigla});
+        if(isFirst){
+          this.clsTipoTarjeta = {name: data.nombre, code: data.id, sigla: data.sigla};
+          //this.buscarCuentas();
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+
+  buscarCelulares() {
+  
+    this.clsNumeroCelular = null;
+    this.numeroCelulares = [];
+    let isFirst = true;
+    this.numeroOperacion = '';
+
+    let metodos_pago_id = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
+    let banco_id = 0;
+
+    this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
+      data.forEach(data => {
+        this.numeroCelulares.push({name: data.numeroCelular, code: data.id});
+        if(isFirst){
+          this.clsNumeroCelular = {name: data.numeroCelular, code: data.id};
+          isFirst = false;
+        }
+      });
+    });
+  }
+
+  calcularMontos(event: Event): void {
+    let importe = this.floor10(this.selectedVenta.totalMonto, -2);
+    let vuelto =  this.montoAbonado - importe;
+    this.montoVuelto = vuelto.toFixed(2);
+  }
 
 
 
@@ -996,6 +1060,31 @@ export class VentasrealizadasComponent implements OnInit{
     this.vistaCarga2 = true;
     this.actualizarVentas();
  }
+
+  floor10 (value, exp): number{
+  return this.decimalAdjust("floor", value, exp);
+  }
+
+  decimalAdjust(type, value, exp): number {
+    type = String(type);
+    if (!["round", "floor", "ceil"].includes(type)) {
+      throw new TypeError(
+        "The type of decimal adjustment must be one of 'round', 'floor', or 'ceil'.",
+      );
+    }
+    exp = Number(exp);
+    value = Number(value);
+    if (exp % 1 !== 0 || Number.isNaN(value)) {
+      return NaN;
+    } else if (exp === 0) {
+      return Math[type](value);
+    }
+    const [magnitude, exponent = 0] = value.toString().split("e");
+    const adjustedValue = Math[type](`${magnitude}e${exponent - exp}`);
+    // Shift back
+    const [newMagnitude, newExponent = 0] = adjustedValue.toString().split("e");
+    return Number(`${newMagnitude}e${+newExponent + exp}`);
+  }
 
 
 }

@@ -30,6 +30,7 @@ import {CatalogoComponent} from './paginas/servicios/catalogo/catalogo.component
 import {ClienteComponent} from './paginas/ventas/cliente/cliente.component';
 import {VentaComponent} from './paginas/ventas/venta/venta.component';
 import {VentasrealizadasComponent} from './paginas/ventas/ventasrealizadas/ventasrealizadas.component';
+import { CobrarComponent } from './paginas/ventas/cobrar/cobrar.component';
 
 //tablas caja
 import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
@@ -135,6 +136,7 @@ const routes: Routes = [
      {path: 'clientes', component: ClienteComponent},
      {path: 'venta', component: VentaComponent},
      {path: 'venta_realizada', component: VentasrealizadasComponent},
+     {path: 'cobrar', component: CobrarComponent},
     ]
   },
   {

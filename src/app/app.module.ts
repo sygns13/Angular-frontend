@@ -189,6 +189,8 @@ import { SoloLetrasDirective } from './solo-letras.directive';
 import { DetallemetodopagoComponent } from './paginas/caja/detallemetodopago/detallemetodopago.component';
 import { VentasrealizadasComponent } from './paginas/ventas/ventasrealizadas/ventasrealizadas.component';
 import { VerventaComponent } from './paginas/ventas/verventa/verventa.component';
+import { CobrarComponent } from './paginas/ventas/cobrar/cobrar.component';
+import { CobrarventaComponent } from './paginas/ventas/cobrarventa/cobrarventa.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -374,6 +376,8 @@ export function tokenGetter() {
         DetallemetodopagoComponent,
         VentasrealizadasComponent,
         VerventaComponent,
+        CobrarComponent,
+        CobrarventaComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

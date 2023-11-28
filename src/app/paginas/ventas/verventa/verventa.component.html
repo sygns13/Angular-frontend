@@ -10,10 +10,24 @@
   </div>
 </div>
 
-<div class="layout-invoice-page">
-    <button pButton pRipple type="button" label="Imprimir" icon="pi pi-print" (click)="print()" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
-    <button pButton pRipple type="button" icon="pi pi-times" label="Cerrar" (click)="cerrarFormulario()" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Vista de la Venta</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí visualiza su venta realizada y seleccionada</blockquote>
+            </div>
+            <br>
 
+            <button pButton pRipple type="button" label="Imprimir" icon="pi pi-print" (click)="print()" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button pButton pRipple type="button" icon="pi pi-times" label="Cerrar" (click)="cerrarFormulario()" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="layout-invoice-page">
     <div class="p-grid layout-invoice-content">
         <div class="p-col-12">
             <div class="card">
@@ -68,7 +82,7 @@
                     </p-table>
 
                     <div class="p-grid">
-                        <div class="p-col-12 p-md-6">
+                        <div class="p-col-12 p-md-8">
                             <!-- <p-panel header="BANK">
                                 <div class="p-d-flex p-ai-center p-jc-between p-py-2">
                                     <span>Bank</span>
@@ -88,7 +102,7 @@
                                 </div>
                             </p-panel> -->
                         </div>
-                        <div class="p-col-12 p-md-6">
+                        <div class="p-col-12 p-md-4">
                             <p-panel header="TOTAL">
                                 <div class="p-grid p-text-right">
                                     <div class="p-col-10">

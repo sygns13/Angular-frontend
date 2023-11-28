@@ -153,7 +153,7 @@ export class DetallemetodopagoComponent {
   
       this.metodoPagoService.listarAll().subscribe(data => {
         data.forEach(metodoPago => {
-          if(metodoPago.tipoId == 'WT' || metodoPago.tipoId == 'EW' || metodoPago.tipoId == 'CH'){
+          if(metodoPago.tipoId == 'WT' || metodoPago.tipoId == 'EW'){
             this.metodoPagos.push({name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId});
           }
         });

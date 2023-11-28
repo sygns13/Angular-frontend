@@ -11,22 +11,19 @@ export class CobroVentaService extends GenericService<CobroVenta>{
 
   detalleMetodoPago = new Subject<CobroVenta[]>();
 
-  protected url: string = `${environment.HOST}/api/backend/detalle-metodo-pago`
+  protected url: string = `${environment.HOST}/api/backend/cobro-ventas`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/api/backend/detalle-metodo-pago`);
+    super(http, `${environment.HOST}/api/backend/cobro-ventas`);
   }
 
   altaBaja(id: number, valor: number) {
     return this.http.patch(`${this.url}/altabaja/${id}/${valor}`, null);
   }
 
-  listarPageable(p: number, s:number, txtBuscar:String, metodos_pago_id: number, banco_id: number){
-    return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}&metodos_pago_id=${metodos_pago_id}&banco_id=${banco_id}`);
+  listarPageable(p: number, s:number, txtBuscar:String){
+    return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
   }
 
-  listarAll(metodos_pago_id: number, banco_id: number){
-    return this.http.get<CobroVenta[]>(`${this.url}/listar-all?metodos_pago_id=${metodos_pago_id}&banco_id=${banco_id}`);
-  }
 }

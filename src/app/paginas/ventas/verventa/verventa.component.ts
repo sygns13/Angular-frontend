@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter,  ViewChild, ElementRef,
 import { CurrencyPipe } from '@angular/common';
 import { Venta } from './../../../_model/venta';
 import { VentaService } from './../../../_service/venta.service';
-import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
-import {ConfirmationService, MessageService} from 'primeng/api';
+import { AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { ConfirmationService, MessageService} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { LazyLoadEvent } from 'primeng/api';
 import { PassfechavistaPipe } from './../../../_pipes/passfechavista.pipe';
@@ -24,7 +24,6 @@ export class VerventaComponent implements OnInit{
   @Output() cerrarFormVerVenta = new EventEmitter<Venta>();
 
   billData: any[];
-
   billCols: any[];
 
   productData: any[];
@@ -45,7 +44,7 @@ export class VerventaComponent implements OnInit{
     /* this.getTipoProductos();
     this.getMarcas();
     this.getPresentaciones(); */
-    this.getVenta()
+    this.getVenta();
     this.primengConfig.ripple = true;
     this.vistaCarga = false;
     //this.setFocusBuscar();
