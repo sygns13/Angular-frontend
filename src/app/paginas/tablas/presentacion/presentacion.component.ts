@@ -248,13 +248,20 @@ export class PresentacionComponent implements OnInit {
     this.presentacionClass.presentacion = this.presentacion.toString().trim();
     this.presentacionClass.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.presentacionService.registrar(this.presentacionClass).subscribe(() => {
+    this.presentacionService.registrar(this.presentacionClass).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Presentación se ha registrado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
@@ -262,25 +269,33 @@ export class PresentacionComponent implements OnInit {
     this.vistaCarga = true;
 
     let presentacionEdit = new Presentacion();
-    presentacionEdit = JSON.parse(JSON.stringify(this.presentacionClass));
+    presentacionEdit = structuredClone(this.presentacionClass);
 
     presentacionEdit.presentacion = this.presentacion.toString().trim();
     presentacionEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.presentacionService.modificar(presentacionEdit).subscribe(() => {
+    this.presentacionService.modificar(presentacionEdit).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Presentación se ha editado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
   eliminarConfirmado(data:Presentacion){
     this.vistaCarga = true;
-    this.presentacionService.eliminar(data.id).subscribe(() => {
+    this.presentacionService.eliminar(data.id).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
@@ -288,7 +303,13 @@ export class PresentacionComponent implements OnInit {
       }
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Presentación se ha eliminado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
@@ -330,13 +351,20 @@ export class PresentacionComponent implements OnInit {
   }
 
   altaBaja(data:Presentacion, valor: number, msj: string){
-    //this.vistaCarga = true;
+    this.vistaCarga = true;
     
-    this.presentacionService.altaBaja(data.id, valor).subscribe(() => {
+    this.presentacionService.altaBaja(data.id, valor).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 

@@ -279,13 +279,20 @@ registrarConfirmado(){
   this.cliente.correo2 = this.correo2;
 
 
-  this.clienteService.registrar(this.cliente).subscribe(() => {
+  this.clienteService.registrar(this.cliente).subscribe({
+    next: (data) => {
     this.vistaCarga = false;
     this.loading = true; 
     this.cancelar();
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
+
 
 }
 
@@ -293,7 +300,7 @@ editarConfirmado(){
   this.vistaCarga = true;
 
   let clienteEdit = new Cliente();
-  clienteEdit = JSON.parse(JSON.stringify(this.cliente));
+  clienteEdit = structuredClone(this.cliente);
 
   let tipoDocumentoBase = new TipoDocumento();
 
@@ -307,19 +314,26 @@ editarConfirmado(){
   clienteEdit.correo1 = this.correo1;
   clienteEdit.correo2 = this.correo2;
 
-  this.clienteService.modificar(clienteEdit).subscribe(() => {
+  this.clienteService.modificar(clienteEdit).subscribe({
+    next: (data) => {
     this.loading = true; 
     this.vistaCarga = false;
     this.cancelar();
     this.cerrar();
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha editado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
 }
 
 eliminarConfirmado(data:Cliente){
   this.vistaCarga = true;
-  this.clienteService.eliminar(data.id).subscribe(() => {
+  this.clienteService.eliminar(data.id).subscribe({
+    next: (data) => {
     this.loading = true; 
     this.vistaCarga = false;
     if(this.numberElements <= 1 && this.page > 0){
@@ -327,7 +341,12 @@ eliminarConfirmado(data:Cliente){
     }
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha eliminado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
 }
 
 

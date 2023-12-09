@@ -21,7 +21,7 @@ export class VentaService extends GenericService<Venta>{
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/api/backend/clientes`);
+    super(http, `${environment.HOST}/api/backend/ventas`);
   }
 
   registrarRetVenta(venta: Venta) {

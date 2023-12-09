@@ -273,7 +273,7 @@ export class TipoProductoComponent implements OnInit {
     this.vistaCarga = true;
 
     let tipoProductoEdit = new TipoProducto();
-    tipoProductoEdit = JSON.parse(JSON.stringify(this.tipoProducto));
+    tipoProductoEdit = structuredClone(this.tipoProducto);
 
     tipoProductoEdit.tipo = this.tipo.toString().trim();
     tipoProductoEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");

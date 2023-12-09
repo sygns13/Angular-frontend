@@ -282,13 +282,19 @@ registrarConfirmado(){
   this.proveedor.responsable = this.responsable;
 
 
-  this.proveedorService.registrar(this.proveedor).subscribe(() => {
+  this.proveedorService.registrar(this.proveedor).subscribe({
+    next: (data) => {
     this.vistaCarga = false;
     this.loading = true; 
     this.cancelar();
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Proveedor se ha registrado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
 
 }
 
@@ -296,7 +302,7 @@ editarConfirmado(){
   this.vistaCarga = true;
 
   let proveedorEdit = new Proveedor();
-  proveedorEdit = JSON.parse(JSON.stringify(this.proveedor));
+  proveedorEdit = structuredClone(this.proveedor);
 
   let tipoDocumentoBase = new TipoDocumento();
 
@@ -311,19 +317,26 @@ editarConfirmado(){
   proveedorEdit.celular = this.celular;
   proveedorEdit.responsable = this.responsable;
 
-  this.proveedorService.modificar(proveedorEdit).subscribe(() => {
+  this.proveedorService.modificar(proveedorEdit).subscribe({
+    next: (data) => {
     this.loading = true; 
     this.vistaCarga = false;
     this.cancelar();
     this.cerrar();
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Proveedor se ha editado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
 }
 
 eliminarConfirmado(data:Proveedor){
   this.vistaCarga = true;
-  this.proveedorService.eliminar(data.id).subscribe(() => {
+  this.proveedorService.eliminar(data.id).subscribe({
+    next: (data) => {
     this.loading = true; 
     this.vistaCarga = false;
     if(this.numberElements <= 1 && this.page > 0){
@@ -331,7 +344,12 @@ eliminarConfirmado(data:Proveedor){
     }
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Proveedor se ha eliminado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
 }
 
 

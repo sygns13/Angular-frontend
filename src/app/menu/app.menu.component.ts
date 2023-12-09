@@ -68,7 +68,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {label: 'Proveedores', icon: 'pi pi-fw pi-user-plus', routerLink: ['/compras/proveedors']},
                     /* {label: 'Cuentas Bancarias', icon: 'pi pi-fw pi-table', routerLink: ['utilities/display']}, */
-                    {label: 'Compras a Proveedores', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['utilities/elevation']},
+                    {label: 'Compras a Proveedores', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/compras/compra']},
                     {label: 'Compras Realizadas', icon: 'pi pi-fw pi-list', routerLink: ['utilities/flexbox']},
                     {label: 'Cuentas por Pagar', icon: 'pi pi-fw pi-star', routerLink: ['utilities/icons']}
                 ]

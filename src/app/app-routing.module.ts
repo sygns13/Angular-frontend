@@ -34,6 +34,7 @@ import { CobrarComponent } from './paginas/ventas/cobrar/cobrar.component';
 
 //tablas compras
 import { ProveedorComponent } from './paginas/compras/proveedor/proveedor.component';
+import { EntradastockComponent } from './paginas/compras/entradastock/entradastock.component';
 
 //tablas caja
 import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
@@ -146,6 +147,7 @@ const routes: Routes = [
     path: 'compras', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'proveedors', component: ProveedorComponent},
+     {path: 'compra', component: EntradastockComponent},
     ]
   },
   {

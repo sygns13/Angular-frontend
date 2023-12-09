@@ -262,20 +262,26 @@ registrarConfirmado(){
 
 
 
-  this.servicioService.registrar(this.servicio).subscribe(() => {
+  this.servicioService.registrar(this.servicio).subscribe({
+    next: (data) => {
     this.vistaCarga = false;
     this.loading = true; 
     this.cancelar();
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Servicio se ha registrado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
 }
 
 editarConfirmado(){
   this.vistaCarga = true;
 
   let servicioEdit = new Servicio();
-  servicioEdit = JSON.parse(JSON.stringify(this.servicio));
+  servicioEdit = structuredClone(this.servicio);
 
 
   servicioEdit.nombre = this.nombre.toString().trim();
@@ -288,19 +294,27 @@ editarConfirmado(){
   servicioEdit.afectoIgv = this.afectoIgv;
 
 
-  this.servicioService.modificar(servicioEdit).subscribe(() => {
+  this.servicioService.modificar(servicioEdit).subscribe({
+    next: (data) => {
     this.loading = true; 
     this.vistaCarga = false;
     this.cancelar();
     this.cerrar();
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Servicio se ha editado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
+
 }
 
 eliminarConfirmado(data:Servicio){
   this.vistaCarga = true;
-  this.servicioService.eliminar(data.id).subscribe(() => {
+  this.servicioService.eliminar(data.id).subscribe({
+    next: (data) => {
     this.loading = true; 
     this.vistaCarga = false;
     if(this.numberElements <= 1 && this.page > 0){
@@ -308,7 +322,13 @@ eliminarConfirmado(data:Servicio){
     }
     this.listarPageMain(this.page, this.rows);
     this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Servicio se ha eliminado satisfactoriamente'});
- });
+  },
+  error: (err) => {
+    this.vistaCarga = false;
+    console.log(err);
+  }        
+});
+
 }
 
 

@@ -517,9 +517,11 @@
               "
             >
               <ng-template [ngIf]="detalleVenta.lote.id != null">
-                {{ detalleVenta.lote.fechaVencimiento }}
                 <ng-template [ngIf]="detalleVenta.lote.fechaVencimiento == null">
                   No Aplica
+                </ng-template>
+                <ng-template [ngIf]="detalleVenta.lote.fechaVencimiento != null">
+                  {{ detalleVenta.lote.fechaVencimiento | passfechavistaTransform }}
                 </ng-template>
               </ng-template>
               

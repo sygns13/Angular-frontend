@@ -516,10 +516,10 @@ export class CobrarventaComponent implements OnInit{
   editarConfirmado(){
     
     this.vistaCarga = true;
-    //detalleUnidadEdit = JSON.parse(JSON.stringify(this.detalleUnidad));
+    //detalleUnidadEdit = structuredClone(this.detalleUnidad));
 
     let cobrarVentaEdit = new CobroVenta();
-    cobrarVentaEdit = JSON.parse(JSON.stringify(this.cobroVenta));
+    cobrarVentaEdit = structuredClone(this.cobroVenta);
 
     let metodoPago = new MetodoPago();
 

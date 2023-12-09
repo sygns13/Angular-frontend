@@ -378,13 +378,19 @@ export class LocalComponent implements OnInit {
     this.almacen.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
     this.almacen.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
 
-    this.almacenService.registrar(this.almacen).subscribe(() => {
+    this.almacenService.registrar(this.almacen).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha registrado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+});
 
 
 /*
@@ -404,7 +410,7 @@ export class LocalComponent implements OnInit {
     this.vistaCarga = true;
 
     let almacenEdit = new Almacen();
-    almacenEdit = JSON.parse(JSON.stringify(this.almacen));
+    almacenEdit = structuredClone(this.almacen);
 
     almacenEdit.nombre = this.nombre.toString().trim();
     almacenEdit.codigo = this.codigo.toString().trim();
@@ -412,20 +418,27 @@ export class LocalComponent implements OnInit {
     almacenEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
     almacenEdit.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
 
-    this.almacenService.modificar(almacenEdit).subscribe(() => {
+    this.almacenService.modificar(almacenEdit).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha editado satisfactoriamente'});
-   });
+      },
+      error: (err) => {
+        this.vistaCarga = false;
+        console.log(err);
+      }        
+    });
 
   }
 
   eliminarConfirmado(data: Almacen){
     this.vistaCarga = true;
-    this.almacenService.eliminar(data.id).subscribe(() => {
+    this.almacenService.eliminar(data.id).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
@@ -433,7 +446,12 @@ export class LocalComponent implements OnInit {
       }
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha eliminado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
 
   }
 
@@ -475,13 +493,20 @@ export class LocalComponent implements OnInit {
   }
 
   altaBaja(data: Almacen, valor: number, msj: string){
-    //this.vistaCarga = true;
+    this.vistaCarga = true;
     
-    this.almacenService.altaBaja(data.id, valor).subscribe(() => {
+    this.almacenService.altaBaja(data.id, valor).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 

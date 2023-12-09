@@ -190,12 +190,18 @@ export class AsignarunidadesComponent implements OnInit {
 
   eliminarConfirmado(data:UnidadProducto){
     this.vistaCarga = true;
-    this.asignarUnidadService.eliminar(data.id).subscribe(() => {
+    this.asignarUnidadService.eliminar(data.id).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       this.getDatosDetallesUnidad();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Código de Venta por Mayor y sus precios definidos se ha eliminado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
   }
 
   registrar(event: Event) {
@@ -221,7 +227,7 @@ export class AsignarunidadesComponent implements OnInit {
     this.vistaCarga = true;
 
     let detalleUnidadEdit = new UnidadProducto();
-    detalleUnidadEdit = JSON.parse(JSON.stringify(this.detalleUnidad));
+    detalleUnidadEdit = structuredClone(this.detalleUnidad);
 
 
     detalleUnidadEdit.almacenId = parseInt((this.clsAlmacen != null) ? this.clsAlmacen.code : null);
@@ -230,12 +236,19 @@ export class AsignarunidadesComponent implements OnInit {
     detalleUnidadEdit.precio = this.mostrarNumeroMethod(this.precioUnidad);
     detalleUnidadEdit.costoCompra = this.mostrarNumeroMethod(this.precioCompra);
 
-    this.asignarUnidadService.registrar(detalleUnidadEdit).subscribe(() => {
+    this.asignarUnidadService.registrar(detalleUnidadEdit).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.getDatosDetallesUnidad();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Código de Venta por Mayor y sus precios definidos se han registrado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
   

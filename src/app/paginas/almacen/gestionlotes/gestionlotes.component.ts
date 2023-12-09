@@ -554,9 +554,15 @@ export class GestionlotesComponent implements OnInit {
 
 
   registrarNuevoLote(){
+
+    if(this.clsAlmacen_registro == null || this.clsAlmacen_registro.code == 0){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: "Seleccione un Local para registrar el Ingreso/Salida de Productos"});
+      return;
+    }
+
     
     
-    //detalleUnidadEdit = JSON.parse(JSON.stringify(this.detalleUnidad));
+    //detalleUnidadEdit = structuredClone(this.detalleUnidad));
 
     let lote = new Lote();
 
@@ -608,14 +614,20 @@ export class GestionlotesComponent implements OnInit {
     lote.cantidad = this.cantidad;
     lote.motivo = this.motivo;
 
-    this.loteService.registrarNuevoLote(lote).subscribe(() => {
+    this.loteService.registrarNuevoLote(lote).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.evaluarFiltros();
       this.listarPageMain(this.page, this.rows);
       this.cancelCargarRegistro();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Nuevo Lote definido se ha agregado satisfactoriamente, se actualizaron los stocks'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
 
   }
 
@@ -623,6 +635,16 @@ export class GestionlotesComponent implements OnInit {
   registrarIngresoSalidaCantLotes(){
 
     this.entradaSalida = new EntradaSalida();
+
+    if(this.clsAlmacen_registro == null || this.clsAlmacen_registro.code == 0){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: "Seleccione un Local para registrar el Ingreso/Salida de Productos"});
+      return;
+    }
+
+    if(this.clsLote == null || this.clsLote.code == 0){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: "Seleccione un Lote para registrar el Ingreso/Salida de Productos"});
+      return;
+    }
 
     this.entradaSalida.motivo = this.motivo;
     this.entradaSalida.loteId = +this.clsLote.code;
@@ -639,19 +661,32 @@ export class GestionlotesComponent implements OnInit {
       msj = 'Se ha registrado la Salida de Productos satisfactoriamente, se actualizaron los stocks';
     }
 
-    this.entradaSalidaService.registrar(this.entradaSalida).subscribe(() => {
+    this.vistaCarga = true;
+
+    this.entradaSalidaService.registrar(this.entradaSalida).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.evaluarFiltros();
       this.listarPageMain(this.page, this.rows);
       this.cancelCargarRegistro();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
 
 
   }
 
   registrarIngresoSalidaCantGeneral(){
+
+    if(this.clsAlmacen_registro == null || this.clsAlmacen_registro.code == 0){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: "Seleccione un Local para registrar el Ingreso/Salida de Productos"});
+      return;
+    }
 
     this.entradaSalida = new EntradaSalida();
 
@@ -670,14 +705,19 @@ export class GestionlotesComponent implements OnInit {
       msj = 'Se ha registrado la Salida de Productos satisfactoriamente, se actualizaron los stocks';
     }
 
-    this.entradaSalidaService.registrar(this.entradaSalida).subscribe(() => {
-      this.vistaCarga = false;
+    this.entradaSalidaService.registrar(this.entradaSalida).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.evaluarFiltros();
       this.listarPageMain(this.page, this.rows);
       this.cancelCargarRegistro();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
 
 
   }

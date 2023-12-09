@@ -192,6 +192,7 @@ import { VerventaComponent } from './paginas/ventas/verventa/verventa.component'
 import { CobrarComponent } from './paginas/ventas/cobrar/cobrar.component';
 import { CobrarventaComponent } from './paginas/ventas/cobrarventa/cobrarventa.component';
 import { ProveedorComponent } from './paginas/compras/proveedor/proveedor.component';
+import { EntradastockComponent } from './paginas/compras/entradastock/entradastock.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -380,6 +381,7 @@ export function tokenGetter() {
         CobrarComponent,
         CobrarventaComponent,
         ProveedorComponent,
+        EntradastockComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

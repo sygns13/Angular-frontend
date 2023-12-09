@@ -339,7 +339,7 @@ export class InitcomprobanteComponent implements OnInit {
     this.vistaCarga = true;
 
     let initComprobanteEdit = new InitComprobante();
-    initComprobanteEdit = JSON.parse(JSON.stringify(this.initComprobante));
+    initComprobanteEdit = structuredClone(this.initComprobante);
 
     let tipoComprobanteBase = new TipoComprobante();
     let almacenBase = new Almacen();

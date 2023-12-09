@@ -248,13 +248,20 @@ export class MarcaComponent implements OnInit {
     this.marca.nombre = this.nombre.toString().trim();
     this.marca.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.marcaService.registrar(this.marca).subscribe(() => {
+    this.marcaService.registrar(this.marca).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Marca se ha registrado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
     
     
     /*
@@ -274,25 +281,33 @@ export class MarcaComponent implements OnInit {
     this.vistaCarga = true;
 
     let marcaEdit = new Marca();
-    marcaEdit = JSON.parse(JSON.stringify(this.marca));
+    marcaEdit = structuredClone(this.marca);
 
     marcaEdit.nombre = this.nombre.toString().trim();
     marcaEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.marcaService.modificar(marcaEdit).subscribe(() => {
+    this.marcaService.modificar(marcaEdit).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Marca se ha editado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
   eliminarConfirmado(data:Marca){
     this.vistaCarga = true;
-    this.marcaService.eliminar(data.id).subscribe(() => {
+    this.marcaService.eliminar(data.id).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
@@ -300,7 +315,13 @@ export class MarcaComponent implements OnInit {
       }
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Marca se ha eliminado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
@@ -342,13 +363,20 @@ export class MarcaComponent implements OnInit {
   }
 
   altaBaja(data:Marca, valor: number, msj: string){
-    //this.vistaCarga = true;
+    this.vistaCarga = true;
     
-    this.marcaService.altaBaja(data.id, valor).subscribe(() => {
+    this.marcaService.altaBaja(data.id, valor).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 

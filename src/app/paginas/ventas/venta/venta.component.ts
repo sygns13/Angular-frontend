@@ -1462,7 +1462,7 @@ iniciarVentaT2(): Promise<any>{
   editarDV(detalleVenta:DetalleVenta, event: Event){
 
     this.detalleVentaGestion = new DetalleVenta();
-    this.detalleVentaGestion = detalleVenta;
+    this.detalleVentaGestion = structuredClone(detalleVenta);
     this.selectedProductVenta = new ProductoVentas();
     let almacen = new Almacen();
     almacen.id = detalleVenta.almacenId;

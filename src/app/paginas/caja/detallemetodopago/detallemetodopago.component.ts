@@ -344,7 +344,7 @@ export class DetallemetodopagoComponent {
       this.vistaCarga = true;
   
       let detalleMetodoPagoEdit = new DetalleMetodoPago();
-      detalleMetodoPagoEdit = JSON.parse(JSON.stringify(this.detalleMetodoPago));
+      detalleMetodoPagoEdit = structuredClone(this.detalleMetodoPago);
   
       let bancoBase = new Banco();
       let metodoPagoBase = new MetodoPago();

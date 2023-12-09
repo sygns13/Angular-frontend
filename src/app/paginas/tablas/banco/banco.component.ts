@@ -276,7 +276,7 @@ export class BancoComponent implements OnInit {
     this.vistaCarga = true;
 
     let bancoEdit = new Banco();
-    bancoEdit = JSON.parse(JSON.stringify(this.banco));
+    bancoEdit = structuredClone(this.banco);
 
     bancoEdit.nombre = this.nombre.toString().trim();
     bancoEdit.dir = this.dir.toString().trim();

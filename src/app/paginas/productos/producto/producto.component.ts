@@ -413,13 +413,20 @@ export class ProductoComponent implements OnInit {
     this.producto.afectoIgv = this.afectoIgv;
     this.producto.activo = parseInt((this.activo != null) ? this.activo.code : "1");
 
-    this.productoService.registrar(this.producto).subscribe(() => {
+    this.productoService.registrar(this.producto).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Producto se ha registrado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
@@ -427,7 +434,7 @@ export class ProductoComponent implements OnInit {
     this.vistaCarga = true;
 
     let tipoProductoEdit = new Producto();
-    tipoProductoEdit = JSON.parse(JSON.stringify(this.producto));
+    tipoProductoEdit = structuredClone(this.producto);
 
     let tipoProductoBase = new TipoProducto();
     let marcaBase = new Marca();
@@ -459,21 +466,29 @@ export class ProductoComponent implements OnInit {
     tipoProductoEdit.activo = parseInt((this.activo != null) ? this.activo.code : "1");
 
 
-    this.productoService.modificar(tipoProductoEdit).subscribe(() => {
+    this.productoService.modificar(tipoProductoEdit).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Producto se ha editado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
   }
 
 
 
   eliminarConfirmado(data:Producto){
     this.vistaCarga = true;
-    this.productoService.eliminar(data.id).subscribe(() => {
+    this.productoService.eliminar(data.id).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
@@ -481,7 +496,13 @@ export class ProductoComponent implements OnInit {
       }
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Producto se ha eliminado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
   }
 
 

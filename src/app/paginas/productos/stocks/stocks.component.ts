@@ -238,7 +238,7 @@ export class StocksComponent implements OnInit {
   registrarConfirmado(){
     
     
-    //detalleUnidadEdit = JSON.parse(JSON.stringify(this.detalleUnidad));
+    //detalleUnidadEdit = structuredClone(this.detalleUnidad));
 
     let lote = new Lote();
 
@@ -290,12 +290,19 @@ export class StocksComponent implements OnInit {
     lote.productoId = this.producto.id;
     lote.cantidad = this.cantidad;
 
-    this.loteService.registrar(lote).subscribe(() => {
+    this.loteService.registrar(lote).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.getDatosmain();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Lote definido se han registrado satisfactoriamente, se actualizaron los stocks'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
@@ -379,10 +386,10 @@ export class StocksComponent implements OnInit {
   editarConfirmado(){
     
     this.vistaCarga = true;
-    //detalleUnidadEdit = JSON.parse(JSON.stringify(this.detalleUnidad));
+    //detalleUnidadEdit = structuredClone(this.detalleUnidad));
 
     let stockLotetDTOEdit = new StockLoteDTO();
-    stockLotetDTOEdit = JSON.parse(JSON.stringify(this.stockLoteDTO));
+    stockLotetDTOEdit = structuredClone(this.stockLoteDTO);
 
     let loteEdit = new Lote();
 
@@ -434,12 +441,18 @@ export class StocksComponent implements OnInit {
     loteEdit.productoId = this.producto.id;
     loteEdit.cantidad = this.cantidad;
 
-    this.loteService.modificar(loteEdit).subscribe(() => {
+    this.loteService.modificar(loteEdit).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.getDatosmain();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Lote se ha editado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
   }
 
 
@@ -462,11 +475,17 @@ export class StocksComponent implements OnInit {
 
     eliminarConfirmado(data:StockLoteDTO){
       this.vistaCarga = true;
-      this.loteService.eliminar(data.lote.id).subscribe(() => {
+      this.loteService.eliminar(data.lote.id).subscribe({
+        next: (data) => {
         this.loading = true; 
         this.vistaCarga = false;
         this.getDatosmain();
         this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Lote se ha eliminado satisfactoriamente'});
+      },
+      error: (err) => {
+        this.vistaCarga = false;
+        console.log(err);
+      }        
     });
     }
 
@@ -518,11 +537,17 @@ export class StocksComponent implements OnInit {
 
     modificarOrdenConfirmado(data:LotesChangeOrden){
       this.vistaCarga = true;
-      this.loteService.modificarOrden(data).subscribe(() => {
+      this.loteService.modificarOrden(data).subscribe({
+        next: (data) => {
         this.loading = true; 
         this.vistaCarga = false;
         this.getDatosmain();
         this.messageService.add({severity:'success', summary:'Confirmado', detail: 'Se ha modificado el orden del Lote satisfactoriamente'});
+      },
+      error: (err) => {
+        this.vistaCarga = false;
+        console.log(err);
+      }        
     });
     }
 
@@ -537,7 +562,7 @@ export class StocksComponent implements OnInit {
     console.log(data);
 
     let stockLotetDTOEdit = new StockLoteDTO();
-    stockLotetDTOEdit = JSON.parse(JSON.stringify(data.stockLoteDTOs[0]));
+    stockLotetDTOEdit = structuredClone(data.stockLoteDTOs[0]);
 
     this.stock = stockLotetDTOEdit.stock;
     this.stock.almacenId = stockLotetDTOEdit.almacen.id;
@@ -579,18 +604,24 @@ export class StocksComponent implements OnInit {
 
   registrarConfirmadoStock(){
     this.vistaCarga = true;
-    //detalleUnidadEdit = JSON.parse(JSON.stringify(this.detalleUnidad));
+    //detalleUnidadEdit = structuredClone(this.detalleUnidad));
 
     this.stock.cantidad = this.cantidadStock;
     this.stock.productoId = this.producto.id;
 
 
-    this.stockService.registrar(this.stock).subscribe(() => {
+    this.stockService.registrar(this.stock).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.getDatosmain();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Stock ha sido actualizado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
   }
 
   sendMessage() {

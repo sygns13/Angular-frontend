@@ -267,13 +267,20 @@ export class UnidadComponent implements OnInit {
     this.unidad.abreviatura = this.abreviatura.toString().trim();
     this.unidad.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.unidadService.registrar(this.unidad).subscribe(() => {
+    this.unidadService.registrar(this.unidad).subscribe({
+      next: (data) => {
       this.vistaCarga = false;
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Unidad se ha registrado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
+  
 
   }
 
@@ -281,27 +288,34 @@ export class UnidadComponent implements OnInit {
     this.vistaCarga = true;
 
     let unidadEdit = new Unidad();
-    unidadEdit = JSON.parse(JSON.stringify(this.unidad));
+    unidadEdit = structuredClone(this.unidad);
 
     unidadEdit.nombre = this.nombre.toString().trim();
     unidadEdit.cantidad = +this.cantidad;
     unidadEdit.abreviatura = this.abreviatura.toString().trim();
     unidadEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-    this.unidadService.modificar(unidadEdit).subscribe(() => {
+    this.unidadService.modificar(unidadEdit).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'a Unidad se ha editado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
 
   }
 
   eliminarConfirmado(data:Unidad){
     this.vistaCarga = true;
-    this.unidadService.eliminar(data.id).subscribe(() => {
+    this.unidadService.eliminar(data.id).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.vistaCarga = false;
       if(this.numberElements <= 1 && this.page > 0){
@@ -309,7 +323,12 @@ export class UnidadComponent implements OnInit {
       }
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Unidad se ha eliminado satisfactoriamente'});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
 
   }
 
@@ -351,13 +370,19 @@ export class UnidadComponent implements OnInit {
   }
 
   altaBaja(data:Unidad, valor: number, msj: string){
-    //this.vistaCarga = true;
+    this.vistaCarga = true;
     
-    this.unidadService.altaBaja(data.id, valor).subscribe(() => {
+    this.unidadService.altaBaja(data.id, valor).subscribe({
+      next: (data) => {
       this.loading = true; 
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-   });
+    },
+    error: (err) => {
+      this.vistaCarga = false;
+      console.log(err);
+    }        
+  });
 
   }
 
