@@ -1875,9 +1875,9 @@
             </div>
 
             <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
-              <label for="numeroTarjeta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Tarjeta:</b></label>
+              <label for="numeroTarjeta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Tarjeta (4 Últimos Dígitos):</b></label>
               <div class="p-col-12 p-md-5">
-                  <input id="numeroTarjeta" type="text" pInputText [(ngModel)]="numeroTarjeta" #inputnumeroTarjeta maxLength="20" placeholder="" style="height:40px; width:100%;">
+                  <input id="numeroTarjeta" type="text" pInputText [(ngModel)]="numeroTarjeta" #inputnumeroTarjeta maxLength="4" placeholder="" style="height:40px; width:100%;">
               </div>
             </div>
 

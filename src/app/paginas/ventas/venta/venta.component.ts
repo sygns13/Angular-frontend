@@ -2155,7 +2155,7 @@ iniciarVentaT2(): Promise<any>{
     metodoPago.tipoId = tipoId;
     metodoPago.nombre = metodoPagoName;
 
-    this.cobroVenta.venta = this.venta;
+    this.cobroVenta.venta = structuredClone(this.venta);
     this.cobroVenta.importe = this.montoAbonado;
 
     let tipoTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.name : "";

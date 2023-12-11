@@ -631,7 +631,7 @@
           pRipple
           type="button"
           icon="pi pi-money-bill"
-          label="Cobrar Compra"
+          label="Registrar Compra"
           class="p-button-raised p-mr-2 p-mb-2"
         ></button>
         <button
@@ -875,7 +875,7 @@
                   <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.presentacion.presentacion}}</td>
                   <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.marca.nombre}}</td>
                   <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.detalleUnidadProducto.unidad.nombre}}</td>
-                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.detalleUnidadProducto.precio | currency:'PEN':'S/.'}}</td>
+                  <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.detalleUnidadProducto.costoCompra | currency:'PEN':'S/.'}}</td>
                   <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{registro.producto.ubicacion}}</td>
   
                     <!-- <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
@@ -1446,14 +1446,36 @@
   </p-dialog>
   
   
-  <p-dialog header="Confirmar Pago" [(visible)]="displayConfirmarPago" [modal]="true" [style]="{'min-height':'600px', 'width': '50vw' }" [draggable]="false" [resizable]="false">
+  <p-dialog header="Confirmar Registro de Compra" [(visible)]="displayConfirmarPago" [modal]="true" [style]="{'min-height':'600px', 'width': '50vw' }" [draggable]="false" [resizable]="false">
     <div class="p-col-12">
-           
+
       <div class="p-field p-grid">
+        <label for="clsActualizado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Actualizar Stocks</label>
+        <div class="p-col-12 p-md-4">
+            <span class="p-float-label">
+                <p-dropdown inputId="clsActualizado" [options]="actualizado" [(ngModel)]="clsActualizado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width':'100%'}" #inputClsFacturado></p-dropdown>
+                    <label>Seleccione</label>
+            </span>
+        </div>
+    </div>
+
+      <div class="p-field p-grid">
+        <label for="clsFacturado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Facturado</label>
+        <div class="p-col-12 p-md-4">
+            <span class="p-float-label">
+                <p-dropdown inputId="clsFacturado" [options]="facturado" [(ngModel)]="clsFacturado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width':'100%'}" #inputClsFacturado></p-dropdown>
+                    <label>Seleccione</label>
+            </span>
+        </div>
+    </div>
+
+    <hr *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+           
+      <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
         <label for="clsTipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
           ><b>Comprobante:</b></label
         >
-        <div class="p-col-12 p-md-4">
+        <div class="p-col-12 p-md-8">
           <span class="p-float-label">
             <p-dropdown
               #tinputclsTipoComprobante
@@ -1470,9 +1492,9 @@
         </div>
       </div>
   
-      <div class="p-field p-grid">
+      <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
         <label for="clsSerieComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-          ><b>Serie de Comprobante:</b></label
+          ><b>Serie:</b></label
         >
     <!--     <div class="p-col-12 p-md-4">
           <span class="p-float-label">
@@ -1489,182 +1511,218 @@
             <label>Seleccione</label>
           </span>
         </div> -->
+        <div class="p-col-12 p-md-2">
+          <input id="serieComprobante" type="text" pInputText [(ngModel)]="serieComprobante" #inputserieComprobante maxLength="20" placeholder="" style="height:40px; width:100%;">
+        </div>
+
+        <label for="clsSerieComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+          ><b>Número:</b></label
+        >
+
+        <div class="p-col-12 p-md-4">
+          <input id="numeroComprobante" type="text" pInputText [(ngModel)]="numeroComprobante" #inputnumeroComprobante maxLength="50" placeholder="" style="height:40px; width:100%;">
+        </div>
+      </div>
+
+
+      <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+        <label for="fechaComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+          ><b>Fecha de Comprobante:</b></label
+        >
+        <div class="p-col-12 p-md-4">
+          <p-inputMask id="fechaComprobante" inputId="inputmask3" mask="99/99/9999" [(ngModel)]="fechaComprobante" #inputFechaComprobante>
+          </p-inputMask>
+        </div>
+      </div>
+
+      <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+        <label for="observacionesComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+          ><b>Observaciones de Comprobante:</b></label
+        >
+        <div class="p-col-12 p-md-10">
+          <input id="observacionesComprobante" type="text" pInputText [(ngModel)]="observacionesComprobante" #inputobservacionesComprobante maxLength="1024" placeholder="" style="height:40px; width:100%;">
+        </div>
       </div>
   
   
-              <hr>
-              <h5>Método de Pago</h5>
-  
-              <div class="p-field p-grid">
-                <label for="clsMetodoPago" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                  ><b>Tipo de Pago:</b></label
-                >
-                <div class="p-col-12 p-md-5">
-                  <span class="p-float-label">
-                    <p-dropdown
-                      #tinputclsMetodoPago
-                      inputId="clsMetodoPago"
-                      [options]="metodoPagos"
-                      [(ngModel)]="clsMetodoPago"
-                      optionLabel="name"
-                      [autoDisplayFirst]="false"
-                      [style]="{'height':'40px', 'width':'100%'}"
-                      [filter]="true"
-                      (onChange)="getDataMetodosPagos()"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                  </span>
-                </div>
-              </div>
-  
-  
-              <!-- Transferencia Bancaria o Cheque -->
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' || clsMetodoPago.tipoId == 'CH' )">
-                <label for="clsBanco" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                  ><b>Banco:</b></label
-                >
-                <div class="p-col-12 p-md-5">
-                  <span class="p-float-label">
-                    <p-dropdown
-                      #tinputclsBanco
-                      inputId="clsBanco"
-                      [options]="bancos"
-                      [(ngModel)]="clsBanco"
-                      optionLabel="name"
-                      [autoDisplayFirst]="false"
-                      [style]="{'height':'40px', 'width':'100%'}"
-                      [filter]="true"
-                      (onChange)="buscarCuentas()"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                  </span>
-                </div>
-              </div>
-  
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT')">
-                <label for="clsNumeroCuenta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                  ><b>N° de Cuenta:</b></label
-                >
-                <div class="p-col-12 p-md-5">
-                  <span class="p-float-label">
-                    <p-dropdown
-                      #tinputclsNumeroCuenta
-                      inputId="clsNumeroCuenta"
-                      [options]="numeroCuentas"
-                      [(ngModel)]="clsNumeroCuenta"
-                      optionLabel="name"
-                      [autoDisplayFirst]="false"
-                      [style]="{'height':'40px', 'width':'100%'}"
-                      [filter]="true"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                  </span>
-                </div>
-              </div>
-  
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' )">
-                <label for="numeroOperacion" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
-                <div class="p-col-12 p-md-5">
-                    <input id="numeroOperacion" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion maxLength="200" placeholder="" style="height:40px; width:100%;">
-                </div>
-              </div>
-  
-  
-              <!-- Tarjeta de Crédito -->
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
-                <label for="comprobante" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                  ><b>Tipo de Tarjeta:</b></label
-                >
-                <div class="p-col-12 p-md-5">
-                  <span class="p-float-label">
-                    <p-dropdown
-                      #tinputclsTipoTarjeta
-                      inputId="clsTipoTarjeta"
-                      [options]="tipoTarjetas"
-                      [(ngModel)]="clsTipoTarjeta"
-                      optionLabel="name"
-                      [autoDisplayFirst]="false"
-                      [style]="{'height':'40px', 'width':'100%'}"
-                      [filter]="true"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                  </span>
-                </div>
-              </div>
-  
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
-                <label for="numeroTarjeta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Tarjeta:</b></label>
-                <div class="p-col-12 p-md-5">
-                    <input id="numeroTarjeta" type="text" pInputText [(ngModel)]="numeroTarjeta" #inputnumeroTarjeta maxLength="20" placeholder="" style="height:40px; width:100%;">
-                </div>
-              </div>
-  
-  
-              <!-- YAPE PLIN -->
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
-                <label for="clsNumeroCelular" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                  ><b>N° de Celular:</b></label
-                >
-                <div class="p-col-12 p-md-5">
-                  <span class="p-float-label">
-                    <p-dropdown
-                      #tinputclsNumeroCelular
-                      inputId="clsNumeroCelular"
-                      [options]="numeroCelulares"
-                      [(ngModel)]="clsNumeroCelular"
-                      optionLabel="name"
-                      [autoDisplayFirst]="false"
-                      [style]="{'height':'40px', 'width':'100%'}"
-                      [filter]="true"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                  </span>
-                </div>
-              </div>
-  
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
-                <label for="numeroOperacion2" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
-                <div class="p-col-12 p-md-5">
-                    <input id="numeroOperacion2" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion2 maxLength="200" placeholder="" style="height:40px; width:100%;">
-                </div>
-              </div>
-  
-              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CH')">
-                <label for="numeroCheque" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Cheque</b></label>
-                <div class="p-col-12 p-md-5">
-                    <input id="numeroCheque" type="text" pInputText [(ngModel)]="numeroCheque" #inputnumeroCheque maxLength="500" placeholder="" style="height:40px; width:100%;">
-                </div>
-              </div>
-  
-              <div class="p-field p-grid">
-                <label for="montoCompra" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto de Compra:</b></label>
-                <div class="p-col-12 p-md-5">
-                    <input id="montoCompra" type="text" pInputText [(ngModel)]="ImporteTotal" #inputmontoCompra  placeholder="" style="height:40px; width:100%;" [readonly]="true">
-                </div>
-              </div>
-  
-              <div class="p-field p-grid">
-                <label for="montoAbonado" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto Abonado:</b></label>
-                <div class="p-col-12 p-md-5">
-                    <input
-                      id="montoAbonado"
-                      type="text"
-                      pInputText
-                      [(ngModel)]="montoAbonado"
-                      appSoloNumeros
-                      #inputmontoAbonado
-                      (change)="calcularMontos($event)"
-                      style="height:40px; width:100%;"
-                    />
-                </div>
-              </div>
-  
-              <div class="p-field p-grid">
-                <label for="montoVuelto" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Vuelto:</b></label>
-                <div class="p-col-12 p-md-5">
-                    <input id="montoVuelto" type="text" pInputText [(ngModel)]="montoVuelto" #inputmontoVuelto  placeholder="" style="height:40px; width:100%;" [readonly]="true">
-                </div>
-              </div>
+      <hr>
+      <h5>Método de Pago</h5>
+
+      <div class="p-field p-grid">
+        <label for="clsMetodoPago" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+          ><b>Tipo de Pago:</b></label
+        >
+        <div class="p-col-12 p-md-5">
+          <span class="p-float-label">
+            <p-dropdown
+              #tinputclsMetodoPago
+              inputId="clsMetodoPago"
+              [options]="metodoPagos"
+              [(ngModel)]="clsMetodoPago"
+              optionLabel="name"
+              [autoDisplayFirst]="false"
+              [style]="{'height':'40px', 'width':'100%'}"
+              [filter]="true"
+              (onChange)="getDataMetodosPagos()"
+            ></p-dropdown>
+            <label>Seleccione</label>
+          </span>
+        </div>
+      </div>
+
+
+      <!-- Transferencia Bancaria o Cheque -->
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' || clsMetodoPago.tipoId == 'CH' )">
+        <label for="clsBanco" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+          ><b>Banco de Proveedor:</b></label
+        >
+        <div class="p-col-12 p-md-5">
+          <span class="p-float-label">
+            <p-dropdown
+              #tinputclsBanco
+              inputId="clsBanco"
+              [options]="bancos"
+              [(ngModel)]="clsBanco"
+              optionLabel="name"
+              [autoDisplayFirst]="false"
+              [style]="{'height':'40px', 'width':'100%'}"
+              [filter]="true"
+            ></p-dropdown>
+            <label>Seleccione</label>
+          </span>
+        </div>
+      </div>
+
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT')">
+        <label for="clsNumeroCuenta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+          ><b>N° de Cuenta de Proveedor:</b></label
+        >
+        <!-- <div class="p-col-12 p-md-5">
+          <span class="p-float-label">
+            <p-dropdown
+              #tinputclsNumeroCuenta
+              inputId="clsNumeroCuenta"
+              [options]="numeroCuentas"
+              [(ngModel)]="clsNumeroCuenta"
+              optionLabel="name"
+              [autoDisplayFirst]="false"
+              [style]="{'height':'40px', 'width':'100%'}"
+              [filter]="true"
+            ></p-dropdown>
+            <label>Seleccione</label>
+          </span>
+        </div> -->
+        <div class="p-col-12 p-md-5">
+          <input id="numeroCuenta" type="text" pInputText [(ngModel)]="numeroCuenta" #inputnumeroCuenta maxLength="200" placeholder="" style="height:40px; width:100%;">
+        </div>
+      </div>
+
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' )">
+        <label for="numeroOperacion" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
+        <div class="p-col-12 p-md-5">
+            <input id="numeroOperacion" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion maxLength="200" placeholder="" style="height:40px; width:100%;">
+        </div>
+      </div>
+
+
+      <!-- Tarjeta de Crédito -->
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
+        <label for="comprobante" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+          ><b>Tipo de Tarjeta:</b></label
+        >
+        <div class="p-col-12 p-md-5">
+          <span class="p-float-label">
+            <p-dropdown
+              #tinputclsTipoTarjeta
+              inputId="clsTipoTarjeta"
+              [options]="tipoTarjetas"
+              [(ngModel)]="clsTipoTarjeta"
+              optionLabel="name"
+              [autoDisplayFirst]="false"
+              [style]="{'height':'40px', 'width':'100%'}"
+              [filter]="true"
+            ></p-dropdown>
+            <label>Seleccione</label>
+          </span>
+        </div>
+      </div>
+
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
+        <label for="numeroTarjeta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Tarjeta de Pago (4 Últimos Dígitos):</b></label>
+        <div class="p-col-12 p-md-5">
+            <input id="numeroTarjeta" type="text" pInputText [(ngModel)]="numeroTarjeta" #inputnumeroTarjeta maxLength="4" placeholder="" style="height:40px; width:100%;">
+        </div>
+      </div>
+
+
+      <!-- YAPE PLIN -->
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
+        <label for="clsNumeroCelular" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+          ><b>N° de Celular de Proveedor:</b></label
+        >
+        <!-- <div class="p-col-12 p-md-5">
+          <span class="p-float-label">
+            <p-dropdown
+              #tinputclsNumeroCelular
+              inputId="clsNumeroCelular"
+              [options]="numeroCelulares"
+              [(ngModel)]="clsNumeroCelular"
+              optionLabel="name"
+              [autoDisplayFirst]="false"
+              [style]="{'height':'40px', 'width':'100%'}"
+              [filter]="true"
+            ></p-dropdown>
+            <label>Seleccione</label>
+          </span>
+        </div> -->
+        <div class="p-col-12 p-md-5">
+          <input id="numeroCelular" type="text" pInputText [(ngModel)]="numeroCelular" #inputnumeroCelular maxLength="20" placeholder="" style="height:40px; width:100%;">
+        </div>
+      </div>
+
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
+        <label for="numeroOperacion2" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
+        <div class="p-col-12 p-md-5">
+            <input id="numeroOperacion2" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion2 maxLength="200" placeholder="" style="height:40px; width:100%;">
+        </div>
+      </div>
+
+      <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CH')">
+        <label for="numeroCheque" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Cheque</b></label>
+        <div class="p-col-12 p-md-5">
+            <input id="numeroCheque" type="text" pInputText [(ngModel)]="numeroCheque" #inputnumeroCheque maxLength="500" placeholder="" style="height:40px; width:100%;">
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="montoCompra" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto de Compra:</b></label>
+        <div class="p-col-12 p-md-5">
+            <input id="montoCompra" type="text" pInputText [(ngModel)]="ImporteTotal" #inputmontoCompra  placeholder="" style="height:40px; width:100%;" [readonly]="true">
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="montoAbonado" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto Abonado:</b></label>
+        <div class="p-col-12 p-md-5">
+            <input
+              id="montoAbonado"
+              type="text"
+              pInputText
+              [(ngModel)]="montoAbonado"
+              appSoloNumeros
+              #inputmontoAbonado
+              (change)="calcularMontos($event)"
+              style="height:40px; width:100%;"
+            />
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="montoVuelto" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Vuelto:</b></label>
+        <div class="p-col-12 p-md-5">
+            <input id="montoVuelto" type="text" pInputText [(ngModel)]="montoVuelto" #inputmontoVuelto  placeholder="" style="height:40px; width:100%;" [readonly]="true">
+        </div>
+      </div>
   
   
       <div class="p-mb-3" style="margin-top: 45px;"></div>

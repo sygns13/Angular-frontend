@@ -194,6 +194,23 @@ export class EntradastockComponent implements OnInit {
 
   //Cobrar
   displayConfirmarPago : boolean = false;
+  facturado: any[] = [
+    {name: 'Si', code: '1'},
+    {name: 'No', code: '0'}
+  ];
+  clsFacturado = {name: "Si", code: '1'};
+
+  actualizado: any[] = [
+    {name: 'Si', code: '1'},
+    {name: 'No', code: '0'}
+  ];
+  clsActualizado = {name: "Si", code: '1'};
+
+  serieComprobante : string = '';
+  fechaComprobante : string = '';
+  numeroComprobante : string = '';
+  observacionesComprobante : string = '';
+
   tipoComprobantes: any[] = [];
   clsTipoComprobante: any = null;
   serieFacturaProveedors: any[] = [];
@@ -204,8 +221,9 @@ export class EntradastockComponent implements OnInit {
   bancos: any[] = [];
   clsBanco: any = null;
 
-  numeroCuentas: any[] = [];
-  clsNumeroCuenta: any = null;
+  //numeroCuentas: any[] = [];
+  //clsNumeroCuenta: any = null;
+  numeroCuenta: string = '';
   numeroOperacion: string = '';
 
   tipoTarjetas: any[] = [];
@@ -213,8 +231,9 @@ export class EntradastockComponent implements OnInit {
   numeroTarjeta: string = '';
   numeroCheque: string = '';
   
-  numeroCelulares: any[] = [];
-  clsNumeroCelular: any = null;
+  //numeroCelulares: any[] = [];
+  //clsNumeroCelular: any = null;
+  numeroCelular: string = '';
   //initFacturaProveedors: InitFacturaProveedor[] = [];
 
   montoEntradaStock: string = null;
@@ -1691,17 +1710,24 @@ iniciarEntradaStockT2(): Promise<any>{
     this.bancos = [];
     this.clsBanco = null;
 
-    this.numeroCuentas = [];
-    this.clsNumeroCuenta = null;
-    this.numeroOperacion = '';
+    this.clsFacturado = {name: "Si", code: '1'};
+    this.clsActualizado = {name: "Si", code: '1'};
+    this.serieComprobante = "";
+    this.numeroComprobante = "";
+    this.numeroComprobante = '';
+    this.observacionesComprobante = '';
+
+    this.numeroCuenta = "";
+    this.numeroOperacion = "";
+    this.numeroTarjeta = "";
+    this.numeroCelular = "";
+    this.numeroCheque = "";
 
     this.tipoTarjetas = [];
     this.clsTipoTarjeta = null;
-    this.numeroTarjeta = '';
-    this.numeroCheque = '';
     
-    this.numeroCelulares = [];
-    this.clsNumeroCelular = null;
+    //this.numeroCelulares = [];
+    //this.clsNumeroCelular = null;
     //initFacturaProveedors: InitFacturaProveedor[] = [];
 
     this.montoEntradaStock = null;
@@ -1727,6 +1753,19 @@ iniciarEntradaStockT2(): Promise<any>{
     this.clsMetodoPago = null;
     this.metodoPagos = [];
     let isFirst = true;
+
+    this.clsFacturado = {name: "Si", code: '1'};
+    this.clsActualizado = {name: "Si", code: '1'};
+    this.serieComprobante = "";
+    this.numeroComprobante = "";
+    this.numeroComprobante = '';
+    this.observacionesComprobante = '';
+
+    this.numeroCuenta = "";
+    this.numeroOperacion = "";
+    this.numeroTarjeta = "";
+    this.numeroCelular = "";
+    this.numeroCheque = "";
 
     //this.metodoPagos.push({name: 'GENERAL (TODOS LOS LOCALES)', code: 0});
 
@@ -1911,15 +1950,13 @@ iniciarEntradaStockT2(): Promise<any>{
     metodoPago.tipoId = tipoId;
     metodoPago.nombre = metodoPagoName;
 
-    this.pagoProveedor.entradaStock = this.entradaStock;
+    this.pagoProveedor.entradaStock = structuredClone(this.entradaStock);
     this.pagoProveedor.montoPago = this.montoAbonado;
 
     let tipoTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.name : "";
     let siglaTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.sigla : "";
 
     let banco = this.clsBanco != null ? this.clsBanco.name : "";
-    let numeroCuenta = this.clsNumeroCuenta != null ? this.clsNumeroCuenta.name : "";
-    let numeroCelular = this.clsNumeroCelular != null ? this.clsNumeroCelular.name : "";
 
     let tipoComprobanteId = parseInt((this.clsTipoComprobante != null) ? this.clsTipoComprobante.code : "0");
 
@@ -1927,18 +1964,48 @@ iniciarEntradaStockT2(): Promise<any>{
     this.pagoProveedor.siglaTarjeta = siglaTarjeta;
     this.pagoProveedor.numeroTarjeta = this.numeroTarjeta;
     this.pagoProveedor.banco = banco;
-    this.pagoProveedor.numeroCuenta = numeroCuenta;
-    this.pagoProveedor.numeroCelular = numeroCelular;
+    this.pagoProveedor.numeroCuenta = this.numeroCuenta;
+    this.pagoProveedor.numeroCelular = this.numeroCelular;
     this.pagoProveedor.numeroCheque = this.numeroCheque;
     this.pagoProveedor.codigoOperacion = this.numeroOperacion;
     this.pagoProveedor.tipoComprobanteId = tipoComprobanteId;
     this.pagoProveedor.metodoPago = metodoPago;
 
+    //Facturado
+    let facturado = parseInt((this.clsFacturado != null) ? this.clsFacturado.code : "0");
+    this.pagoProveedor.entradaStock.facturado = facturado;
+
+    let facturaProveedor = new FacturaProveedor();
+    let tipoComprobante = new TipoComprobante();
+
+    if(this.pagoProveedor.entradaStock.facturado == 1){
+      facturaProveedor.serie = this.serieComprobante;
+      facturaProveedor.numero = this.numeroComprobante;
+      facturaProveedor.observaciones = this.observacionesComprobante;
+      
+      const fechaComp = moment(this.fechaComprobante, 'DD/MM/YYYY');
+        if(!fechaComp.isValid){
+          this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Comprobante indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+          return;
+        }
+      facturaProveedor.fecha = fechaComp.format('YYYY-MM-DD');
+
+      tipoComprobante.id = tipoComprobanteId;
+      facturaProveedor.tipoComprobante = tipoComprobante;
+      facturaProveedor.almacen = this.pagoProveedor.entradaStock.almacen;
+
+      this.pagoProveedor.entradaStock.facturaProveedor = facturaProveedor;
+    }
+
+    //Actualizado
+    let actualizado = parseInt((this.clsActualizado != null) ? this.clsActualizado.code : "0");
+    this.pagoProveedor.entradaStock.actualizado = actualizado;
+
     this.entradaStockService.pagarEntradaStock(this.pagoProveedor).subscribe({
       next: (data) => {
         if(data != null && data.id != null){
           //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Proveedor se ha registrado satisfactoriamente'});
-          this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Compra se ha Cobrado Exitosamente'});
+          this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Compra se ha Registrado Exitosamente'});
           this.pagoProveedor = data;
           this.displayConfirmarPago = false;
           this.nuevaEntradaStock();
