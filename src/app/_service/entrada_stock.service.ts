@@ -76,4 +76,17 @@ export class EntradaStockService extends GenericService<EntradaStock>{
   getPagosEntradaStocks(id: number, p: number, s:number) {
     return this.http.post<any>(`${this.url}/get-pagos/${id}?page=${p}&size=${s}`, null);
   }
+
+  facturarEntradaStock(entrada_stock: EntradaStock) {
+    return this.http.put<EntradaStock>(`${this.url}/facturar`, entrada_stock);
+  }
+  revFacturaEntradaStock(entrada_stock: EntradaStock) {
+    return this.http.put<EntradaStock>(`${this.url}/revertir-facturar`, entrada_stock);
+  }
+  actualizarEntradaStock(entrada_stock: EntradaStock) {
+    return this.http.put<EntradaStock>(`${this.url}/actualizar`, entrada_stock);
+  }
+  revActualizacionEntradaStock(entrada_stock: EntradaStock) {
+    return this.http.put<EntradaStock>(`${this.url}/revertir-actualizar`, entrada_stock);
+  }
 }

@@ -1822,7 +1822,6 @@ iniciarEntradaStockT2(): Promise<any>{
         this.tipoTarjetas.push({name: data.nombre, code: data.id, sigla: data.sigla});
         if(isFirst){
           this.clsTipoTarjeta = {name: data.nombre, code: data.id, sigla: data.sigla};
-          //this.buscarCuentas();
           isFirst = false;
         }
       });
@@ -1849,7 +1848,7 @@ iniciarEntradaStockT2(): Promise<any>{
     }
 
     if(this.entradaStock.totalMonto == null || this.entradaStock.totalMonto == 0){
-      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monton de Compra igual a cero'});
+      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monto de Compra igual a cero'});
       return;
     }
 

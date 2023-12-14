@@ -498,7 +498,7 @@ export class VentasrealizadasComponent implements OnInit{
     metodoPago.tipoId = tipoId;
     metodoPago.nombre = metodoPagoName;
 
-    this.cobroVenta.venta = this.selectedVenta;
+    this.cobroVenta.venta = structuredClone(this.selectedVenta);
     this.cobroVenta.importe = this.montoAbonado;
 
     let tipoTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.name : "";
@@ -922,7 +922,7 @@ export class VentasrealizadasComponent implements OnInit{
     }
 
     if(this.selectedVenta.totalMonto == null || this.selectedVenta.totalMonto == 0){
-      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monton de venta igual a cero'});
+      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monto de venta igual a cero'});
       return;
     }
 

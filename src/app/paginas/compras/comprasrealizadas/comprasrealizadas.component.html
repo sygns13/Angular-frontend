@@ -1,0 +1,701 @@
+<div class="p-grid" *ngIf="vistaCarga && vistaCarga2">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+</div>
+
+<p-toast *ngIf="vistaCarga2"></p-toast>
+
+<div class="p-grid" *ngIf="vistaCarga2">
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Compras a Proveedores Realizadas</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí se visualizan todas las ventas registradas de Bienes y Servicios</blockquote>
+            </div>
+            <br>
+
+
+            <button (click)="actualizarCompras()" pButton pRipple type="button" icon="pi pi-refresh" label="Actualizar" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+            <button (click)="nuevaCompra()" pButton pRipple type="button" icon="pi pi-plus" label="Nueva Compra" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="verCompra()" pButton pRipple type="button" icon="pi pi-file" label="Ver Compra" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="printCompra()" pButton pRipple type="button" icon="pi pi-print" label="Imprimir Compra" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="edittCompra()" pButton pRipple type="button" icon="pi pi-pencil" label="Editar Compra" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button (click)="cobrarCompra()" pButton pRipple type="button" icon="pi pi-dollar" label="Pagar" class="p-button-raised p-button-help p-mr-2 p-mb-2"></button>
+
+            <button (click)="facturarCompra()" pButton pRipple type="button" icon="pi pi-check-circle" label="F" class="p-button-raised p-button-success p-mr-2 p-mb-2"  pTooltip="Facturar Compra" tooltipPosition="top"></button>
+            <button (click)="actualizarCompra()" pButton pRipple type="button" icon="pi pi-check-circle" label="A" class="p-button-raised p-button-success p-mr-2 p-mb-2" pTooltip="Actualizar Stocks de la Compra"></button>
+
+            <button (click)="revFacturarCompra()" pButton pRipple type="button" icon="pi pi-times-circle" label="F" class="p-button-raised p-button-warning p-mr-2 p-mb-2"  pTooltip="Eliminar Factura de Compra" tooltipPosition="top"></button>
+            <button (click)="revActualizarCompra()" pButton pRipple type="button" icon="pi pi-times-circle" label="A" class="p-button-raised p-button-warning p-mr-2 p-mb-2" pTooltip="Revertir Actualización de Stocks de la Compra"></button>
+
+            <!-- <button (click)="anularCompra()" pButton pRipple type="button" icon="pi pi-times" label="Anular Compra" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button> -->
+            <button (click)="eliminarCompra()" pButton pRipple type="button" icon="pi pi-trash" label="Eliminar Compra" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+
+            <button style="float: right" (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button style="float: right" (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-file-excel" label="Exportar a Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+<!-- 
+  
+            
+            
+            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Inventario PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexXls()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+-->
+    
+        </div>
+    </div>
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Compras a Proveedores</h5>
+
+
+             <div class="p-fluid box" style="padding-top:15px; padding-bottom:25px;">
+
+                <div class="p-field p-grid">
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Sucursal</label>
+                    <div class="p-col-12 p-md-11">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioFiltros($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>SELECCIONE</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Desde</label>
+                    <div class="p-col-12 p-md-2">
+                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaInicio" #inputFechaInicio [style]="{'height':'31px'}">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="fechaFinal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Hasta</label>
+                    <div class="p-col-12 p-md-2">
+                        <p-inputMask id="fechaFinal" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaFinal" #inputFechaFinal [style]="{'height':'31px'}">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="estadoCompras" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Estado de Compra</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #inputClsEstadoCompra inputId="estadoCompras" [options]="estadoCompras" (onChange)="cambioFiltros($event)" [(ngModel)]="clsEstadoCompra" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>TODOS</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="estadoCompras" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Palabra Clave</label>
+                    <div class="p-col-12 p-md-11">
+                        <div class="p-inputgroup">
+                            <button pButton pRipple type="button" label="Buscar" (click)="buscar()" [style]="{'height':'31px'}"></button>
+                            <span class="p-float-label">
+                                <input #inputTxtBuscar type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()" [style]="{'height':'31px'}"/>
+                                <label>Número de Compra, Proveedor, Comprobante, Usuario</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        
+                <p-table [value]="entradaStocks" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" 
+                selectionMode="single" [(selection)]="selectedEntradaStock" dataKey="id" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px'}">
+
+<!--                 <ng-template pTemplate="colgroup" let-columns pTemplate="headergrouped">
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:184px;">
+                        <col style="width:115px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:140px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:85px;">
+                        <col style="width:85px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                    </colgroup>
+                </ng-template> -->
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Sucursal</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N° de Compra</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Hora</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Estado de Registro</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Facturada</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Actualizada Stocks</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Comprobante</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Proveedor</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Monto (S/.)</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Usuario</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-Compra let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="Compra">
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.almacen.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.numero}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.fecha | passfechavistaTransform}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.hora}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.8rem; padding: 5px;">{{Compra.estadoStr}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.8rem; padding: 5px; text-align: center;">
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="Compra.facturado === 1" value="Si"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="Compra.facturado === 0" value="No"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.8rem; padding: 5px; text-align: center;">
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="Compra.actualizado === 1" value="Si"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="Compra.actualizado === 0" value="No"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.facturaProveedor != null ? Compra.facturaProveedor.tipoComprobante.nombre + " " + Compra.facturaProveedor.serie + "-" + Compra.facturaProveedor.numero : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.proveedor != null ? Compra.proveedor.nombre + " " + Compra.proveedor.tipoDocumento.tipo + " " + Compra.proveedor.documento  : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.totalMonto | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.user.name}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+            <p-footer>
+                <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+            </p-footer>
+        </p-confirmDialog>
+
+
+
+        
+        <p-dialog header="Confirmar Registro de Compra" [(visible)]="displayConfirmarPago" [modal]="true" [style]="{'min-height':'600px', 'width': '50vw' }" [draggable]="false" [resizable]="false">
+            <div class="p-col-12">
+        
+              <div class="p-field p-grid">
+                <label for="clsActualizado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Actualizar Stocks</label>
+                <div class="p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="clsActualizado" [options]="actualizado" [(ngModel)]="clsActualizado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width':'100%'}" #inputClsFacturado></p-dropdown>
+                            <label>Seleccione</label>
+                    </span>
+                </div>
+            </div>
+        
+              <div class="p-field p-grid">
+                <label for="clsFacturado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Facturado</label>
+                <div class="p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="clsFacturado" [options]="facturado" [(ngModel)]="clsFacturado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px', 'width':'100%'}" #inputClsFacturado></p-dropdown>
+                            <label>Seleccione</label>
+                    </span>
+                </div>
+            </div>
+        
+            <hr *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+                   
+              <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+                <label for="clsTipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                  ><b>Comprobante:</b></label
+                >
+                <div class="p-col-12 p-md-8">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsTipoComprobante
+                      inputId="clsTipoComprobante"
+                      [options]="tipoComprobantes"
+                      [(ngModel)]="clsTipoComprobante"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div>
+              </div>
+          
+              <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+                <label for="clsSerieComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                  ><b>Serie:</b></label
+                >
+            <!--     <div class="p-col-12 p-md-4">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsSerieComprobante
+                      inputId="clsSerieComprobante"
+                      [options]="serieComprobantes"
+                      [(ngModel)]="clsSerieComprobante"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div> -->
+                <div class="p-col-12 p-md-2">
+                  <input id="serieComprobante" type="text" pInputText [(ngModel)]="serieComprobante" #inputserieComprobante maxLength="20" placeholder="" style="height:40px; width:100%;">
+                </div>
+        
+                <label for="clsSerieComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                  ><b>Número:</b></label
+                >
+        
+                <div class="p-col-12 p-md-4">
+                  <input id="numeroComprobante" type="text" pInputText [(ngModel)]="numeroComprobante" #inputnumeroComprobante maxLength="50" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+        
+              <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+                <label for="fechaComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                  ><b>Fecha de Comprobante:</b></label
+                >
+                <div class="p-col-12 p-md-4">
+                  <p-inputMask id="fechaComprobante" inputId="inputmask3" mask="99/99/9999" [(ngModel)]="fechaComprobante" #inputFechaComprobante>
+                  </p-inputMask>
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsFacturado != null && clsFacturado.code == '1'">
+                <label for="observacionesComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                  ><b>Observaciones de Comprobante:</b></label
+                >
+                <div class="p-col-12 p-md-10">
+                  <input id="observacionesComprobante" type="text" pInputText [(ngModel)]="observacionesComprobante" #inputobservacionesComprobante maxLength="1024" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+          
+          
+              <hr>
+              <h5>Método de Pago</h5>
+        
+              <div class="p-field p-grid">
+                <label for="clsMetodoPago" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>Tipo de Pago:</b></label
+                >
+                <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsMetodoPago
+                      inputId="clsMetodoPago"
+                      [options]="metodoPagos"
+                      [(ngModel)]="clsMetodoPago"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                      (onChange)="getDataMetodosPagos()"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div>
+              </div>
+        
+        
+              <!-- Transferencia Bancaria o Cheque -->
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' || clsMetodoPago.tipoId == 'CH' )">
+                <label for="clsBanco" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>Banco de Proveedor:</b></label
+                >
+                <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsBanco
+                      inputId="clsBanco"
+                      [options]="bancos"
+                      [(ngModel)]="clsBanco"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT')">
+                <label for="clsNumeroCuenta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>N° de Cuenta de Proveedor:</b></label
+                >
+                <!-- <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsNumeroCuenta
+                      inputId="clsNumeroCuenta"
+                      [options]="numeroCuentas"
+                      [(ngModel)]="clsNumeroCuenta"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div> -->
+                <div class="p-col-12 p-md-5">
+                  <input id="numeroCuenta" type="text" pInputText [(ngModel)]="numeroCuenta" #inputnumeroCuenta maxLength="200" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' )">
+                <label for="numeroOperacion" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroOperacion" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion maxLength="200" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+        
+              <!-- Tarjeta de Crédito -->
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
+                <label for="comprobante" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>Tipo de Tarjeta:</b></label
+                >
+                <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsTipoTarjeta
+                      inputId="clsTipoTarjeta"
+                      [options]="tipoTarjetas"
+                      [(ngModel)]="clsTipoTarjeta"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
+                <label for="numeroTarjeta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Tarjeta de Pago (4 Últimos Dígitos):</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroTarjeta" type="text" pInputText [(ngModel)]="numeroTarjeta" #inputnumeroTarjeta maxLength="4" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+        
+              <!-- YAPE PLIN -->
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
+                <label for="clsNumeroCelular" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>N° de Celular de Proveedor:</b></label
+                >
+                <!-- <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsNumeroCelular
+                      inputId="clsNumeroCelular"
+                      [options]="numeroCelulares"
+                      [(ngModel)]="clsNumeroCelular"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div> -->
+                <div class="p-col-12 p-md-5">
+                  <input id="numeroCelular" type="text" pInputText [(ngModel)]="numeroCelular" #inputnumeroCelular maxLength="20" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
+                <label for="numeroOperacion2" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroOperacion2" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion2 maxLength="200" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CH')">
+                <label for="numeroCheque" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Cheque</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroCheque" type="text" pInputText [(ngModel)]="numeroCheque" #inputnumeroCheque maxLength="500" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+              <div class="p-field p-grid">
+                <label for="montoCompra" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto de Compra:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="montoCompra" type="text" pInputText [(ngModel)]="ImporteTotal" #inputmontoCompra  placeholder="" style="height:40px; width:100%;" [readonly]="true">
+                </div>
+              </div>
+        
+              <div class="p-field p-grid">
+                <label for="montoAbonado" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto Abonado:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input
+                      id="montoAbonado"
+                      type="text"
+                      pInputText
+                      [(ngModel)]="montoAbonado"
+                      appSoloNumeros
+                      #inputmontoAbonado
+                      (change)="calcularMontos($event)"
+                      style="height:40px; width:100%;"
+                    />
+                </div>
+              </div>
+        
+              <div class="p-field p-grid">
+                <label for="montoVuelto" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Vuelto:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="montoVuelto" type="text" pInputText [(ngModel)]="montoVuelto" #inputmontoVuelto  placeholder="" style="height:40px; width:100%;" [readonly]="true">
+                </div>
+              </div>
+          
+          
+              <div class="p-mb-3" style="margin-top: 45px;"></div>
+          
+              <br>
+          
+              <button
+                  (click)="confirmarPago()"
+                  pButton
+                  pRipple
+                  type="button"
+                  icon="pi pi-check-square"
+                  label="Confirmar Pago"
+                  class="p-button-raised p-mr-2 p-mb-2"
+                ></button>
+              </div>
+            <p-footer>
+                <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToEntradaStocks=false" label="Yes" class="p-button-text"></button> -->
+                <button (click)="displayConfirmarPago=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+                <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToEntradaStocks=false" label="No" class="p-button-text"></button> -->
+            </p-footer>
+          </p-dialog>
+
+
+        <p-dialog header="Seleccionar Proveedor" [(visible)]="displayProveedor" [modal]="true" [style]="{ width: '70vw' }" [draggable]="false" [resizable]="false">
+            <div class="p-col-12">
+              <div class="p-mb-3" style="margin-top: 5px;">
+                  <div class="p-inputgroup">
+                      <button pButton pRipple type="button" label="Buscar" (click)="buscarProveedors()"></button>
+                      <span class="p-float-label" style="margin-right: 10px;" >
+                          <input type="text" pInputText [(ngModel)]="txtBuscarProveedor" (keyup.enter)="buscarProveedors()" #inputBuscar/>
+                          <label>Palabra Clave</label>
+                      </span>
+                      <button (click)="nuevoProveedor()" pButton pRipple type="button" label="Nuevo Proveedor" class="p-button-info" icon="pi pi-plus" style="min-width: 150px;"></button>
+                  </div>
+              </div>
+  
+  
+              <div class="p-col-12" *ngIf="vistaRegistroProveedor">
+                  <div class="card  p-shadow-10">
+                      <h5>{{tipoFrmProveedor}}</h5>
+                      <div class="p-fluid box">
+          
+          
+                          <div class="p-field p-grid">
+                              <label for="tipoDocumento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Documento de Identidad</label>
+                              <div class="p-col-12 p-md-2">
+                                  <span class="p-float-label">
+                                      <p-dropdown #tinputclsTipoDocumentoProveedor inputId="tipoDocumentoProveedor" [options]="tipoDocumentosProveedor" [(ngModel)]="clsTipoDocumentoProveedor" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                          <label>Seleccione</label>
+                                  </span>
+                              </div>
+                              <label for="codigoProveedor" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Documento de Identidad</label>
+                              <div class="p-col-12 p-md-2">
+                                  <input id="codigoProveedor" type="text" pInputText [(ngModel)]="documentoProveedor" #inputCodigoProveedor maxLength="45">
+                              </div>
+                          </div>
+          
+                          <div class="p-field p-grid">
+                              <label for="nombreProveedor" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre del Proveedor</label>
+                              <div class="p-col-12 p-md-10">
+                                  <input id="nombreProveedor" type="text" pInputText [(ngModel)]="nombreProveedor" #inputNombreProveedorReg maxLength="500">
+                              </div>
+                          </div>
+          
+                          <div class="p-field p-grid">
+                              <label for="direccionProveedor" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Dirección</label>
+                              <div class="p-col-12 p-md-10">
+                                  <input id="direccionProveedor" type="text" pInputText [(ngModel)]="direccionProveedor" #inputDireccionProveedor maxLength="500">
+                              </div>
+                          </div>
+          
+                          <div class="p-field p-grid">
+                            <label for="telefonoProveedor" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Telefono</label>
+                            <div class="p-col-12 p-md-2">
+                                <input id="telefonoProveedor" type="text" pInputText [(ngModel)]="telefonoProveedor" #inputTelefono maxLength="25">
+                            </div>
+        
+                            <label for="anexo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Anexo</label>
+                            <div class="p-col-12 p-md-2">
+                                <input id="anexo" type="text" pInputText [(ngModel)]="anexo" #inputAnexo maxLength="25">
+                            </div>
+        
+                            <label for="celular" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Celular</label>
+                            <div class="p-col-12 p-md-2">
+                                <input id="celular" type="text" pInputText [(ngModel)]="celular" #inputCelular maxLength="25">
+                            </div>
+                        </div>
+        
+                        <div class="p-field p-grid">
+                            <label for="responsable" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Responsable</label>
+                            <div class="p-col-12 p-md-10">
+                                <input id="responsable" type="text" pInputText [(ngModel)]="responsable" #inputResponsable maxLength="500">
+                            </div>
+                        </div>
+          
+          
+                      </div>
+              
+                      <br>
+                      <button *ngIf="vistaBotonRegistroProveedor" (click)="registrarProveedor($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+                      <button *ngIf="vistaBotonRegistroProveedor"  (click)="cancelarProveedor()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+                      <!-- <button *ngIf="vistaBotonEdicionProveedor" (click)="modificarProveedor($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button> -->
+                      <button (click)="cerrarProveedor()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+                  </div>
+              </div>
+              
+  
+            <p-table [value]="proveedors" [resizableColumns]="true" [paginator]="true" [rows]="rowsProveedors" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="firstProveedors"  [(totalRecords)]="totalRecordsProveedors" [loading]="loadingProveedors" (onLazyLoad)="loadDataProveedors($event)"
+              currentPageReportTemplate="Mostrando {{firstProveedors}} a {{lastProveedors}} de {{totalRecordsProveedors}} registros" [rowsPerPageOptions]="[10]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" 
+              selectionMode="single" [(selection)]="selectedProveedor" dataKey="id">
+  
+  
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Proveedor</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Anexo</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Celular</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Responsable</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-proveedor let-rowIndex="rowIndex" >
+                <tr [pSelectableRow]="proveedor" (dblclick)="aceptarProveedor(proveedor)">
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.tipoDocumento.descripcion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.documento}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.direccion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.telefono}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.anexo}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.celular}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.responsable}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="p-mb-3"></div>
+        </div>
+    <p-footer>
+        <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProveedor=false" label="Yes" class="p-button-text"></button> -->
+        <button (click)="displayProveedor=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+        <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProveedor=false" label="No" class="p-button-text"></button> -->
+    </p-footer>
+        </p-dialog>
+
+        <p-dialog header="Confirmar Factura de Compra" [(visible)]="displayFacturarComra" [modal]="true" [style]="{'width': '50vw' }" [draggable]="false" [resizable]="false">
+          <div class="p-col-12">
+                 
+            <div class="p-field p-grid">
+              <label for="clsTipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                ><b>Comprobante:</b></label
+              >
+              <div class="p-col-12 p-md-8">
+                <span class="p-float-label">
+                  <p-dropdown
+                    #tinputclsTipoComprobanteF
+                    inputId="clsTipoComprobanteF"
+                    [options]="tipoComprobantes"
+                    [(ngModel)]="clsTipoComprobante"
+                    optionLabel="name"
+                    [autoDisplayFirst]="false"
+                    [style]="{'height':'40px', 'width':'100%'}"
+                    [filter]="true"
+                  ></p-dropdown>
+                  <label>Seleccione</label>
+                </span>
+              </div>
+            </div>
+        
+            <div class="p-field p-grid">
+              <label for="clsSerieComprobanteF" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                ><b>Serie:</b></label
+              >
+              <div class="p-col-12 p-md-2">
+                <input id="serieComprobanteF" type="text" pInputText [(ngModel)]="serieComprobante" #inputserieComprobanteF maxLength="20" placeholder="" style="height:40px; width:100%;">
+              </div>
+      
+              <label for="clsSerieComprobanteF" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                ><b>Número:</b></label
+              >
+      
+              <div class="p-col-12 p-md-4">
+                <input id="numeroComprobanteF" type="text" pInputText [(ngModel)]="numeroComprobante" #inputnumeroComprobanteF maxLength="50" placeholder="" style="height:40px; width:100%;">
+              </div>
+            </div>
+      
+      
+            <div class="p-field p-grid">
+              <label for="fechaComprobanteF" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                ><b>Fecha de Comprobante:</b></label
+              >
+              <div class="p-col-12 p-md-4">
+                <p-inputMask id="fechaComprobanteF" inputId="inputmask3" mask="99/99/9999" [(ngModel)]="fechaComprobante" #inputFechaComprobanteF>
+                </p-inputMask>
+              </div>
+            </div>
+      
+            <div class="p-field p-grid">
+              <label for="observacionesComprobanteF" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                ><b>Observaciones de Comprobante:</b></label
+              >
+              <div class="p-col-12 p-md-10">
+                <input id="observacionesComprobanteF" type="text" pInputText [(ngModel)]="observacionesComprobante" #inputobservacionesComprobanteF maxLength="1024" placeholder="" style="height:40px; width:100%;">
+              </div>
+            </div>
+        
+            <div class="p-mb-3" style="margin-top: 45px;"></div>
+        
+            <br>
+        
+            <button
+                (click)="confirmarFactura()"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-check-square"
+                label="Confirmar Facturación"
+                class="p-button-raised p-mr-2 p-mb-2"
+              ></button>
+            </div>
+          <p-footer>
+              <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToEntradaStocks=false" label="Yes" class="p-button-text"></button> -->
+              <button (click)="displayFacturarComra=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+              <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToEntradaStocks=false" label="No" class="p-button-text"></button> -->
+          </p-footer>
+        </p-dialog>
+
+        
+    
+
+</div>
+
+
+<div *ngIf="!vistaCarga2">
+    <app-vercompra *ngIf="verFrmCompra" [entradaStock]="selectedEntradaStock" (cerrarFormVerCompra)="cerrarFormularioVerCompra($event)"></app-vercompra>
+</div>

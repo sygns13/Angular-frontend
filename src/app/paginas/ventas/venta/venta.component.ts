@@ -2040,7 +2040,7 @@ iniciarVentaT2(): Promise<any>{
     }
 
     if(this.venta.totalMonto == null || this.venta.totalMonto == 0){
-      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monton de venta igual a cero'});
+      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monto de venta igual a cero'});
       return;
     }
 
