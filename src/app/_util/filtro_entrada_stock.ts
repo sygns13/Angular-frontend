@@ -29,4 +29,6 @@ export class FiltroEntradaStock {
     buscarDatosUser: string;
 
     buscarDatos: string;
+
+    estadoPago: number;
 }

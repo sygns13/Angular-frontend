@@ -69,8 +69,8 @@ export class EntradaStockService extends GenericService<EntradaStock>{
     return this.http.patch(`${this.url}/anular/${id}`, null);
   }
 
-  getEntradaStocksPorCobrar(filtro: FiltroEntradaStock, p: number, s:number) {
-    return this.http.post<any>(`${this.url}/get-entrada-stock-cobrar?page=${p}&size=${s}`, filtro);
+  getEntradaStocksPorPagar(filtro: FiltroEntradaStock, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get-entrada-stocks-pagar?page=${p}&size=${s}`, filtro);
   }
 
   getPagosEntradaStocks(id: number, p: number, s:number) {

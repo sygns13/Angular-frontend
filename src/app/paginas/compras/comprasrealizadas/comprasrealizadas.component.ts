@@ -191,9 +191,8 @@ export class ComprasrealizadasComponent implements OnInit{
     private tipoComprobanteService: TipoComprobanteService,
     private metodoPagoService:MetodoPagoService,
     private bancoService: BancoService,
-    private clienteService: ProveedorService,
-    private tipoTarjetaService: TipoTarjetaService,
-    private proveedorService: ProveedorService) {
+    private proveedorService: ProveedorService,
+    private tipoTarjetaService: TipoTarjetaService) {
     this.breadcrumbService.setItems([
       { label: 'Compras' },
       { label: 'Compras Realizadas', routerLink: ['/compras/compra_realizada'] }
@@ -278,7 +277,7 @@ export class ComprasrealizadasComponent implements OnInit{
     this.clsTipoDocumentoProveedor = null;
     this.tipoDocumentosProveedor = [];
   
-    this.clienteService.getTipoDocumentos().subscribe(data => {
+    this.proveedorService.getTipoDocumentos().subscribe(data => {
       data.forEach(tipoDoc => {
         this.tipoDocumentosProveedor.push({name: tipoDoc.tipo, code: tipoDoc.id});
       });
@@ -728,7 +727,7 @@ export class ComprasrealizadasComponent implements OnInit{
 
   listarPageProveedors(p: number, s:number) {
 
-    this.clienteService.listarPageable(p, s, this.txtBuscarProveedor).subscribe(data => {
+    this.proveedorService.listarPageable(p, s, this.txtBuscarProveedor).subscribe(data => {
       this.proveedors = data.content;
       this.isFirstProveedors = data.first;
       this.isLastProveedors = data.last;

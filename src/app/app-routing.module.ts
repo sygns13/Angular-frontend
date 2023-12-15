@@ -36,6 +36,7 @@ import { CobrarComponent } from './paginas/ventas/cobrar/cobrar.component';
 import { ProveedorComponent } from './paginas/compras/proveedor/proveedor.component';
 import { EntradastockComponent } from './paginas/compras/entradastock/entradastock.component';
 import { ComprasrealizadasComponent } from './paginas/compras/comprasrealizadas/comprasrealizadas.component';
+import { PagarComponent } from './paginas/compras/pagar/pagar.component';
 
 //tablas caja
 import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
@@ -150,6 +151,7 @@ const routes: Routes = [
      {path: 'proveedors', component: ProveedorComponent},
      {path: 'compra', component: EntradastockComponent},
      {path: 'compra_realizada', component: ComprasrealizadasComponent},
+     {path: 'pagar', component: PagarComponent},
     ]
   },
   {

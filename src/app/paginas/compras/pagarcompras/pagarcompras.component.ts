@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter,  ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { Venta } from './../../../_model/venta';
-import { VentaService } from './../../../_service/venta.service';
+import { EntradaStock } from './../../../_model/entrada_stock';
+import { EntradaStockService } from './../../../_service/entrada_stock.service';
 import { MetodoPagoService } from '../../../_service/metodo_pago.service';
 import { BancoService } from '../../../_service/banco.service';
 import { TipoTarjetaService } from '../../../_service/tipo_tarjeta.service';
-import { DetalleMetodoPagoService } from '../../../_service/detalle_metodo_pago.service';
-import { CobroVentaService } from '../../../_service/cobro_venta.service';
+import { PagoProveedorService } from './../../../_service/pago_proveedor.service';
 import { AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
 import { ConfirmationService, MessageService} from 'primeng/api';
 import { Message } from 'primeng/api';
@@ -14,30 +13,31 @@ import { PrimeNGConfig } from 'primeng/api';
 import { LazyLoadEvent } from 'primeng/api';
 import { PassfechavistaPipe } from './../../../_pipes/passfechavista.pipe';
 import { OnlydecimalesPipe } from './../../../_pipes/onlydecimales.pipe';
-import { CobroVenta } from './../../../_model/cobro_venta';
+import { PagoProveedor } from './../../../_model/pago_proveedor';
 import { MetodoPago } from '../../../_model/metodo_pago';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-cobrarventa',
-  templateUrl: './cobrarventa.component.html',
-  styleUrls: ['./cobrarventa.component.scss'],
+  selector: 'app-pagarcompras',
+  templateUrl: './pagarcompras.component.html',
+  styleUrls: ['./pagarcompras.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class CobrarventaComponent implements OnInit{
+export class PagarcomprasComponent implements OnInit{
 
-  @Input() venta: Venta;
-  @Output() cerrarFormCobrarVenta = new EventEmitter<Venta>();
+  @Input() entradaStock: EntradaStock;
+  @Output() cerrarFormPagarEntradaStock = new EventEmitter<EntradaStock>();
 
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
 
   message: string = "valor1";
   vistaCarga: boolean = false;
+  displayConfirmarPago: boolean = false;
 
   billData: any[];
   billCols: any[];
 
-  pagosVenta: any[] = [];
+  pagosEntradaStock: any[] = [];
 
   page: number = 0;
   first: number = 0;
@@ -57,21 +57,26 @@ export class CobrarventaComponent implements OnInit{
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
 
-  cobroVenta: CobroVenta = new CobroVenta();
-  fecha: string = '';
-  displayConfirmarPago : boolean = false;
+  pagoProveedor: PagoProveedor = new PagoProveedor();
+  serieComprobante : string = '';
+  fechaComprobante : string = '';
+  numeroComprobante : string = '';
+  observacionesComprobante : string = '';
+
+  fecha : string = '';
   tipoComprobantes: any[] = [];
   clsTipoComprobante: any = null;
-  serieComprobantes: any[] = [];
-  clsSerieComprobante: any = null;
+  serieFacturaProveedors: any[] = [];
+  clsSerieFacturaProveedor: any = null;
   clsMetodoPago: any = null;
   metodoPagos: any[] = [];
 
   bancos: any[] = [];
   clsBanco: any = null;
 
-  numeroCuentas: any[] = [];
-  clsNumeroCuenta: any = null;
+  //numeroCuentas: any[] = [];
+  //clsNumeroCuenta: any = null;
+  numeroCuenta: string = '';
   numeroOperacion: string = '';
 
   tipoTarjetas: any[] = [];
@@ -79,23 +84,25 @@ export class CobrarventaComponent implements OnInit{
   numeroTarjeta: string = '';
   numeroCheque: string = '';
   
-  numeroCelulares: any[] = [];
-  clsNumeroCelular: any = null;
+  //numeroCelulares: any[] = [];
+  //clsNumeroCelular: any = null;
+  numeroCelular: string = '';
+  //initFacturaProveedors: InitFacturaProveedor[] = [];
 
+  montoEntradaStock: string = null;
   montoAbonado: number = null;
 
 
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private ventaService: VentaService, 
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private entradaStockService: EntradaStockService, 
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
     private onlydecimalesPipe: OnlydecimalesPipe, private currencyPipe:CurrencyPipe, private passfechavistaPipe: PassfechavistaPipe,
     private metodoPagoService:MetodoPagoService,
     private bancoService: BancoService,
-    private detalleMetodoPagoService: DetalleMetodoPagoService,
-    private cobroVentaService: CobroVentaService,
+    private pagoProveedorService: PagoProveedorService,
     private tipoTarjetaService: TipoTarjetaService) {
     this.breadcrumbService.setItems([
-      { label: 'Ventas' },
-      { label: 'Cuentas por Cobrar', routerLink: ['/ventas/cobrar'] }
+      { label: 'Compras' },
+      { label: 'Compras por Pagar', routerLink: ['/compras/pagar'] }
     ]);
   }
 
@@ -103,23 +110,23 @@ export class CobrarventaComponent implements OnInit{
     /* this.getTipoProductos();
     this.getMarcas();
     this.getPresentaciones(); */
-    //this.getVenta()
+    //this.getEntradaStock()
     this.primengConfig.ripple = true;
     this.vistaCarga = false;
     //this.setFocusBuscar();
-    this.getVenta();
+    this.getEntradaStock();
     this.listarPageMain(this.page, this.rows);
   }
 
   cerrarFormulario(){
-    this.cerrarFormCobrarVenta.emit(this.venta);
+    this.cerrarFormPagarEntradaStock.emit(this.entradaStock);
   }
 
   //Carga de Data
-  getVenta(): void {
-    this.ventaService.listarPorId(this.venta.id).subscribe(data => {
+  getEntradaStock(): void {
+    this.entradaStockService.listarPorId(this.entradaStock.id).subscribe(data => {
       if(data != null && data.id != null){
-        this.venta = data;
+        this.entradaStock = data;
         this.renderHeaders();
       }
     });
@@ -128,20 +135,20 @@ export class CobrarventaComponent implements OnInit{
   renderHeaders(): void{
     this.billData = [
       {
-          'cliente': this.venta.cliente != null ? this.venta.cliente.nombre : "",
-          'documento': this.venta.cliente != null ? this.venta.cliente.tipoDocumento.tipo + ": " + this.venta.cliente.documento  : "",
-          'comprobante': this.venta.comprobante != null ? this.venta.comprobante.initComprobante.tipoComprobante.nombre + " " + this.venta.comprobante.serie + "-" + this.venta.comprobante.numero : "",
-          'fecha': this.passfechavistaPipe.transform(this.venta.fecha) + " - " + this.venta.hora,
-          'importe': this.currencyPipe.transform(this.venta.importeTotal, "PEN" , "S/."),
+          'proveedor': this.entradaStock.proveedor != null ? this.entradaStock.proveedor.nombre : "",
+          'documento': this.entradaStock.proveedor != null ? this.entradaStock.proveedor.tipoDocumento.tipo + ": " + this.entradaStock.proveedor.documento  : "",
+          'facturaProveedor': this.entradaStock.facturaProveedor != null ? this.entradaStock.facturaProveedor.tipoComprobante.nombre + " " + this.entradaStock.facturaProveedor.serie + "-" + this.entradaStock.facturaProveedor.numero : "",
+          'fecha': this.passfechavistaPipe.transform(this.entradaStock.fecha) + " - " + this.entradaStock.hora,
+          'importe': this.currencyPipe.transform(this.entradaStock.importeTotal, "PEN" , "S/."),
       }
     ];
 
   this.billCols = [
-      { field: 'cliente', header: 'Cliente' },
+      { field: 'proveedor', header: 'Proveedor' },
       { field: 'documento', header: 'Documento de Identidad' },
-      { field: 'comprobante', header: 'Comprobante' },
+      { field: 'facturaProveedor', header: 'Comprobante' },
       { field: 'fecha', header: 'Fecha y hora' },
-      { field: 'importe', header: 'Importe de Venta' },
+      { field: 'importe', header: 'Importe de Compra' },
     ];
   }
 
@@ -158,8 +165,8 @@ export class CobrarventaComponent implements OnInit{
  
     this.loading = true;
   
-    this.ventaService.getPagosVentas(this.venta.id, p ,s).subscribe(data => {
-      this.pagosVenta = data.content;
+    this.entradaStockService.getPagosEntradaStocks(this.entradaStock.id, p ,s).subscribe(data => {
+      this.pagosEntradaStock = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
       this.numberElements = data.numberOfElements;
@@ -175,6 +182,17 @@ export class CobrarventaComponent implements OnInit{
     this.clsMetodoPago = null;
     this.metodoPagos = [];
     let isFirst = true;
+
+    this.serieComprobante = "";
+    this.numeroComprobante = "";
+    this.numeroComprobante = '';
+    this.observacionesComprobante = '';
+
+    this.numeroCuenta = "";
+    this.numeroOperacion = "";
+    this.numeroTarjeta = "";
+    this.numeroCelular = "";
+    this.numeroCheque = "";
 
     //this.metodoPagos.push({name: 'GENERAL (TODOS LOS LOCALES)', code: 0});
 
@@ -200,7 +218,7 @@ export class CobrarventaComponent implements OnInit{
       this.buscarTipoTarjetas();
     }
     if(this.clsMetodoPago.tipoId == 'EW'){
-      this.buscarCelulares();
+      //this.buscarCelulares();
     }
   }
 
@@ -214,11 +232,7 @@ export class CobrarventaComponent implements OnInit{
     this.bancoService.listarAll().subscribe(data => {
       data.forEach(banco => {
         this.bancos.push({name: banco.nombre, code: banco.id});
-        if(isFirst){
           this.clsBanco = {name: banco.nombre, code: banco.id};
-          this.buscarCuentas();
-          isFirst = false;
-        }
       });
     });
   }
@@ -235,49 +249,6 @@ export class CobrarventaComponent implements OnInit{
         this.tipoTarjetas.push({name: data.nombre, code: data.id, sigla: data.sigla});
         if(isFirst){
           this.clsTipoTarjeta = {name: data.nombre, code: data.id, sigla: data.sigla};
-          //this.buscarCuentas();
-          isFirst = false;
-        }
-      });
-    });
-  }
-
-
-  buscarCelulares() {
-  
-    this.clsNumeroCelular = null;
-    this.numeroCelulares = [];
-    let isFirst = true;
-    this.numeroOperacion = '';
-
-    let metodos_pago_id = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
-    let banco_id = 0;
-
-    this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
-      data.forEach(data => {
-        this.numeroCelulares.push({name: data.numeroCelular, code: data.id});
-        if(isFirst){
-          this.clsNumeroCelular = {name: data.numeroCelular, code: data.id};
-          isFirst = false;
-        }
-      });
-    });
-  }
-
-  buscarCuentas() {
-  
-    this.clsNumeroCuenta = null;
-    this.numeroCuentas = [];
-    let isFirst = true;
-
-    let metodos_pago_id = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
-    let banco_id = parseInt((this.clsBanco != null) ? this.clsBanco.code : "0");
-
-    this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
-      data.forEach(numeroCuenta => {
-        this.numeroCuentas.push({name: numeroCuenta.numeroCuenta, code: numeroCuenta.id});
-        if(isFirst){
-          this.clsNumeroCuenta = {name: numeroCuenta.numeroCuenta, code: numeroCuenta.id};
           isFirst = false;
         }
       });
@@ -304,7 +275,7 @@ export class CobrarventaComponent implements OnInit{
   cancelar() {
     const fechaMoment = moment();
 
-    this.montoAbonado = this.venta.montoPorCobrar;
+    this.montoAbonado = this.entradaStock.montoPorPagar;
     this.fecha = fechaMoment.format('DD/MM/YYYY');
     this.numeroCheque = "";
     this.getMetodoPagos();
@@ -329,7 +300,7 @@ export class CobrarventaComponent implements OnInit{
 
 
   confirmarPagoConfirmado(): void{
-    this.cobroVenta = new CobroVenta();
+    this.pagoProveedor = new PagoProveedor();
     let metodoPago = new MetodoPago();
 
     let metodoPagoId = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
@@ -340,45 +311,43 @@ export class CobrarventaComponent implements OnInit{
     metodoPago.tipoId = tipoId;
     metodoPago.nombre = metodoPagoName;
 
-    this.cobroVenta.venta = this.venta;
-    this.cobroVenta.importe = this.montoAbonado;
+    this.pagoProveedor.entradaStock = this.entradaStock;
+    this.pagoProveedor.montoPago = this.montoAbonado;
 
     let tipoTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.name : "";
     let siglaTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.sigla : "";
 
     let banco = this.clsBanco != null ? this.clsBanco.name : "";
-    let numeroCuenta = this.clsNumeroCuenta != null ? this.clsNumeroCuenta.name : "";
-    let numeroCelular = this.clsNumeroCelular != null ? this.clsNumeroCelular.name : "";
 
-    let initComprobanteId = parseInt((this.clsSerieComprobante != null) ? this.clsSerieComprobante.code : "0");
+    let tipoComprobanteId = parseInt((this.clsTipoComprobante != null) ? this.clsTipoComprobante.code : "0");
 
-    this.cobroVenta.tipoTarjeta = tipoTarjeta;
-    this.cobroVenta.siglaTarjeta = siglaTarjeta;
-    this.cobroVenta.numeroTarjeta = this.numeroTarjeta;
-    this.cobroVenta.banco = banco;
-    this.cobroVenta.numeroCuenta = numeroCuenta;
-    this.cobroVenta.numeroCelular = numeroCelular;
-    this.cobroVenta.numeroCheque = this.numeroCheque;
-    this.cobroVenta.codigoOperacion = this.numeroOperacion;
-    this.cobroVenta.initComprobanteId = initComprobanteId;
-    this.cobroVenta.metodoPago = metodoPago;
+    this.pagoProveedor.tipoTarjeta = tipoTarjeta;
+    this.pagoProveedor.siglaTarjeta = siglaTarjeta;
+    this.pagoProveedor.numeroTarjeta = this.numeroTarjeta;
+    this.pagoProveedor.banco = banco;
+    this.pagoProveedor.numeroCuenta = this.numeroCuenta;
+    this.pagoProveedor.numeroCelular = this.numeroCelular;
+    this.pagoProveedor.numeroCheque = this.numeroCheque;
+    this.pagoProveedor.codigoOperacion = this.numeroOperacion;
+    this.pagoProveedor.tipoComprobanteId = tipoComprobanteId;
+    this.pagoProveedor.metodoPago = metodoPago;
 
     const fechaMoment = moment(this.fecha, 'DD/MM/YYYY');
       if(!fechaMoment.isValid){
         this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
         return;
       }
-      this.cobroVenta.fecha = fechaMoment.format('YYYY-MM-DD');
+      this.pagoProveedor.fecha = fechaMoment.format('YYYY-MM-DD');
 
     this.vistaCarga = true;
-    this.cobroVentaService.registrar(this.cobroVenta).subscribe({
+    this.pagoProveedorService.registrar(this.pagoProveedor).subscribe({
       next: c => {
         this.vistaCarga = false;
         this.loading = true; 
         this.cancelar();
         this.displayConfirmarPago = false;
         this.listarPageMain(this.page, this.rows);
-        this.getVenta();
+        this.getEntradaStock();
         this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Pago se ha registrado satisfactoriamente'});
       },
       error: error => {
@@ -394,9 +363,9 @@ export class CobrarventaComponent implements OnInit{
   }
 
 
-  editar(data:CobroVenta): void{
+  editar(data:PagoProveedor): void{
 
-    this.cobroVenta = data;
+    this.pagoProveedor = data;
     this.clsMetodoPago = null;
     this.metodoPagos = [];
 
@@ -405,7 +374,7 @@ export class CobrarventaComponent implements OnInit{
           this.metodoPagos.push({name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId});
       });
 
-      this.clsMetodoPago =  (this.cobroVenta.metodoPago != null) ?  {name: this.cobroVenta.metodoPago.nombre, code: this.cobroVenta.metodoPago.id, tipoId: this.cobroVenta.metodoPago.tipoId} : null;
+      this.clsMetodoPago =  (this.pagoProveedor.metodoPago != null) ?  {name: this.pagoProveedor.metodoPago.nombre, code: this.pagoProveedor.metodoPago.id, tipoId: this.pagoProveedor.metodoPago.tipoId} : null;
 
       let metodos_pago_id = parseInt((this.clsMetodoPago != null) ? this.clsMetodoPago.code : "0");
 
@@ -417,20 +386,10 @@ export class CobrarventaComponent implements OnInit{
         data.forEach(banco => {
           this.bancos.push({name: banco.nombre, code: banco.id});
 
-          if(this.cobroVenta.banco != null && banco.nombre == this.cobroVenta.banco){
+          if(this.pagoProveedor.banco != null && banco.nombre == this.pagoProveedor.banco){
                 this.clsBanco = {name: banco.nombre, code: banco.id};
-                this.clsNumeroCuenta = null;
-                this.numeroCuentas = [];
-                let banco_id = parseInt((this.clsBanco != null) ? this.clsBanco.code : "0");
-  
-                this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
-                  data.forEach(numeroCuenta => {
-                    this.numeroCuentas.push({name: numeroCuenta.numeroCuenta, code: numeroCuenta.id});
-                    if(this.cobroVenta.numeroCuenta != null && numeroCuenta.numeroCuenta == this.cobroVenta.numeroCuenta){
-                      this.clsNumeroCuenta = {name: numeroCuenta.numeroCuenta, code: numeroCuenta.id};
-                    }
-                  });
-                }); 
+                this.numeroCuenta = null;
+                this.numeroCuenta = this.pagoProveedor.numeroCuenta; 
             } 
         });
       });
@@ -440,46 +399,40 @@ export class CobrarventaComponent implements OnInit{
         this.tipoTarjetaService.listarAll().subscribe(data => {
           data.forEach(data => {
             this.tipoTarjetas.push({name: data.nombre, code: data.id, sigla: data.sigla});
-            if(this.cobroVenta.tipoTarjeta != null && data.nombre == this.cobroVenta.tipoTarjeta){
+            if(this.pagoProveedor.tipoTarjeta != null && data.nombre == this.pagoProveedor.tipoTarjeta){
               this.clsTipoTarjeta = {name: data.nombre, code: data.id, sigla: data.sigla};
             }
           });
         });
       
 
-      if(this.cobroVenta.numeroTarjeta != null){
-        this.numeroTarjeta = this.cobroVenta.numeroTarjeta;
+      if(this.pagoProveedor.numeroTarjeta != null && this.pagoProveedor.numeroTarjeta != ""){
+        this.numeroTarjeta = this.pagoProveedor.numeroTarjeta;
       }
 
-      if(this.cobroVenta.numeroCheque != null){
-        this.numeroCheque = this.cobroVenta.numeroCheque;
+      if(this.pagoProveedor.numeroCheque != null && this.pagoProveedor.numeroCheque != ""){
+        this.numeroCheque = this.pagoProveedor.numeroCheque;
       }
 
-      if(this.cobroVenta.codigoOperacion != null){
-        this.numeroOperacion = this.cobroVenta.codigoOperacion;
+      if(this.pagoProveedor.codigoOperacion != null && this.pagoProveedor.codigoOperacion != ""){
+        this.numeroOperacion = this.pagoProveedor.codigoOperacion;
       }
 
-      this.numeroCelulares = [];
-      this.detalleMetodoPagoService.listarAll(metodos_pago_id, 0).subscribe(data => {
-        data.forEach(data => {
-          this.numeroCelulares.push({name: data.numeroCelular, code: data.id});
-          if(this.cobroVenta.numeroCelular != null && data.numeroCelular == this.cobroVenta.numeroCelular){
-            this.clsNumeroCelular = {name: data.numeroCelular, code: data.id};
-          }
-        });
-      });
+      if(this.pagoProveedor.numeroCelular != null && this.pagoProveedor.numeroCelular != ""){
+        this.numeroCelular = this.pagoProveedor.numeroCelular;
+      }
 
     });
 
     
 
-    if(this.cobroVenta.fecha != null){
-      const fechaMoment = moment(this.cobroVenta.fecha, 'YYYY-MM-DD');
+    if(this.pagoProveedor.fecha != null){
+      const fechaMoment = moment(this.pagoProveedor.fecha, 'YYYY-MM-DD');
       this.fecha = fechaMoment.format('DD/MM/YYYY');
     }
 
-    if(this.cobroVenta.importe != null){
-      this.montoAbonado = this.cobroVenta.importe;
+    if(this.pagoProveedor.montoPago != null){
+      this.montoAbonado = this.pagoProveedor.montoPago;
     }
 
 
@@ -517,8 +470,8 @@ export class CobrarventaComponent implements OnInit{
     this.vistaCarga = true;
     //detalleUnidadEdit = structuredClone(this.detalleUnidad));
 
-    let cobrarVentaEdit = new CobroVenta();
-    cobrarVentaEdit = structuredClone(this.cobroVenta);
+    let cobrarEntradaStockEdit = new PagoProveedor();
+    cobrarEntradaStockEdit = structuredClone(this.pagoProveedor);
 
     let metodoPago = new MetodoPago();
 
@@ -530,45 +483,43 @@ export class CobrarventaComponent implements OnInit{
     metodoPago.tipoId = tipoId;
     metodoPago.nombre = metodoPagoName;
 
-    cobrarVentaEdit.venta = this.venta;
-    cobrarVentaEdit.importe = this.montoAbonado;
+    cobrarEntradaStockEdit.entradaStock = this.entradaStock;
+    cobrarEntradaStockEdit.montoPago = this.montoAbonado;
 
     let tipoTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.name : "";
     let siglaTarjeta = this.clsTipoTarjeta != null ? this.clsTipoTarjeta.sigla : "";
 
     let banco = this.clsBanco != null ? this.clsBanco.name : "";
-    let numeroCuenta = this.clsNumeroCuenta != null ? this.clsNumeroCuenta.name : "";
-    let numeroCelular = this.clsNumeroCelular != null ? this.clsNumeroCelular.name : "";
 
-    let initComprobanteId = parseInt((this.clsSerieComprobante != null) ? this.clsSerieComprobante.code : "0");
+    let tipoComprobanteId = parseInt((this.clsTipoComprobante != null) ? this.clsTipoComprobante.code : "0");
 
-    cobrarVentaEdit.tipoTarjeta = tipoTarjeta;
-    cobrarVentaEdit.siglaTarjeta = siglaTarjeta;
-    cobrarVentaEdit.numeroTarjeta = this.numeroTarjeta;
-    cobrarVentaEdit.banco = banco;
-    cobrarVentaEdit.numeroCuenta = numeroCuenta;
-    cobrarVentaEdit.numeroCelular = numeroCelular;
-    cobrarVentaEdit.numeroCheque = this.numeroCheque;
-    cobrarVentaEdit.codigoOperacion = this.numeroOperacion;
-    cobrarVentaEdit.initComprobanteId = initComprobanteId;
-    cobrarVentaEdit.metodoPago = metodoPago;
+    cobrarEntradaStockEdit.tipoTarjeta = tipoTarjeta;
+    cobrarEntradaStockEdit.siglaTarjeta = siglaTarjeta;
+    cobrarEntradaStockEdit.numeroTarjeta = this.numeroTarjeta;
+    cobrarEntradaStockEdit.banco = banco;
+    cobrarEntradaStockEdit.numeroCuenta = this.numeroCuenta;
+    cobrarEntradaStockEdit.numeroCelular = this.numeroCelular;
+    cobrarEntradaStockEdit.numeroCheque = this.numeroCheque;
+    cobrarEntradaStockEdit.codigoOperacion = this.numeroOperacion;
+    cobrarEntradaStockEdit.tipoComprobanteId = tipoComprobanteId;
+    cobrarEntradaStockEdit.metodoPago = metodoPago;
 
     const fechaMoment = moment(this.fecha, 'DD/MM/YYYY');
       if(!fechaMoment.isValid){
         this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
         return;
       }
-      cobrarVentaEdit.fecha = fechaMoment.format('YYYY-MM-DD');
+      cobrarEntradaStockEdit.fecha = fechaMoment.format('YYYY-MM-DD');
 
     this.vistaCarga = true;
-    this.cobroVentaService.modificar(cobrarVentaEdit).subscribe({
+    this.pagoProveedorService.modificar(cobrarEntradaStockEdit).subscribe({
       next: c => {
         this.vistaCarga = false;
         this.loading = true; 
         this.cancelar();
         this.displayConfirmarPago = false;
         this.listarPageMain(this.page, this.rows);
-        this.getVenta();
+        this.getEntradaStock();
         this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Pago se ha modificado satisfactoriamente'});
       },
       error: error => {
@@ -585,7 +536,7 @@ export class CobrarventaComponent implements OnInit{
 
   }
 
-  eliminar(data:CobroVenta, event: Event){
+  eliminar(data:PagoProveedor, event: Event){
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -601,9 +552,9 @@ export class CobrarventaComponent implements OnInit{
     
   }
 
-  eliminarConfirmado(data:CobroVenta){
+  eliminarConfirmado(data:PagoProveedor){
     this.vistaCarga = true;
-   this.cobroVentaService.eliminar(data.id).subscribe({
+   this.pagoProveedorService.eliminar(data.id).subscribe({
     next: c => {
       this.loading = true; 
       this.vistaCarga = false;
@@ -611,7 +562,7 @@ export class CobrarventaComponent implements OnInit{
         this.page--;
       }
       this.listarPageMain(this.page, this.rows);
-      this.getVenta();
+      this.getEntradaStock();
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Pago se ha eliminado satisfactoriamente'});
     },
     error: error => {

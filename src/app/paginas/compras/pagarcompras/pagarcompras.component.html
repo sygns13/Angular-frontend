@@ -1,0 +1,373 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center">
+      <p-progressSpinner
+        [style]="{ width: '100px', height: '100px' }"
+        styleClass="custom-spinner"
+        strokeWidth="8"
+        fill="#EEEEEE"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </div>
+
+  <p-toast></p-toast>
+
+  <div class="p-grid" >
+
+    <div class="p-col-12">
+      <div class="card  p-shadow-10">
+          <h4>Gestión de Pago de Compras</h4>
+          <div class="p-fluid">
+              <blockquote>Registro de pagos realizados por la Compra Seleccionada</blockquote>
+          </div>
+          <br>
+          <button pButton pRipple type="button" icon="pi pi-times" label="Cerrar" (click)="cerrarFormulario()" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+  
+      </div>
+    </div>
+
+    <div class="p-col-12">
+      <div class="card  p-shadow-10">
+        <div class="p-d-flex p-jc-between">
+          <h5>N° de Compra {{entradaStock.numero}} 
+              <span *ngIf="entradaStock.estado == 0" class="p-tag p-tag-danger p-ml-2">COMPRA ANULADA</span>
+          </h5>
+        </div>
+
+        <div class="p-d-flex p-jc-between">
+            <div class="p-d-flex p-flex-column p-ai-center">
+                <svg width="48" height="50" viewBox="0 0 48 50" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M33.1548 9.65956L23.9913 4.86169L5.54723 14.5106L0.924465 12.0851L23.9913 0L37.801 7.23403L33.1548 9.65956ZM23.9931 19.3085L42.4255 9.65955L47.0717 12.0851L23.9931 24.1595L10.1952 16.9361L14.8297 14.5106L23.9931 19.3085ZM4.6345 25.8937L0 23.4681V37.9149L23.0669 50V45.1489L4.6345 35.4894V25.8937ZM18.4324 28.2658L0 18.6169V13.7658L23.0669 25.8403V40.2977L18.4324 37.8615V28.2658ZM38.7301 23.468V18.6169L24.9205 25.8403V49.9999L29.555 47.5743V28.2659L38.7301 23.468ZM43.3546 35.4892V16.1914L48.0008 13.7659V37.9148L34.1912 45.1488V40.2977L43.3546 35.4892Z" fill="var(--primary-color)"></path></svg>
+                <p class="p-mt-1" style="font-weight: bold;     font-size: 1.5em;">Sucursal: {{entradaStock.almacen.nombre}}</p>
+            </div>
+        </div>
+
+        <div class="p-p-3">
+          <p-table [columns]="billCols" [value]="billData" styleClass="p-invoice-datatable-responsive p-pb-3">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">
+                        <span class="p-column-title">{{col.header}}</span>
+                        {{rowData[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+
+        <div class="p-grid">
+          <div class="p-col-12 p-md-8">
+          </div>
+          <div class="p-col-12 p-md-4">
+            <p-panel header="">
+                <div class="p-grid p-text-right">
+                    <div class="p-col-10" style="font-weight: bold;">
+                        <span>Importe Cobrado</span>
+                    </div>
+                    <div class="p-col-2" style="font-weight: bold;">
+                        <span class="pink-color">{{ entradaStock.montoPagado| currency : "PEN" : "S/."}}</span>
+                    </div>
+
+                    <div class="p-col-10" style="font-weight: bold;">
+                        <span>Importe Pendiente</span>
+                    </div>
+                    <div class="p-col-2" style="font-weight: bold;">
+                        <span class="pink-color">{{ entradaStock.montoPorPagar| currency : "PEN" : "S/."}}</span>
+                    </div>
+                </div>
+            </p-panel>
+          </div>
+        </div>
+
+        <div class="p-grid">
+          <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Pago" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+        </div>
+        
+
+        <h5>Listado de Pagos de Compra</h5>
+
+        <p-table [value]="pagosEntradaStock" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" 
+                responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px'}">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Método de Pago</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Datos del Pago</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Importe</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Gestión</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pago let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="pago">
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{pago.fecha | passfechavistaTransform}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{pago.metodoPago != null ? pago.metodoPago.nombre : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">
+                          <ng-template [ngIf]="pago.metodoPago != null">
+
+                            <ng-template [ngIf]="pago.metodoPago.tipoId == 'WT'">
+                              Banco: {{pago.banco}}, Nro de Cuenta: {{pago.numeroCuenta}}, Nro de Operación: {{pago.codigoOperacion}}
+                            </ng-template>
+
+                            <ng-template [ngIf]="pago.metodoPago.tipoId == 'CC'">
+                              Tarjeta: {{pago.tipoTarjeta}}, Last 4: {{pago.numeroTarjeta}}
+                            </ng-template>
+
+                            <ng-template [ngIf]="pago.metodoPago.tipoId == 'EW'">
+                              Número de Celular: {{pago.numeroCelular}}, Nro de Operación: {{pago.codigoOperacion}}
+                            </ng-template>
+
+                            <ng-template [ngIf]="pago.metodoPago.tipoId == 'CH'">
+                              Banco: {{pago.banco}}, Nro de Cheque: {{pago.numeroCheque}}
+                            </ng-template>
+
+                          </ng-template>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{pago.montoPago | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">
+                          <button (click)="editar(pago, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Pago" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                          <button *ngIf="pago.borrado === 0" (click)="eliminar(pago , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Pago" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+
+      </div>
+    </div>
+
+
+    <p-dialog header="Confirmar Pago" [(visible)]="displayConfirmarPago" [modal]="true" [style]="{'min-height':'570px', 'width': '50vw' }" [draggable]="false" [resizable]="false">
+      <div class="p-col-12">
+            
+              <h5>{{tipoFrm}}</h5>
+
+              <div class="p-field p-grid">
+                <label for="fecha" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Fecha:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <p-inputMask id="fecha" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fecha" 
+                    #inputFechaInicio [style]="{'height':'40px', 'width':'100%'}">
+                    </p-inputMask>
+                </div>
+            </div>
+  
+            <div class="p-field p-grid">
+                <label for="clsMetodoPago" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>Tipo de Pago:</b></label
+                >
+                <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsMetodoPago
+                      inputId="clsMetodoPago"
+                      [options]="metodoPagos"
+                      [(ngModel)]="clsMetodoPago"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                      (onChange)="getDataMetodosPagos()"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div>
+              </div>
+  
+  
+              <!-- Transferencia Bancaria o Cheque -->
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' || clsMetodoPago.tipoId == 'CH' )">
+                <label for="clsBanco" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>Banco de Proveedor:</b></label
+                >
+                <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsBanco
+                      inputId="clsBanco"
+                      [options]="bancos"
+                      [(ngModel)]="clsBanco"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div>
+              </div>
+  
+              
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT')">
+                <label for="clsNumeroCuenta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>N° de Cuenta de Proveedor:</b></label
+                >
+                <!-- <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsNumeroCuenta
+                      inputId="clsNumeroCuenta"
+                      [options]="numeroCuentas"
+                      [(ngModel)]="clsNumeroCuenta"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div> -->
+                <div class="p-col-12 p-md-5">
+                  <input id="numeroCuenta" type="text" pInputText [(ngModel)]="numeroCuenta" #inputnumeroCuenta maxLength="200" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+  
+  
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' )">
+                <label for="numeroOperacion" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroOperacion" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion maxLength="200" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+  
+              <!-- Tarjeta de Crédito -->
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
+                <label for="comprobante" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>Tipo de Tarjeta:</b></label
+                >
+                <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsTipoTarjeta
+                      inputId="clsTipoTarjeta"
+                      [options]="tipoTarjetas"
+                      [(ngModel)]="clsTipoTarjeta"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
+                <label for="numeroTarjeta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Tarjeta de Pago (4 Últimos Dígitos):</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroTarjeta" type="text" pInputText [(ngModel)]="numeroTarjeta" #inputnumeroTarjeta maxLength="4" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+  
+  
+              <!-- YAPE PLIN -->
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
+                <label for="clsNumeroCelular" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
+                  ><b>N° de Celular de Proveedor:</b></label
+                >
+                <!-- <div class="p-col-12 p-md-5">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      #tinputclsNumeroCelular
+                      inputId="clsNumeroCelular"
+                      [options]="numeroCelulares"
+                      [(ngModel)]="clsNumeroCelular"
+                      optionLabel="name"
+                      [autoDisplayFirst]="false"
+                      [style]="{'height':'40px', 'width':'100%'}"
+                      [filter]="true"
+                    ></p-dropdown>
+                    <label>Seleccione</label>
+                  </span>
+                </div> -->
+                <div class="p-col-12 p-md-5">
+                  <input id="numeroCelular" type="text" pInputText [(ngModel)]="numeroCelular" #inputnumeroCelular maxLength="20" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
+                <label for="numeroOperacion2" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroOperacion2" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion2 maxLength="200" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+              <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CH')">
+                <label for="numeroCheque" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Cheque</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input id="numeroCheque" type="text" pInputText [(ngModel)]="numeroCheque" #inputnumeroCheque maxLength="500" placeholder="" style="height:40px; width:100%;">
+                </div>
+              </div>
+        
+        
+              <div class="p-field p-grid">
+                <label for="montoAbonado" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto Abonado:</b></label>
+                <div class="p-col-12 p-md-5">
+                    <input
+                      id="montoAbonado"
+                      type="text"
+                      pInputText
+                      [(ngModel)]="montoAbonado"
+                      appSoloNumeros
+                      #inputmontoAbonado
+                      style="height:40px; width:100%;"
+                    />
+                </div>
+              </div>
+  
+             
+  
+  
+      <div class="p-mb-3" style="margin-top: 45px;"></div>
+  
+      <br>
+  
+      <button
+          *ngIf="vistaBotonRegistro"
+          (click)="confirmarPago($event)"
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-check-square"
+          label="Confirmar Registro de Pago"
+          class="p-button-raised p-mr-2 p-mb-2"
+          ></button>
+  
+      <button
+          *ngIf="vistaBotonEdicion"
+          (click)="modificar($event)"
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-check-square"
+          label="Confirmar Modificación de Pago"
+          class="p-button-raised p-mr-2 p-mb-2 p-button-success"
+          ></button>
+      </div>
+      <br>
+      <p-footer>
+          <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToCompras=false" label="Yes" class="p-button-text"></button> -->
+          <button (click)="displayConfirmarPago=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+          <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToCompras=false" label="No" class="p-button-text"></button> -->
+      </p-footer>
+  </p-dialog>
+
+
+
+  <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+
+  </div>
