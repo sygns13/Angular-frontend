@@ -39,8 +39,10 @@ import { ComprasrealizadasComponent } from './paginas/compras/comprasrealizadas/
 import { PagarComponent } from './paginas/compras/pagar/pagar.component';
 
 //tablas caja
-import {InitcomprobanteComponent} from './paginas/caja/initcomprobante/initcomprobante.component';
-import {DetallemetodopagoComponent} from './paginas/caja/detallemetodopago/detallemetodopago.component';
+import { InitcomprobanteComponent } from './paginas/caja/initcomprobante/initcomprobante.component';
+import { DetallemetodopagoComponent } from './paginas/caja/detallemetodopago/detallemetodopago.component';
+import { IngresosalidacajaComponent } from './paginas/caja/ingresosalidacaja/ingresosalidacaja.component';
+import { CajaDiariaComponent } from './paginas/caja/caja-diaria/caja-diaria.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -157,6 +159,8 @@ const routes: Routes = [
   {
     path: 'caja', component: AppMainComponent, canActivate: [GuardService],
     children: [
+     {path: 'movimientos-caja', component: IngresosalidacajaComponent},
+     {path: 'caja-diaria', component: CajaDiariaComponent},
      {path: 'init-comprobantes', component: InitcomprobanteComponent},
      {path: 'metodos-pagos', component: DetallemetodopagoComponent},
      /* {path: 'venta', component: VentaComponent} */

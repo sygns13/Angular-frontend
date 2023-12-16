@@ -76,8 +76,8 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Caja', icon: 'pi pi-fw pi-dollar',
                 items: [
-                    {label: 'Registro de Movimientos', icon: 'pi pi-fw pi-sort-numeric-down-alt', routerLink: ['/uikit/formlayout']},
-                    {label: 'Caja Diaria', icon: 'pi pi-fw pi-table', routerLink: ['utilities/display']},
+                    {label: 'Registro de Movimientos', icon: 'pi pi-fw pi-sort-numeric-down-alt', routerLink: ['/caja/movimientos-caja']},
+                    {label: 'Caja Diaria', icon: 'pi pi-fw pi-table', routerLink: ['/caja/caja-diaria']},
                     {label: 'Iniciar Comprobantes', icon: 'pi pi-fw pi-file', routerLink: ['/caja/init-comprobantes']},
                     {label: 'Config Métodos de Pago', icon: 'pi pi-fw pi-mobile', routerLink: ['/caja/metodos-pagos']}
                 ]

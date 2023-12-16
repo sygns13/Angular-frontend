@@ -1,0 +1,209 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    
+    <p-toast></p-toast>
+    
+    <div class="p-grid" >
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Registro de Movimientos de Caja</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede registrar los Movimientos de Caja (Ingresos y Salidas de Dinero)</blockquote>
+            </div>
+            <br>
+    
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Movimiento de Caja" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+    
+    
+    <div class="p-col-12" *ngIf="vistaRegistro">
+        <div class="card  p-shadow-10">
+            <h5>{{tipoFrm}}</h5>
+            <div class="p-fluid box">
+
+
+                <div class="p-field p-grid">
+                    <label for="almacen_registo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Local</b></label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputClsAlmacenRegistro inputId="almacen_registo" [options]="almacens_registo"  [(ngModel)]="clsAlmacen_registro" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px'}" [filter]="true"></p-dropdown>
+                                <label>Seleccione un Local</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Monto Abonado:</b></label>
+                    <div class="p-col-12 p-md-4">
+                        <input
+                          id="monto"
+                          type="text"
+                          pInputText
+                          [(ngModel)]="monto"
+                          appSoloNumeros
+                          #inputMonto
+                        />
+                    </div>
+
+                    <label for="tipo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Tipo de Movimiento</b></label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="tipo" [options]="tipos" [(ngModel)]="clsTipo" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px'}"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                  </div>
+
+                <div class="p-field p-grid">
+                    <label for="concepto" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Concepto</b></label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="concepto" type="text" pInputText [(ngModel)]="concepto" #inputConcepto maxLength="500">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="tipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Movimiento Libre o Tipo de Comprobante</b></label>
+                    <div class="p-col-12 p-md-4">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="tipoComprobante" [options]="tipoComprobantes" [(ngModel)]="clsTipoComprobante" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px'}"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+
+                    <label for="tipo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Fecha</b></label>
+                    <div class="p-col-12 p-md-2">
+                        <p-inputMask id="fecha" inputId="inputmask2" mask="99/99/9999" [(ngModel)]="fecha" #inputFecha>
+                        </p-inputMask>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="comprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>N° de Comprobante (En caso aplique)</b></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="comprobante" type="text" pInputText [(ngModel)]="comprobante" #inputComprobante maxLength="100">
+                    </div>
+
+                    <label for="hora" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Hora</b></label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="hora" type="time" pInputText [(ngModel)]="hora" #inputHora maxLength="8">
+                        <!-- <p-inputMask id="hora" inputId="inputmask3" mask="99:99:99" [(ngModel)]="hora" #inputHora>
+                        </p-inputMask> -->
+                    </div>
+                </div>
+
+            </div>
+    
+            <br>
+            <button *ngIf="vistaBotonRegistro" (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonRegistro"  (click)="cancelar()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonEdicion" (click)="modificar($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="cerrar()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Movimientos de Caja Registrados</h5>
+       <!-- <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>-->
+
+        <div class="p-field p-grid">
+            <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
+            <div class="p-col-12 p-md-12">
+                <span class="p-float-label">
+                    <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px', 'width':'100%'}" [filter]="true"></p-dropdown>
+                        <label>GENERAL TODOS</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+        <p-table [value]="ingresoSalidaCajas" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Sucursal</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Tipo de Movimiento</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Concepto</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Monto</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Movimiento Libre o Tipo de Comprobante</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">N° de Comprobante (En caso aplique)</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Fecha</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Hora</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 13%; color:white;">Gestión</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-ingresoSalidaCaja let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Sucursal</span>  {{ingresoSalidaCaja.almacen.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo</span>  
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipo == '0'">
+                            Salida
+                        </ng-template>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipo == '1'">
+                            Ingreso
+                        </ng-template>
+                    </td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Concepto</span>  {{ingresoSalidaCaja.concepto}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Monto</span>  {{ingresoSalidaCaja.monto | currency:'PEN':'S/.'}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo de Comprobante</span>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '0'">
+                            Movimiento Libre
+                        </ng-template>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '1'">
+                            Factura
+                        </ng-template>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '2'">
+                            Boleta
+                        </ng-template>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '3'">
+                            Recibo por Honor
+                        </ng-template>
+                    </td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Comprobante</span>  {{ingresoSalidaCaja.comprobante}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha</span>  {{ingresoSalidaCaja.fecha | passfechavistaTransform}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Hora</span>  {{ingresoSalidaCaja.hora}}</td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
+                        <button (click)="editar(ingresoSalidaCaja, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Movimiento de Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="ingresoSalidaCaja.borrado === 0" (click)="eliminar(ingresoSalidaCaja , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Movimiento de Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+                                 <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                                 <!-- <p-messages [value]="msgs"></p-messages> -->
+    
+    </div>

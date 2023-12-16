@@ -51,6 +51,10 @@ export class GestionloteService extends GenericService<InventarioDTO> {
     return this.http.get<Almacen[]>(`${this.urlAlmacen}/almacens`);
   }
 
+  getAlmacensDate() {
+    return this.http.get<any>(`${this.urlAlmacen}/almacens-date`);
+  }
+
 
 
 }

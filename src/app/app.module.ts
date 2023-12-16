@@ -197,6 +197,8 @@ import { ComprasrealizadasComponent } from './paginas/compras/comprasrealizadas/
 import { VercompraComponent } from './paginas/compras/vercompra/vercompra.component';
 import { PagarComponent } from './paginas/compras/pagar/pagar.component';
 import { PagarcomprasComponent } from './paginas/compras/pagarcompras/pagarcompras.component';
+import { IngresosalidacajaComponent } from './paginas/caja/ingresosalidacaja/ingresosalidacaja.component';
+import { CajaDiariaComponent } from './paginas/caja/caja-diaria/caja-diaria.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -390,6 +392,8 @@ export function tokenGetter() {
         VercompraComponent,
         PagarComponent,
         PagarcomprasComponent,
+        IngresosalidacajaComponent,
+        CajaDiariaComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
