@@ -10,10 +10,12 @@ export const environment = {
   TOKEN_AUTH_PASSWORD: 'sisventasapp2021codex',
   TOKEN_NAME: 'access_token',
   REFRESH_TOKEN: 'refresh_token',
-  REINTENTOS: 2,
+  REINTENTOS: 0,
   MICRO_CRUD: 'micro-crud',
   MICRO_CR: 'micro-cr',
-  MICRO_AUTH: 'uaa'
+  MICRO_AUTH: 'uaa',
+  GRANT_TYPE_PASSWORD: 'password',
+  GRANT_TYPE_REFRESH_TOKEN: 'refresh_token',
 };
 
 /*

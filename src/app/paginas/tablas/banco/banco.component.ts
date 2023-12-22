@@ -7,6 +7,7 @@ import {Message} from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import {Banco } from '../../../_model/banco';
 import { LazyLoadEvent } from 'primeng/api';
+import { LoginService } from 'src/app/_service/login.service';
 
 @Component({
   selector: 'app-banco',
@@ -58,7 +59,8 @@ export class BancoComponent implements OnInit {
 
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private bancoService:BancoService,
-                private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
+                private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
+                private loginService: LoginService) {
     this.breadcrumbService.setItems([
         { label: 'Tablas Base' },
         { label: 'Gestión de Bancos', routerLink: ['/tablas/bancos'] }
@@ -125,14 +127,18 @@ export class BancoComponent implements OnInit {
   listarPageMain(p: number, s:number) {
 
     this.bancoService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
-      this.bancos = data.content;
-      this.isFirst = data.first;
-      this.isLast = data.last;
-      this.numberElements = data.numberOfElements;
-      this.first = (p * s);
-      this.last = (p * s) + this.numberElements;
-      this.totalRecords = data.totalElements;
-      this.loading = false;
+
+    //this.bancoService.listarPageable(p, s, this.txtBuscar).then(dataZero => {
+        //dataZero.subscribe(data => {
+        this.bancos = data.content;
+        this.isFirst = data.first;
+        this.isLast = data.last;
+        this.numberElements = data.numberOfElements;
+        this.first = (p * s);
+        this.last = (p * s) + this.numberElements;
+        this.totalRecords = data.totalElements;
+        this.loading = false;
+      //});
     });
   }
 

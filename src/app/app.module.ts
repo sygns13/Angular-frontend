@@ -182,6 +182,8 @@ import { environment } from 'src/environments/environment';
 import { Not403Component } from './paginas/errors/not403/not403.component';
 import { Not404Component } from './paginas/errors/not404/not404.component';
 import { ServerErrorsInterceptor } from './shared/server-errors.interceptor';
+import { VerifySessionInterceptor } from './shared/verify-session.interceptor';
+
 import { SoloNumerosDirective } from './solo-numeros.directive';
 import { InitcomprobanteComponent } from './paginas/caja/initcomprobante/initcomprobante.component';
 import { SoloNumerosEnterosDirective } from './solo-numeros-enteros.directive';
@@ -401,9 +403,14 @@ export function tokenGetter() {
         CurrencyPipe, PassfechavistaPipe, 
         {
           provide: HTTP_INTERCEPTORS,
+          useClass: VerifySessionInterceptor,
+          multi: true
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
           useClass: ServerErrorsInterceptor,
           multi: true
-        }
+        },
     ],
     bootstrap: [AppComponent]
 })

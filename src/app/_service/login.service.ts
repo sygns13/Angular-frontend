@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
+//import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { of, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +20,16 @@ export class LoginService {
 
   login(usuario: string, contrasena: string) {
 
-    const body = `grant_type=password&username=${encodeURIComponent(usuario)}&password=${encodeURIComponent(contrasena)}`;
+    const body = `grant_type=${environment.GRANT_TYPE_PASSWORD}&username=${encodeURIComponent(usuario)}&password=${encodeURIComponent(contrasena)}`;
+
+    return this.http.post<any>(this.url, body, {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8').set('Authorization', 'Basic ' + btoa(environment.TOKEN_AUTH_USERNAME + ':' + environment.TOKEN_AUTH_PASSWORD))
+    });
+  }
+
+  refreshToken(refresh_token: string) {
+
+    const body = `grant_type=${environment.GRANT_TYPE_REFRESH_TOKEN}&refresh_token=${refresh_token}`;
 
     return this.http.post<any>(this.url, body, {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8').set('Authorization', 'Basic ' + btoa(environment.TOKEN_AUTH_USERNAME + ':' + environment.TOKEN_AUTH_PASSWORD))
@@ -33,6 +45,72 @@ export class LoginService {
     sessionStorage.clear();
     this.router.navigate(['login']);
   }*/
+
+  verificarSesion(): Observable<boolean>{
+
+     //1) VERIFICAR SI ESTA LOGUEADO
+      let rpta = this.estaLogueado();
+      if (!rpta) {
+        this.cerrarSesion();
+        return of(false);
+      } else {
+        //2) VERIFICAR SI EL TOKEN NO HA EXPIRADO
+        const helper = new JwtHelperService();
+        let token = sessionStorage.getItem(environment.TOKEN_NAME);
+        if (!helper.isTokenExpired(token)) {
+          return of(true);
+        } else {
+          let refresh_token = sessionStorage.getItem(environment.REFRESH_TOKEN);
+          this.refreshToken(refresh_token).subscribe({
+            next: (data) => {
+              sessionStorage.setItem(environment.TOKEN_NAME, data.access_token);
+              sessionStorage.setItem(environment.REFRESH_TOKEN, data.refresh_token);
+
+              return of(true);
+            },
+            error: (error) => {
+              //console.log(error);
+              this.cerrarSesion();
+              return of(false);
+            }        
+        });          
+        }
+      }
+  }
+
+  async verificarSesion2(): Promise<boolean>{
+
+    return new Promise((resolve, reject) => {
+     //1) VERIFICAR SI ESTA LOGUEADO
+      let rpta = this.estaLogueado();
+      if (!rpta) {
+        this.cerrarSesion();
+        return resolve(false);
+      } else {
+        //2) VERIFICAR SI EL TOKEN NO HA EXPIRADO
+        const helper = new JwtHelperService();
+        let token = sessionStorage.getItem(environment.TOKEN_NAME);
+        if (!helper.isTokenExpired(token)) {
+          return resolve(true);
+        } else {
+          let refresh_token = sessionStorage.getItem(environment.REFRESH_TOKEN);
+          this.refreshToken(refresh_token).subscribe({
+            next: (data) => {
+              sessionStorage.setItem(environment.TOKEN_NAME, data.access_token);
+              sessionStorage.setItem(environment.REFRESH_TOKEN, data.refresh_token);
+
+              return resolve(true);
+            },
+            error: (error) => {
+              //console.log(error);
+              this.cerrarSesion();
+              return resolve(false);
+            }        
+        });          
+        }
+      }
+    })
+  }
 
   cerrarSesion() {
     let token = sessionStorage.getItem(environment.TOKEN_NAME);
