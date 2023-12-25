@@ -1,0 +1,144 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+    </div>
+</div>
+    
+<p-toast></p-toast>
+
+<div class="p-grid" >
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Gestión de Configuraciones Generales</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede gestionar sus configuraciones para el Uso del Sistema</blockquote>
+            </div>
+            <br>
+        </div>
+    </div>
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h5>Configuraciones Principales</h5>
+            <div class="p-fluid box">
+
+                <div class="p-field p-grid" *ngIf="vistaConfigCajasEnabled">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{configCajasEnabled.nombre}}</label>
+                    <div class="p-col-12 p-md-1">
+                        <div class="p-field-radiobutton">
+                            <p-radioButton name="cajasEnabled" value="1" [(ngModel)]="configCajasEnabled.valor" id="cajasEnabled1" inputId="cajasEnabled1"></p-radioButton>
+                            <label for="cajasEnabled1" style="cursor: pointer;">Si</label>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-1">
+                        <div class="p-field-radiobutton">
+                            <p-radioButton name="cajasEnabled" value="0" [(ngModel)]="configCajasEnabled.valor" id="cajasEnabled2" inputId="cajasEnabled2"></p-radioButton>
+                            <label for="cajasEnabled2" style="cursor: pointer;">No</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <button (click)="modificarConfigGen($event)" pButton pRipple type="button" icon="pi pi-save" label="Guardar" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="cancelarConfigGen()" pButton pRipple type="button" icon="pi pi-times" label="Cancelar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+            
+        </div>
+    </div>
+
+
+
+    <div class="p-col-12"*ngIf="vistaConfigsImpresion">
+        <div class="card  p-shadow-10">
+            <h5>Configuraciones de Impresión</h5>
+            <div class="p-fluid box">
+
+                <div class="p-field p-grid" *ngIf="vistaConfigVistaPreviaComprobantesEnabled">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{configVistaPreviaComprobantesEnabled.nombre}}</label>
+                    <div class="p-col-12 p-md-1">
+                        <div class="p-field-radiobutton">
+                            <p-radioButton name="vistaPreviaComprobante" value="1" [(ngModel)]="configVistaPreviaComprobantesEnabled.valor" id="vistaPreviaComprobante1" inputId="vistaPreviaComprobante1"></p-radioButton>
+                            <label for="vistaPreviaComprobante1" style="cursor: pointer;">Si</label>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-1">
+                        <div class="p-field-radiobutton">
+                            <p-radioButton name="vistaPreviaComprobante" value="0" [(ngModel)]="configVistaPreviaComprobantesEnabled.valor" id="vistaPreviaComprobante2" inputId="vistaPreviaComprobante2"></p-radioButton>
+                            <label for="vistaPreviaComprobante2" style="cursor: pointer;">No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid" *ngIf="vistaConfigTipoImpresoraVentas">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{configTipoImpresoraVentas.nombre}}</label>
+                    <div class="p-col-12 p-md-1">
+                        <div class="p-field-radiobutton">
+                            <p-radioButton name="tipoImpresora" value="1" [(ngModel)]="configTipoImpresoraVentas.valor" id="tipoImpresora1" inputId="tipoImpresora1"></p-radioButton>
+                            <label for="tipoImpresora1" style="cursor: pointer;">Impresora de Vouchers</label>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-1">
+                        <div class="p-field-radiobutton">
+                            <p-radioButton name="tipoImpresora" value="2" [(ngModel)]="configTipoImpresoraVentas.valor" id="tipoImpresora2" inputId="tipoImpresora2"></p-radioButton>
+                            <label for="tipoImpresora2" style="cursor: pointer;">Impresora A4 de Ventas</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid" *ngIf="vistaConfigCantCopiasEnabled">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{configCantCopiasEnabled.nombre}}</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="configCantCopiasEnabled.valor" appSoloNumerosEnteros maxLength="1">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid" *ngIf="vistaConfigImpresoraVentas">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{configImpresoraVentas.nombre}}</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown inputId="impresoras" [options]="impresoras" [(ngModel)]="tipoImpresoraVentas" optionLabel="name"  [autoDisplayFirst]="false" [style]="{'height':'40px'}" #inputImpresoraVenta></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid" *ngIf="vistaConfigImpresoraVouchersVentas">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{configImpresoraVouchersVentas.nombre}}</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown inputId="impresoras" [options]="impresoras" [(ngModel)]="tipoImpresoraVouchersVentas" optionLabel="name"  [autoDisplayFirst]="false" [style]="{'height':'40px'}" #inputImpresoraVenta></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid" *ngIf="vistaConfigImpresoraReportes">
+                    <label for="nombre" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{configImpresoraReportes.nombre}}</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label">
+                            <p-dropdown inputId="impresoras" [options]="impresoras" [(ngModel)]="tipoImpresoraReportes" optionLabel="name"  [autoDisplayFirst]="false" [style]="{'height':'40px'}" #inputImpresoraVenta></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <br>
+            <button (click)="modificarConfigImpresion($event)" pButton pRipple type="button" icon="pi pi-save" label="Guardar" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="cancelarConfigImpresion()" pButton pRipple type="button" icon="pi pi-times" label="Cancelar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+            
+        </div>
+    </div>
+
+
+
+    <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+        <p-footer>
+            <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+            <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+        </p-footer>
+    </p-confirmDialog>
+</div>

@@ -19,6 +19,10 @@ export class GenericService<T> {
     return this.http.get<T>(`${this.url}/${id}`);
   }
 
+  listarPorIdStr(id: string) {
+    return this.http.get<T>(`${this.url}/${id}`);
+  }
+
   registrar(t: T) {
     return this.http.post(this.url, t);
   }

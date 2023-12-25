@@ -138,8 +138,8 @@ export class AppMenuComponent implements OnInit {
             },
             {label: 'Configuraciones', icon: 'pi pi-fw pi-cog',
             items: [
-                {label: 'Gestión de Usuarios', icon: 'pi pi-fw pi-user-edit', routerLink: ['/landing']}, 
-                {label: 'Configuraciones', icon: 'pi pi-fw pi-cog', routerLink: ['/landing']}
+                {label: 'Gestión de Usuarios', icon: 'pi pi-fw pi-user-edit', routerLink: ['/configs/usuarios']}, 
+                {label: 'Configuraciones', icon: 'pi pi-fw pi-cog', routerLink: ['/configs/settings']}
             ]
             }
         ];

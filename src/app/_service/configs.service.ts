@@ -1,24 +1,25 @@
 import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
 import { HttpClient } from '@angular/common/http';
-import { Banco } from './../_model/banco';
+import { Config } from './../_model/config';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { of, Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class BancoService extends GenericService<Banco>  {
+export class ConfigsService extends GenericService<Config>  {
 
-  bancos = new Subject<Banco[]>();
+  configs = new Subject<Config[]>();
 
-  protected url: string = `${environment.HOST}/api/backend/bancos`
+  protected url: string = `${environment.HOST}/api/backend/configs`
   mensajeCambio = new Subject<string>();
 
   constructor(protected http: HttpClient) { 
-    super(http, `${environment.HOST}/api/backend/bancos`);
+    super(http, `${environment.HOST}/api/backend/configs`);
   }
 
   altaBaja(id: number, valor: number) {
@@ -31,6 +32,10 @@ export class BancoService extends GenericService<Banco>  {
   }
 
   listarAll(){
-    return this.http.get<Banco[]>(`${this.url}/listar-all`);
+    return this.http.get<Config[]>(`${this.url}/listar-all`);
+  }
+
+  modificarList(configs: Config[]) {
+    return this.http.put(`${this.url}/modificar-list`, configs);
   }
 }
