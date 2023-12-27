@@ -16,6 +16,7 @@ import * as moment from 'moment';
   selector: 'app-ingresosalidacaja',
   templateUrl: './ingresosalidacaja.component.html',
   styleUrls: ['./ingresosalidacaja.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class IngresosalidacajaComponent implements OnInit {
@@ -69,7 +70,7 @@ export class IngresosalidacajaComponent implements OnInit {
   msgs: Message[] = [];
   position: string;
 
-  tipoFrm: string = 'Nuevo Movimiento de Caja';
+  tipoFrm: string = 'Nuevo Movimiento de Dinero';
   vistaBotonRegistro : boolean = false;
   vistaBotonEdicion : boolean = false;
   vistaCarga : boolean = true;
@@ -205,7 +206,7 @@ export class IngresosalidacajaComponent implements OnInit {
 
     this.vistaBotonRegistro = true;
     this.vistaBotonEdicion = false;
-    this.tipoFrm = 'Nuevo Movimiento de Caja';
+    this.tipoFrm = 'Nuevo Movimiento de Dinero';
     this.vistaRegistro = true;
 
     this.cancelar();
@@ -277,7 +278,7 @@ export class IngresosalidacajaComponent implements OnInit {
     this.clsAlmacen_registro =  (this.ingresoSalidaCaja.almacen != null) ?  {name: this.ingresoSalidaCaja.almacen.nombre, code: this.ingresoSalidaCaja.almacen.id} : null;
 
 
-    this.tipoFrm = 'Editar Movimiento de Caja';
+    this.tipoFrm = 'Editar Movimiento de Dinero';
     this.vistaRegistro = true;
 
     this.setFocusMonto();
@@ -387,7 +388,7 @@ export class IngresosalidacajaComponent implements OnInit {
       this.loading = true; 
       this.cancelar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Movimiento de Caja se ha registrado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Movimiento de Dinero se ha registrado satisfactoriamente'});
     },
     error: error => {
       console.log('Error complete');
@@ -442,7 +443,7 @@ export class IngresosalidacajaComponent implements OnInit {
       this.cancelar();
       this.cerrar();
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Movimiento de Caja se ha editado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Movimiento de Dinero se ha editado satisfactoriamente'});
     },
     error: error => {
       console.log('Error complete');
@@ -474,7 +475,7 @@ export class IngresosalidacajaComponent implements OnInit {
         this.page--;
       }
       this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Movimiento de Caja se ha eliminado satisfactoriamente'});
+      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Movimiento de Dinero se ha eliminado satisfactoriamente'});
     },
     error: error => {
       this.vistaCarga = false;

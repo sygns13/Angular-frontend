@@ -13,6 +13,7 @@ import { OnlydecimalesPipe } from './../../../_pipes/onlydecimales.pipe';
   selector: 'app-verventa',
   templateUrl: './verventa.component.html',
   styleUrls: ['./verventa.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class VerventaComponent implements OnInit{

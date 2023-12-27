@@ -13,6 +13,7 @@ import { OnlydecimalesPipe } from './../../../_pipes/onlydecimales.pipe';
   selector: 'app-vercompra',
   templateUrl: './vercompra.component.html',
   styleUrls: ['./vercompra.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class VercompraComponent implements OnInit{

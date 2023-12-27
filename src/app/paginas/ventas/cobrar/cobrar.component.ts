@@ -34,6 +34,7 @@ import * as moment from 'moment';
   selector: 'app-cobrar',
   templateUrl: './cobrar.component.html',
   styleUrls: ['./cobrar.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class CobrarComponent implements OnInit{

@@ -21,6 +21,7 @@ import * as moment from 'moment';
   selector: 'app-pagarcompras',
   templateUrl: './pagarcompras.component.html',
   styleUrls: ['./pagarcompras.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class PagarcomprasComponent implements OnInit{

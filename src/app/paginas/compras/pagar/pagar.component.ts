@@ -33,6 +33,7 @@ import * as moment from 'moment';
   selector: 'app-pagar',
   templateUrl: './pagar.component.html',
   styleUrls: ['./pagar.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class PagarComponent implements OnInit{

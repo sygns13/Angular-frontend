@@ -1,1 +1,276 @@
-<p>usuarios works!</p>
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    
+    <p-toast></p-toast>
+    
+    <div class="p-grid" >
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Registro de Usuarios</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede gestionar los usuarios del sistema</blockquote>
+            </div>
+            <br>
+    
+            <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Usuario" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+    
+    
+    <div class="p-col-12" *ngIf="vistaRegistro">
+        <div class="card  p-shadow-10">
+            <h5>{{tipoFrm}}</h5>
+            <div class="p-fluid box">
+
+
+                <div class="p-field p-grid">
+                    <label for="tipoDocumento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Documento de Identidad</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoDocumento inputId="tipoDocumento" [options]="tipoDocumentos" [(ngModel)]="clsTipoDocumento" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px'}" [filter]="true"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                    <label for="tipoDocumento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Documento de Identidad</label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="codigo" type="text" pInputText [(ngModel)]="documento" #inputCodigo maxLength="45">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="nombres" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombres</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="nombres" type="text" pInputText [(ngModel)]="nombres" #inputNombres maxLength="500">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="apellidoPaterno" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Apellido Paterno</label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="apellidoPaterno" type="text" pInputText [(ngModel)]="apellidoPaterno" #inputApePaterno maxLength="250">
+                    </div>
+
+                    <label for="apellidoMaterno" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Apellido Materno</label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="apellidoMaterno" type="text" pInputText [(ngModel)]="apellidoMaterno" #inputApeMaterno maxLength="250">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="direccion" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Dirección</label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="direccion" type="text" pInputText [(ngModel)]="direccion" #inputDireccion maxLength="500">
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="telefono" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Telefono</label>
+                    <div class="p-col-12 p-md-2">
+                        <input id="telefono" type="text" pInputText [(ngModel)]="telefono" #inputTelefono maxLength="45">
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="p-field p-grid">
+                    <label for="almacen" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
+                      >Seleccione Local o Sucursal:</label
+                    >
+                    <div class="p-col-12 p-md-10">
+                      <span class="p-float-label">
+                        <p-dropdown
+                          #tinputclsAlmacen
+                          inputId="almacen"
+                          [options]="almacens"
+                          [(ngModel)]="clsAlmacen"
+                          optionLabel="name"
+                          [autoDisplayFirst]="false"
+                          [style]="{ height: '40px' }"
+                          [filter]="true"
+                        ></p-dropdown>
+                        <label>Seleccione</label>
+                      </span>
+                    </div>
+                  </div>
+
+                <div class="p-field p-grid">
+                    <label for="tipoUser" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Usuario</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoUser inputId="tipoUser" [options]="tipoUsers" [(ngModel)]="clsTipoUser" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px'}" [filter]="true"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="name" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Username</label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="name" type="text" pInputText [(ngModel)]="name" #inputName maxLength="250">
+                    </div>
+
+                    <label for="email" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Email</label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="email" type="text" pInputText [(ngModel)]="email" #inputEmail maxLength="500">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+
+                    <label for="modificarPassword" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" *ngIf="vistaBotonEdicion">Modificar Password</label>
+                    <div class="p-col-12 p-md-4" *ngIf="vistaBotonEdicion">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="modificarPassword" [options]="modificarPasswords" [(ngModel)]="clsModificarPassword" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px'}"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+
+                    <label for="password" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" *ngIf="vistaBotonRegistro || (clsModificarPassword != null && clsModificarPassword.code == 1)">Password</label>
+                    <div class="p-col-12 p-md-4" *ngIf="vistaBotonRegistro || (clsModificarPassword != null && clsModificarPassword.code == 1)">
+                        <input id="password" type="password" pInputText [(ngModel)]="password" #inputPassword maxLength="50">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="estado" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</label>
+                    <div class="p-col-12 p-md-10">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="estado" [options]="estados" [(ngModel)]="clsEstado" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'40px'}"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- <div class="p-field p-grid">
+                    <label for="correo1" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Correo Electrónico 1</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="correo1" type="text" pInputText [(ngModel)]="correo1" #inputCorreo1 maxLength="1000">
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="correo2" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Correo Electrónico 2</label>
+                    <div class="p-col-12 p-md-10">
+                        <input id="correo2" type="text" pInputText [(ngModel)]="correo2" #inputCorreo2 maxLength="1000">
+                    </div>
+                </div>
+ -->
+
+            </div>
+    
+            <br>
+            <button *ngIf="vistaBotonRegistro" (click)="registrar($event)" pButton pRipple type="button" icon="pi pi-save" label="Registrar" class="p-button-raised p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonRegistro"  (click)="cancelar()" pButton pRipple type="button" icon="pi pi-times-circle" label="Cancelar" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
+            <button *ngIf="vistaBotonEdicion" (click)="modificar($event)" pButton pRipple type="button" icon="pi pi-save" label="Editar" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="cerrar()" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Usuarios Registrados</h5>
+       <!-- <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>-->
+
+        <div class="p-mb-3">
+            <div class="p-inputgroup">
+                <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
+                <span class="p-float-label">
+                    <input type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()"/>
+                    <label>Palabra Clave</label>
+                </span>
+            </div>
+        </div>
+        <p-table [value]="users" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" >
+
+            <!-- <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col style="width:60px;">
+                    <col style="width:200px;">
+                    <col style="width:150px;">
+                    <col style="width:100px;">
+                    <col style="width:180px;">
+                    <col style="width:80px;">
+                    <col style="width:170px;">
+                    <col style="width:170px;">
+                    <col style="width:67px;">
+                </colgroup>
+            </ng-template> -->
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Usuario</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Sucursal Habilitado</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Username</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Email</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Nombres y Apellidos</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Estado</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Gestión</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.tipoUser.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">
+                        <ng-template [ngIf]="user.almacenId != null">
+                            {{user.almacen}}
+                        </ng-template>
+                    </td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.name}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.email}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.tipoDocumento.descripcion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.documento}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.nombres}} {{user.datos.apellidoPaterno}} {{user.datos.apellidoMaterno}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.direccion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.telefono}}</td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
+                        <p-tag styleClass="p-mr-2" severity="success" *ngIf="user.activo === 1" value="Activo"></p-tag>
+                        <p-tag styleClass="p-mr-2" severity="warning" *ngIf="user.activo === 0" value="Inactivo"></p-tag>
+                    </td>
+
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
+    
+                        <button (click)="editar(user, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+
+                        <button *ngIf="user.borrado === 0" (click)="eliminar(user , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+
+                        <button *ngIf="user.activo === 0" (click)="alta(user , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="user.activo === 1" (click)="baja(user , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+                                 <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                                 <!-- <p-messages [value]="msgs"></p-messages> -->
+    
+    </div>

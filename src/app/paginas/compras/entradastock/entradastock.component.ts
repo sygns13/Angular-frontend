@@ -44,6 +44,7 @@ import { Lote } from 'src/app/_model/lote';
   selector: 'app-entradastock',
   templateUrl: './entradastock.component.html',
   styleUrls: ['./entradastock.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class EntradastockComponent implements OnInit {

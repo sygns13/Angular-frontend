@@ -33,6 +33,7 @@ import * as moment from 'moment';
   selector: 'app-comprasrealizadas',
   templateUrl: './comprasrealizadas.component.html',
   styleUrls: ['./comprasrealizadas.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class ComprasrealizadasComponent implements OnInit{

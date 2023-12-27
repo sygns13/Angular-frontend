@@ -34,6 +34,7 @@ import * as moment from 'moment';
   selector: 'app-ventasrealizadas',
   templateUrl: './ventasrealizadas.component.html',
   styleUrls: ['./ventasrealizadas.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class VentasrealizadasComponent implements OnInit{

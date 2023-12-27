@@ -17,6 +17,7 @@ import { LazyLoadEvent } from 'primeng/api';
   selector: 'app-initcomprobante',
   templateUrl: './initcomprobante.component.html',
   styleUrls: ['./initcomprobante.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class InitcomprobanteComponent implements OnInit {

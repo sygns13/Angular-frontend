@@ -14,6 +14,7 @@ import { PrinterService } from 'src/app/_service/printer.service';
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class SettingsComponent implements OnInit{

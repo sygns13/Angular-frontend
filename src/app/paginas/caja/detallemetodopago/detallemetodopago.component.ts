@@ -17,6 +17,7 @@ import { LazyLoadEvent } from 'primeng/api';
   selector: 'app-detallemetodopago',
   templateUrl: './detallemetodopago.component.html',
   styleUrls: ['./detallemetodopago.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class DetallemetodopagoComponent {

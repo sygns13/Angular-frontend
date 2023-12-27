@@ -15,6 +15,7 @@ import { TipoDocumento } from './../../../_model/tipo_documento';
   selector: 'app-proveedor',
   templateUrl: './proveedor.component.html',
   styleUrls: ['./proveedor.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class ProveedorComponent implements OnInit {

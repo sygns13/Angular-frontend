@@ -22,6 +22,7 @@ import * as moment from 'moment';
   selector: 'app-cobrarventa',
   templateUrl: './cobrarventa.component.html',
   styleUrls: ['./cobrarventa.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class CobrarventaComponent implements OnInit{

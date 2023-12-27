@@ -13,6 +13,7 @@ import { LoginService } from 'src/app/_service/login.service';
   selector: 'app-banco',
   templateUrl: './banco.component.html',
   styleUrls: ['./banco.component.scss'],
+  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class BancoComponent implements OnInit {
