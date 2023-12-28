@@ -25,6 +25,13 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/favorites/dashboardanalytics'], badge: '2', badgeClass: 'p-badge-success'}
                 ]*/
             },
+            {label: 'Configuraciones', icon: 'pi pi-fw pi-cog',
+            items: [
+                {label: 'Gestión de Usuarios', icon: 'pi pi-fw pi-user-edit', routerLink: ['/configs/usuarios']}, 
+                {label: 'Configuraciones', icon: 'pi pi-fw pi-cog', routerLink: ['/configs/settings']},
+                {label: 'Config Métodos de Pago', icon: 'pi pi-fw pi-mobile', routerLink: ['/caja/metodos-pagos']}
+            ]
+            },
             {
                 label: 'Tablas Base', icon: 'pi pi-fw pi-folder-open',
                 items: [
@@ -84,7 +91,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Reportes', icon: 'pi pi-fw pi-print',
                 items: [
-                    {label: 'Reporte de Clientes', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/pages/crud']},
+                    {label: 'Reporte de Clientes', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/clientes']},
                     {label: 'Proveedores', icon: 'pi pi-fw pi-file-pdf',
                         items: [
                             /* {label: 'Listado de Proveedores', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank'}, */
@@ -135,13 +142,7 @@ export class AppMenuComponent implements OnInit {
                     }
                 ]
             },
-            {label: 'Configuraciones', icon: 'pi pi-fw pi-cog',
-            items: [
-                {label: 'Gestión de Usuarios', icon: 'pi pi-fw pi-user-edit', routerLink: ['/configs/usuarios']}, 
-                {label: 'Configuraciones', icon: 'pi pi-fw pi-cog', routerLink: ['/configs/settings']},
-                {label: 'Config Métodos de Pago', icon: 'pi pi-fw pi-mobile', routerLink: ['/caja/metodos-pagos']}
-            ]
-            }
+            
         ];
     }
 }

@@ -48,6 +48,9 @@ import { CajaDiariaComponent } from './paginas/caja/caja-diaria/caja-diaria.comp
 import { SettingsComponent } from './paginas/configs/settings/settings.component';
 import { UsuariosComponent } from './paginas/configs/usuarios/usuarios.component';
 
+//REPORTES
+import { ClienterepComponent } from './paginas/reporte/clienterep/clienterep.component';
+
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
 import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
@@ -175,6 +178,12 @@ const routes: Routes = [
     children: [
      {path: 'settings', component: SettingsComponent},
      {path: 'usuarios', component: UsuariosComponent},
+    ]
+  },
+  {
+    path: 'reporte', component: AppMainComponent, canActivate: [GuardService],
+    children: [
+     {path: 'clientes', component: ClienterepComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },
