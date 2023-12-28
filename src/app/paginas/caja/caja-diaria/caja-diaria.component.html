@@ -1,1 +1,139 @@
-<p>caja-diaria works!</p>
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+    </div>
+</div>
+
+<p-toast></p-toast>
+
+<div class="p-grid" >
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Estado de Ingresos y Egresos de Dinero por Sucursal</h4>
+            <div class="p-fluid">
+                <blockquote>Aquí puede visualizar el cuadre de Ingresos y Salidas de Dinero por Sucursal</blockquote>
+            </div>
+            <br>
+            <!-- <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Movimiento de Dinero" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button> -->
+            <button (click)="actualizar()" pButton pRipple type="button" icon="pi pi-refresh" label="Actualizar" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
+
+            <button (click)="printDetallado()" pButton pRipple type="button" icon="pi pi-print" label="Imprimir Detallado" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="printResumen()" pButton pRipple type="button" icon="pi pi-print" label="Imprimir Resumen" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+        </div>
+    </div>
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <!-- <h5>Listado de Movimientos de Dinero Registrados</h5> -->
+
+
+        <div class="p-field p-grid">
+            <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
+            <div class="p-col-12 p-md-12">
+                <span class="p-float-label">
+                    <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'40px', 'width':'100%'}" [filter]="true"></p-dropdown>
+                        <label>GENERAL TODOS</label>
+                </span>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="p-field p-grid" style="margin-bottom: 45px;">
+            <label for="cajaInicial" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" style="display: flex; justify-content: flex-end;"><b>Caja Inicial (S/.)</b></label>
+            <div class="p-col-12 p-md-2">
+                <input id="cajaInicial" type="text" pInputText [(ngModel)]="cajaInicial" #inputCajaInicial [readonly]="true">
+            </div>
+
+            <label for="cajaTotal" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" style="display: flex; justify-content: flex-end;"><b>Caja Total del día (S/.)</b></label>
+            <div class="p-col-12 p-md-2">
+                <input id="cajaTotal" type="text" pInputText [(ngModel)]="cajaTotal" #inputCajaTotal [readonly]="true">
+            </div>
+
+            <label for="fecha" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" style="color: rgb(5, 5, 121);"><b>Fecha {{fechaVista}}</b></label>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-6">
+                <h6>Ingresos Efectivos del Día</h6>
+                <hr>
+
+                <div class="p-field p-grid">
+                    <label for="ingresoVentas" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0" style="display: flex; justify-content: flex-end;"><span>Ventas (S/.)</span></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="ingresoVentas" type="text" pInputText [(ngModel)]="ingresoVentas" #inputIngresoVentas [readonly]="true">
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <button (click)="verIngresosVentas()" pButton pRipple type="button" icon="pi pi-search" label="Ver" class="p-button-raised p-button-primary "></button>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="ingresoOtros" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0" style="display: flex; justify-content: flex-end;"><span>Otros Ingresos (S/.)</span></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="ingresoOtros" type="text" pInputText [(ngModel)]="ingresoOtros" #inputIngresoOtros [readonly]="true">
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <button (click)="verIngresosOtros()" pButton pRipple type="button" icon="pi pi-search" label="Ver" class="p-button-raised p-button-primary "></button>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="p-field p-grid">
+                    <label for="ingresoTotal" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0" style="display: flex; justify-content: flex-end;"><b>Total de Ingresos en Efectivo (S/.)</b></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="ingresoTotal" type="text" pInputText [(ngModel)]="ingresoTotal" #inputIngresoTotal [readonly]="true">
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-col-6">
+                <h6>Salidas de Dinero del Día</h6>
+                <hr>
+
+                <div class="p-field p-grid">
+                    <label for="egresoCompras" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0" style="display: flex; justify-content: flex-end;"><span>Pago a Proveedores (S/.)</span></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="egresoCompras" type="text" pInputText [(ngModel)]="egresoCompras" #inputEgresoCompras [readonly]="true">
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <button (click)="verEgresosCompras()" pButton pRipple type="button" icon="pi pi-search" label="Ver" class="p-button-raised p-button-primary "></button>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="egresoOtros" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0" style="display: flex; justify-content: flex-end;"><span>Otros Egresos (S/.)</span></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="egresoOtros" type="text" pInputText [(ngModel)]="egresoOtros" #inputEgresoOtros [readonly]="true">
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <button (click)="verEgresosOtros()" pButton pRipple type="button" icon="pi pi-search" label="Ver" class="p-button-raised p-button-primary "></button>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="p-field p-grid">
+                    <label for="egresoTotal" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0" style="display: flex; justify-content: flex-end;"><b>Total de Egresos en Efectivo (S/.)</b></label>
+                    <div class="p-col-12 p-md-4">
+                        <input id="egresoTotal" type="text" pInputText [(ngModel)]="egresoTotal" #inputEgresoTotal [readonly]="true">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        </div>
+    </div> 
+    
+    
+    <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+        <p-footer>
+            <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+            <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+        </p-footer>
+    </p-confirmDialog>
+
+</div>
