@@ -11,21 +11,19 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-            <h4>Reporte de Clientes</h4>
+            <h4>Reporte de Proveedores</h4>
             <br>
-    
-            <!-- <button (click)="nuevo()" pButton pRipple type="button" icon="pi pi-plus" label="Agregar Nuevo Cliente" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button> -->
     
             <button (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
             <button (click)="exportarXLSX()" pButton pRipple type="button" icon="pi pi-file-excel" label="Exportar a Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+    
         </div>
     </div>
     
-    
-  
+ 
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-             <h5>Listado de Clientes Registrados</h5>
+             <h5>Listado de Proveedores Registrados</h5>
        <!-- <div class="p-mb-3">
             <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
             <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
@@ -41,7 +39,7 @@
                 </span>
             </div>
         </div>
-        <p-table [value]="clientes" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+        <p-table [value]="proveedors" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px!important'}" >
 
             <!-- <ng-template pTemplate="colgroup" let-columns>
@@ -61,25 +59,27 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">N°</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Cliente</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Proveedor</th>
                     <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Tipo de Documento de Identidad</th>
                     <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Documento de Identidad</th>
                     <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Dirección</th>
                     <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Teléfono</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 1</th>
-                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Correo Electrónico 2</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Anexo</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Celular</th>
+                    <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Responsable</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-cliente let-rowIndex="rowIndex" >
+            <ng-template pTemplate="body" let-proveedor let-rowIndex="rowIndex" >
                 <tr>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.nombre}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.tipoDocumento.descripcion}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.documento}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.direccion}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.telefono}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo1}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{cliente.correo2}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.tipoDocumento.descripcion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.documento}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.direccion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.telefono}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.anexo}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.celular}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{proveedor.responsable}}</td>
                 </tr>
             </ng-template>
         </p-table>

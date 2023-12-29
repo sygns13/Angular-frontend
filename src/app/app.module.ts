@@ -204,6 +204,9 @@ import { CajaDiariaComponent } from './paginas/caja/caja-diaria/caja-diaria.comp
 import { SettingsComponent } from './paginas/configs/settings/settings.component';
 import { UsuariosComponent } from './paginas/configs/usuarios/usuarios.component';
 import { ClienterepComponent } from './paginas/reporte/clienterep/clienterep.component';
+import { ProveedorrepComponent } from './paginas/reporte/proveedorrep/proveedorrep.component';
+import { MarcarepComponent } from './paginas/reporte/marcarep/marcarep.component';
+import { TipoproductorepComponent } from './paginas/reporte/tipoproductorep/tipoproductorep.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -402,6 +405,9 @@ export function tokenGetter() {
         SettingsComponent,
         UsuariosComponent,
         ClienterepComponent,
+        ProveedorrepComponent,
+        MarcarepComponent,
+        TipoproductorepComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

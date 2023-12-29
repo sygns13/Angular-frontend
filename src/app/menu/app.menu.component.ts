@@ -92,16 +92,15 @@ export class AppMenuComponent implements OnInit {
                 label: 'Reportes', icon: 'pi pi-fw pi-print',
                 items: [
                     {label: 'Reporte de Clientes', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/clientes']},
-                    {label: 'Proveedores', icon: 'pi pi-fw pi-file-pdf',
-                        items: [
-                            /* {label: 'Listado de Proveedores', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank'}, */
+                    {label: 'Proveedores', icon: 'pi pi-fw pi-file-pdf',  routerLink: ['/reporte/proveedores']
+                        /* items: [
                             {label: 'Listado de Proveedores', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
                             {label: 'Cuentas de Proveedores', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}
-                        ]
+                        ] */
                     },
-                    {label: 'Reporte de Bancos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/login']},
-                    {label: 'Reporte de Marcas', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/pages/invoice']},
-                    {label: 'Tipos de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/pages/help']},
+                    /* {label: 'Reporte de Bancos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/bancos']}, */
+                    {label: 'Reporte de Marcas', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/marcas']},
+                    {label: 'Tipos de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/tipo-productos']},
                     {label: 'Productos', icon: 'pi pi-fw pi-file-pdf', 
                     items: [
                         {label: 'Productos por Almacén', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 

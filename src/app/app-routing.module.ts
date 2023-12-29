@@ -50,6 +50,9 @@ import { UsuariosComponent } from './paginas/configs/usuarios/usuarios.component
 
 //REPORTES
 import { ClienterepComponent } from './paginas/reporte/clienterep/clienterep.component';
+import { ProveedorrepComponent } from './paginas/reporte/proveedorrep/proveedorrep.component';
+import { MarcarepComponent } from './paginas/reporte/marcarep/marcarep.component';
+import { TipoproductorepComponent } from './paginas/reporte/tipoproductorep/tipoproductorep.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -184,6 +187,9 @@ const routes: Routes = [
     path: 'reporte', component: AppMainComponent, canActivate: [GuardService],
     children: [
      {path: 'clientes', component: ClienterepComponent},
+     {path: 'proveedores', component: ProveedorrepComponent},
+     {path: 'marcas', component: MarcarepComponent},
+     {path: 'tipo-productos', component: TipoproductorepComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },
