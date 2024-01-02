@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { AppBreadcrumbService } from '../../../menu/app.breadcrumb.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { switchMap } from 'rxjs/operators';
 import { Producto } from './../../../_model/producto';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {Message} from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Message } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { LazyLoadEvent } from 'primeng/api';
 import { TipoProducto } from './../../../_model/tipo_producto';
@@ -16,13 +16,13 @@ import { FiltroInventario } from './../../../_util/filtro_inventario';
 import { ExportsService } from './../../../_service/reportes/exports.service';
 
 @Component({
-  selector: 'app-inventario',
-  templateUrl: './inventario.component.html',
-  styleUrls: ['./inventario.component.scss'],
+  selector: 'app-productosalmacen',
+  templateUrl: './productosalmacen.component.html',
+  styleUrls: ['./productosalmacen.component.scss'],
   providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
-export class InventarioComponent implements OnInit {
+export class ProductosalmacenComponent implements OnInit {
 
   @ViewChild('inputNombre', { static: false }) inputNombre: ElementRef;
 
@@ -35,7 +35,7 @@ export class InventarioComponent implements OnInit {
 
   prioridades: any[] = [
     {name: 'Alta', code: '1'},
-    {name: 'Media', code: '2'},
+    {name: 'Normal', code: '2'},
     {name: 'Baja', code: '3'}
   ];
 
@@ -45,7 +45,7 @@ export class InventarioComponent implements OnInit {
   codigoProducto: string = '';
   nombre: string = '';
   composicion: string = '';
-  prioridad: any =  {name: 'Media', code: '2'};
+  prioridad: any =  {name: 'Normal', code: '2'};
   ubicacion: string = '';
 
   clsAlmacen: any = null;
@@ -99,16 +99,17 @@ export class InventarioComponent implements OnInit {
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
     private exportsService: ExportsService) {
     this.breadcrumbService.setItems([
-    { label: 'Almacén' },
-    { label: 'Inventario', routerLink: ['/almacen/inventario'] }
+      { label: 'Reportes' },
+      { label: 'Productos' },
+      { label: 'Productos por Sucursal', routerLink: ['/reporte/productos-almacen'] }
     ]);
 
 }
 
 ngOnInit(): void {
-  this.getTipoProductos();
+  /* this.getTipoProductos();
   this.getMarcas();
-  this.getPresentaciones();
+  this.getPresentaciones(); */
   this.getAlmacens()
   this.primengConfig.ripple = true;
   this.vistaCarga = false;
@@ -371,11 +372,9 @@ evaluarFiltros(usarFiltroConsulta : boolean){
   }
 }
 
-exportarInventarioXls(){
-  //console.log(this.selectedProduct);
+exportarXLSX(){
 
-  this.evaluarFiltros(this.usarFiltroConsulta);
-  this.exportsService.exportProductoInventarioXLSX(this.filtroInventario).subscribe(data => {
+  this.exportsService.exportProductosSucursalXLSX(this.filtroInventario.almacenId).subscribe(data => {
 
     const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const fileURL = URL.createObjectURL(file);
@@ -384,18 +383,15 @@ exportarInventarioXls(){
     a.setAttribute('style', 'display:none');
     document.body.appendChild(a);
     a.href = fileURL;
-    a.download = 'InventarioReporte.xlsx';
+    a.download = 'ProductoSucursalReporte.xlsx';
     a.click();
     //window.open(fileURL);
   });
-
 }
-exportarInventarioPdf(){
 
-  this.evaluarFiltros(this.usarFiltroConsulta);
-  this.exportsService.exportProductoInventarioPDF(this.filtroInventario).subscribe(data => {
+exportarPDF(){
 
-    console.log(data);
+  this.exportsService.exportProductosSucursalPDF(this.filtroInventario.almacenId).subscribe(data => {
 
     const file = new Blob([data], { type: 'application/pdf' });  
     const fileURL = URL.createObjectURL(file);
@@ -404,11 +400,19 @@ exportarInventarioPdf(){
     a.setAttribute('style', 'display:none');
     document.body.appendChild(a);
     a.href = fileURL;
-    a.download = 'InventarioReporte.pdf';
+    a.download = 'ProductoSucursalReporte.pdf';
     a.click();
 
     //window.open(fileURL);
   });
+  
+}
+
+exportarInventarioXls(){
+  console.log(this.selectedProduct);
+
+}
+exportarInventarioPdf(){
 
 }
 exportarKardexXls(){

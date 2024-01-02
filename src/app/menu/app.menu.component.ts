@@ -103,9 +103,9 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Tipos de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/tipo-productos']},
                     {label: 'Productos', icon: 'pi pi-fw pi-file-pdf', 
                     items: [
-                        {label: 'Productos por Almacén', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
-                        {label: 'Reportes de Inventario', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
-                        {label: 'Listado de Precios de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}
+                        {label: 'Productos por Sucursal', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/productos-almacen']}, 
+                        {label: 'Reportes de Inventario', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/almacen/inventario']},
+                        {label: 'Listado de Precios de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/productos-precios']}
                     ]
                     },
                     {label: 'Reporte de Salidas Libres', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/notfound']},

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { AppBreadcrumbService } from '../../../menu/app.breadcrumb.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { switchMap } from 'rxjs/operators';
 import { Producto } from './../../../_model/producto';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {Message} from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Message } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { LazyLoadEvent } from 'primeng/api';
 import { TipoProducto } from './../../../_model/tipo_producto';
@@ -12,17 +12,18 @@ import { Marca } from './../../../_model/marca';
 import { Presentacion } from './../../../_model/presentacion';
 import { InventarioDTO } from './../../../_model/inventario_dto';
 import { InventarioService } from 'src/app/_service/inventario.service';
-import { FiltroInventario } from './../../../_util/filtro_inventario';
 import { ExportsService } from './../../../_service/reportes/exports.service';
+import { UnidadService } from './../../../_service/unidad.service';
+import { FiltroProductosVenta } from 'src/app/_util/filtro_productos_venta'; 
 
 @Component({
-  selector: 'app-inventario',
-  templateUrl: './inventario.component.html',
-  styleUrls: ['./inventario.component.scss'],
+  selector: 'app-productosprecio',
+  templateUrl: './productosprecio.component.html',
+  styleUrls: ['./productosprecio.component.scss'],
   providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
-export class InventarioComponent implements OnInit {
+export class ProductosprecioComponent implements OnInit {
 
   @ViewChild('inputNombre', { static: false }) inputNombre: ElementRef;
 
@@ -35,7 +36,7 @@ export class InventarioComponent implements OnInit {
 
   prioridades: any[] = [
     {name: 'Alta', code: '1'},
-    {name: 'Media', code: '2'},
+    {name: 'Normal', code: '2'},
     {name: 'Baja', code: '3'}
   ];
 
@@ -45,7 +46,7 @@ export class InventarioComponent implements OnInit {
   codigoProducto: string = '';
   nombre: string = '';
   composicion: string = '';
-  prioridad: any =  {name: 'Media', code: '2'};
+  prioridad: any =  {name: 'Normal', code: '2'};
   ubicacion: string = '';
 
   clsAlmacen: any = null;
@@ -70,7 +71,7 @@ export class InventarioComponent implements OnInit {
 
   loading: boolean = true; 
 
-  filtroInventario = new FiltroInventario();
+  filtroProductosVenta = new FiltroProductosVenta();
 
   selectedProduct: InventarioDTO;
 
@@ -94,22 +95,27 @@ export class InventarioComponent implements OnInit {
   composicion_idlabel: string = '';
   ubicacion_idlabel: string = '';
 
+  unidads: any[] = [];
+  clsUnidad: any = null;
+
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private inventarioService: InventarioService, 
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
-    private exportsService: ExportsService) {
+    private exportsService: ExportsService,
+    private unidadService:UnidadService) {
     this.breadcrumbService.setItems([
-    { label: 'Almacén' },
-    { label: 'Inventario', routerLink: ['/almacen/inventario'] }
+      { label: 'Reportes' },
+      { label: 'Productos' },
+      { label: 'Listado de Precios de Productos', routerLink: ['/reporte/productos-precios'] }
     ]);
 
 }
 
 ngOnInit(): void {
-  this.getTipoProductos();
+  /* this.getTipoProductos();
   this.getMarcas();
-  this.getPresentaciones();
-  this.getAlmacens()
+  this.getPresentaciones(); */
+  this.getAlmacens();
   this.primengConfig.ripple = true;
   this.vistaCarga = false;
 }
@@ -196,29 +202,51 @@ getAlmacens() {
 
   this.clsAlmacen = null;
   this.almacens = [];
+  let first = true;
 
   this.inventarioService.getAlmacens().subscribe(data => {
 
-    this.almacens.push({name: "General - Todas", code: 0});
-    this.clsAlmacen = {name: "General - Todas", code: 0};
+    //this.almacens.push({name: "General - Todas", code: 0});
+    //this.clsAlmacen = {name: "General - Todas", code: 0};
     data.forEach(almacen => {
       this.almacens.push({name: almacen.nombre, code: almacen.id});
+      if(first){
+        this.clsAlmacen = {name: almacen.nombre, code: almacen.id};
+        this.filtroProductosVenta.almacenId =  this.clsAlmacen.code;
+        first = false;
+        this.getUnidads();
+      }
     });
 
-    this.filtroInventario.almacenId =  this.clsAlmacen.code;
-    this.listarPageMain(this.page, this.rows);
+  });
+}
 
+getUnidads() {
+
+  this.clsUnidad = null;
+  this.unidads = [];
+
+  this.unidadService.listarAll().subscribe(data => {
+    data.forEach(unidad => {
+      this.unidads.push({name: unidad.nombre, code: unidad.id});
+
+      if(unidad.cantidad == 1){
+        this.clsUnidad = {name: unidad.nombre, code: unidad.id};
+        this.filtroProductosVenta.unidadId =  this.clsUnidad.code;
+        this.listarPageMain(this.page, this.rows);
+      }
+    });
   });
 }
 
 listarPageMain(p: number, s:number) {
 
-  this.filtroInventario.page = p;
-  this.filtroInventario.size = s;
+  this.filtroProductosVenta.page = p;
+  this.filtroProductosVenta.size = s;
 
   this.loading = true;
 
-  this.inventarioService.getProductoInventario(this.filtroInventario).subscribe(data => {
+  this.inventarioService.getProductoPrecios(this.filtroProductosVenta).subscribe(data => {
     this.inventarios = data.content;
     this.isFirst = data.first;
     this.isLast = data.last;
@@ -246,7 +274,7 @@ verFiltros(){
 
 cancelFormulario(){
 
-  this.filtroInventario = new FiltroInventario();
+  this.filtroProductosVenta = new FiltroProductosVenta();
 
   this.clsTipoProducto = null;
   this.clsMarca = null;
@@ -277,105 +305,27 @@ buscarConFiltros(){
 
 evaluarFiltros(usarFiltroConsulta : boolean){
 
-  this.filtroInventario = new FiltroInventario();
+  this.filtroProductosVenta = new FiltroProductosVenta();
 
   if(this.clsAlmacen != null){
-    this.filtroInventario.almacenId = this.clsAlmacen.code;
+    this.filtroProductosVenta.almacenId = this.clsAlmacen.code;
   }
   else{
-    this.filtroInventario.almacenId = 0;
+    this.filtroProductosVenta.almacenId = 0;
   }
 
-  if(usarFiltroConsulta){
-
-    if(this.clsTipoProducto != null) {
-      this.filtroInventario.tipoProductoId = this.clsTipoProducto.code;
-      this.tipo_producto_idlabel = this.clsTipoProducto.name;
-    }
-    else{
-      this.tipo_producto_idlabel = 'TODOS';
-    }
-
-    if(this.clsMarca != null) {
-      this.filtroInventario.marcaId = this.clsMarca.code;
-      this.marca_idlabel = this.clsMarca.name;
-    }
-    else{
-      this.marca_idlabel = 'TODAS';
-    }
-
-    if(this.clsPresentacion != null) {
-      this.filtroInventario.presentacionId = this.clsPresentacion.code;
-      this.presentacion_idlabel = this.clsPresentacion.name;
-    }
-    else{
-      this.presentacion_idlabel = 'TODAS';
-    }
-
-    this.usarFiltroConsulta1 = true;
-    this.usarFiltroConsulta2 = true;
-    this.usarFiltroConsulta3 = true;
-
-    if(this.codigoProducto.trim().length > 0){
-      this.filtroInventario.codigo = this.codigoProducto.trim();
-      this.codigoProducto_idlabel = this.codigoProducto;
-      this.usarFiltroConsulta4 = true;
-    }else{
-      this.usarFiltroConsulta4 = false;
-    }
-
-    if(this.nombre.trim().length > 0){
-      this.filtroInventario.nombre = this.nombre.trim();
-      this.nombre_idlabel = this.nombre;
-      this.usarFiltroConsulta5 = true;
-    }else{
-      this.usarFiltroConsulta5 = false;
-    }
-
-    if(this.composicion.trim().length > 0){
-      this.filtroInventario.composicion = this.composicion.trim();
-      this.composicion_idlabel = this.composicion;
-      this.usarFiltroConsulta6 = true;
-    }else{
-      this.usarFiltroConsulta6 = false;
-    }
-
-    if(this.prioridad != null && this.prioridad !=''){
-      this.filtroInventario.prioridad = this.prioridad.code;
-      this.usarFiltroConsulta7 = true;
-
-      console.log(this.prioridad);
-
-      if(this.prioridad.code == '1'){
-        this.prioridad_idlabel = this.prioridad.name;
-      }
-
-      if(this.prioridad.code == '2'){
-        this.prioridad_idlabel = this.prioridad.name;
-      }
-
-      if(this.prioridad.code == '3'){
-        this.prioridad_idlabel = this.prioridad.name;
-      }
-    }else{
-      this.usarFiltroConsulta7 = false;
-    }
-
-    if(this.ubicacion.trim().length > 0){
-      this.filtroInventario.ubicacion = this.ubicacion.trim();
-      this.ubicacion_idlabel = this.ubicacion;
-      this.usarFiltroConsulta8 = true;
-    }else{
-      this.usarFiltroConsulta8 = false;
-    }
+  if(this.clsUnidad != null){
+    this.filtroProductosVenta.unidadId = this.clsUnidad.code;
   }
+  else{
+    this.filtroProductosVenta.unidadId = 0;
+  }
+
 }
 
-exportarInventarioXls(){
-  //console.log(this.selectedProduct);
+exportarXLSX(){
 
-  this.evaluarFiltros(this.usarFiltroConsulta);
-  this.exportsService.exportProductoInventarioXLSX(this.filtroInventario).subscribe(data => {
+  this.exportsService.exportProductosPrecioXLSX(this.filtroProductosVenta.almacenId, this.filtroProductosVenta.unidadId).subscribe(data => {
 
     const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const fileURL = URL.createObjectURL(file);
@@ -384,18 +334,15 @@ exportarInventarioXls(){
     a.setAttribute('style', 'display:none');
     document.body.appendChild(a);
     a.href = fileURL;
-    a.download = 'InventarioReporte.xlsx';
+    a.download = 'ProductoPreciosReporte.xlsx';
     a.click();
     //window.open(fileURL);
   });
-
 }
-exportarInventarioPdf(){
 
-  this.evaluarFiltros(this.usarFiltroConsulta);
-  this.exportsService.exportProductoInventarioPDF(this.filtroInventario).subscribe(data => {
+exportarPDF(){
 
-    console.log(data);
+  this.exportsService.exportProductosPrecioPDF(this.filtroProductosVenta.almacenId, this.filtroProductosVenta.unidadId).subscribe(data => {
 
     const file = new Blob([data], { type: 'application/pdf' });  
     const fileURL = URL.createObjectURL(file);
@@ -404,11 +351,19 @@ exportarInventarioPdf(){
     a.setAttribute('style', 'display:none');
     document.body.appendChild(a);
     a.href = fileURL;
-    a.download = 'InventarioReporte.pdf';
+    a.download = 'ProductoPreciosReporte.pdf';
     a.click();
 
     //window.open(fileURL);
   });
+  
+}
+
+exportarInventarioXls(){
+  console.log(this.selectedProduct);
+
+}
+exportarInventarioPdf(){
 
 }
 exportarKardexXls(){

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { FiltroInventario } from '../../_util/filtro_inventario';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,11 @@ export class ExportsService {
   protected urlProveedores: string = `${environment.HOST}/api/backend/proveedor_reportes`;
   protected urlMarcas: string = `${environment.HOST}/api/backend/marca_reportes`;
   protected urlTipoProductos: string = `${environment.HOST}/api/backend/tipo_producto_reportes`;
+
+  protected urlProductos: string = `${environment.HOST}/api/backend/producto_reportes`;
+  protected pathProdSucursal: string = `sucursal`;
+  protected pathProdInventario: string = `inventario`;
+  protected pathProdPrecio: string = `precio`;
 
   constructor(protected http: HttpClient) { }
 
@@ -59,6 +65,42 @@ export class ExportsService {
 
   exportTipoProductosXLSX() {
     return this.http.get(`${this.urlTipoProductos}/export-xls`, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductosSucursalPDF(almacenId: number) {
+    return this.http.get(`${this.urlProductos}/${this.pathProdSucursal}/export-pdf?almacen_id=${almacenId}`, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductosSucursalXLSX(almacenId: number) {
+    return this.http.get(`${this.urlProductos}/${this.pathProdSucursal}/export-xls?almacen_id=${almacenId}`, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductoInventarioPDF(filtros: FiltroInventario) {
+    return this.http.post(`${this.urlProductos}/${this.pathProdInventario}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductoInventarioXLSX(filtros: FiltroInventario) {
+    return this.http.post(`${this.urlProductos}/${this.pathProdInventario}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductosPrecioPDF(almacenId: number, unidadId: number) {
+    return this.http.get(`${this.urlProductos}/${this.pathProdPrecio}/export-pdf?almacen_id=${almacenId}&unidad_id=${unidadId}`, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductosPrecioXLSX(almacenId: number, unidadId: number) {
+    return this.http.get(`${this.urlProductos}/${this.pathProdPrecio}/export-xls?almacen_id=${almacenId}&unidad_id=${unidadId}`, {
       responseType: 'blob'
     });
   }

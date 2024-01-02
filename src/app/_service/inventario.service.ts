@@ -9,6 +9,7 @@ import { Marca } from './../_model/marca';
 import { Presentacion } from './../_model/presentacion';
 import { InventarioDTO } from './../_model/inventario_dto';
 import { FiltroInventario } from '../_util/filtro_inventario';
+import { FiltroProductosVenta } from '../_util/filtro_productos_venta';
 import { Almacen } from '../_model/almacen';
 
 @Injectable({
@@ -49,6 +50,10 @@ export class InventarioService extends GenericService<InventarioDTO>  {
 
   getAlmacens() {
     return this.http.get<Almacen[]>(`${this.urlAlmacen}/almacens`);
+  }
+
+  getProductoPrecios(filtros: FiltroProductosVenta) {
+    return this.http.post<any>(`${this.url}/productoprecio`, filtros);
   }
 
 }

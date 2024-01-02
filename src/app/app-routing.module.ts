@@ -54,6 +54,9 @@ import { ProveedorrepComponent } from './paginas/reporte/proveedorrep/proveedorr
 import { MarcarepComponent } from './paginas/reporte/marcarep/marcarep.component';
 import { TipoproductorepComponent } from './paginas/reporte/tipoproductorep/tipoproductorep.component';
 
+import { ProductosalmacenComponent } from './paginas/reporte/productosalmacen/productosalmacen.component';
+import { ProductosprecioComponent } from './paginas/reporte/productosprecio/productosprecio.component';
+
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
 import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
@@ -190,6 +193,9 @@ const routes: Routes = [
      {path: 'proveedores', component: ProveedorrepComponent},
      {path: 'marcas', component: MarcarepComponent},
      {path: 'tipo-productos', component: TipoproductorepComponent},
+
+     {path: 'productos-almacen', component: ProductosalmacenComponent},
+     {path: 'productos-precios', component: ProductosprecioComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },

@@ -207,6 +207,8 @@ import { ClienterepComponent } from './paginas/reporte/clienterep/clienterep.com
 import { ProveedorrepComponent } from './paginas/reporte/proveedorrep/proveedorrep.component';
 import { MarcarepComponent } from './paginas/reporte/marcarep/marcarep.component';
 import { TipoproductorepComponent } from './paginas/reporte/tipoproductorep/tipoproductorep.component';
+import { ProductosalmacenComponent } from './paginas/reporte/productosalmacen/productosalmacen.component';
+import { ProductosprecioComponent } from './paginas/reporte/productosprecio/productosprecio.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -408,6 +410,8 @@ export function tokenGetter() {
         ProveedorrepComponent,
         MarcarepComponent,
         TipoproductorepComponent,
+        ProductosalmacenComponent,
+        ProductosprecioComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
