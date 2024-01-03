@@ -28,6 +28,10 @@ export class UserService extends GenericService<User>  {
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
   }
 
+  listarAll(){
+    return this.http.get<any>(`${this.url}/listar_all`);
+  }
+
   getTipoDocumentos(){
     return this.http.get<any>(`${this.url}/tipodocumentos`);
   }

@@ -1,0 +1,209 @@
+<div class="p-grid" *ngIf="vistaCarga && vistaCarga2">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+</div>
+
+<p-toast *ngIf="vistaCarga2"></p-toast>
+
+<div class="p-grid" *ngIf="vistaCarga2">
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Reporte General de Compras Realizadas</h4>
+            <br>
+
+
+            <button (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-file-excel" label="Exportar a Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+<!-- 
+  
+            
+            
+            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Inventario PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexXls()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarKardexPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Exportar Kardex a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+-->
+    
+        </div>
+    </div>
+
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Compras a Proveedores</h5>
+
+
+             <div class="p-fluid box" style="padding-top:15px; padding-bottom:25px;">
+
+                <div class="p-field p-grid">
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Sucursal</label>
+                    <div class="p-col-12 p-md-11">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioFiltros($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>SELECCIONE</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Desde</label>
+                    <div class="p-col-12 p-md-2">
+                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaInicio" #inputFechaInicio [style]="{'height':'31px'}">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="fechaFinal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Hasta</label>
+                    <div class="p-col-12 p-md-2">
+                        <p-inputMask id="fechaFinal" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaFinal" #inputFechaFinal [style]="{'height':'31px'}">
+                        </p-inputMask>
+                    </div>
+
+                    <label for="estadoCompras" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Estado de Compra</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #inputClsEstadoCompra inputId="estadoCompras" [options]="estadoCompras" (onChange)="cambioFiltros($event)" [(ngModel)]="clsEstadoCompra" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>TODOS</label>
+                        </span>
+                    </div>
+                </div>
+
+               <!--  <div class="p-field p-grid">
+                    <label for="estadoCompras" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Palabra Clave</label>
+                    <div class="p-col-12 p-md-11">
+                        <div class="p-inputgroup">
+                            <button pButton pRipple type="button" label="Buscar" (click)="buscar()" [style]="{'height':'31px'}"></button>
+                            <span class="p-float-label">
+                                <input #inputTxtBuscar type="text" pInputText [(ngModel)]="txtBuscar" (keyup.enter)="buscar()" [style]="{'height':'31px'}"/>
+                                <label>Número de Compra, Proveedor, Comprobante, Usuario</label>
+                            </span>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="p-field p-grid">
+                    <label for="usuario" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Usuario</label>
+                    <div class="p-col-12 p-md-11">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsUsuario inputId="usuario" [options]="usuarios" (onChange)="cambioFiltros($event)" [(ngModel)]="clsUsuario" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>SELECCIONE</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="proveedor" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Proveedor</label>
+                    <div class="p-col-12 p-md-11">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsUsuario inputId="proveedor" [options]="proveedors" (onChange)="cambioFiltros($event)" [(ngModel)]="clsProveedor" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>SELECCIONE</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="facturados" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Facturación de Compra</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #inputclsFacturado inputId="facturados" [options]="facturados" (onChange)="cambioFiltros($event)" [(ngModel)]="clsFacturado" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>TODOS</label>
+                        </span>
+                    </div>
+
+                    <label for="actualizados" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Actualización de Stocks de Compra</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #inputclsActualizado inputId="actualizados" [options]="actualizados" (onChange)="cambioFiltros($event)" [(ngModel)]="clsActualizado" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>TODOS</label>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        
+                <p-table [value]="entradaStocks" [resizableColumns]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" 
+                selectionMode="single" [(selection)]="selectedEntradaStock" dataKey="id" responsiveLayout="scroll" [style]="{width:'100%', 'padding-right': '0px'}">
+
+<!--                 <ng-template pTemplate="colgroup" let-columns pTemplate="headergrouped">
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:184px;">
+                        <col style="width:115px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:153px;">
+                        <col style="width:140px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:80px;">
+                        <col style="width:85px;">
+                        <col style="width:85px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                    </colgroup>
+                </ng-template> -->
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Sucursal</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N° de Compra</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Fecha</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Hora</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Estado de Registro</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Facturada</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Actualizada Stocks</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Comprobante</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Proveedor</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Monto (S/.)</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Usuario</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-Compra let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="Compra">
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{rowIndex+1}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.almacen.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.numero}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.fecha | passfechavistaTransform}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.hora}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.8rem; padding: 5px;">{{Compra.estadoStr}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.8rem; padding: 5px; text-align: center;">
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="Compra.facturado === 1" value="Si"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="Compra.facturado === 0" value="No"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.8rem; padding: 5px; text-align: center;">
+                              <p-tag styleClass="p-mr-2" severity="success" *ngIf="Compra.actualizado === 1" value="Si"></p-tag>
+                              <p-tag styleClass="p-mr-2" severity="warning" *ngIf="Compra.actualizado === 0" value="No"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.facturaProveedor != null ? Compra.facturaProveedor.tipoComprobante.nombre + " " + Compra.facturaProveedor.serie + "-" + Compra.facturaProveedor.numero : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.proveedor != null ? Compra.proveedor.nombre + " " + Compra.proveedor.tipoDocumento.tipo + " " + Compra.proveedor.documento  : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.totalMonto | currency:'PEN':'S/.'}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 0.9rem; padding: 5px;">{{Compra.user.name}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+            <p-footer>
+                <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+            </p-footer>
+        </p-confirmDialog>
+
+       
+    
+
+</div>
+
+
+<div *ngIf="!vistaCarga2">
+    <app-vercompra *ngIf="verFrmCompra" [entradaStock]="selectedEntradaStock" (cerrarFormVerCompra)="cerrarFormularioVerCompra($event)"></app-vercompra>
+</div>

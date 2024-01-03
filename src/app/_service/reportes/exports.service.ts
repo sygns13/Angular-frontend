@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { FiltroInventario } from '../../_util/filtro_inventario';
 import { FiltroGeneral } from 'src/app/_util/filtro_general';
+import { FiltroEntradaStock } from 'src/app/_util/filtro_entrada_stock';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,9 @@ export class ExportsService {
 
   protected urlMovimientoProductos: string = `${environment.HOST}/api/backend/movimiento_productos_reportes`;
   protected pathMovimiento: string = `movimiento`;
+  
+  protected urlComprasGenerales: string = `${environment.HOST}/api/backend/entrada_stock_report`;
+  protected pathGeneral: string = `general`;
 
   constructor(protected http: HttpClient) { }
 
@@ -117,6 +121,18 @@ export class ExportsService {
 
   exportMovimientoProductosXLSX(filtros: FiltroGeneral) {
     return this.http.post(`${this.urlMovimientoProductos}/${this.pathMovimiento}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportComprasGeneralesPDF(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlComprasGenerales}/${this.pathGeneral}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportComprasGeneralesXLSX(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlComprasGenerales}/${this.pathGeneral}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }

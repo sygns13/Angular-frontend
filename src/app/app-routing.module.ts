@@ -57,6 +57,8 @@ import { TipoproductorepComponent } from './paginas/reporte/tipoproductorep/tipo
 import { ProductosalmacenComponent } from './paginas/reporte/productosalmacen/productosalmacen.component';
 import { ProductosprecioComponent } from './paginas/reporte/productosprecio/productosprecio.component';
 
+import { ComprasgeneralesComponent } from './paginas/reporte/comprasgenerales/comprasgenerales.component';
+
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
 import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
@@ -196,6 +198,8 @@ const routes: Routes = [
 
      {path: 'productos-almacen', component: ProductosalmacenComponent},
      {path: 'productos-precios', component: ProductosprecioComponent},
+
+     {path: 'compras-generales', component: ComprasgeneralesComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },
