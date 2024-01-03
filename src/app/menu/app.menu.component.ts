@@ -108,7 +108,7 @@ export class AppMenuComponent implements OnInit {
                         {label: 'Listado de Precios de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/productos-precios']}
                     ]
                     },
-                    {label: 'Reporte de Salidas Libres', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/notfound']},
+                    {label: 'Entradas y Salidas Libres', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/almacen/reporte_stocks']},
                     {label: 'Compras', icon: 'pi pi-fw pi-file-pdf',
                     items: [
                         {label: 'Compras de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 

@@ -17,6 +17,7 @@ import { FiltroGeneral } from './../../../_util/filtro_general';
 import { StockService } from './../../../_service/stock.service';
 import { LoteService } from './../../../_service/lote.service';
 import { EntradaSalidaService } from '../../../_service/entrada_salida.service';
+import { ExportsService } from '../../../_service/reportes/exports.service';
 import { Lote } from 'src/app/_model/lote';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
@@ -66,7 +67,8 @@ export class ListarentradasalidaproductosComponent implements OnInit {
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private productoService: ProductoService, private gestionloteService: GestionloteService,
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService, private entradaSalidaService: EntradaSalidaService,
-    private router: Router) {
+    private router: Router,
+    private exportsService: ExportsService) {
       this.breadcrumbService.setItems([
       { label: 'Almacén' },
       { label: 'Reporte de Salidas e Ingresos Libres de Productos', routerLink: ['/almacen/reporte_stocks'] }
@@ -246,12 +248,139 @@ export class ListarentradasalidaproductosComponent implements OnInit {
     this.router.navigateByUrl('/almacen/gestion_stocks');
   }
 
-  exportarInventarioXls(){
+  exportarMovimientoXls() {
+
+    this.evaluarFiltros();
+
+    if(this.fechaInicio != null &&  this.fechaInicio.length == 10){
+      const fechaIni = moment(this.fechaInicio, 'DD/MM/YYYY');
+      if(!fechaIni.isValid){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+      this.filtroGeneral.fechaInicio = fechaIni.format('YYYY-MM-DD');
+
+      if(this.filtroGeneral.fechaInicio == null || this.filtroGeneral.fechaInicio.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+    }
+    else{
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+    }
+
+    if(this.fechaFinal != null &&  this.fechaFinal.length == 10){
+      const fechaFin = moment(this.fechaFinal, 'DD/MM/YYYY');
+      if(!fechaFin.isValid){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+      this.filtroGeneral.fechaFinal = fechaFin.format('YYYY-MM-DD');
+
+      console.log(this.filtroGeneral.fechaFinal);
+
+      if(this.filtroGeneral.fechaFinal == null || this.filtroGeneral.fechaFinal.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+    }
+    else{
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+    }
+
+    this.exportarMovimientoXlsPrint();
 
   }
 
-  exportarInventarioPdf(){
 
+  exportarMovimientoXlsPrint(){
+    //console.log(this.selectedProduct);
+  
+    //this.evaluarFiltros();
+    this.exportsService.exportMovimientoProductosXLSX(this.filtroGeneral).subscribe(data => {
+  
+      const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const fileURL = URL.createObjectURL(file);
+  
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none');
+      document.body.appendChild(a);
+      a.href = fileURL;
+      a.download = 'MovimientoProductosReporte.xlsx';
+      a.click();
+      //window.open(fileURL);
+    });
+  
+  }
+
+  exportarMovimientoPdf() {
+
+    this.evaluarFiltros();
+
+    if(this.fechaInicio != null &&  this.fechaInicio.length == 10){
+      const fechaIni = moment(this.fechaInicio, 'DD/MM/YYYY');
+      if(!fechaIni.isValid){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+      this.filtroGeneral.fechaInicio = fechaIni.format('YYYY-MM-DD');
+
+      if(this.filtroGeneral.fechaInicio == null || this.filtroGeneral.fechaInicio.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+    }
+    else{
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+    }
+
+    if(this.fechaFinal != null &&  this.fechaFinal.length == 10){
+      const fechaFin = moment(this.fechaFinal, 'DD/MM/YYYY');
+      if(!fechaFin.isValid){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+      this.filtroGeneral.fechaFinal = fechaFin.format('YYYY-MM-DD');
+
+      console.log(this.filtroGeneral.fechaFinal);
+
+      if(this.filtroGeneral.fechaFinal == null || this.filtroGeneral.fechaFinal.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+    }
+    else{
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+    }
+
+    this.exportarMovimientoPdfPrint();
+
+  }
+
+  exportarMovimientoPdfPrint(){
+  
+    //this.evaluarFiltros();
+    this.exportsService.exportMovimientoProductosPDF(this.filtroGeneral).subscribe(data => {
+  
+      console.log(data);
+  
+      const file = new Blob([data], { type: 'application/pdf' });  
+      const fileURL = URL.createObjectURL(file);
+  
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none');
+      document.body.appendChild(a);
+      a.href = fileURL;
+      a.download = 'MovimientoProductosReporte.pdf';
+      a.click();
+  
+      //window.open(fileURL);
+    });
+  
   }
 
 

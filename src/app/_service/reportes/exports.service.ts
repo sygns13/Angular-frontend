@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { FiltroInventario } from '../../_util/filtro_inventario';
+import { FiltroGeneral } from 'src/app/_util/filtro_general';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,9 @@ export class ExportsService {
   protected pathProdSucursal: string = `sucursal`;
   protected pathProdInventario: string = `inventario`;
   protected pathProdPrecio: string = `precio`;
+
+  protected urlMovimientoProductos: string = `${environment.HOST}/api/backend/movimiento_productos_reportes`;
+  protected pathMovimiento: string = `movimiento`;
 
   constructor(protected http: HttpClient) { }
 
@@ -101,6 +105,18 @@ export class ExportsService {
 
   exportProductosPrecioXLSX(almacenId: number, unidadId: number) {
     return this.http.get(`${this.urlProductos}/${this.pathProdPrecio}/export-xls?almacen_id=${almacenId}&unidad_id=${unidadId}`, {
+      responseType: 'blob'
+    });
+  }
+
+  exportMovimientoProductosPDF(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlMovimientoProductos}/${this.pathMovimiento}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportMovimientoProductosXLSX(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlMovimientoProductos}/${this.pathMovimiento}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }
