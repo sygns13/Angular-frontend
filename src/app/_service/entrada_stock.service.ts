@@ -9,6 +9,7 @@ import { DetalleEntradaStock } from '../_model/detalle_entrada_stock';
 import { ProductoAddEntradaStock } from '../_model/producto_add_entrada_stock';
 import { PagoProveedor } from '../_model/pago_proveedor';
 import { FiltroEntradaStock } from '../_util/filtro_entrada_stock';
+import { ComprasDTO } from '../_model/compras_dto';
 
 @Injectable({
   providedIn: 'root'
@@ -88,5 +89,12 @@ export class EntradaStockService extends GenericService<EntradaStock>{
   }
   revActualizacionEntradaStock(entrada_stock: EntradaStock) {
     return this.http.put<EntradaStock>(`${this.url}/revertir-actualizar`, entrada_stock);
+  }
+
+
+
+  //Reportes Detalle
+  getEntradaStocksDetail(filtro: FiltroEntradaStock, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get_entrada_stocks_details?page=${p}&size=${s}`, filtro);
   }
 }

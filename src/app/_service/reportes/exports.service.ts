@@ -24,8 +24,9 @@ export class ExportsService {
   protected urlMovimientoProductos: string = `${environment.HOST}/api/backend/movimiento_productos_reportes`;
   protected pathMovimiento: string = `movimiento`;
   
-  protected urlComprasGenerales: string = `${environment.HOST}/api/backend/entrada_stock_report`;
+  protected urlCompras: string = `${environment.HOST}/api/backend/entrada_stock_report`;
   protected pathGeneral: string = `general`;
+  protected pathDetallada: string = `detallada`;
 
   constructor(protected http: HttpClient) { }
 
@@ -126,13 +127,25 @@ export class ExportsService {
   }
 
   exportComprasGeneralesPDF(filtros: FiltroEntradaStock) {
-    return this.http.post(`${this.urlComprasGenerales}/${this.pathGeneral}/export-pdf`, filtros, {
+    return this.http.post(`${this.urlCompras}/${this.pathGeneral}/export-pdf`, filtros, {
       responseType: 'blob'
     });
   }
 
   exportComprasGeneralesXLSX(filtros: FiltroEntradaStock) {
-    return this.http.post(`${this.urlComprasGenerales}/${this.pathGeneral}/export-xls`, filtros, {
+    return this.http.post(`${this.urlCompras}/${this.pathGeneral}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportComprasDetalladasPDF(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCompras}/${this.pathDetallada}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportComprasDetalladasXLSX(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCompras}/${this.pathDetallada}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }

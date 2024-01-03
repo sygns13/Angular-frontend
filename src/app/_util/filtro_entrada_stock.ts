@@ -31,4 +31,6 @@ export class FiltroEntradaStock {
     buscarDatos: string;
 
     estadoPago: number;
+
+    idProducto: number;
 }

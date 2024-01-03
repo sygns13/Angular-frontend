@@ -30,23 +30,26 @@ import { FacturaProveedor } from './../../../_model/factura_proveedor';
 import { UserService } from 'src/app/_service/user.service';
 import { ExportsService } from './../../../_service/reportes/exports.service';
 import { InventarioService } from './../../../_service/inventario.service';
+import { ProductoVentas } from './../../../_model/producto_ventas';
+import { FiltroProductosVenta } from './../../../_util/filtro_productos_venta';
+import { UnidadService } from './../../../_service/unidad.service';
 import * as moment from 'moment';
 
-
 @Component({
-  selector: 'app-comprasgenerales',
-  templateUrl: './comprasgenerales.component.html',
-  styleUrls: ['./comprasgenerales.component.scss'],
+  selector: 'app-comprasdetalladas',
+  templateUrl: './comprasdetalladas.component.html',
+  styleUrls: ['./comprasdetalladas.component.scss'],
   providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
-export class ComprasgeneralesComponent implements OnInit{
+export class ComprasdetalladasComponent implements OnInit{
 
   @ViewChild('inputTxtBuscar', { static: false }) inputTxtBuscar: ElementRef;
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
   @ViewChild('inputBuscarDocProveedor', { static: false }) inputBuscarDocProveedor: ElementRef;
   @ViewChild('inputNombreProveedorReg', { static: false }) inputNombreProveedorReg: ElementRef;
   @ViewChild('inputserieComprobanteF', { static: false }) inputserieComprobanteF: ElementRef;
+  @ViewChild('inputBuscarProductos', { static: false }) inputBuscarProductos: ElementRef;
 
 
   almacens: any[] = [];
@@ -88,6 +91,9 @@ export class ComprasgeneralesComponent implements OnInit{
 
   clsFacturado: any = {name: "TODOS", code: 'Z'};
   clsActualizado: any = {name: "TODOS", code: 'Z'};
+
+  //txtBuscarProducto: string = '';
+  idProducto : number = null;
   
 
   entradaStock = new EntradaStock();
@@ -207,6 +213,56 @@ export class ComprasgeneralesComponent implements OnInit{
   //Facturar
   displayFacturarComra : boolean = false;
 
+  //Productos
+  displayProductsToEntradaStocks : boolean = false;
+  //selectedProductEntradaStock: ProductoVentas;
+
+  productosEntradaStocks: any[] = [];
+  filtroProductosVenta: FiltroProductosVenta = new FiltroProductosVenta();
+
+  pageProductosToEntradaStocks: number = 0;
+  firstProductosToEntradaStocks: number = 0;
+  lastProductosToEntradaStocks: number = 0;
+  rowsProductosToEntradaStocks: number = 10;
+  isFirstProductosToEntradaStocks: boolean = true;
+  isLastProductosToEntradaStocks: boolean = false;
+  totalRecordsProductosToEntradaStocks: number = 0;
+  numberElementsProductosToEntradaStocks: number = 0;
+  loadingProductosToEntradaStocks: boolean = true; 
+
+  txtBuscarProducto: string = '';
+  txtBuscarProductoF: string = '';
+
+  selectedProductEntradaStock: Producto;
+
+  unidads: any[] = [];
+  clsUnidad: any = null;
+  
+  lotesProducto: any[] = [];
+  //clsLote: any = null;
+  nombreLote: string = '';
+  fechaVencimiento: string = '';
+  cantLote: number = null;
+  cantUnitLote: number = null;
+
+
+  lotesProductoBack: any[] = [];
+  indexLote : number = 0;
+
+  cantidadProductoLotes: number = 1;
+
+  cantidadDescuento: number = 0;
+  precioUnitario: number = null;
+  precioTotal: string = null;
+  
+  cantStock: number = null;
+  cantUnitStock: number = null;
+
+  stocksProductoBack: any[] = [];
+  
+  cantidadProductoStocks: number = 1;
+  cantidadDescuentoStock: number = 0;
+
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private entradaStockService: EntradaStockService, 
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
     private almacenService: AlmacenService, private router: Router,
@@ -218,7 +274,9 @@ export class ComprasgeneralesComponent implements OnInit{
     private tipoTarjetaService: TipoTarjetaService,
     private userService: UserService,
     private exportsService: ExportsService,
-    private inventarioService: InventarioService) {
+    private inventarioService: InventarioService,
+    private productoService: ProductoService,
+    private unidadService:UnidadService) {
     this.breadcrumbService.setItems([
       { label: 'Reportes' },
       { label: 'Reporte de Compras de Productos', routerLink: ['/reporte/compras-generales'] }
@@ -232,6 +290,7 @@ export class ComprasgeneralesComponent implements OnInit{
     this.getPresentaciones(); */
     this.getAlmacens();
     //this.getTipoDocumentos();
+    this.getUnidads();
     this.primengConfig.ripple = true;
     this.vistaCarga = false;
     //this.setFocusBuscar();
@@ -425,7 +484,7 @@ export class ComprasgeneralesComponent implements OnInit{
  
     this.loading = true;
   
-    this.entradaStockService.getEntradaStocks(this.filtroEntradaStock, p ,s).subscribe(data => {
+    this.entradaStockService.getEntradaStocksDetail(this.filtroEntradaStock, p ,s).subscribe(data => {
       this.entradaStocks = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
@@ -451,6 +510,11 @@ export class ComprasgeneralesComponent implements OnInit{
     this.listarPageMain(this.page, this.rows);
   }
 
+  cambioFiltrosExec(){
+    this.evaluarFiltros();
+    this.listarPageMain(this.page, this.rows);
+  }
+
   exportarPDF(): void{
     this.evaluarFiltros();
     this.printPDF();
@@ -462,7 +526,7 @@ export class ComprasgeneralesComponent implements OnInit{
   }
 
   printPDF(): void{
-    this.exportsService.exportComprasGeneralesPDF(this.filtroEntradaStock).subscribe(data => {
+    this.exportsService.exportComprasDetalladasPDF(this.filtroEntradaStock).subscribe(data => {
   
       const file = new Blob([data], { type: 'application/pdf' });  
       const fileURL = URL.createObjectURL(file);
@@ -471,7 +535,7 @@ export class ComprasgeneralesComponent implements OnInit{
       a.setAttribute('style', 'display:none');
       document.body.appendChild(a);
       a.href = fileURL;
-      a.download = 'ComprasGeneral.pdf';
+      a.download = 'ComprasDetalladas.pdf';
       a.click();
   
       //window.open(fileURL);
@@ -479,7 +543,7 @@ export class ComprasgeneralesComponent implements OnInit{
   }
 
   printXLS(): void{
-    this.exportsService.exportComprasGeneralesXLSX(this.filtroEntradaStock).subscribe(data => {
+    this.exportsService.exportComprasDetalladasXLSX(this.filtroEntradaStock).subscribe(data => {
   
       const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const fileURL = URL.createObjectURL(file);
@@ -488,7 +552,7 @@ export class ComprasgeneralesComponent implements OnInit{
       a.setAttribute('style', 'display:none');
       document.body.appendChild(a);
       a.href = fileURL;
-      a.download = 'ComprasGeneral.xlsx';
+      a.download = 'ComprasDetalladas.xlsx';
       a.click();
       //window.open(fileURL);
     });
@@ -564,7 +628,93 @@ export class ComprasgeneralesComponent implements OnInit{
     } else{
       this.filtroEntradaStock.actualizado = null;
     }
+
+    if(this.selectedProductEntradaStock != null && this.selectedProductEntradaStock.id != null){
+      this.filtroEntradaStock.idProducto = this.selectedProductEntradaStock.id;
+    }
   }
+
+  buscarProducto() {
+
+    /* this.filtroProductosVenta.almacenId = this.entradaStock.almacen.id;
+    this.filtroProductosVenta.size = 10;
+
+    this.displayProductsToEntradaStocks = false; */
+    this.displayProductsToEntradaStocks = true;
+    this.selectedProductEntradaStock = null
+    this.buscarProductos();
+    this.setFocusBuscarProducto();
+    
+  }
+
+  setFocusBuscarProducto() {    
+    this.changeDetectorRef.detectChanges();
+    this.inputBuscarProductos.nativeElement.focus();
+  }
+
+  buscarProductos(): void{
+    this.loadingProductosToEntradaStocks = true; 
+    this.filtroProductosVenta.palabraClave = this.txtBuscarProductoF;
+    this.filtroProductosVenta.unidadId = parseInt((this.clsUnidad != null) ? this.clsUnidad.code : 0);
+    this.filtroProductosVenta.page = 0;
+    this.listarPageProductosToEntradaStocks();
+  }
+
+  listarPageProductosToEntradaStocks() {
+
+    this.productoService.listarPageable(this.filtroProductosVenta.page, this.filtroProductosVenta.size, this.filtroProductosVenta.palabraClave).subscribe(data => {
+      this.productosEntradaStocks = data.content;
+      this.isFirstProductosToEntradaStocks = data.first;
+      this.isLastProductosToEntradaStocks = data.last;
+      this.numberElementsProductosToEntradaStocks = data.numberOfElements;
+      this.firstProductosToEntradaStocks = (this.filtroProductosVenta.page * this.filtroProductosVenta.size);
+      this.lastProductosToEntradaStocks = (this.filtroProductosVenta.page * this.filtroProductosVenta.size) + this.numberElementsProductosToEntradaStocks;
+      this.totalRecordsProductosToEntradaStocks = data.totalElements;
+      this.loadingProductosToEntradaStocks = false;
+    });
+  }
+
+  aceptarProducto(registro){
+    this.selectedProductEntradaStock = registro;
+
+    this.txtBuscarProducto = this.selectedProductEntradaStock.nombre;
+    this.displayProductsToEntradaStocks = false;
+    this.cambioFiltrosExec();
+  }
+
+  cancelProducto(){
+    this.selectedProductEntradaStock = new Producto();
+    this.txtBuscarProducto = '';
+    this.displayProductsToEntradaStocks = false;
+    this.cambioFiltrosExec();
+  }
+
+  loadDataProductosToEntradaStocks(event: LazyLoadEvent) { 
+    this.loadingProductosToEntradaStocks = true; 
+    this.filtroProductosVenta.size = event.rows;
+    this.filtroProductosVenta.page = event.first / this.rows;
+  
+    this.listarPageProductosToEntradaStocks();
+  
+  }
+
+  getUnidads() {
+
+    this.clsUnidad = null;
+    this.unidads = [];
+
+    this.unidadService.listarAll().subscribe(data => {
+      data.forEach(unidad => {
+        this.unidads.push({name: unidad.nombre, code: unidad.id});
+
+        if(unidad.cantidad == 1){
+          this.clsUnidad = {name: unidad.nombre, code: unidad.id};
+        }
+      });
+    });
+  }
+
+
 
   buscar(): void{
     this.actualizarCompras();
