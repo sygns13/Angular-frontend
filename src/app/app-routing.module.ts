@@ -59,6 +59,7 @@ import { ProductosprecioComponent } from './paginas/reporte/productosprecio/prod
 
 import { ComprasgeneralesComponent } from './paginas/reporte/comprasgenerales/comprasgenerales.component';
 import { ComprasdetalladasComponent } from './paginas/reporte/comprasdetalladas/comprasdetalladas.component';
+import { CuentaspagarComponent } from './paginas/reporte/cuentaspagar/cuentaspagar.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -202,6 +203,7 @@ const routes: Routes = [
 
      {path: 'compras-generales', component: ComprasgeneralesComponent},
      {path: 'compras-detalladas', component: ComprasdetalladasComponent},
+     {path: 'pago-compras', component: CuentaspagarComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },

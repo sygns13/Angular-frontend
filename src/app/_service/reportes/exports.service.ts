@@ -27,6 +27,7 @@ export class ExportsService {
   protected urlCompras: string = `${environment.HOST}/api/backend/entrada_stock_report`;
   protected pathGeneral: string = `general`;
   protected pathDetallada: string = `detallada`;
+  protected pathCuentasPorPagar: string = `cuentas_pagar_general`;
 
   constructor(protected http: HttpClient) { }
 
@@ -146,6 +147,18 @@ export class ExportsService {
 
   exportComprasDetalladasXLSX(filtros: FiltroEntradaStock) {
     return this.http.post(`${this.urlCompras}/${this.pathDetallada}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportCuentasPagarPDF(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCompras}/${this.pathCuentasPorPagar}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportCuentasPagarXLSX(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCompras}/${this.pathCuentasPorPagar}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }
