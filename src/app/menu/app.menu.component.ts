@@ -115,7 +115,7 @@ export class AppMenuComponent implements OnInit {
                         {label: 'Compras Detalladas por Producto', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/compras-detalladas']},
 /*                         {label: 'Compras Detalladas por Proveedor', icon: 'pi pi-file-pdf', routerLink: ['/landing']}, */
                         {label: 'Reporte de Pagos de Compras', icon: 'pi pi-file-pdf', routerLink: ['/reporte/pago-compras']},
-                        {label: 'Pagos de Compras Detalladas', icon: 'pi pi-file-pdf', routerLink: ['/landing']}
+                        {label: 'Pagos de Compras Detalladas', icon: 'pi pi-file-pdf', routerLink: ['/reporte/pago-detallado']}
                     ]
                     },
                     {label: 'Ventas', icon: 'pi pi-fw pi-file-pdf',

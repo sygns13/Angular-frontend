@@ -28,6 +28,7 @@ export class ExportsService {
   protected pathGeneral: string = `general`;
   protected pathDetallada: string = `detallada`;
   protected pathCuentasPorPagar: string = `cuentas_pagar_general`;
+  protected pathCuentasPorPagarDetail: string = `cuentas_pagar_detallado`;
 
   constructor(protected http: HttpClient) { }
 
@@ -159,6 +160,19 @@ export class ExportsService {
 
   exportCuentasPagarXLSX(filtros: FiltroEntradaStock) {
     return this.http.post(`${this.urlCompras}/${this.pathCuentasPorPagar}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+
+  exportCuentasPagarDetailPDF(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCompras}/${this.pathCuentasPorPagarDetail}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportCuentasPagarDetailXLSX(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCompras}/${this.pathCuentasPorPagarDetail}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }

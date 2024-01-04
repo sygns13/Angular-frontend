@@ -33,13 +33,13 @@ import { InventarioService } from './../../../_service/inventario.service';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-cuentaspagar',
-  templateUrl: './cuentaspagar.component.html',
-  styleUrls: ['./cuentaspagar.component.scss'],
+  selector: 'app-cuentaspagardetail',
+  templateUrl: './cuentaspagardetail.component.html',
+  styleUrls: ['./cuentaspagardetail.component.scss'],
   providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
-export class CuentaspagarComponent implements OnInit{
+export class CuentaspagardetailComponent implements OnInit{
 
   //@ViewChild('inputTxtBuscar', { static: false }) inputTxtBuscar: ElementRef;
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
@@ -112,7 +112,7 @@ export class CuentaspagarComponent implements OnInit{
     private inventarioService: InventarioService) {
     this.breadcrumbService.setItems([
       { label: 'Reportes' },
-      { label: 'Reporte de Pagos de Compras', routerLink: ['/reporte/pago-compras'] }
+      { label: 'Pagos de Compras Detalladas', routerLink: ['/reporte/pago-detallado'] }
     ]);
 
   }
@@ -152,12 +152,12 @@ export class CuentaspagarComponent implements OnInit{
       return this.isFirst;
   }
 
-  setFocusBuscar() {    
+ /*  setFocusBuscar() {    
 
-    //this.changeDetectorRef.detectChanges();
-    //this.inputTxtBuscar.nativeElement.focus();
+    this.changeDetectorRef.detectChanges();
+    this.inputTxtBuscar.nativeElement.focus();
   
-  }
+  } */
 
   setFocusBuscarDocCliente() {    
     this.changeDetectorRef.detectChanges();
@@ -245,7 +245,7 @@ export class CuentaspagarComponent implements OnInit{
  
     this.loading = true;
   
-    this.entradaStockService.getEntradaStocksPorPagar(this.filtroEntradaStock, p ,s).subscribe(data => {
+    this.entradaStockService.getPagosEntradaStocksDetail(this.filtroEntradaStock, p ,s).subscribe(data => {
       this.entradaStocks = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
@@ -341,7 +341,7 @@ export class CuentaspagarComponent implements OnInit{
   }
 
   printPDF(): void{
-    this.exportsService.exportCuentasPagarPDF(this.filtroEntradaStock).subscribe(data => {
+    this.exportsService.exportCuentasPagarDetailPDF(this.filtroEntradaStock).subscribe(data => {
   
       const file = new Blob([data], { type: 'application/pdf' });  
       const fileURL = URL.createObjectURL(file);
@@ -350,7 +350,7 @@ export class CuentaspagarComponent implements OnInit{
       a.setAttribute('style', 'display:none');
       document.body.appendChild(a);
       a.href = fileURL;
-      a.download = 'PagosProveedores.pdf';
+      a.download = 'PagosProveedoresDetallado.pdf';
       a.click();
   
       //window.open(fileURL);
@@ -358,7 +358,7 @@ export class CuentaspagarComponent implements OnInit{
   }
 
   printXLS(): void{
-    this.exportsService.exportCuentasPagarXLSX(this.filtroEntradaStock).subscribe(data => {
+    this.exportsService.exportCuentasPagarDetailXLSX(this.filtroEntradaStock).subscribe(data => {
   
       const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const fileURL = URL.createObjectURL(file);
@@ -367,7 +367,7 @@ export class CuentaspagarComponent implements OnInit{
       a.setAttribute('style', 'display:none');
       document.body.appendChild(a);
       a.href = fileURL;
-      a.download = 'PagosProveedores.xlsx';
+      a.download = 'PagosProveedoresDetallado.xlsx';
       a.click();
       //window.open(fileURL);
     });
