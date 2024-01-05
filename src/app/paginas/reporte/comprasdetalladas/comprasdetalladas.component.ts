@@ -631,6 +631,8 @@ export class ComprasdetalladasComponent implements OnInit{
 
     if(this.selectedProductEntradaStock != null && this.selectedProductEntradaStock.id != null){
       this.filtroEntradaStock.idProducto = this.selectedProductEntradaStock.id;
+    } else{
+      this.filtroEntradaStock.idProducto = null;
     }
   }
 

@@ -10,25 +10,12 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-            <h4>Ventas Realizadas</h4>
-            <div class="p-fluid">
-                <blockquote>Aquí se visualizan todas las ventas registradas de Bienes y Servicios</blockquote>
-            </div>
+            <h4>Reporte General de Ventas Realizadas</h4>
             <br>
 
 
-            <button (click)="actualizarVentas()" pButton pRipple type="button" icon="pi pi-refresh" label="Actualizar" class="p-button-raised p-button-info p-mr-2 p-mb-2"></button>
-            <button (click)="nuevaVenta()" pButton pRipple type="button" icon="pi pi-plus" label="Nueva Venta" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
-            <button (click)="verVenta()" pButton pRipple type="button" icon="pi pi-file" label="Ver Venta" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
-            <button (click)="printVenta()" pButton pRipple type="button" icon="pi pi-print" label="Imprimir Venta" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
-            <button (click)="edittVenta()" pButton pRipple type="button" icon="pi pi-pencil" label="Editar Venta" class="p-button-raised p-button-warning p-mr-2 p-mb-2"></button>
-            <button (click)="cobrarVenta()" pButton pRipple type="button" icon="pi pi-dollar" label="Cobrar" class="p-button-raised p-button-help p-mr-2 p-mb-2"></button>
-            <button (click)="genComprobanteVenta()" pButton pRipple type="button" icon="pi pi-file-edit" label="Generar Comprobante" class="p-button-raised p-button-help p-mr-2 p-mb-2"></button>
-            <button (click)="anularVenta()" pButton pRipple type="button" icon="pi pi-times" label="Anular Venta" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
-            <button (click)="eliminarVenta()" pButton pRipple type="button" icon="pi pi-trash" label="Eliminar Venta" class="p-button-raised p-button-danger p-mr-2 p-mb-2"></button>
-
-            <button style="float: right" (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
-            <button style="float: right" (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-file-excel" label="Exportar a Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-file-excel" label="Exportar a Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
 <!-- 
   
             
@@ -88,7 +75,7 @@
                     </div>
                 </div>
 
-                <div class="p-field p-grid">
+                <!-- <div class="p-field p-grid">
                     <label for="estadoVentas" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Palabra Clave</label>
                     <div class="p-col-12 p-md-11">
                         <div class="p-inputgroup">
@@ -98,6 +85,62 @@
                                 <label>Número de Venta, Cliente, Comprobante, Usuario</label>
                             </span>
                         </div>
+                    </div>
+                </div> -->
+
+                <div class="p-field p-grid">
+                    <label for="usuario" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Usuario</label>
+                    <div class="p-col-12 p-md-11">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsUsuario inputId="usuario" [options]="usuarios" (onChange)="cambioFiltros($event)" [(ngModel)]="clsUsuario" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>SELECCIONE</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Cliente</label>
+                    <div class="p-col-12 p-md-8">
+                        <input
+                        id="nombreCliente"
+                        type="text"
+                        pInputText
+                        [(ngModel)]="txtNombreCliente"
+                        #inputNombreCliente
+                        [disabled]="true"
+                        />
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <button
+                        (click)="buscarCliente()"
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-search"
+                        label="Buscar Cliente"
+                        class="p-button-raised p-button-info"
+                        ></button>
+                      </div>
+                      <div class="p-col-12 p-md-1">
+                        <button
+                          (click)="cancelCliente()"
+                          pButton
+                          pRipple
+                          type="button"
+                          icon="pi pi-times"
+                          label=""
+                          class="p-button-raised p-button-danger"
+                        ></button>
+                      </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="tipoComprobante" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Tipo de Comprobante</label>
+                    <div class="p-col-12 p-md-2">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoComprobante inputId="tipoComprobante" [options]="tipoComprobantes" (onChange)="cambioFiltros($event)" [(ngModel)]="clsTipoComprobante" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                                <label>SELECCIONE</label>
+                        </span>
                     </div>
                 </div>
 
@@ -186,416 +229,9 @@
 
 
 
-        
-        <p-dialog header="Confirmar Pago" [(visible)]="displayConfirmarPago" [modal]="true" [style]="{'min-height':'600px', 'width': '50vw' }" [draggable]="false" [resizable]="false">
-            <div class="p-col-12">
-                
-            <div class="p-field p-grid">
-                <label for="clsTipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-                ><b>Comprobante:</b></label
-                >
-                <div class="p-col-12 p-md-4">
-                <span class="p-float-label">
-                    <p-dropdown
-                    #tinputclsTipoComprobante
-                    inputId="clsTipoComprobante"
-                    [options]="tipoComprobantes"
-                    [(ngModel)]="clsTipoComprobante"
-                    optionLabel="name"
-                    [autoDisplayFirst]="false"
-                    [style]="{'height':'40px', 'width':'100%'}"
-                    [filter]="true"
-                    (onChange)="buscarSeriesComprobantes()"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                </span>
-                </div>
-            </div>
-        
-            <div class="p-field p-grid">
-                <label for="clsSerieComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-                ><b>Serie de Comprobante:</b></label
-                >
-                <div class="p-col-12 p-md-4">
-                <span class="p-float-label">
-                    <p-dropdown
-                    #tinputclsSerieComprobante
-                    inputId="clsSerieComprobante"
-                    [options]="serieComprobantes"
-                    [(ngModel)]="clsSerieComprobante"
-                    optionLabel="name"
-                    [autoDisplayFirst]="false"
-                    [style]="{'height':'40px', 'width':'100%'}"
-                    [filter]="true"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                </span>
-                </div>
-            </div>
-        
-        
-                    <hr>
-                    <h5>Método de Pago</h5>
-        
-                    <div class="p-field p-grid">
-                        <label for="clsMetodoPago" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                        ><b>Tipo de Pago:</b></label
-                        >
-                        <div class="p-col-12 p-md-5">
-                        <span class="p-float-label">
-                            <p-dropdown
-                            #tinputclsMetodoPago
-                            inputId="clsMetodoPago"
-                            [options]="metodoPagos"
-                            [(ngModel)]="clsMetodoPago"
-                            optionLabel="name"
-                            [autoDisplayFirst]="false"
-                            [style]="{'height':'40px', 'width':'100%'}"
-                            [filter]="true"
-                            (onChange)="getDataMetodosPagos()"
-                            ></p-dropdown>
-                            <label>Seleccione</label>
-                        </span>
-                        </div>
-                    </div>
-        
-        
-                    <!-- Transferencia Bancaria o Cheque -->
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' || clsMetodoPago.tipoId == 'CH' )">
-                        <label for="clsBanco" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                        ><b>Banco:</b></label
-                        >
-                        <div class="p-col-12 p-md-5">
-                        <span class="p-float-label">
-                            <p-dropdown
-                            #tinputclsBanco
-                            inputId="clsBanco"
-                            [options]="bancos"
-                            [(ngModel)]="clsBanco"
-                            optionLabel="name"
-                            [autoDisplayFirst]="false"
-                            [style]="{'height':'40px', 'width':'100%'}"
-                            [filter]="true"
-                            (onChange)="buscarCuentas()"
-                            ></p-dropdown>
-                            <label>Seleccione</label>
-                        </span>
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' || clsMetodoPago.tipoId == 'CH' )">
-                        <label for="clsNumeroCuenta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                        ><b>N° de Cuenta:</b></label
-                        >
-                        <div class="p-col-12 p-md-5">
-                        <span class="p-float-label">
-                            <p-dropdown
-                            #tinputclsNumeroCuenta
-                            inputId="clsNumeroCuenta"
-                            [options]="numeroCuentas"
-                            [(ngModel)]="clsNumeroCuenta"
-                            optionLabel="name"
-                            [autoDisplayFirst]="false"
-                            [style]="{'height':'40px', 'width':'100%'}"
-                            [filter]="true"
-                            ></p-dropdown>
-                            <label>Seleccione</label>
-                        </span>
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'WT' )">
-                        <label for="numeroOperacion" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
-                        <div class="p-col-12 p-md-5">
-                            <input id="numeroOperacion" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion maxLength="200" placeholder="" style="height:40px; width:100%;">
-                        </div>
-                    </div>
-        
-        
-                    <!-- Tarjeta de Crédito -->
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
-                        <label for="comprobante" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                        ><b>Tipo de Tarjeta:</b></label
-                        >
-                        <div class="p-col-12 p-md-5">
-                        <span class="p-float-label">
-                            <p-dropdown
-                            #tinputclsTipoTarjeta
-                            inputId="clsTipoTarjeta"
-                            [options]="tipoTarjetas"
-                            [(ngModel)]="clsTipoTarjeta"
-                            optionLabel="name"
-                            [autoDisplayFirst]="false"
-                            [style]="{'height':'40px', 'width':'100%'}"
-                            [filter]="true"
-                            ></p-dropdown>
-                            <label>Seleccione</label>
-                        </span>
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CC')">
-                        <label for="numeroTarjeta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Tarjeta:</b></label>
-                        <div class="p-col-12 p-md-5">
-                            <input id="numeroTarjeta" type="text" pInputText [(ngModel)]="numeroTarjeta" #inputnumeroTarjeta maxLength="20" placeholder="" style="height:40px; width:100%;">
-                        </div>
-                    </div>
-        
-        
-                    <!-- YAPE PLIN -->
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
-                        <label for="clsNumeroCelular" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"
-                        ><b>N° de Celular:</b></label
-                        >
-                        <div class="p-col-12 p-md-5">
-                        <span class="p-float-label">
-                            <p-dropdown
-                            #tinputclsNumeroCelular
-                            inputId="clsNumeroCelular"
-                            [options]="numeroCelulares"
-                            [(ngModel)]="clsNumeroCelular"
-                            optionLabel="name"
-                            [autoDisplayFirst]="false"
-                            [style]="{'height':'40px', 'width':'100%'}"
-                            [filter]="true"
-                            ></p-dropdown>
-                            <label>Seleccione</label>
-                        </span>
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'EW')">
-                        <label for="numeroOperacion2" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Operación:</b></label>
-                        <div class="p-col-12 p-md-5">
-                            <input id="numeroOperacion2" type="text" pInputText [(ngModel)]="numeroOperacion" #inputnumeroOperacion2 maxLength="200" placeholder="" style="height:40px; width:100%;">
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid" *ngIf="clsMetodoPago != null && (clsMetodoPago.tipoId == 'CH')">
-                        <label for="numeroCheque" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Número de Cheque</b></label>
-                        <div class="p-col-12 p-md-5">
-                            <input id="numeroCheque" type="text" pInputText [(ngModel)]="numeroCheque" #inputnumeroCheque maxLength="500" placeholder="" style="height:40px; width:100%;">
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid">
-                        <label for="montoVenta" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto de Venta:</b></label>
-                        <div class="p-col-12 p-md-5">
-                            <input id="montoVenta" type="text" pInputText [(ngModel)]="ImporteTotal" #inputmontoVenta  placeholder="" style="height:40px; width:100%;" [readonly]="true">
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid">
-                        <label for="montoAbonado" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Monto Abonado:</b></label>
-                        <div class="p-col-12 p-md-5">
-                            <input
-                            id="montoAbonado"
-                            type="text"
-                            pInputText
-                            [(ngModel)]="montoAbonado"
-                            appSoloNumeros
-                            #inputmontoAbonado
-                            (change)="calcularMontos($event)"
-                            style="height:40px; width:100%;"
-                            />
-                        </div>
-                    </div>
-        
-                    <div class="p-field p-grid">
-                        <label for="montoVuelto" class="p-col-12 p-mb-3 p-md-3 p-mb-md-0"><b>Vuelto:</b></label>
-                        <div class="p-col-12 p-md-5">
-                            <input id="montoVuelto" type="text" pInputText [(ngModel)]="montoVuelto" #inputmontoVuelto  placeholder="" style="height:40px; width:100%;" [readonly]="true">
-                        </div>
-                    </div>
-        
-        
-            <div class="p-mb-3" style="margin-top: 45px;"></div>
-        
-            <br>
-        
-            <button
-                (click)="confirmarPago()"
-                pButton
-                pRipple
-                type="button"
-                icon="pi pi-check-square"
-                label="Confirmar Pago"
-                class="p-button-raised p-mr-2 p-mb-2"
-                ></button>
-            </div>
-            <p-footer>
-                <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
-                <button (click)="displayConfirmarPago=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
-                <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
-            </p-footer>
-        </p-dialog>
+     
 
-
-        
-        <p-dialog header="Generar Comprobante" [(visible)]="displayGenerateComprobante" [modal]="true" [style]="{'min-height':'400px', 'width': '50vw' }" [draggable]="false" [resizable]="false">
-            <div class="p-col-12">
-
-            <div class="p-field p-grid">
-                <label for="clsTipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-                ><b>Comprobante:</b></label
-                >
-                <div class="p-col-12 p-md-4">
-                <span class="p-float-label">
-                    <p-dropdown
-                    #tinputclsTipoComprobante
-                    inputId="clsTipoComprobante"
-                    [options]="tipoComprobantes"
-                    [(ngModel)]="clsTipoComprobante"
-                    optionLabel="name"
-                    [autoDisplayFirst]="false"
-                    [style]="{'height':'40px', 'width':'100%'}"
-                    [filter]="true"
-                    (onChange)="buscarSeriesComprobantes()"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                </span>
-                </div>
-            </div>
-        
-            <div class="p-field p-grid">
-                <label for="clsSerieComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-                ><b>Serie de Comprobante:</b></label
-                >
-                <div class="p-col-12 p-md-4">
-                <span class="p-float-label">
-                    <p-dropdown
-                    #tinputclsSerieComprobante
-                    inputId="clsSerieComprobante"
-                    [options]="serieComprobantes"
-                    [(ngModel)]="clsSerieComprobante"
-                    optionLabel="name"
-                    [autoDisplayFirst]="false"
-                    [style]="{'height':'40px', 'width':'100%'}"
-                    [filter]="true"
-                    ></p-dropdown>
-                    <label>Seleccione</label>
-                </span>
-                </div>
-            </div>
-            
-                
-                <hr>    
-
-
-               
-            <div class="p-field p-grid">
-                <label for="nombreCliente" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Cliente:</b></label>
-                <div class="p-col-12 p-md-8">
-                    <input
-                      *ngIf="venta != null && venta.cliente != null"
-                      id="nombreCliente"
-                      type="text"
-                      pInputText
-                      [(ngModel)]="venta.cliente.nombre"
-                      #inputNombreCliente
-                      [readonly]="true"
-                      [style]="{'width':'100%'}"
-                    />
-                  </div>
-                  <div class="p-col-12 p-md-2">
-                    <button
-                      (click)="buscarCliente()"
-                      pButton
-                      pRipple
-                      type="button"
-                      icon="pi pi-search"
-                      label="Buscar Cliente"
-                      class="p-button-raised p-button-info"
-                    ></button>
-                  </div>
-            </div>
-
-
-            <div class="p-field p-grid">
-              <label for="documentoCliente" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-                ><b>N° de Documento:</b></label
-              >
-              <div class="p-col-12 p-md-4">
-                <input
-                  *ngIf="venta != null && venta.cliente != null"
-                  id="documentoCliente"
-                  type="text"
-                  pInputText
-                  [(ngModel)]="venta.cliente.documento"
-                  #inputDocumentoCliente
-                  [readonly]="true"
-                  [style]="{'width':'100%'}"
-                />
-              </div>
-              <div
-                class="p-col-12 p-md-2"
-                style="text-align: center; padding-top: 6px; padding-bottom: 6px"
-              >
-                <span 
-                  *ngIf="nombreDocIdentidad != null && nombreDocIdentidad.length > 0"
-                  class="person-tag pink-bgcolor p-p-1 fs-small"
-                  style="
-                    color: #f7f7f7;
-                    font-weight: 500;
-                    min-height: 100%;
-                    display: inline-flex;
-                    align-items: center;
-                    font-size: 15px !important;
-                  "
-                  >{{ nombreDocIdentidad }}</span
-                >
-              </div>
-              <div
-                class="p-col-12 p-md-4"
-                style="padding-top: 6px; padding-bottom: 6px"
-              >
-                <div class="p-inputgroup">
-                  <button
-                    pButton
-                    pRipple
-                    type="button"
-                    label="Buscar"
-                    (click)="buscarDocCliente()"
-                    style="width: 150px"
-                  ></button>
-                  <span class="p-float-label">
-                    <input
-                      type="text"
-                      pInputText
-                      [(ngModel)]="txtBuscarDocCliente"
-                      (keyup.enter)="buscarDocCliente()"
-                      #inputBuscarDocCliente
-                      [style]="{'width':'100%'}"
-                    />
-                    <label>Documento de Identidad</label>
-                  </span>
-                </div>
-              </div>
-            </div>               
-                
-        
-            <div class="p-mb-3" style="margin-top: 45px;"></div>
-        
-            <br>
-        
-            <button
-                (click)="GenerarComprobante()"
-                pButton
-                pRipple
-                type="button"
-                icon="pi pi-check-square"
-                label="Generar Comprobante"
-                class="p-button-raised p-mr-2 p-mb-2"
-                ></button>
-            </div>
-            <p-footer>
-                <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayProductsToVentas=false" label="Yes" class="p-button-text"></button> -->
-                <button (click)="displayGenerateComprobante=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
-                <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayProductsToVentas=false" label="No" class="p-button-text"></button> -->
-            </p-footer>
-        </p-dialog>
-
-
+    
 
         <p-dialog header="Seleccionar Cliente" [(visible)]="displayClient" [modal]="true" [style]="{ width: '70vw' }" [draggable]="false" [resizable]="false">
             <div class="p-col-12">
@@ -606,7 +242,6 @@
                                 <input type="text" pInputText [(ngModel)]="txtBuscarCliente" (keyup.enter)="buscarClientes()" #inputBuscar/>
                                 <label>Palabra Clave</label>
                             </span>
-                            <button (click)="nuevoCliente()" pButton pRipple type="button" label="Nuevo Cliente" class="p-button-info" icon="pi pi-plus" style="min-width: 130px;"></button>
                         </div>
                     </div>
         

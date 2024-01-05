@@ -120,7 +120,7 @@ export class AppMenuComponent implements OnInit {
                     },
                     {label: 'Ventas', icon: 'pi pi-fw pi-file-pdf',
                     items: [
-                        {label: 'Ventas Generales', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
+                        {label: 'Ventas Generales', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/ventas-generales']}, 
                         {label: 'Ventas por Vendedor', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
                         {label: 'Ventas Detalladas', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
                         {label: 'Top de Productos Vendidos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},

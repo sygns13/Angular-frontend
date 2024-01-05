@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { FiltroInventario } from '../../_util/filtro_inventario';
 import { FiltroGeneral } from 'src/app/_util/filtro_general';
 import { FiltroEntradaStock } from 'src/app/_util/filtro_entrada_stock';
+import { FiltroVenta } from 'src/app/_util/filtro_venta';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,9 @@ export class ExportsService {
   protected pathDetallada: string = `detallada`;
   protected pathCuentasPorPagar: string = `cuentas_pagar_general`;
   protected pathCuentasPorPagarDetail: string = `cuentas_pagar_detallado`;
+
+  protected urlVentas: string = `${environment.HOST}/api/backend/venta_report`;
+  protected pathGeneralVta: string = `general`;
 
   constructor(protected http: HttpClient) { }
 
@@ -173,6 +177,19 @@ export class ExportsService {
 
   exportCuentasPagarDetailXLSX(filtros: FiltroEntradaStock) {
     return this.http.post(`${this.urlCompras}/${this.pathCuentasPorPagarDetail}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+
+  exportVentasGeneralesPDF(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathGeneralVta}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportVentasGeneralesXLSX(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathGeneralVta}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }
