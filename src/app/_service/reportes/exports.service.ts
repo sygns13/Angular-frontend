@@ -33,6 +33,7 @@ export class ExportsService {
 
   protected urlVentas: string = `${environment.HOST}/api/backend/venta_report`;
   protected pathGeneralVta: string = `general`;
+  protected pathDetalladaVta: string = `detallada`;
 
   constructor(protected http: HttpClient) { }
 
@@ -190,6 +191,18 @@ export class ExportsService {
 
   exportVentasGeneralesXLSX(filtros: FiltroVenta) {
     return this.http.post(`${this.urlVentas}/${this.pathGeneralVta}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportVentasDetalladasPDF(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathDetalladaVta}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportVentasDetalladasXLSX(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathDetalladaVta}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }

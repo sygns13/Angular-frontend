@@ -31,21 +31,23 @@ import { TipoDocumento } from './../../../_model/tipo_documento';
 import { ExportsService } from './../../../_service/reportes/exports.service';
 import { InventarioService } from './../../../_service/inventario.service';
 import { UserService } from './../../../_service/user.service';
+import { FiltroProductosVenta } from './../../../_util/filtro_productos_venta';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-ventasgenerales',
-  templateUrl: './ventasgenerales.component.html',
-  styleUrls: ['./ventasgenerales.component.scss'],
+  selector: 'app-ventasdetalladas',
+  templateUrl: './ventasdetalladas.component.html',
+  styleUrls: ['./ventasdetalladas.component.scss'],
   providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
-export class VentasgeneralesComponent implements OnInit{
+export class VentasdetalladasComponent implements OnInit{
 
   //@ViewChild('inputTxtBuscar', { static: false }) inputTxtBuscar: ElementRef;
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
   @ViewChild('inputBuscarDocCliente', { static: false }) inputBuscarDocCliente: ElementRef;
   @ViewChild('inputNombreClienteReg', { static: false }) inputNombreClienteReg: ElementRef;
+  @ViewChild('inputBuscarProductos', { static: false }) inputBuscarProductos: ElementRef;
 
 
   almacens: any[] = [];
@@ -172,6 +174,29 @@ export class VentasgeneralesComponent implements OnInit{
 
   txtNombreCliente: string = '';
 
+  txtBuscarProducto: string = '';
+  txtBuscarProductoF: string = '';
+
+  displayProductsToVentas : boolean = false;
+  selectedProductVenta: Producto;
+
+  filtroProductosVenta: FiltroProductosVenta = new FiltroProductosVenta();
+  productosVentas: any[] = [];
+
+  pageProductosToVentas: number = 0;
+  firstProductosToVentas: number = 0;
+  lastProductosToVentas: number = 0;
+  rowsProductosToVentas: number = 10;
+  isFirstProductosToVentas: boolean = true;
+  isLastProductosToVentas: boolean = false;
+  totalRecordsProductosToVentas: number = 0;
+  numberElementsProductosToVentas: number = 0;
+  loadingProductosToVentas: boolean = true; 
+
+  unidads: any[] = [];
+  clsUnidad: any = null;
+
+
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private ventaService: VentaService, 
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
     private almacenService: AlmacenService, private router: Router,
@@ -185,10 +210,11 @@ export class VentasgeneralesComponent implements OnInit{
     private tipoTarjetaService: TipoTarjetaService,
     private exportsService: ExportsService,
     private inventarioService: InventarioService,
-    private userService: UserService) {
+    private userService: UserService,
+    private productoService: ProductoService) {
     this.breadcrumbService.setItems([
       { label: 'Reportes' },
-      { label: 'Reporte de Ventas Generales', routerLink: ['/reporte/ventas-generales'] }
+      { label: 'Ventas Detalladas por Producto', routerLink: ['/reporte/ventas-detalladas'] }
     ]);
 
   }
@@ -428,7 +454,7 @@ export class VentasgeneralesComponent implements OnInit{
  
     this.loading = true;
   
-    this.ventaService.getVentas(this.filtroVenta, p ,s).subscribe(data => {
+    this.ventaService.getVentasDetallado(this.filtroVenta, p ,s).subscribe(data => {
       this.ventas = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
@@ -525,7 +551,88 @@ export class VentasgeneralesComponent implements OnInit{
     else{
       this.filtroVenta.idTipoComprobante = null;
     }
+
+    if(this.selectedProductVenta != null && this.selectedProductVenta.id != null){
+      this.filtroVenta.idProducto = this.selectedProductVenta.id;
+    } else{
+      this.filtroVenta.idProducto = null;
+    }
   }
+
+  buscarProducto() {
+
+    /* this.filtroProductosVenta.almacenId = this.entradaStock.almacen.id;
+    this.filtroProductosVenta.size = 10;
+
+    this.displayProductsToVentas = false; */
+    this.displayProductsToVentas = true;
+    this.selectedProductVenta = null
+    this.buscarProductos();
+    this.setFocusBuscarProducto();
+    
+  }
+
+  setFocusBuscarProducto() {    
+    this.changeDetectorRef.detectChanges();
+    this.inputBuscarProductos.nativeElement.focus();
+  }
+
+  buscarProductos(): void{
+    this.loadingProductosToVentas = true; 
+    this.filtroProductosVenta.palabraClave = this.txtBuscarProductoF;
+    this.filtroProductosVenta.unidadId = parseInt((this.clsUnidad != null) ? this.clsUnidad.code : 0);
+    this.filtroProductosVenta.page = 0;
+    this.listarPageProductosToVentas();
+  }
+
+  listarPageProductosToVentas() {
+
+    this.productoService.listarPageable(this.filtroProductosVenta.page, this.filtroProductosVenta.size, this.filtroProductosVenta.palabraClave).subscribe(data => {
+      this.productosVentas = data.content;
+      this.isFirstProductosToVentas = data.first;
+      this.isLastProductosToVentas = data.last;
+      this.numberElementsProductosToVentas = data.numberOfElements;
+      this.firstProductosToVentas = (this.filtroProductosVenta.page * this.filtroProductosVenta.size);
+      this.lastProductosToVentas = (this.filtroProductosVenta.page * this.filtroProductosVenta.size) + this.numberElementsProductosToVentas;
+      this.totalRecordsProductosToVentas = data.totalElements;
+      this.loadingProductosToVentas = false;
+    });
+  }
+
+  aceptarProducto(registro){
+    this.selectedProductVenta = registro;
+
+    this.txtBuscarProducto = this.selectedProductVenta.nombre;
+    this.displayProductsToVentas = false;
+    this.cambioFiltrosExec();
+  }
+
+  cancelProducto(){
+    this.selectedProductVenta = new Producto();
+    this.txtBuscarProducto = '';
+    this.displayProductsToVentas = false;
+    this.cambioFiltrosExec();
+  }
+
+  loadDataProductosToVentas(event: LazyLoadEvent) { 
+    this.loadingProductosToVentas = true; 
+    this.filtroProductosVenta.size = event.rows;
+    this.filtroProductosVenta.page = event.first / this.rows;
+  
+    this.listarPageProductosToVentas();
+  
+  }
+
+
+
+
+
+
+
+
+
+
+
 
   buscar(): void{
     this.actualizarVentas();
@@ -1106,7 +1213,7 @@ export class VentasgeneralesComponent implements OnInit{
   }
 
   printPDF(): void{
-    this.exportsService.exportVentasGeneralesPDF(this.filtroVenta).subscribe(data => {
+    this.exportsService.exportVentasDetalladasPDF(this.filtroVenta).subscribe(data => {
   
       const file = new Blob([data], { type: 'application/pdf' });  
       const fileURL = URL.createObjectURL(file);
@@ -1115,7 +1222,7 @@ export class VentasgeneralesComponent implements OnInit{
       a.setAttribute('style', 'display:none');
       document.body.appendChild(a);
       a.href = fileURL;
-      a.download = 'VentasGeneral.pdf';
+      a.download = 'VentasDetalladas.pdf';
       a.click();
   
       //window.open(fileURL);
@@ -1123,7 +1230,7 @@ export class VentasgeneralesComponent implements OnInit{
   }
 
   printXLS(): void{
-    this.exportsService.exportVentasGeneralesXLSX(this.filtroVenta).subscribe(data => {
+    this.exportsService.exportVentasDetalladasXLSX(this.filtroVenta).subscribe(data => {
   
       const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const fileURL = URL.createObjectURL(file);
@@ -1132,7 +1239,7 @@ export class VentasgeneralesComponent implements OnInit{
       a.setAttribute('style', 'display:none');
       document.body.appendChild(a);
       a.href = fileURL;
-      a.download = 'VentasGeneral.xlsx';
+      a.download = 'VentasDetalladas.xlsx';
       a.click();
       //window.open(fileURL);
     });

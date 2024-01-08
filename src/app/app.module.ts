@@ -214,6 +214,7 @@ import { ComprasdetalladasComponent } from './paginas/reporte/comprasdetalladas/
 import { CuentaspagarComponent } from './paginas/reporte/cuentaspagar/cuentaspagar.component';
 import { CuentaspagardetailComponent } from './paginas/reporte/cuentaspagardetail/cuentaspagardetail.component';
 import { VentasgeneralesComponent } from './paginas/reporte/ventasgenerales/ventasgenerales.component';
+import { VentasdetalladasComponent } from './paginas/reporte/ventasdetalladas/ventasdetalladas.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -422,6 +423,7 @@ export function tokenGetter() {
         CuentaspagarComponent,
         CuentaspagardetailComponent,
         VentasgeneralesComponent,
+        VentasdetalladasComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

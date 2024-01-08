@@ -27,4 +27,6 @@ export class FiltroVenta {
     buscarDatosUser: string;
 
     buscarDatos: string;
+
+    idProducto: number;
 }

@@ -79,4 +79,8 @@ export class VentaService extends GenericService<Venta>{
   getPagosVentas(id: number, p: number, s:number) {
     return this.http.post<any>(`${this.url}/get-pagos/${id}?page=${p}&size=${s}`, null);
   }
+
+  getVentasDetallado(filtro: FiltroVenta, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get_ventas_detallado?page=${p}&size=${s}`, filtro);
+  }
 }
