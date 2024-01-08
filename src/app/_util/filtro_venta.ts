@@ -29,4 +29,9 @@ export class FiltroVenta {
     buscarDatos: string;
 
     idProducto: number;
+    
+    tipoProductoId: number;
+    marcaId: number;
+    presentacionId: number;
+
 }

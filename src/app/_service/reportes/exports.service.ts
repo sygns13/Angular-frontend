@@ -34,6 +34,7 @@ export class ExportsService {
   protected urlVentas: string = `${environment.HOST}/api/backend/venta_report`;
   protected pathGeneralVta: string = `general`;
   protected pathDetalladaVta: string = `detallada`;
+  protected pathTopProductos: string = `top_productos`;
 
   constructor(protected http: HttpClient) { }
 
@@ -203,6 +204,19 @@ export class ExportsService {
 
   exportVentasDetalladasXLSX(filtros: FiltroVenta) {
     return this.http.post(`${this.urlVentas}/${this.pathDetalladaVta}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+
+  exportVentasTopProductosPDF(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathTopProductos}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportVentasTopProductosXLSX(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathTopProductos}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }

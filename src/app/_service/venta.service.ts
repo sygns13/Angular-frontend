@@ -83,4 +83,8 @@ export class VentaService extends GenericService<Venta>{
   getVentasDetallado(filtro: FiltroVenta, p: number, s:number) {
     return this.http.post<any>(`${this.url}/get_ventas_detallado?page=${p}&size=${s}`, filtro);
   }
+
+  getVentasTopProductosVendidos(filtro: FiltroVenta, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get_top_productos_vendidos?page=${p}&size=${s}`, filtro);
+  }
 }
