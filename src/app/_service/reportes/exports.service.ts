@@ -36,6 +36,7 @@ export class ExportsService {
   protected pathDetalladaVta: string = `detallada`;
   protected pathTopProductos: string = `top_productos`;
   protected pathCuentasPorCobrar: string = `cuentas_cobrar_general`;
+  protected pathCuentasPorCobrarDetail: string = `cuentas_cobrar_detallado`;
 
   constructor(protected http: HttpClient) { }
 
@@ -230,6 +231,18 @@ export class ExportsService {
 
   exportCuentasCobrarXLSX(filtros: FiltroVenta) {
     return this.http.post(`${this.urlVentas}/${this.pathCuentasPorCobrar}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportCuentasCobrarDetailPDF(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathCuentasPorCobrarDetail}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportCuentasCobrarDetailXLSX(filtros: FiltroVenta) {
+    return this.http.post(`${this.urlVentas}/${this.pathCuentasPorCobrarDetail}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }

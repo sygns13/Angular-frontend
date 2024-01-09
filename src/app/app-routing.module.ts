@@ -66,6 +66,7 @@ import { VentasgeneralesComponent } from './paginas/reporte/ventasgenerales/vent
 import { VentasdetalladasComponent } from './paginas/reporte/ventasdetalladas/ventasdetalladas.component';
 import { VentastopproductosComponent } from './paginas/reporte/ventastopproductos/ventastopproductos.component';
 import { CuentascobrarComponent } from './paginas/reporte/cuentascobrar/cuentascobrar.component';
+import { CuentascobrardetailComponent } from './paginas/reporte/cuentascobrardetail/cuentascobrardetail.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -216,6 +217,7 @@ const routes: Routes = [
      {path: 'ventas-detalladas', component: VentasdetalladasComponent},
      {path: 'top-productos-vendidos', component: VentastopproductosComponent},
      {path: 'cobro-ventas', component: CuentascobrarComponent},
+     {path: 'cobro-detallado', component: CuentascobrardetailComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },
