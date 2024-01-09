@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CajaSucursalDTO } from 'src/app/_model/cajasucursal_dto';
+import { FiltroGeneral } from 'src/app/_util/filtro_general';
 
 
 @Injectable({
@@ -22,5 +23,9 @@ export class CajaDiariaSucursalService {
 
   getCajaDiaria(fecha:String, almacen_id:number){
     return this.http.get<CajaSucursalDTO>(`${this.url}/get-caja-diaria?almacen_id=${almacen_id}&fecha=${fecha}`);
+  }
+
+  getResumenCaja(filtro: FiltroGeneral) {
+    return this.http.post<CajaSucursalDTO>(`${this.url}/get_resumen_caja`, filtro);
   }
 }
