@@ -219,6 +219,7 @@ import { VentastopproductosComponent } from './paginas/reporte/ventastopproducto
 import { CuentascobrarComponent } from './paginas/reporte/cuentascobrar/cuentascobrar.component';
 import { CuentascobrardetailComponent } from './paginas/reporte/cuentascobrardetail/cuentascobrardetail.component';
 import { CajaresumenComponent } from './paginas/reporte/cajaresumen/cajaresumen.component';
+import { IngresosventasComponent } from './paginas/reporte/ingresosventas/ingresosventas.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -432,6 +433,7 @@ export function tokenGetter() {
         CuentascobrarComponent,
         CuentascobrardetailComponent,
         CajaresumenComponent,
+        IngresosventasComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

@@ -68,6 +68,7 @@ import { VentastopproductosComponent } from './paginas/reporte/ventastopproducto
 import { CuentascobrarComponent } from './paginas/reporte/cuentascobrar/cuentascobrar.component';
 import { CuentascobrardetailComponent } from './paginas/reporte/cuentascobrardetail/cuentascobrardetail.component';
 import { CajaresumenComponent } from './paginas/reporte/cajaresumen/cajaresumen.component';
+import { IngresosventasComponent } from './paginas/reporte/ingresosventas/ingresosventas.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -221,6 +222,7 @@ const routes: Routes = [
      {path: 'cobro-detallado', component: CuentascobrardetailComponent},
 
      {path: 'resumen-caja', component: CajaresumenComponent},
+     {path: 'ingresos-ventas', component: IngresosventasComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },
