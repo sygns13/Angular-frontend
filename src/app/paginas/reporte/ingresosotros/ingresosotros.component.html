@@ -1,0 +1,133 @@
+<div class="p-grid" *ngIf="vistaCarga">
+    <div class="p-col-12" style="text-align: center;" >
+        <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    
+    <p-toast></p-toast>
+    
+    <div class="p-grid" >
+    
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+            <h4>Reporte de Ingresos por Otros Movimientos Realizadas</h4>
+            <br>
+    
+            <button (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-file-excel" label="Exportar a Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+    
+        </div>
+    </div>
+    
+
+    
+    <div class="p-col-12">
+        <div class="card  p-shadow-10">
+             <h5>Listado de Movimientos de Dinero Registrados</h5>
+       <!-- <div class="p-mb-3">
+            <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [hidden]="isFirstPage()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+            <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
+        </div>-->
+
+        <div class="p-fluid box" style="padding-top:15px; padding-bottom:25px;">
+            <div class="p-field p-grid">
+                <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
+                <div class="p-col-12 p-md-12">
+                    <span class="p-float-label">
+                        <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioFiltros($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                            <label>GENERAL TODOS</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Desde</label>
+                <div class="p-col-12 p-md-2">
+                    <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaInicio" #inputFechaInicio [style]="{'height':'31px'}">
+                    </p-inputMask>
+                </div>
+
+                <label for="fechaFinal" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Hasta</label>
+                <div class="p-col-12 p-md-2">
+                    <p-inputMask id="fechaFinal" inputId="inputmask1" mask="99/99/9999" (change)="cambioFiltros($event)"  [(ngModel)]="fechaFinal" #inputFechaFinal [style]="{'height':'31px'}">
+                    </p-inputMask>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="tipoComprobante" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"><b>Movimiento Libre o Tipo de Comprobante</b></label>
+                    <div class="p-col-12 p-md-4">
+                        <span class="p-float-label combo">
+                            <p-dropdown inputId="tipoComprobante" [options]="tipoComprobantes" (onChange)="cambioFiltros($event)" [(ngModel)]="clsTipoComprobante" optionLabel="name" [autoDisplayFirst]="true" [style]="{'height':'31px'}"></p-dropdown>
+                                <label>Seleccione</label>
+                        </span>
+                    </div>
+              </div>
+        </div>
+
+
+        <div class="p-grid">
+            <h5>Ingreso Totales - Monto Total (S/.): {{montoTotal | currency:'PEN':'S/.'}}</h5>
+        </div>
+
+        <p-table [value]="ingresoSalidaCajas" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Sucursal</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Concepto</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Fecha</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Hora</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Tipo de Movimiento o Tipo de Comprobante</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">N° de Comprobante (En caso aplique)</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Importe Ingreso (S/.)</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-ingresoSalidaCaja let-rowIndex="rowIndex" >
+                <tr>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{rowIndex+1}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Sucursal</span>  {{ingresoSalidaCaja.almacen.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Concepto</span>  {{ingresoSalidaCaja.concepto}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Fecha</span>  {{ingresoSalidaCaja.fecha | passfechavistaTransform}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Hora</span>  {{ingresoSalidaCaja.hora}}</td>
+                   
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Tipo de Comprobante</span>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '0'">
+                            Movimiento Libre
+                        </ng-template>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '1'">
+                            Factura
+                        </ng-template>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '2'">
+                            Boleta
+                        </ng-template>
+                        <ng-template [ngIf]="ingresoSalidaCaja.tipoComprobante == '3'">
+                            Recibo por Honor
+                        </ng-template>
+                    </td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Comprobante</span>  {{ingresoSalidaCaja.comprobante}}</td>
+
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Monto</span>  {{ingresoSalidaCaja.monto | currency:'PEN':'S/.'}}</td>
+                    
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div> 
+    
+    
+        <p-confirmDialog header="Confirmación" #cd key="confirmDialog" icon="pi pi-exclamation-triangle" message="¿Está seguro de Registrar?"
+                                 [style]="{width: '425px'}" acceptButtonStyleClass="p-button-text" rejectButtonStyleClass="p-button-text">
+                                 <p-footer>
+                                    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+                                    <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
+                                </p-footer>
+                                </p-confirmDialog>
+    
+                                 <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
+                                 <!-- <p-messages [value]="msgs"></p-messages> -->
+    
+    </div>

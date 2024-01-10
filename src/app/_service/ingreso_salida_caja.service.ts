@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { IngresoSalidaCaja } from '../_model/ingreso_salida_caja';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { FiltroGeneral } from '../_util/filtro_general';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class IngresoSalidaCajaService extends GenericService<IngresoSalidaCaja> 
 
   listarAll(){
     return this.http.get<IngresoSalidaCaja[]>(`${this.url}/listar-all`);
+  }
+
+  getIngresosCaja(filtros: FiltroGeneral) {
+    return this.http.post<any>(`${this.url}/ingresos_otros`, filtros);
   }
 }

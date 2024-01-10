@@ -7,4 +7,5 @@ export class FiltroGeneral {
     tipo: number;
     fechaInicio: string;
     fechaFinal: string;
+    tipoComprobanteOtros: number;
 }

@@ -41,6 +41,7 @@ export class ExportsService {
   protected urlCaja: string = `${environment.HOST}/api/backend/caja_reportes`;
   protected resumen: string = `resumen`;
   protected ingresosVentas: string = `ingresos_ventas`;
+  protected ingresosOtros: string = `ingresos_otros`;
 
   constructor(protected http: HttpClient) { }
 
@@ -272,6 +273,18 @@ export class ExportsService {
 
   exportIngresosVentasXLSX(filtros: FiltroVenta) {
     return this.http.post(`${this.urlCaja}/${this.ingresosVentas}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportIngresosOtrosPDF(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlCaja}/${this.ingresosOtros}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportIngresosOtrosXLSX(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlCaja}/${this.ingresosOtros}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }
