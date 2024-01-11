@@ -70,6 +70,7 @@ import { CuentascobrardetailComponent } from './paginas/reporte/cuentascobrardet
 import { CajaresumenComponent } from './paginas/reporte/cajaresumen/cajaresumen.component';
 import { IngresosventasComponent } from './paginas/reporte/ingresosventas/ingresosventas.component';
 import { IngresosotrosComponent } from './paginas/reporte/ingresosotros/ingresosotros.component';
+import { EgresoscomprasComponent } from './paginas/reporte/egresoscompras/egresoscompras.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -225,6 +226,7 @@ const routes: Routes = [
      {path: 'resumen-caja', component: CajaresumenComponent},
      {path: 'ingresos-ventas', component: IngresosventasComponent},
      {path: 'ingresos-otros', component: IngresosotrosComponent},
+     {path: 'egresos-compras', component: EgresoscomprasComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },

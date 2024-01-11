@@ -221,6 +221,7 @@ import { CuentascobrardetailComponent } from './paginas/reporte/cuentascobrardet
 import { CajaresumenComponent } from './paginas/reporte/cajaresumen/cajaresumen.component';
 import { IngresosventasComponent } from './paginas/reporte/ingresosventas/ingresosventas.component';
 import { IngresosotrosComponent } from './paginas/reporte/ingresosotros/ingresosotros.component';
+import { EgresoscomprasComponent } from './paginas/reporte/egresoscompras/egresoscompras.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -436,6 +437,7 @@ export function tokenGetter() {
         CajaresumenComponent,
         IngresosventasComponent,
         IngresosotrosComponent,
+        EgresoscomprasComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,

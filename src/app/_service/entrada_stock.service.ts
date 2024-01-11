@@ -102,4 +102,8 @@ export class EntradaStockService extends GenericService<EntradaStock>{
   getPagosEntradaStocksDetail(filtro: FiltroEntradaStock, p: number, s:number) {
     return this.http.post<any>(`${this.url}/get_entrada_stocks_pagar_detail?page=${p}&size=${s}`, filtro);
   }
+
+  getEgresosCompras(filtro: FiltroEntradaStock, p: number, s:number) {
+    return this.http.post<any>(`${this.url}/get_egresos_compras?page=${p}&size=${s}`, filtro);
+  }
 }

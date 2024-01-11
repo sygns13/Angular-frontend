@@ -42,6 +42,7 @@ export class ExportsService {
   protected resumen: string = `resumen`;
   protected ingresosVentas: string = `ingresos_ventas`;
   protected ingresosOtros: string = `ingresos_otros`;
+  protected egresosCompras: string = `egresos_compras`;
 
   constructor(protected http: HttpClient) { }
 
@@ -285,6 +286,19 @@ export class ExportsService {
 
   exportIngresosOtrosXLSX(filtros: FiltroGeneral) {
     return this.http.post(`${this.urlCaja}/${this.ingresosOtros}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+
+  exportEgresosComprasPDF(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCaja}/${this.egresosCompras}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportEgresosComprasXLSX(filtros: FiltroEntradaStock) {
+    return this.http.post(`${this.urlCaja}/${this.egresosCompras}/export-xls`, filtros, {
       responseType: 'blob'
     });
   }
