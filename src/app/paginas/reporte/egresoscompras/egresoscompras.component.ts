@@ -222,7 +222,7 @@ export class EgresoscomprasComponent implements OnInit{
     private inventarioService: InventarioService) {
     this.breadcrumbService.setItems([
       { label: 'Reportes' },
-      { label: 'Reporte de Gastos por Pago a Proveedores', routerLink: ['/reporte/egresos-compras'] }
+      { label: 'Reporte de Egresos por Pago a Proveedores', routerLink: ['/reporte/egresos-compras'] }
     ]);
 
   }

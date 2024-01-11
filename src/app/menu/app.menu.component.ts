@@ -134,8 +134,8 @@ export class AppMenuComponent implements OnInit {
                         {label: 'Resumen de Caja', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/resumen-caja']}, 
                         {label: 'Ingresos por Ventas', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/ingresos-ventas']},
                         {label: 'Ingresos por Otros Conceptos', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/ingresos-otros']},
-                        {label: 'Gastos por Pago a Proveedores', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/egresos-compras']},
-                        {label: 'Gastos Diversos', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']},
+                        {label: 'Egresos por Pago a Proveedores', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/egresos-compras']},
+                        {label: 'Egresos por Otros Conceptos', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/egresos-otros']},
                         /* {label: 'Ingresos Egresos Detallados', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/landing']} */
                     ]
                     }

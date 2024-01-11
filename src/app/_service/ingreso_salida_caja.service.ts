@@ -35,4 +35,8 @@ export class IngresoSalidaCajaService extends GenericService<IngresoSalidaCaja> 
   getIngresosCaja(filtros: FiltroGeneral) {
     return this.http.post<any>(`${this.url}/ingresos_otros`, filtros);
   }
+
+  getEgresosCaja(filtros: FiltroGeneral) {
+    return this.http.post<any>(`${this.url}/egresos_otros`, filtros);
+  }
 }

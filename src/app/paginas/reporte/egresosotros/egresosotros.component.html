@@ -11,7 +11,7 @@
     
     <div class="p-col-12">
         <div class="card  p-shadow-10">
-            <h4>Reporte de Ingresos por Otros Movimientos Realizadas</h4>
+            <h4>Reporte de Egresos por Otros Movimientos Realizadas</h4>
             <br>
     
             <button (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-file-pdf" label="Exportar a PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
@@ -69,7 +69,7 @@
 
 
         <div class="p-grid">
-            <h5>Ingresos Totales - Monto Total (S/.): {{montoTotal | currency:'PEN':'S/.'}}</h5>
+            <h5>Egresos Totales - Monto Total (S/.): {{montoTotal | currency:'PEN':'S/.'}}</h5>
         </div>
 
         <p-table [value]="ingresoSalidaCajas" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" [lazy]="true"  [(first)]="first"  [(totalRecords)]="totalRecords" [loading]="loading" (onLazyLoad)="loadData($event)"
@@ -83,7 +83,7 @@
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Hora</th>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">Tipo de Movimiento o Tipo de Comprobante</th>
                     <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 10%; color:white;">N° de Comprobante (En caso aplique)</th>
-                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Importe de Ingreso (S/.)</th>
+                    <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 8%; color:white;">Importe de Egreso (S/.)</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-ingresoSalidaCaja let-rowIndex="rowIndex" >

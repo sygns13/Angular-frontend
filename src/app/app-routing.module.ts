@@ -71,6 +71,7 @@ import { CajaresumenComponent } from './paginas/reporte/cajaresumen/cajaresumen.
 import { IngresosventasComponent } from './paginas/reporte/ingresosventas/ingresosventas.component';
 import { IngresosotrosComponent } from './paginas/reporte/ingresosotros/ingresosotros.component';
 import { EgresoscomprasComponent } from './paginas/reporte/egresoscompras/egresoscompras.component';
+import { EgresosotrosComponent } from './paginas/reporte/egresosotros/egresosotros.component';
 
 import {DashboardComponent} from './demo/view/dashboard.component';
 import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
@@ -227,6 +228,7 @@ const routes: Routes = [
      {path: 'ingresos-ventas', component: IngresosventasComponent},
      {path: 'ingresos-otros', component: IngresosotrosComponent},
      {path: 'egresos-compras', component: EgresoscomprasComponent},
+     {path: 'egresos-otros', component: EgresosotrosComponent},
     ]
   },
   { path: 'not-403', component: Not403Component },
