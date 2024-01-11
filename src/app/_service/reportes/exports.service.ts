@@ -21,6 +21,8 @@ export class ExportsService {
   protected pathProdSucursal: string = `sucursal`;
   protected pathProdInventario: string = `inventario`;
   protected pathProdPrecio: string = `precio`;
+  protected pathBajoStock: string = `bajo_stock`;
+  protected pathProdVencidos: string = `vencidos`;
 
   protected urlMovimientoProductos: string = `${environment.HOST}/api/backend/movimiento_productos_reportes`;
   protected pathMovimiento: string = `movimiento`;
@@ -130,6 +132,31 @@ export class ExportsService {
       responseType: 'blob'
     });
   }
+
+  exportProductosBajoStocksPDF(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlProductos}/${this.pathBajoStock}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductosBajoStocksXLSX(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlProductos}/${this.pathBajoStock}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductosVencidosPDF(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlProductos}/${this.pathProdVencidos}/export-pdf`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
+  exportProductosVencidosXLSX(filtros: FiltroGeneral) {
+    return this.http.post(`${this.urlProductos}/${this.pathProdVencidos}/export-xls`, filtros, {
+      responseType: 'blob'
+    });
+  }
+
 
   exportMovimientoProductosPDF(filtros: FiltroGeneral) {
     return this.http.post(`${this.urlMovimientoProductos}/${this.pathMovimiento}/export-pdf`, filtros, {

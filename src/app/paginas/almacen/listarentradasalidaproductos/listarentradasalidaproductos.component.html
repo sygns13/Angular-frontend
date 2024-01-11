@@ -65,13 +65,13 @@
 
                     <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"  style="justify-content: space-evenly;"><div style="float: right;">Desde:</div></label>
                     <div class="p-col-12 p-md-2" >
-                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaInicio" #inputFechaIngreso (onChange)="cambioTipos($event)">
+                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaInicio" #inputFechaIngreso (onChange)="cambioTipos($event)" placeholder="DD/MM/YYYY">
                         </p-inputMask>
                     </div>
 
                     <label for="fechaFin" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0"  style="justify-content: space-evenly;">Hasta:</label>
                     <div class="p-col-12 p-md-2" >
-                        <p-inputMask id="fechaFin" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaFinal" #inputFechaIngreso (onChange)="cambioTipos($event)">
+                        <p-inputMask id="fechaFin" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaFinal" #inputFechaIngreso (onChange)="cambioTipos($event)" placeholder="DD/MM/YYYY">
                         </p-inputMask>
                     </div>
                 </div>

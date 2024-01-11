@@ -17,8 +17,8 @@
             </div>
             <br>
 
-            <button (click)="exportarInventarioXls()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
-            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en PDF" class="p-button-raised p-button-primary  p-mr-2 p-mb-2"></button>
+            <button (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
         </div>
     </div>
 
@@ -74,13 +74,13 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
-                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
-                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Sucursal</th>
 
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Mínimo</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock Disponible</th>
@@ -89,13 +89,13 @@
                 <ng-template pTemplate="body" let-productoBajoStock let-rowIndex="rowIndex">
                     <tr >
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.nombre}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.codigoUnidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.nombre}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.tipoProducto.tipo}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.marca.nombre}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.presentacion.presentacion}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"> {{productoBajoStock.producto.composicion}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{clsAlmacen != null ? clsAlmacen.name : ""}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.almacen.nombre}}</td>
     
 
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productoBajoStock.producto.stockMinimo}}</td>

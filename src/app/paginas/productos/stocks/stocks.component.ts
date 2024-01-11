@@ -584,6 +584,21 @@ export class StocksComponent implements OnInit {
 
   }
 
+  cancelEditStock(data:any){
+    console.log(data);
+
+    let stockLotetDTOEdit = new StockLoteDTO();
+    stockLotetDTOEdit = structuredClone(data.stockLoteDTOs[0]);
+
+    this.stock = stockLotetDTOEdit.stock;
+    this.stock.almacenId = stockLotetDTOEdit.almacen.id;
+
+    this.almacens_registo.forEach(almacens => {
+      almacens.editar = 0;
+    });
+
+  }
+
   saveDatoGeneral(event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',

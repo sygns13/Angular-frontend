@@ -78,13 +78,13 @@
                 <div class="p-field p-grid" *ngIf="divLote">
                     <label for="fechaIngreso" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Fecha de Ingreso del Lote</label>
                     <div class="p-col-12 p-md-4">
-                        <p-inputMask id="fechaIngreso" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaIngreso" #inputFechaIngreso [disabled]="!divNuevoLote">
+                        <p-inputMask id="fechaIngreso" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaIngreso" #inputFechaIngreso [disabled]="!divNuevoLote" placeholder="DD/MM/YYYY">
                         </p-inputMask>
                     </div>
 
                     <label for="fechaVencimiento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{labelFechavencimientoLote}}</label>
                     <div class="p-col-12 p-md-4">
-                        <p-inputMask id="fechaVencimiento" inputId="inputmask2" mask="99/99/9999" [(ngModel)]="fechaVencimiento" #inputFechaVencimiento [disabled]="!divNuevoLote">
+                        <p-inputMask id="fechaVencimiento" inputId="inputmask2" mask="99/99/9999" [(ngModel)]="fechaVencimiento" #inputFechaVencimiento [disabled]="!divNuevoLote" placeholder="DD/MM/YYYY">
                         </p-inputMask>
                     </div>
                 </div>
@@ -93,21 +93,21 @@
 
                     <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" *ngIf="!divNuevoLote">{{labelCantidadTotal}}</label>
                     <div class="p-col-12 p-md-2" *ngIf="!divNuevoLote">
-                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidadTotalLote" (keypress)="soloNumeros($event)" maxLength="25" [disabled]="!divNuevoLote">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidadTotalLote" appSoloNumeros maxLength="25" [disabled]="!divNuevoLote">
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
                     <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{tipoCantidad}}</label>
                     <div class="p-col-12 p-md-2">
-                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" (keypress)="soloNumeros($event)" maxLength="25" #inputCantidad (ngModelChange)="cambioCantidad($event)">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" appSoloNumeros maxLength="25" #inputCantidad (ngModelChange)="cambioCantidad($event)">
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
                     <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0" *ngIf="!divNuevoLote">{{labelCantidadTotalFinal}}</label>
                     <div class="p-col-12 p-md-2" *ngIf="!divNuevoLote">
-                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidadTotalProcesado" (keypress)="soloNumeros($event)" maxLength="25" [disabled]="!divNuevoLote">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidadTotalProcesado" appSoloNumeros maxLength="25" [disabled]="!divNuevoLote">
                     </div>
                 </div>
 

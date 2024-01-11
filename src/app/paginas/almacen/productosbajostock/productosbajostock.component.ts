@@ -18,6 +18,7 @@ import { StockService } from './../../../_service/stock.service';
 import { LoteService } from './../../../_service/lote.service';
 import { EntradaSalidaService } from '../../../_service/entrada_salida.service';
 import { Lote } from 'src/app/_model/lote';
+import { ExportsService } from './../../../_service/reportes/exports.service';
 import * as moment from 'moment';
 
 @Component({
@@ -55,7 +56,8 @@ export class ProductosbajostockComponent implements OnInit {
   filtroGeneral = new FiltroGeneral();
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private productoService: ProductoService,
-    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService, private gestionloteService: GestionloteService) {
+    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService, private gestionloteService: GestionloteService,
+    private exportsService: ExportsService) {
     this.breadcrumbService.setItems([
     { label: 'Almacén' },
     { label: 'Reporte de Productos bajos de Stock', routerLink: ['/almacen/productos_bajo_stock'] }
@@ -114,9 +116,12 @@ export class ProductosbajostockComponent implements OnInit {
   
     this.gestionloteService.getAlmacens().subscribe(data => {
 
-      if(data.length > 0){
+      /* if(data.length > 0){
         this.clsAlmacen = {name: data[0].nombre, code: data[0].id};
-      }
+      } */
+
+      this.almacens.push({name: "General - Todos", code: 0});
+      this.clsAlmacen = {name: "General - Todos", code: 0};
 
       data.forEach(almacen => {
         this.almacens.push({name: almacen.nombre, code: almacen.id});
@@ -179,12 +184,47 @@ export class ProductosbajostockComponent implements OnInit {
 
   //metodos transaccionales
 
-  exportarInventarioXls(){
-
+  exportarPDF(): void{
+    this.evaluarFiltros();
+    this.printPDF();
   }
 
-  exportarInventarioPdf(){
+  exportarExcel(): void{
+    this.evaluarFiltros();
+    this.printXLS();
+  }
 
+  printPDF(): void{
+    this.exportsService.exportProductosBajoStocksPDF(this.filtroGeneral).subscribe(data => {
+  
+      const file = new Blob([data], { type: 'application/pdf' });  
+      const fileURL = URL.createObjectURL(file);
+  
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none');
+      document.body.appendChild(a);
+      a.href = fileURL;
+      a.download = 'ProductosBajoStock.pdf';
+      a.click();
+  
+      //window.open(fileURL);
+    });
+  }
+
+  printXLS(): void{
+    this.exportsService.exportProductosBajoStocksXLSX(this.filtroGeneral).subscribe(data => {
+  
+      const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const fileURL = URL.createObjectURL(file);
+  
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none');
+      document.body.appendChild(a);
+      a.href = fileURL;
+      a.download = 'ProductosBajoStock.xlsx';
+      a.click();
+      //window.open(fileURL);
+    });
   }
 
 

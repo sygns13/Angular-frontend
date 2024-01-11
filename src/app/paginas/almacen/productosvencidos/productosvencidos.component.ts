@@ -18,6 +18,7 @@ import { StockService } from './../../../_service/stock.service';
 import { LoteService } from './../../../_service/lote.service';
 import { EntradaSalidaService } from '../../../_service/entrada_salida.service';
 import { Lote } from 'src/app/_model/lote';
+import { ExportsService } from './../../../_service/reportes/exports.service';
 import * as moment from 'moment';
 
 @Component({
@@ -68,7 +69,8 @@ export class ProductosvencidosComponent implements OnInit {
   filtroGeneral = new FiltroGeneral();
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private productoService: ProductoService,
-    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService, private gestionloteService: GestionloteService) {
+    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService, private gestionloteService: GestionloteService,
+    private exportsService: ExportsService) {
     this.breadcrumbService.setItems([
     { label: 'Almacén' },
     { label: 'Reporte de Productos Vencidos', routerLink: ['/almacen/productos_vencidos'] }
@@ -126,9 +128,11 @@ export class ProductosvencidosComponent implements OnInit {
   
     this.gestionloteService.getAlmacens().subscribe(data => {
 
-      if(data.length > 0){
+      /* if(data.length > 0){
         this.clsAlmacen = {name: data[0].nombre, code: data[0].id};
-      }
+      } */
+      this.almacens.push({name: "General - Todos", code: 0});
+      this.clsAlmacen = {name: "General - Todos", code: 0};
 
       data.forEach(almacen => {
         this.almacens.push({name: almacen.nombre, code: almacen.id});
@@ -162,17 +166,19 @@ export class ProductosvencidosComponent implements OnInit {
 
   cambioSucursal(event: Event){
     this.evaluarFiltros();
-    
+    this.listarPageMain(this.page, this.rows);
      
   }
 
   cambioTipos(event: Event){
     this.evaluarFiltros();
+    this.listarPageMain(this.page, this.rows);
      
   }
 
   eventoBuscar(){
     this.evaluarFiltros();
+    this.listarPageMain(this.page, this.rows);
      
   }
 
@@ -197,15 +203,15 @@ export class ProductosvencidosComponent implements OnInit {
         this.verFechas = false;
         this.fechaInicio = '';
         this.fechaFinal = '';
-        this.listarPageMain(this.page, this.rows);
+        //this.listarPageMain(this.page, this.rows);
       }
       else if(this.clsTipo.code == '7'){
         this.verFechas = true;
-        this.productosVencidos = [];
+        //this.productosVencidos = [];
       }
     }
     else{
-      this.listarPageMain(this.page, this.rows);
+      //this.listarPageMain(this.page, this.rows);
     }
   }
 
@@ -258,12 +264,103 @@ export class ProductosvencidosComponent implements OnInit {
 
   //metodos transaccionales
 
-  exportarInventarioXls(){
+  evaluarFechas(): boolean{
 
+    if(this.fechaInicio != null &&  this.fechaInicio.length == 10){
+      const fechaIni = moment(this.fechaInicio, 'DD/MM/YYYY');
+      if(!fechaIni.isValid){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+      this.filtroGeneral.fechaInicio = fechaIni.format('YYYY-MM-DD');
+
+      if(this.filtroGeneral.fechaInicio == null || this.filtroGeneral.fechaInicio.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+    }
+    else{
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+    }
+
+    if(this.fechaFinal != null &&  this.fechaFinal.length == 10){
+      const fechaFin = moment(this.fechaFinal, 'DD/MM/YYYY');
+      if(!fechaFin.isValid){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+      this.filtroGeneral.fechaFinal = fechaFin.format('YYYY-MM-DD');
+
+      console.log(this.filtroGeneral.fechaFinal);
+
+      if(this.filtroGeneral.fechaFinal == null || this.filtroGeneral.fechaFinal.length != 10){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+      }
+    }
+    else{
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return false;
+    }
+
+    return true;
   }
 
-  exportarInventarioPdf(){
+  exportarPDF(): void{
+    this.evaluarFiltros();
+    if(this.clsTipo.code == '7'){
+      if(this.evaluarFechas()){
+        this.printPDF();
+      }
+    }else{
+      this.printPDF();
+    }
+    
+  }
 
+  exportarExcel(): void{
+    this.evaluarFiltros();
+    if(this.clsTipo.code == '7'){
+      if(this.evaluarFechas()){
+        this.printXLS();
+      }
+    }else{
+      this.printXLS();
+    }
+  }
+
+  printPDF(): void{
+    this.exportsService.exportProductosVencidosPDF(this.filtroGeneral).subscribe(data => {
+  
+      const file = new Blob([data], { type: 'application/pdf' });  
+      const fileURL = URL.createObjectURL(file);
+  
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none');
+      document.body.appendChild(a);
+      a.href = fileURL;
+      a.download = 'ProductosVencidos.pdf';
+      a.click();
+  
+      //window.open(fileURL);
+    });
+  }
+
+  printXLS(): void{
+    this.exportsService.exportProductosVencidosXLSX(this.filtroGeneral).subscribe(data => {
+  
+      const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const fileURL = URL.createObjectURL(file);
+  
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none');
+      document.body.appendChild(a);
+      a.href = fileURL;
+      a.download = 'ProductosVencidos.xlsx';
+      a.click();
+      //window.open(fileURL);
+    });
   }
 
 

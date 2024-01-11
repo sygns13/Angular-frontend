@@ -86,12 +86,12 @@
 
                     <label for="precioCompra" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Costo de Compra Unitario</label>
                     <div class="p-col-12 p-md-2">
-                        <input id="precioCompra" type="text" pInputText [(ngModel)]="precioCompra" #inputPrecioCompra maxLength="25" (keypress)="soloNumeros($event)">
+                        <input id="precioCompra" type="text" pInputText [(ngModel)]="precioCompra" #inputPrecioCompra maxLength="25" appSoloNumeros>
                     </div>
 
                     <label for="precioUnidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Precio de Venta Unitario</label>
                     <div class="p-col-12 p-md-2">
-                        <input id="precioUnidad" type="text" pInputText [(ngModel)]="precioUnidad" #inputPrecioUnidad maxLength="25"  (keypress)="soloNumeros($event)">
+                        <input id="precioUnidad" type="text" pInputText [(ngModel)]="precioUnidad" #inputPrecioUnidad maxLength="25"  appSoloNumeros>
                     </div>
                 </div>
 
@@ -99,7 +99,7 @@
                 <div class="p-field p-grid">
                     <label for="stockMinimo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Stock Mínimo</label>
                     <div class="p-col-12 p-md-2">
-                        <input id="stockMinimo" type="text" pInputText [(ngModel)]="stockMinimo" #inputStockMinimo maxLength="25" (keypress)="soloNumeros($event)">
+                        <input id="stockMinimo" type="text" pInputText [(ngModel)]="stockMinimo" #inputStockMinimo maxLength="25" appSoloNumeros>
                     </div>
 
                     <label for="prioridad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Prioridad (Opcional)</label>
@@ -193,7 +193,7 @@
                     
                     <label for="tasaIsc" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tasa del ISC</label>
                     <div class="p-col-12 p-md-2">
-                        <input id="tasaIsc" type="text" pInputText [(ngModel)]="tasaIsc" #inputTasaIsc maxLength="25" (keypress)="soloNumeros($event)">
+                        <input id="tasaIsc" type="text" pInputText [(ngModel)]="tasaIsc" #inputTasaIsc maxLength="25" appSoloNumeros>
                     </div>
                 </div>
 

@@ -91,7 +91,7 @@
                     <div class="p-field p-grid">
                         <label for="fechaIngreso" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Fecha de Ingreso</label>
                         <div class="p-col-12 p-md-10">
-                            <p-inputMask id="fechaIngreso" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaIngreso" #inputFechaIngreso>
+                            <p-inputMask id="fechaIngreso" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaIngreso" #inputFechaIngreso placeholder="DD/MM/YYYY">
                             </p-inputMask>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                     <div class="p-field p-grid">
                         <label for="fechaVencimiento" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Fecha de Vencimiento (Deje en blanco si no aplica)</label>
                         <div class="p-col-12 p-md-10">
-                            <p-inputMask id="fechaVencimiento" inputId="inputmask2" mask="99/99/9999" [(ngModel)]="fechaVencimiento" #inputFechaVencimiento>
+                            <p-inputMask id="fechaVencimiento" inputId="inputmask2" mask="99/99/9999" [(ngModel)]="fechaVencimiento" #inputFechaVencimiento placeholder="DD/MM/YYYY">
                             </p-inputMask>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                     <div class="p-field p-grid">
                         <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Cantidad de Unidades</label>
                         <div class="p-col-12 p-md-10">
-                            <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" (keypress)="soloNumeros($event)" maxLength="25">
+                            <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" appSoloNumeros maxLength="25">
                         </div>
                     </div>
 
@@ -310,7 +310,7 @@
                                     </ng-template>
                                     <ng-template #elseEdit>
                                         <span class="p-float-label">
-                                            <input type="text" pInputText #inputStockGeneral  [(ngModel)]="cantidadStock" id="txtcantstock" (keyup.enter)="saveDatoGeneral($event)">
+                                            <input type="text" pInputText #inputStockGeneral  [(ngModel)]="cantidadStock" id="txtcantstock" (keyup.enter)="saveDatoGeneral($event)" appSoloNumeros>
                                             <label>Cantidad de Unidades</label>
                                         </span>
                                     </ng-template>
@@ -321,6 +321,7 @@
                 
                                     <button *ngIf="detStock.editar == 0" (click)="editarStock(detStock, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Cantidad" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
                                     <button *ngIf="detStock.editar == 1" (click)="saveDatoGeneral($event)" pButton pRipple type="button" icon="pi pi-save" class="p-button-rounded p-button-primary p-mr-2 p-mb-2" pTooltip="Grabar Cantidad" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                                    <button *ngIf="detStock.editar == 1" (click)="cancelEditStock(detStock, $event)" pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Cancelar Modificación" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
                                     
                                 </td>
                             </tr>

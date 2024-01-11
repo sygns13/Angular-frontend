@@ -17,8 +17,8 @@
             </div>
             <br>
 
-            <button (click)="exportarInventarioXls()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en Excel" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
-            <button (click)="exportarInventarioPdf()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en PDF" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
+            <button (click)="exportarPDF()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en PDF" class="p-button-raised p-button-primary p-mr-2 p-mb-2"></button>
+            <button (click)="exportarExcel()" pButton pRipple type="button" icon="pi pi-plus" label="Imprimir en Excel" class="p-button-raised p-button-success p-mr-2 p-mb-2"></button>
         </div>
     </div>
 
@@ -64,13 +64,13 @@
 
                     <label for="fechaInicio" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0" *ngIf="verFechas" style="justify-content: space-evenly;"><div style="float: right;">Desde:</div></label>
                     <div class="p-col-12 p-md-2" *ngIf="verFechas">
-                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaInicio" #inputFechaIngreso>
+                        <p-inputMask id="fechaInicio" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaInicio" #inputFechaIngreso placeholder="DD/MM/YYYY">
                         </p-inputMask>
                     </div>
 
                     <label for="fechaFin" class="p-col-12 p-mb-1 p-md-1 p-mb-md-0" *ngIf="verFechas" style="justify-content: space-evenly;">Hasta:</label>
                     <div class="p-col-12 p-md-2" *ngIf="verFechas">
-                        <p-inputMask id="fechaFin" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaFinal" #inputFechaIngreso>
+                        <p-inputMask id="fechaFin" inputId="inputmask1" mask="99/99/9999"  [(ngModel)]="fechaFinal" #inputFechaIngreso placeholder="DD/MM/YYYY">
                         </p-inputMask>
                     </div>
                 </div>
@@ -105,13 +105,13 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">N°</th>
-                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Código</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Producto</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Tipo de Producto</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Marca</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Presentación</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Composición</th>
-                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Local</th>
+                        <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Sucursal</th>
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Lote</th>
 
                         <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); color:white;">Stock del Lote</th>
@@ -121,8 +121,8 @@
                 <ng-template pTemplate="body" let-productosVencidos let-rowIndex="rowIndex">
                     <tr >
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
-                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productosVencidos.producto.nombre}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productosVencidos.producto.codigoUnidad}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productosVencidos.producto.nombre}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productosVencidos.producto.tipoProducto.tipo}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productosVencidos.producto.marca.nombre}}</td>
                         <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{productosVencidos.producto.presentacion.presentacion}}</td>

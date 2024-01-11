@@ -54,13 +54,13 @@ export class AppMenuComponent implements OnInit {
                     {label: 'productos Vencidos', icon: 'pi pi-fw pi-backward', routerLink: ['/almacen/productos_vencidos']},
                 ]
             },
-            {
+            /* {
                 label: 'Servicios', icon: 'pi pi-fw pi-calendar',
                 items: [
                     {label: 'Catálogo de Servicios', icon: 'pi pi-fw pi-camera', routerLink: ['/servicios/catalogo']},
                 ]
-            },
-            {
+            },*/
+            { 
                 label: 'Ventas', icon: 'pi pi-fw pi-shopping-cart',
                 items: [
                     {label: 'Clientes', icon: 'pi pi-fw pi-users', routerLink: ['/ventas/clientes']},

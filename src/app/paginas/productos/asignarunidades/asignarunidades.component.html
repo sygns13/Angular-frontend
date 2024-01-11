@@ -106,21 +106,21 @@
                 <div class="p-field p-grid">
                     <label for="cantidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Cantidad</label>
                     <div class="p-col-12 p-md-10">
-                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" (keypress)="soloNumeros($event)" maxLength="8" [disabled]="true">
+                        <input id="cantidad" type="text" pInputText [(ngModel)]="cantidad" appSoloNumeros maxLength="8" [disabled]="true">
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
                     <label for="precioUnidad" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Precio de Venta</label>
                     <div class="p-col-12 p-md-10">
-                        <input id="precioUnidad" type="text" pInputText [(ngModel)]="precioUnidad" #inputPrecioUnidad maxLength="25"  (keypress)="soloNumeros($event)">
+                        <input id="precioUnidad" type="text" pInputText [(ngModel)]="precioUnidad" #inputPrecioUnidad maxLength="25"  appSoloNumeros>
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
                     <label for="precioCompra" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Costo de Compra</label>
                     <div class="p-col-12 p-md-10">
-                        <input id="precioCompra" type="text" pInputText [(ngModel)]="precioCompra" #inputPrecioCompra maxLength="25" (keypress)="soloNumeros($event)">
+                        <input id="precioCompra" type="text" pInputText [(ngModel)]="precioCompra" #inputPrecioCompra maxLength="25" appSoloNumeros>
                     </div>
                 </div>
 
