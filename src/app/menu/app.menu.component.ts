@@ -40,7 +40,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Gestión de Marcas', icon: 'pi pi-fw pi-list', routerLink: ['/tablas/marcas']},
                     {label: 'Presentaciones de Productos', icon: 'pi pi-fw pi-bookmark', routerLink: ['/tablas/presentaciones']},
                     {label: 'Gestión de Unidades', icon: 'pi pi-fw pi-table', routerLink: ['/tablas/unidades']},
-                    {label: 'Registro de Bancos', icon: 'pi pi-fw pi-home', routerLink: ['/tablas/bancos']}
+                    /* {label: 'Registro de Bancos', icon: 'pi pi-fw pi-home', routerLink: ['/tablas/bancos']} */
                 ]
             },
             {
