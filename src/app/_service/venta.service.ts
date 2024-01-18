@@ -98,4 +98,11 @@ export class VentaService extends GenericService<Venta>{
   getIngresosVentas(filtro: FiltroVenta, p: number, s:number) {
     return this.http.post<any>(`${this.url}/get_ingresos_ventas?page=${p}&size=${s}`, filtro);
   }
+
+
+  imprimirFactura(id: number) {
+    return this.http.post(`${this.url}/comprobante/factura/${id}`, null, {
+      responseType: 'blob'
+    });
+  }
 }

@@ -487,7 +487,7 @@ iniciarVentaT2(): Promise<any>{
         this.venta.detalleVentas = this.detalleVentas;
 
 
-        let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+        let opGrabada = this.venta.subtotalAfecto;
         this.OpGravada = opGrabada.toFixed(2);
         this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
         this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -669,7 +669,7 @@ iniciarVentaT2(): Promise<any>{
                 this.venta.detalleVentas = this.detalleVentas;
 
 
-                let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+                let opGrabada = this.venta.subtotalAfecto;
                 this.OpGravada = opGrabada.toFixed(2);
                 this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
                 this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -1191,7 +1191,7 @@ iniciarVentaT2(): Promise<any>{
             this.venta.detalleVentas = this.detalleVentas;
 
 
-            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            let opGrabada = this.venta.subtotalAfecto;
             this.OpGravada = opGrabada.toFixed(2);
             this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
             this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -1275,7 +1275,7 @@ iniciarVentaT2(): Promise<any>{
             this.venta.detalleVentas = this.detalleVentas;
 
 
-            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            let opGrabada = this.venta.subtotalAfecto;
             this.OpGravada = opGrabada.toFixed(2);
             this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
             this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -1360,7 +1360,7 @@ iniciarVentaT2(): Promise<any>{
             this.venta.detalleVentas = this.detalleVentas;
 
 
-            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            let opGrabada = this.venta.subtotalAfecto;
             this.OpGravada = opGrabada.toFixed(2);
             this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
             this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -1434,7 +1434,7 @@ iniciarVentaT2(): Promise<any>{
           this.venta.detalleVentas = this.detalleVentas;
 
 
-          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+          let opGrabada = this.venta.subtotalAfecto;
           this.OpGravada = opGrabada.toFixed(2);
           this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
           this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -1609,7 +1609,7 @@ iniciarVentaT2(): Promise<any>{
           this.venta.detalleVentas = this.detalleVentas;
 
 
-          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+          let opGrabada = this.venta.subtotalAfecto;
           this.OpGravada = opGrabada.toFixed(2);
           this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
           this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -1677,7 +1677,7 @@ iniciarVentaT2(): Promise<any>{
           this.venta.detalleVentas = this.detalleVentas;
 
 
-          let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+          let opGrabada = this.venta.subtotalAfecto;
           this.OpGravada = opGrabada.toFixed(2);
           this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
           this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -1879,9 +1879,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.tipoComprobanteService.listarAll().subscribe(data => {
       data.forEach(tipoComprobante => {
-        this.tipoComprobantes.push({name: tipoComprobante.nombre, code: tipoComprobante.id});
+        this.tipoComprobantes.push({name: tipoComprobante.nombre, code: tipoComprobante.id, prefix: tipoComprobante.prefix});
         if(isFirst){
-          this.clsTipoComprobante = {name: tipoComprobante.nombre, code: tipoComprobante.id};
+          this.clsTipoComprobante = {name: tipoComprobante.nombre, code: tipoComprobante.id, prefix: tipoComprobante.prefix};
           this.buscarSeriesComprobantes();
           isFirst = false;
         }
@@ -2094,7 +2094,7 @@ iniciarVentaT2(): Promise<any>{
             this.venta.detalleVentas = this.detalleVentas;
 
 
-            let opGrabada = this.venta.subtotalAfecto - this.venta.igv
+            let opGrabada = this.venta.subtotalAfecto;
             this.OpGravada = opGrabada.toFixed(2);
             this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
             this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
@@ -2178,6 +2178,9 @@ iniciarVentaT2(): Promise<any>{
     this.cobroVenta.initComprobanteId = initComprobanteId;
     this.cobroVenta.metodoPago = metodoPago;
 
+    let prefix = this.clsTipoComprobante != null ? this.clsTipoComprobante.prefix : "";
+    let idVenta = this.venta.id;
+
     this.ventaService.cobroVenta(this.cobroVenta).subscribe({
       next: (data) => {
         if(data != null && data.id != null){
@@ -2185,6 +2188,7 @@ iniciarVentaT2(): Promise<any>{
           this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Venta se ha Cobrado Exitosamente'});
           this.cobroVenta = data;
           this.displayConfirmarPago = false;
+          this.printComprobante(idVenta, prefix);
           this.nuevaVenta();
         }
       },
@@ -2193,6 +2197,31 @@ iniciarVentaT2(): Promise<any>{
       }        
    });
 
+  }
+
+
+  printComprobante(idVenta: number, prefixComprobante: string): void{
+
+    if(prefixComprobante == 'B'){
+
+    }
+    if(prefixComprobante == 'F'){
+      this.ventaService.imprimirFactura(idVenta).subscribe(data => {
+  
+        const file = new Blob([data], { type: 'application/pdf' });  
+        const fileURL = URL.createObjectURL(file);
+    
+        const a = document.createElement('a');
+        a.setAttribute('style', 'display:none');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = 'FacturaVenta.pdf';
+        a.click();
+    
+        //window.open(fileURL);
+      });
+    }
+    
   }
 
 

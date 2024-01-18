@@ -44,7 +44,7 @@ export class ProductoComponent implements OnInit {
 
   tiposISC: any[] = [
     {name: 'Porcentual % (0 a 100)', code: '1'},
-    {name: 'Valor Fijo', code: '2'}
+    {name: 'Valor Fijo por Unidad (S/.)', code: '2'}
   ];
 
   clsTipoProducto: any = null;
@@ -464,6 +464,11 @@ export class ProductoComponent implements OnInit {
     tipoProductoEdit.tasaIsc = this.tasaIsc;
     tipoProductoEdit.afectoIgv = this.afectoIgv;
     tipoProductoEdit.activo = parseInt((this.activo != null) ? this.activo.code : "1");
+
+
+    console.log("this.tasaIsc");
+    console.log(this.tasaIsc);
+    console.log(tipoProductoEdit);
 
 
     this.productoService.modificar(tipoProductoEdit).subscribe({
