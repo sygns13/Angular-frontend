@@ -2203,7 +2203,20 @@ iniciarVentaT2(): Promise<any>{
   printComprobante(idVenta: number, prefixComprobante: string): void{
 
     if(prefixComprobante == 'B'){
-
+      this.ventaService.imprimirBoleta(idVenta).subscribe(data => {
+  
+        const file = new Blob([data], { type: 'application/pdf' });  
+        const fileURL = URL.createObjectURL(file);
+    
+        const a = document.createElement('a');
+        a.setAttribute('style', 'display:none');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = 'BoletaVenta.pdf';
+        a.click();
+    
+        //window.open(fileURL);
+      });
     }
     if(prefixComprobante == 'F'){
       this.ventaService.imprimirFactura(idVenta).subscribe(data => {

@@ -105,4 +105,10 @@ export class VentaService extends GenericService<Venta>{
       responseType: 'blob'
     });
   }
+
+  imprimirBoleta(id: number) {
+    return this.http.post(`${this.url}/comprobante/boleta/${id}`, null, {
+      responseType: 'blob'
+    });
+  }
 }
