@@ -2234,6 +2234,22 @@ iniciarVentaT2(): Promise<any>{
         //window.open(fileURL);
       });
     }
+    if(prefixComprobante == 'NV'){
+      this.ventaService.imprimirNotaVenta(idVenta).subscribe(data => {
+  
+        const file = new Blob([data], { type: 'application/pdf' });  
+        const fileURL = URL.createObjectURL(file);
+    
+        const a = document.createElement('a');
+        a.setAttribute('style', 'display:none');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = 'NotaVenta.pdf';
+        a.click();
+    
+        //window.open(fileURL);
+      });
+    }
     
   }
 

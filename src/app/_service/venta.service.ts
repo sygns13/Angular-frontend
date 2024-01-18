@@ -111,4 +111,10 @@ export class VentaService extends GenericService<Venta>{
       responseType: 'blob'
     });
   }
+
+  imprimirNotaVenta(id: number) {
+    return this.http.post(`${this.url}/comprobante/nota_venta/${id}`, null, {
+      responseType: 'blob'
+    });
+  }
 }
