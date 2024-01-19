@@ -955,7 +955,33 @@ export class ComprasrealizadasComponent implements OnInit{
 
   printCompra(): void{
 
+    if(this.selectedEntradaStock == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione una Compra haciendo click en su fila correspondiente'});
+      return;
+    }
+    this.printComprobante(this.selectedEntradaStock.id);
   }
+
+  printComprobante(idCompra: number): void{
+
+    this.entradaStockService.imprimirComprobante(idCompra).subscribe(data => {
+
+      const file = new Blob([data], { type: 'application/pdf' });  
+      const fileURL = URL.createObjectURL(file);
+  
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none');
+      document.body.appendChild(a);
+      a.href = fileURL;
+      a.download = 'ReporteCompra.pdf';
+      a.click();
+  
+      //window.open(fileURL);
+    });
+
+  
+}
+
 
   edittCompra(): void{
     if(this.selectedEntradaStock == null){

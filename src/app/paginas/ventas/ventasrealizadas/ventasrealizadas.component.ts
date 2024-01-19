@@ -872,7 +872,74 @@ export class VentasrealizadasComponent implements OnInit{
   }
 
   printVenta(): void{
+    if(this.selectedVenta == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'Seleccione una Venta haciendo click en su fila correspondiente'});
+      return;
+    }
+    //console.log(this.selectedVenta);
 
+    if(this.selectedVenta.comprobante == null){
+      this.messageService.add({severity:'warn', summary:'Aviso', detail: 'La Venta no tiene Comprobante de Pago'});
+      return;
+    }
+
+    let prefix = this.selectedVenta.comprobante.initComprobante.tipoComprobante.prefix;
+    let idVenta = this.selectedVenta.id;
+    this.printComprobante(idVenta, prefix);
+
+  }
+
+  printComprobante(idVenta: number, prefixComprobante: string): void{
+
+    if(prefixComprobante == 'B'){
+      this.ventaService.imprimirBoleta(idVenta).subscribe(data => {
+  
+        const file = new Blob([data], { type: 'application/pdf' });  
+        const fileURL = URL.createObjectURL(file);
+    
+        const a = document.createElement('a');
+        a.setAttribute('style', 'display:none');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = 'BoletaVenta.pdf';
+        a.click();
+    
+        //window.open(fileURL);
+      });
+    }
+    if(prefixComprobante == 'F'){
+      this.ventaService.imprimirFactura(idVenta).subscribe(data => {
+  
+        const file = new Blob([data], { type: 'application/pdf' });  
+        const fileURL = URL.createObjectURL(file);
+    
+        const a = document.createElement('a');
+        a.setAttribute('style', 'display:none');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = 'FacturaVenta.pdf';
+        a.click();
+    
+        //window.open(fileURL);
+      });
+    }
+    if(prefixComprobante == 'NV'){
+      this.ventaService.imprimirNotaVenta(idVenta).subscribe(data => {
+  
+        const file = new Blob([data], { type: 'application/pdf' });  
+        const fileURL = URL.createObjectURL(file);
+    
+        const a = document.createElement('a');
+        a.setAttribute('style', 'display:none');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = 'NotaVenta.pdf';
+        a.click();
+    
+        //window.open(fileURL);
+      });
+    }
+    
   }
 
   edittVenta(): void{

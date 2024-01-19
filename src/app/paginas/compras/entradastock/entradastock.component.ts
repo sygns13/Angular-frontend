@@ -2001,6 +2001,8 @@ iniciarEntradaStockT2(): Promise<any>{
     let actualizado = parseInt((this.clsActualizado != null) ? this.clsActualizado.code : "0");
     this.pagoProveedor.entradaStock.actualizado = actualizado;
 
+    let idCompra = this.entradaStock.id;
+
     this.entradaStockService.pagarEntradaStock(this.pagoProveedor).subscribe({
       next: (data) => {
         if(data != null && data.id != null){
@@ -2008,6 +2010,7 @@ iniciarEntradaStockT2(): Promise<any>{
           this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Compra se ha Registrado Exitosamente'});
           this.pagoProveedor = data;
           this.displayConfirmarPago = false;
+          this.printComprobante(idCompra);
           this.nuevaEntradaStock();
         }
       },
@@ -2016,6 +2019,26 @@ iniciarEntradaStockT2(): Promise<any>{
       }        
    });
 
+  }
+
+  printComprobante(idCompra: number): void{
+
+      this.entradaStockService.imprimirComprobante(idCompra).subscribe(data => {
+  
+        const file = new Blob([data], { type: 'application/pdf' });  
+        const fileURL = URL.createObjectURL(file);
+    
+        const a = document.createElement('a');
+        a.setAttribute('style', 'display:none');
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = 'ReporteCompra.pdf';
+        a.click();
+    
+        //window.open(fileURL);
+      });
+
+    
   }
 
 

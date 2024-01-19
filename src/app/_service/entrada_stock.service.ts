@@ -106,4 +106,10 @@ export class EntradaStockService extends GenericService<EntradaStock>{
   getEgresosCompras(filtro: FiltroEntradaStock, p: number, s:number) {
     return this.http.post<any>(`${this.url}/get_egresos_compras?page=${p}&size=${s}`, filtro);
   }
+
+  imprimirComprobante(id: number) {
+    return this.http.post(`${this.url}/comprobante/${id}`, null, {
+      responseType: 'blob'
+    });
+  }
 }
