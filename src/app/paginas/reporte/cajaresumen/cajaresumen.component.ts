@@ -92,6 +92,14 @@ export class CajaresumenComponent implements OnInit{
       });
 
       this.evaluarFiltros();
+    if(this.FiltroGeneral.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.FiltroGeneral.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
       this.getMainData();
     });
   }
@@ -118,6 +126,14 @@ export class CajaresumenComponent implements OnInit{
 
   cambioSucursal(event: any) {
     this.evaluarFiltros();
+    if(this.FiltroGeneral.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.FiltroGeneral.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.getMainData();
   }
 
@@ -152,11 +168,27 @@ export class CajaresumenComponent implements OnInit{
 
   exportarPDF(): void{
     this.evaluarFiltros();
+    if(this.FiltroGeneral.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.FiltroGeneral.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.printPDF();
   }
 
   exportarExcel(): void{
     this.evaluarFiltros();
+    if(this.FiltroGeneral.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.FiltroGeneral.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.printXLS();
   }
 
@@ -194,6 +226,15 @@ export class CajaresumenComponent implements OnInit{
   }
 
   actualizar(){
+    this.evaluarFiltros();
+    if(this.FiltroGeneral.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.FiltroGeneral.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.getMainData();
   }
 

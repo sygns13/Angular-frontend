@@ -85,8 +85,9 @@ export class VentastopproductosComponent implements OnInit{
   clsEstadoVenta: any = {name: 'TODAS', code: 'Z'};
   clsTipoVenta: any = {name: 'TODAS', code: '0'};
 
-  fechaInicio: string = '';
-  fechaFinal: string = '';
+  now: any = moment();
+  fechaInicio: string = this.now.format('DD/MM/YYYY');
+  fechaFinal: string = this.now.format('DD/MM/YYYY');
   txtBuscar: string = '';
 
   venta = new Venta();
@@ -361,6 +362,15 @@ export class VentastopproductosComponent implements OnInit{
         this.tipoComprobantes.push({name: tipoComprobante.nombre, code: tipoComprobante.id});
       });
 
+      this.evaluarFiltros();
+      if(this.filtroVenta.fechaInicio == null){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return;
+      }
+      if(this.filtroVenta.fechaFinal == null){
+        this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+        return;
+      }
       this.listarPageMain(this.page, this.rows);
     });
   }
@@ -509,11 +519,27 @@ export class VentastopproductosComponent implements OnInit{
 
   cambioFiltros(event: Event){
     this.evaluarFiltros();
+    if(this.filtroVenta.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.filtroVenta.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.listarPageMain(this.page, this.rows);
   }
 
   cambioFiltrosExec(){
     this.evaluarFiltros();
+    if(this.filtroVenta.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.filtroVenta.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.listarPageMain(this.page, this.rows);
   }
 
@@ -989,6 +1015,14 @@ export class VentastopproductosComponent implements OnInit{
   actualizarVentas(): void{
     this.selectedVenta  = null;
     this.evaluarFiltros();
+    if(this.filtroVenta.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.filtroVenta.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.listarPageMain(this.page, this.rows);
   }
   
@@ -1179,11 +1213,27 @@ export class VentastopproductosComponent implements OnInit{
 
   exportarPDF(): void{
     this.evaluarFiltros();
+    if(this.filtroVenta.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.filtroVenta.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.printPDF();
   }
 
   exportarExcel(): void{
     this.evaluarFiltros();
+    if(this.filtroVenta.fechaInicio == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha de Inicio indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
+    if(this.filtroVenta.fechaFinal == null){
+      this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha Final indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
+      return;
+    }
     this.printXLS();
   }
 
