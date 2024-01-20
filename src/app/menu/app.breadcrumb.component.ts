@@ -20,7 +20,7 @@ export class AppBreadcrumbComponent implements OnDestroy {
             this.items = response;
         });
 
-        this.home = { icon: 'pi pi-home', routerLink: '/' };
+        this.home = { icon: 'pi pi-home', routerLink: '/principal' };
     }
 
     ngOnDestroy() {

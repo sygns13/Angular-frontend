@@ -4,6 +4,7 @@ import { AppMainComponent } from './app.main.component';
 import { AppComponent } from '../app.component';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { environment } from 'src/environments/environment';
+import { LoginService } from '../_service/login.service';
 
 @Component({
     selector: 'app-inline-menu',
@@ -50,7 +51,8 @@ export class AppInlineMenuComponent {
 
     tipo_usuario: string = '';
 
-    constructor(public appMain: AppMainComponent, public app: AppComponent) { }
+    constructor(public appMain: AppMainComponent, public app: AppComponent,
+                private loginService: LoginService) { }
 
     ngOnInit(): void {
 
@@ -83,5 +85,10 @@ export class AppInlineMenuComponent {
 
     isHorizontalActive() {
        return this.appMain.isHorizontal() && !this.appMain.isMobile();
+    }
+
+
+    cerrarSesion(event){
+        this.loginService.cerrarSesion();
     }
 }

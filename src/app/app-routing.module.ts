@@ -7,6 +7,9 @@ import { LoginComponent } from './paginas/login/login/login.component';
 //Fondo Principal padre
 import {AppMainComponent} from './menu/app.main.component';
 
+//Principal
+import {PrincipalComponent} from './paginas/principal/principal/principal.component';
+
 //tablas base
 import {LocalComponent} from './paginas/tablas/local/local.component';
 import {TipoProductoComponent} from './paginas/tablas/tipoproducto/tipoproducto.component';
@@ -134,10 +137,16 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'principal', component: AppMainComponent, canActivate: [GuardService] /*,
+    path: 'principal', component: AppMainComponent, canActivate: [GuardService] ,
     children: [
-      {path: 'principal', component: DashboardComponent}, 
-    ]*/
+      {path: '', component: PrincipalComponent}, 
+    ]
+  },
+  {
+    path: 'test', component: AppMainComponent, canActivate: [GuardService] ,
+    children: [
+      {path: '', component: DashboardComponent}, 
+    ]
   },
   {
     path: 'tablas', component: AppMainComponent, canActivate: [GuardService],

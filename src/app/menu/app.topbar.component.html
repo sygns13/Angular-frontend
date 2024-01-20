@@ -22,7 +22,7 @@
         <div class="layout-topbar-actions-left">
              <!-- MENUS SUPERIORES -->
             <!-- <p-megaMenu [model]="model" styleClass="layout-megamenu"></p-megaMenu> -->
-            Sistema de Gestión de Ventas y Comprobantes Electrónicos BCS V.1.0
+            Sistema de Gestión de Ventas y Comprobantes Electrónicos CSI V.1.0
         </div>
         
         <div class="layout-topbar-actions-right">
@@ -160,26 +160,26 @@
                     </a>
 
                     <ul class="layout-topbar-action-panel p-shadow-6" [@topbarActionPanelAnimation]="'visible'" *ngIf="appMain.activeTopbarItem === 'profile'">
-                        <li class="layout-topbar-action-item">
+                        <!-- <li class="layout-topbar-action-item">
                             <a class="p-d-flex p-flex-row p-ai-center" pRipple>
                                 <i class="pi pi-cog" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
                                 <span>Mi Perfil</span>
                             </a>
-                        </li>
-                        <li class="layout-topbar-action-item">
+                        </li> -->
+                        <!-- <li class="layout-topbar-action-item">
                             <a class="p-d-flex p-flex-row p-ai-center" pRipple>
                                 <i class="pi pi-file-o" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
                                 <span>Términos de Uso</span>
                             </a>
-                        </li>
-                        <li class="layout-topbar-action-item">
+                        </li> -->
+                        <!-- <li class="layout-topbar-action-item">
                             <a class="p-d-flex p-flex-row p-ai-center" pRipple>
                                 <i class="pi pi-compass" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
                                 <span>Ticket de Asistencia</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="layout-topbar-action-item">
-                            <a class="p-d-flex p-flex-row p-ai-center" pRipple>
+                            <a class="p-d-flex p-flex-row p-ai-center" pRipple (click)="cerrarSesion($event)">
                                 <i class="pi pi-power-off" [ngClass]="{'p-mr-2': !app.isRTL, 'p-ml-2': app.isRTL}"></i>
                                 <span>Cerrar Sesión</span>
                             </a>

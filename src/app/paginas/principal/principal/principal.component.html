@@ -1,0 +1,466 @@
+<div class="p-grid dashboard">
+
+    <div class="p-col-12 p-md-12 p-lg-12">
+        <h5>Módulo de Ventas</h5>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/ventas/venta">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-shopping-cart"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Ventas de Productos</span>
+                        <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Ventas</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-shopping-cart" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/ventas/venta_realizada">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-shopping-cart"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Ventas Realizadas</span>
+                        <span class="overview-status p-p-1 pink-bgcolor fs-small">Ver Ventas Realizadas</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-inbox" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/ventas/clientes">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-shopping-cart"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Gestión de Clientes</span>
+                        <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Clientes</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-users" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/ventas/cobrar">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-shopping-cart"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Cuentas por Cobrar</span>
+                        <span class="overview-status p-p-1 green-bgcolor fs-small">Registro de Pagos de Ventas</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-money-bill" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="p-col-12 p-md-12 p-lg-12" style="padding-top: 40px;">
+        <h5>Módulo de Caja</h5>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/caja/movimientos-caja">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-dollar"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Movimientos de Caja</span>
+                        <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Movimientos de Caja por Sucursal</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-sort-numeric-down-alt" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/caja/caja-diaria">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-dollar"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Vista de Caja del Día</span>
+                        <span class="overview-status p-p-1 pink-bgcolor fs-small">Caja del Día por Sucursal</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-table" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/caja/init-comprobantes">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-dollar"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Iniciar Comprobantes</span>
+                        <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Inicio de Comprobantes</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-table" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="p-col-12 p-md-12 p-lg-12" style="padding-top: 40px;">
+        <h5>Módulo de Compras</h5>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/compras/compra">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-compass"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Compras de Productos</span>
+                        <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Compras</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-shopping-cart" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/compras/compra_realizada">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-compass"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Compras Realizadas</span>
+                        <span class="overview-status p-p-1 pink-bgcolor fs-small">Ver Compras Realizadas</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-list" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/compras/proveedors">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-compass"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Gestión de Proveedores</span>
+                        <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Proveedores</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-user-plus" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/compras/pagar">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-compass"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Cuentas por Pagar</span>
+                        <span class="overview-status p-p-1 green-bgcolor fs-small">Registro de Pagos por Compras</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-star" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+
+
+
+    <div class="p-col-12 p-md-12 p-lg-12" style="padding-top: 40px;">
+        <h5>Módulo de Almacén</h5>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/almacen/productos">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-inbox"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Catálogo de Productos</span>
+                        <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Productos</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-camera" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/almacen/inventario">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-inbox"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Vista de Inventario</span>
+                        <span class="overview-status p-p-1 pink-bgcolor fs-small">Ver Inventario por Sucursal</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-briefcase" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/almacen/gestion_stocks">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-inbox"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Movimientos de Productos</span>
+                        <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Salidas e Ingresos Libres de Productos</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-sort" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/almacen/reporte_stocks">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-shopping-cart"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Reporte de Movimientos</span>
+                        <span class="overview-status p-p-1 green-bgcolor fs-small">Reporte de Salidas e Ingresos Libres de Productos</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-list" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/almacen/productos_bajo_stock">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-inbox"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Productos Bajos de Stock</span>
+                        <span class="overview-status p-p-1 teal-bgcolor fs-small">Reprote de Productos Bajos de Stock</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-angle-double-down" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="p-col-12 p-md-6 p-lg-3">
+        <a href="/almacen/productos_vencidos">
+            <div class="card overview-box p-d-flex p-flex-column p-pt-2">
+                <div class="p-d-flex p-ai-center muted-text">
+                    <i class="pi pi-inbox"></i>
+                    <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
+                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                        <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
+                        <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
+                    </div> -->
+                </div>
+                <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
+                    <div class="p-d-flex p-flex-column">
+                        <span class="p-mb-1 fs-xlarge">Productos Vencidos</span>
+                        <span class="overview-status p-p-1 pink-bgcolor fs-small">Reprote de Productos Vencidos</span>
+                    </div>
+                    <div class="p-d-flex p-ai-end">
+                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        <i class="pi pi-backward" style="font-size: 4rem"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

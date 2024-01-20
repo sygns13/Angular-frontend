@@ -10,26 +10,26 @@
     </a>
 
     <ul class="layout-inline-menu-action-panel" [@menu]="appMain.inlineMenuActive[key] ? isHorizontalActive() ? 'visible' : 'visibleAnimated' : isHorizontalActive() ? 'hidden' : 'hiddenAnimated'">
-        <li class="layout-inline-menu-action-item" pTooltip="Mi Perfil" [tooltipDisabled]="isTooltipDisabled">
+        <!-- <li class="layout-inline-menu-action-item" pTooltip="Mi Perfil" [tooltipDisabled]="isTooltipDisabled">
             <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-cog pi-fw"></i>
                 <span>Mi Perfil</span>
             </a>
-        </li>
-        <li class="layout-inline-menu-action-item" pTooltip="Términos de Uso" [tooltipDisabled]="isTooltipDisabled">
+        </li> -->
+        <!-- <li class="layout-inline-menu-action-item" pTooltip="Términos de Uso" [tooltipDisabled]="isTooltipDisabled">
             <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-file-o pi-fw"></i>
                 <span>Términos de Uso</span>
             </a>
-        </li>
-        <li class="layout-inline-menu-action-item" pTooltip="Ticket de Asistencia" [tooltipDisabled]="isTooltipDisabled">
+        </li> -->
+        <!-- <li class="layout-inline-menu-action-item" pTooltip="Ticket de Asistencia" [tooltipDisabled]="isTooltipDisabled">
             <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-compass pi-fw"></i>
                 <span>Ticket de Asistencia</span>
             </a>
-        </li>
+        </li> -->
         <li class="layout-inline-menu-action-item" pTooltip="Cerrar Sesión" [tooltipDisabled]="isTooltipDisabled">
-            <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex">
+            <a class="p-d-flex p-flex-row p-ai-center" [attr.tabindex]="tabIndex" (click)="cerrarSesion($event)">
                 <i class="pi pi-power-off pi-fw"></i>
                 <span>Cerrar Sesión</span>
             </a>
