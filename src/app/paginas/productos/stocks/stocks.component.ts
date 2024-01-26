@@ -356,7 +356,18 @@ export class StocksComponent implements OnInit {
 
     this.cantidad = this.stockLoteDTO.lote.cantidad;
 
-    this.clsAlmacen_registro =  (this.stockLoteDTO.almacen != null) ?  {name: this.stockLoteDTO.almacen.nombre, code: this.stockLoteDTO.almacen.id} : null;
+    //{name: almacen.nombre, code: almacen.id, codigo: almacen.codigo, stockLoteDTOs: this.stockLoteDTOs, cantidadTotal : this.cantidadTotal, calcTotales: _total, editar : 0}
+    //let _total = this.calcularTotalesN(this.stockLoteDTO.almacen);
+    //this.cantidadTotal = this.stockLoteDTO.almacen.productosStocks.cantidadTotal;
+    this.almacens_registo.forEach(almacen => {
+
+      if(almacen.code == this.stockLoteDTO.almacen.id){
+        this.clsAlmacen_registro = almacen;
+      }
+
+    });
+
+    //this.clsAlmacen_registro =  (this.stockLoteDTO.almacen != null) ?  {name: almacen.nombre, code: almacen.id, codigo: almacen.codigo, stockLoteDTOs: this.stockLoteDTOs, cantidadTotal : this.cantidadTotal, calcTotales: _total, editar : 0} : null;
     this.tipoFrm = 'Editar Lote de Producto' 
     this.vistaRegistro = true;
 
