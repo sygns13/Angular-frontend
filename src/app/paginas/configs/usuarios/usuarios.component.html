@@ -222,37 +222,39 @@
                     <th pResizableColumn style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221);  color:white;">Gestión</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-user let-rowIndex="rowIndex" >
+            <ng-template pTemplate="body" let-userTable let-rowIndex="rowIndex" >
                 <tr>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{rowIndex+1}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.tipoUser.nombre}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.tipoUser.nombre}}</td>
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">
-                        <ng-template [ngIf]="user.almacenId != null">
-                            {{user.almacen}}
+                        <ng-template [ngIf]="userTable.almacenId != null">
+                            {{userTable.almacen}}
                         </ng-template>
                     </td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.name}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.email}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.tipoDocumento.descripcion}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.documento}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.nombres}} {{user.datos.apellidoPaterno}} {{user.datos.apellidoMaterno}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.direccion}}</td>
-                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{user.datos.telefono}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.name}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.email}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.datos.tipoDocumento.descripcion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.datos.documento}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.datos.nombres}} {{userTable.datos.apellidoPaterno}} {{userTable.datos.apellidoMaterno}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.datos.direccion}}</td>
+                    <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;">{{userTable.datos.telefono}}</td>
 
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;">
-                        <p-tag styleClass="p-mr-2" severity="success" *ngIf="user.activo === 1" value="Activo"></p-tag>
-                        <p-tag styleClass="p-mr-2" severity="warning" *ngIf="user.activo === 0" value="Inactivo"></p-tag>
+                        <p-tag styleClass="p-mr-2" severity="success" *ngIf="userTable.activo === 1" value="Activo"></p-tag>
+                        <p-tag styleClass="p-mr-2" severity="warning" *ngIf="userTable.activo === 0" value="Inactivo"></p-tag>
                     </td>
 
 
                     <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;">
+
+                        <button *ngIf="userTable.tipoUser.id < 9" (click)="asignarCajas(userTable, $event)" pButton pRipple type="button" icon="pi pi-shopping-cart" class="p-button-rounded p-button-info p-mr-2 p-mb-2" pTooltip="Asignar Cajas a usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
     
-                        <button (click)="editar(user, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button (click)="editar(userTable, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
 
-                        <button *ngIf="user.borrado === 0" (click)="eliminar(user , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="userTable.borrado === 0" (click)="eliminar(userTable , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
 
-                        <button *ngIf="user.activo === 0" (click)="alta(user , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
-                        <button *ngIf="user.activo === 1" (click)="baja(user , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="userTable.activo === 0" (click)="alta(userTable , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                        <button *ngIf="userTable.activo === 1" (click)="baja(userTable , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Usuario" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
                         
                     </td>
                 </tr>
@@ -268,9 +270,81 @@
                                     <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
                                     <button type="button" pButton icon="pi pi-check" label="Si, Aceptar" (click)="cd.accept()"></button>
                                 </p-footer>
-                                </p-confirmDialog>
+        </p-confirmDialog>
     
                                  <!-- Esta alerta se muestra estaticamente, el toast si flotante -->
                                  <!-- <p-messages [value]="msgs"></p-messages> -->
+
+
+        <p-dialog header="Asignación de Cajas" [(visible)]="displayCajas" [modal]="true" [style]="{ 'min-height':'450px', width: '70vw' }" [draggable]="false" [resizable]="false">
+        <div class="p-col-12">
+                
+    
+            <div class="p-fluid box">
+                <div class="p-field p-grid">
+                    <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
+                    <div class="p-col-12 p-md-12">
+                        <span class="p-float-label">
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacensCajas" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacenCaja" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                            <label>Seleccione un Local</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="p-mb-3">
+                <div class="p-inputgroup">
+                    <button pButton pRipple type="button" label="BuscarCaja" (click)="buscarCaja()"></button>
+                    <span class="p-float-label">
+                        <input type="text" pInputText [(ngModel)]="txtBuscarCaja" (keyup.enter)="buscarCaja()"/>
+                        <label>Palabra Clave</label>
+                    </span>
+                </div>
+            </div>
+
+            <p-table [value]="cajasUser" [paginator]="false" [lazy]="true" [loading]="loading"
+                 styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
+                <ng-template pTemplate="header">
+                    <!-- <tr>
+                        <th colspan="4" style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">Local: {{clsAlmacenCaja.name}}</th>
+                    </tr> -->
+                    <tr>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 60%; color:white;">Caja</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 20%; color:white;">Estado de Asignación</th>
+                        <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 15%; color:white;">Gestión</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cajaUser let-rowIndex="rowIndex" >
+                    <tr *ngIf="clsAlmacenCaja != null && clsAlmacenCaja.code == cajaUser.caja.almacen.id">
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">N°</span> {{cajaUser.caja.countIdx}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px;"><span class="p-column-title">Caja</span>  {{cajaUser.caja.nombre}}</td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 5px; text-align: center;"><span class="p-column-title">Estado de Asignación</span>
+                                <p-tag styleClass="p-mr-2" severity="success" *ngIf="cajaUser.id != null " value="Asignado"></p-tag>
+                                <p-tag styleClass="p-mr-2" severity="warning" *ngIf="cajaUser.id == null" value="No Asignado"></p-tag>
+                        </td>
+                        <td style="border: 1px solid rgb(221, 221, 221); font-size: 1rem; padding: 1px; text-align: center;"><span class="p-column-title">Gestión</span>
+                            <button *ngIf="cajaUser.id == null" (click)="asignarCaja(cajaUser , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Asignar Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                            <button *ngIf="cajaUser.id != null" (click)="desasignarCaja(cajaUser , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Asignación de la Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+        
+                            <!-- <button (click)="editar(cajaUser, $event)" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 p-mb-2" pTooltip="Editar Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                            <button *ngIf="cajaUser.borrado === 0" (click)="eliminar(cajaUser , $event)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2 p-mb-2" pTooltip="Eliminar Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                            <button *ngIf="cajaUser.activo === 0" (click)="alta(cajaUser , $event)" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-mr-2 p-mb-2" pTooltip="Activar Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button>
+                            <button *ngIf="cajaUser.activo === 1" (click)="baja(cajaUser , $event)" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-help p-mr-2 p-mb-2" pTooltip="Desactivar Caja" tooltipPosition="top" style="height: 2rem; width: 2rem;"></button> -->
+                            
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+                
+                
+            <div class="p-mb-3"></div>
+            </div>
+        <p-footer>
+            <!-- <button pButton pRipple type="button" icon="pi pi-check" (click)="displayClient=false" label="Yes" class="p-button-text"></button> -->
+            <button (click)="displayCajas=false" pButton pRipple type="button" icon="pi pi-times" label="Cerrar" class="p-button-raised p-button-danger"></button>
+            <!-- <button pButton pRipple type="button" icon="pi pi-times" (click)="displayClient=false" label="No" class="p-button-text"></button> -->
+        </p-footer>
+    </p-dialog>
     
     </div>

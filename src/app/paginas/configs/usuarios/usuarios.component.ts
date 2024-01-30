@@ -14,6 +14,8 @@ import { User } from './../../../_model/user';
 import { DatosUser } from './../../../_model/datos_user';
 import { TipoDocumento } from './../../../_model/tipo_documento';
 import { TipoUser } from 'src/app/_model/tipo_user';
+import { CajaService } from 'src/app/_service/caja.service';
+import { CajaUser } from 'src/app/_model/caja_user';
 
 
 @Component({
@@ -92,10 +94,18 @@ export class UsuariosComponent implements OnInit {
 
   message:string;
 
+  //Asignación de Cajas
+  displayCajas: boolean = false;
+  almacensCajas: any[] = [];
+  clsAlmacenCaja: any = null;
+  txtBuscarCaja: String = '';
+  cajasUser: any[] = [];
+
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private userService: UserService,
     private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
     private tipoUserService: TipoUserService, 
-    private gestionloteService: GestionloteService) {
+    private gestionloteService: GestionloteService,
+    private cajaService:CajaService) {
     this.breadcrumbService.setItems([
     { label: 'Configuraciones' },
     { label: 'Gestión de Usuarios', routerLink: ['/configs/usuarios'] }
@@ -162,6 +172,7 @@ getAlmacens() {
 
   this.clsAlmacen = null;
   this.almacens = [];
+  this.almacensCajas = [];
 
   this.almacens.push({name: "General - Todas", code: 0});
   this.clsAlmacen = {name: "General - Todas", code: 0};
@@ -170,6 +181,7 @@ getAlmacens() {
   this.gestionloteService.getAlmacens().subscribe(data => {
     data.forEach(almacen => {
       this.almacens.push({name: almacen.nombre, code: almacen.id});
+      this.almacensCajas.push({name: almacen.nombre, code: almacen.id});
     });
   });
 }
@@ -554,6 +566,134 @@ mostrarNumeroMethodconComas(value: any){
 }
 
 
+asignarCajas(data: User, event: Event){
+  this.user = data;
+  this.clsAlmacenCaja = null;
+  this.txtBuscarCaja = '';
+  this.cajasUser = [];
 
+  this.displayCajas = true;
+  //this.listarCajas();
+}
+
+
+cambioSucursal(event: Event){
+  this.listarCajas();
+}
+
+
+buscarCaja(){
+  this.listarCajas();
+}
+
+
+listarCajas() {
+
+  let _idAlmacen = (this.clsAlmacenCaja != null) ? this.clsAlmacenCaja.code : 0;
+  let _idUsuario = this.user != null && this.user.id != null && this.user.id != 0 ? this.user.id : 0;
+  
+  this.cajaService.listarAllByAlmacenAndUser(this.txtBuscarCaja, _idAlmacen, _idUsuario).subscribe(data => {
+    this.cajasUser = data;
+
+    this.almacensCajas.forEach(almacen => {
+      let count = 0;
+      this.cajasUser.forEach(cajaUser => {
+        if(cajaUser.caja.almacen.id == almacen.code){
+          count++;
+          cajaUser.caja.countIdx = count;
+        }
+      });
+    });
+    this.loading = false;
+    console.log(this.cajasUser);
+  });
+}
+
+
+
+asignarCaja(data: CajaUser, event: Event){
+  this.confirmationService.confirm({
+    key: 'confirmDialog',
+    target: event.target,
+    message: '¿Está seguro de Asignar la Caja ' + data.caja.nombre + ' al Usuario ',
+    icon: 'pi pi-exclamation-triangle',
+    header: 'Confirmación Activación',
+    accept: () => {
+      let msj : string = 'Se ha asignado la Caja al Usuario satisfactoriamente';
+      let valor: number = 1;
+     this.asignarUserCaja(data, valor, msj);
+    },
+    reject: () => {
+    }
+});
+  
+}
+
+desasignarCaja(data: CajaUser, event: Event){
+  this.confirmationService.confirm({
+    key: 'confirmDialog',
+    target: event.target,
+    message: '¿Está seguro de Desactivar el registro?',
+    icon: 'pi pi-exclamation-triangle',
+    header: 'Confirmación Desactivación',
+    accept: () => {
+      let msj : string = 'Se ha eliminado la asignación de la Caja ' + data.caja.nombre + ' al Usuario satisfactoriamente';
+      let valor: number = 0;
+      this.eliminarAsignacionUserCaja(data, valor, msj);
+    },
+    reject: () => {
+    }
+});
+  
+}
+
+asignarUserCaja(data: CajaUser, valor: number, msj: string){
+  this.vistaCarga = true;
+
+  //let _cajaUser = new CajaUser();
+  data.user = this.user;
+  
+  this.cajaService.asignarCajaToUser(data).subscribe({
+    next: c => {
+    this.loading = true; 
+    this.vistaCarga = false;
+    this.listarCajas();
+    this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
+    },
+    error: error => {
+      console.log('Error complete');
+      this.vistaCarga = false;
+    },
+    complete: () => {
+      this.vistaCarga = false;
+      console.log('Request complete');
+    }
+  });
+
+}
+
+eliminarAsignacionUserCaja(data: CajaUser, valor: number, msj: string){
+  this.vistaCarga = true;
+
+  //let _cajaUser = new CajaUser();
+  
+  this.cajaService.eliminarAsignacionCajaToUser(data).subscribe({
+    next: c => {
+    this.loading = true; 
+    this.vistaCarga = false;
+    this.listarCajas();
+    this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
+    },
+    error: error => {
+      console.log('Error complete');
+      this.vistaCarga = false;
+    },
+    complete: () => {
+      this.vistaCarga = false;
+      console.log('Request complete');
+    }
+  });
+
+}
 
 }

@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { of, Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { CajaUser } from '../_model/caja_user';
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +33,21 @@ export class CajaService extends GenericService<Caja>  {
 
   listarAllByAlmacen(txtBuscar:String, idAlmacen:number){
     return this.http.get<any>(`${this.url}/get_by_almacen?buscar=${txtBuscar}&almacen_id=${idAlmacen}`);
-    
+  }
+
+  listarAllByAlmacenAndUser(txtBuscar:String, idAlmacen:number, idUsuario:number){
+    return this.http.get<any>(`${this.url}/get_by_almacen_and_user?buscar=${txtBuscar}&almacen_id=${idAlmacen}&user_id=${idUsuario}`);
   }
 
   listarAll(){
     return this.http.get<Caja[]>(`${this.url}/listar-all`);
+  }
+
+  asignarCajaToUser(cajaUser: CajaUser) {
+    return this.http.post<any>(`${this.url}/asignar_caja_to_user`, cajaUser);
+  }
+
+  eliminarAsignacionCajaToUser(cajaUser: CajaUser) {
+    return this.http.post<any>(`${this.url}/eliminar_asignacion_caja_to_user`, cajaUser);
   }
 }
