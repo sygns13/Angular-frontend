@@ -1401,7 +1401,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 
 .p-button {
   color: #ffffff;
-  background: #3F51B5;
+  background: #ffc408;
   border: 0 none;
   padding: 0.643rem 0.75rem;
   font-size: 1rem;
@@ -1409,28 +1409,28 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-radius: 4px;
 }
 .p-button:enabled:hover {
-  background: rgba(63, 81, 181, 0.92);
+  background: #e8ab00;
   color: #ffffff;
   border-color: transparent;
 }
 .p-button:enabled:active {
-  background: rgba(63, 81, 181, 0.68);
+  background: #ffc408;
   color: #ffffff;
   border-color: transparent;
 }
 .p-button.p-button-outlined {
   background-color: transparent;
-  color: #3F51B5;
+  color: #ffc408;
   border: 1px solid;
 }
 .p-button.p-button-outlined:enabled:hover {
   background: rgba(63, 81, 181, 0.04);
-  color: #3F51B5;
+  color: #ffc408;
   border: 1px solid;
 }
 .p-button.p-button-outlined:enabled:active {
   background: rgba(63, 81, 181, 0.16);
-  color: #3F51B5;
+  color: #ffc408;
   border: 1px solid;
 }
 .p-button.p-button-outlined.p-button-plain {
@@ -1447,17 +1447,17 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 }
 .p-button.p-button-text {
   background-color: transparent;
-  color: #3F51B5;
+  color: #ffc408;
   border-color: transparent;
 }
 .p-button.p-button-text:enabled:hover {
   background: rgba(63, 81, 181, 0.04);
-  color: #3F51B5;
+  color: #ffc408;
   border-color: transparent;
 }
 .p-button.p-button-text:enabled:active {
   background: rgba(63, 81, 181, 0.16);
-  color: #3F51B5;
+  color: #ffc408;
   border-color: transparent;
 }
 .p-button.p-button-text.p-button-plain {
@@ -5154,10 +5154,13 @@ p-autocomplete.ng-dirty.ng-invalid .p-autocomplete .p-autocomplete-multiple-cont
   min-width: auto;
 }
 .p-button:enabled:focus {
-  background: rgba(63, 81, 181, 0.76);
+  background: #e8ab00;
 }
 .p-button:enabled:active {
+  /*
   background: rgba(63, 81, 181, 0.68);
+  */
+  background: #e8ab00;
 }
 .p-button .p-ink {
   background-color: rgba(255, 255, 255, 0.32);

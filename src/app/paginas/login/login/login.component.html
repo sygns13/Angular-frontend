@@ -2,31 +2,34 @@
     <div class="topbar p-p-3 p-d-flex p-jc-between p-flex-row p-ai-center">
         <div class="topbar-left p-ml-3 p-d-flex" routerLink="/">
             <div class="logo">
-                <img src="assets/layout/images/logo-final.png" alt=""/>
+                <img src="assets/layout/images/logoOnedoyF.png" style="width: 250px!important;height: 50px!important;" alt=""/>
             </div>
         </div>
         <div class="topbar-right p-mr-3 p-d-flex">
-            
-            <button pButton pRipple type="button" label="Sistema de Gestión de Ventas y Comprobantes Electrónicos CSI V.1.0" [routerLink]="['/']"
-                    class="p-button-text p-button-plain topbar-button"></button>
+
+           <!-- <button pButton pRipple type="button" label="Sistema de Gestión de Ventas y Comprobantes Electrónicos CSI V.1.0" [routerLink]="['/']"
+                    class="p-button-text p-button-plain topbar-button"></button>-->
+          <div class="logo">
+            <img src="assets/layout/images/logoCSIF.png" class="topbar-button" style="width: 250px!important;height: 50px!important;" alt=""/>
+          </div>
         </div>
     </div>
 
-    
+
 
     <div class="p-as-center p-mt-auto p-mb-auto">
-        <div class="pages-panel card p-d-flex p-flex-column">
-            <div class="pages-header p-px-3 p-py-1">
-                <h2>LOGIN DE ACCESO</h2>
-            </div>
-
-            <h4>Bienvenido</h4>
-
-            <div class="pages-detail p-mb-6 p-px-6">Por favor ingrese sus credenciales e inicie sesión</div>
-
+        <div class="pages-panel card p-d-flex p-flex-column" style="padding: 2.1rem;background-color: #ffffffeb">
+          <div class="logo">
+            <img src="assets/layout/images/logoMontaniaCSI.png" style="width: 160px!important;height: 66px!important;" alt=""/>
+          </div>
+          <h4 style="font-size: 1.7rem;margin-top: 8px;margin-bottom: 8px;">Bienvenido!</h4>
+            <div class="pages-detail" style="font-family: Sans-serif;">Sistema de Ventas y Facturación Electrónica</div>
+            <hr style="margin-bottom: 1.6rem;margin-top: 1.6rem;">
+          <!--  <div class="pages-detail" style="padding-bottom: 1.5rem">Ingrese sus credenciales e inicie sesión</div>
+-->
             <div class="input-panel p-d-flex p-flex-column p-px-3">
                 <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
+                    <span class="p-inputgroup-addon" style="background-color: #1565C0;color: #ffffff;">
                         <i class="pi pi-user"></i>
                     </span>
                     <span class="p-float-label">
@@ -35,8 +38,8 @@
                     </span>
                 </div>
 
-                <div class="p-inputgroup p-mt-3 p-mb-6">
-                    <span class="p-inputgroup-addon">
+                <div class="p-inputgroup p-mt-3 p-mb-5">
+                    <span class="p-inputgroup-addon" style="background-color: #1565C0;color: #ffffff;">
                         <i class="pi pi-lock"></i>
                     </span>
                     <span class="p-float-label">
@@ -47,13 +50,13 @@
 
             </div>
 
-            <p-button class="login-button p-mb-6 p-px-3" label="LOGIN" (click)="iniciarSesion()"></p-button>
+            <p-button class="login-button p-mb-4 p-px-3" label="ACCEDER" (click)="iniciarSesion()"></p-button>
 
             <div style="text-align: center">
                 <a routerLink="/recuperar">¿Olvidaste tu contraseña?</a>
               </div>
 
-            
+
 
         </div>
     </div>
@@ -64,6 +67,6 @@
         </p-card>
         <p-card  header="Error" [style]="{'width': '30rem', 'margin-bottom': '0em' , 'color':'red'}" *ngIf="verError">
             <p style="color:red">{{content1}}</p>
-        </p-card> 
+        </p-card>
     </div>
 </div>

@@ -285,7 +285,7 @@
                     <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
                     <div class="p-col-12 p-md-12">
                         <span class="p-float-label">
-                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacensCajas" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacenCaja" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                            <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacensCajasVista" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacenCaja" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
                             <label>Seleccione un Local</label>
                         </span>
                     </div>
@@ -305,9 +305,6 @@
             <p-table [value]="cajasUser" [paginator]="false" [lazy]="true" [loading]="loading"
                  styleClass="p-datatable-responsive-demo p-datatable-gridlines" >
                 <ng-template pTemplate="header">
-                    <!-- <tr>
-                        <th colspan="4" style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">Local: {{clsAlmacenCaja.name}}</th>
-                    </tr> -->
                     <tr>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 5%; color:white;">N°</th>
                         <th style="background-color: rgb(80, 148, 216); border: 1px solid rgb(221, 221, 221); width: 60%; color:white;">Caja</th>

@@ -25,9 +25,9 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/favorites/dashboardanalytics'], badge: '2', badgeClass: 'p-badge-success'}
                 ]*/
             },
-            {label: 'Configuraciones', icon: 'pi pi-fw pi-cog',
+            {label: 'Configuracionesss', icon: 'pi pi-fw pi-cog', styleClass: 'menu-label-black',
             items: [
-                {label: 'Gestión de Usuarios', icon: 'pi pi-fw pi-user-edit', routerLink: ['/configs/usuarios']}, 
+                {label: 'Gestión de Usuarios', icon: 'pi pi-fw pi-user-edit', routerLink: ['/configs/usuarios']},
                 {label: 'Configuraciones', icon: 'pi pi-fw pi-cog', routerLink: ['/configs/settings']},
                 {label: 'Config Métodos de Pago', icon: 'pi pi-fw pi-mobile', routerLink: ['/caja/metodos-pagos']}
             ]
@@ -60,7 +60,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Catálogo de Servicios', icon: 'pi pi-fw pi-camera', routerLink: ['/servicios/catalogo']},
                 ]
             },*/
-            { 
+            {
                 label: 'Ventas', icon: 'pi pi-fw pi-shopping-cart',
                 items: [
                     {label: 'Clientes', icon: 'pi pi-fw pi-users', routerLink: ['/ventas/clientes']},
@@ -84,6 +84,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Caja', icon: 'pi pi-fw pi-dollar',
                 items: [
                     {label: 'Registro de Cajas de Ventas', icon: 'pi pi-fw pi-table', routerLink: ['/caja/cajas']},
+                    {label: 'Mi Caja de Ventas', icon: 'pi pi-fw pi-inbox', routerLink: ['/caja/gestion']},
                     {label: 'Registro de Movimientos por Sucursal', icon: 'pi pi-fw pi-sort-numeric-down-alt', routerLink: ['/caja/movimientos-caja']},
                     {label: 'Caja del Día por  Sucursal', icon: 'pi pi-fw pi-table', routerLink: ['/caja/caja-diaria']},
                     {label: 'Iniciar Comprobantes', icon: 'pi pi-fw pi-file', routerLink: ['/caja/init-comprobantes']},
@@ -95,16 +96,16 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Reporte de Clientes', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/clientes']},
                     {label: 'Proveedores', icon: 'pi pi-fw pi-file-pdf',  routerLink: ['/reporte/proveedores']
                         /* items: [
-                            {label: 'Listado de Proveedores', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, 
+                            {label: 'Listado de Proveedores', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']},
                             {label: 'Cuentas de Proveedores', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}
                         ] */
                     },
                     /* {label: 'Reporte de Bancos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/bancos']}, */
                     {label: 'Reporte de Marcas', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/marcas']},
                     {label: 'Tipos de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/tipo-productos']},
-                    {label: 'Productos', icon: 'pi pi-fw pi-file-pdf', 
+                    {label: 'Productos', icon: 'pi pi-fw pi-file-pdf',
                     items: [
-                        {label: 'Productos por Sucursal', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/productos-almacen']}, 
+                        {label: 'Productos por Sucursal', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/productos-almacen']},
                         {label: 'Reportes de Inventario', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/almacen/inventario']},
                         {label: 'Listado de Precios de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/productos-precios']}
                     ]
@@ -112,7 +113,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Entradas y Salidas Libres', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/almacen/reporte_stocks']},
                     {label: 'Compras', icon: 'pi pi-fw pi-file-pdf',
                     items: [
-                        {label: 'Compras de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/compras-generales']}, 
+                        {label: 'Compras de Productos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/compras-generales']},
                         {label: 'Compras Detalladas por Producto', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/compras-detalladas']},
 /*                         {label: 'Compras Detalladas por Proveedor', icon: 'pi pi-file-pdf', routerLink: ['/landing']}, */
                         {label: 'Reporte de Pagos de Compras', icon: 'pi pi-file-pdf', routerLink: ['/reporte/pago-compras']},
@@ -121,7 +122,7 @@ export class AppMenuComponent implements OnInit {
                     },
                     {label: 'Ventas', icon: 'pi pi-fw pi-file-pdf',
                     items: [
-                        {label: 'Ventas Generales', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/ventas-generales']}, 
+                        {label: 'Ventas Generales', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/ventas-generales']},
                         /* {label: 'Ventas por Vendedor', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/landing']}, */
                         {label: 'Ventas Detalladas por Producto', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/ventas-detalladas']},
                         {label: 'Top de Productos Vendidos', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/reporte/top-productos-vendidos']},
@@ -132,7 +133,7 @@ export class AppMenuComponent implements OnInit {
                     },
                     {label: 'Caja', icon: 'pi pi-fw pi-chart-line',
                     items: [
-                        {label: 'Resumen de Caja', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/resumen-caja']}, 
+                        {label: 'Resumen de Caja', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/resumen-caja']},
                         {label: 'Ingresos por Ventas', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/ingresos-ventas']},
                         {label: 'Ingresos por Otros Conceptos', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/ingresos-otros']},
                         {label: 'Egresos por Pago a Proveedores', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/reporte/egresos-compras']},
@@ -142,7 +143,7 @@ export class AppMenuComponent implements OnInit {
                     }
                 ]
             },
-            
+
         ];
     }
 }

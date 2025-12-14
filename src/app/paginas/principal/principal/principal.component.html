@@ -1,4 +1,117 @@
 <div class="p-grid dashboard">
+  <div class="p-col-12 p-md-6 p-lg-3">
+    <!-- Card 1 -->
+    <div class="col-12 md:col-6 lg:col-3 ">
+      <div class="card flex flex-column newdesign">
+        <div class="flex align-items-center text-700">
+          <i class="pi pi-shopping-cart mr-2"></i>
+          <span class="font-bold m-0 pl-2"> Ventas</span>
+          <div class="ml-auto">
+            <button pButton pRipple type="button" icon="pi pi-ellipsis-h"
+                    class="p-button-text p-button-rounded p-button-icon-only"
+                    (click)="menu1.toggle($event)"></button>
+            <p-menu #menu1 [popup]="true" [model]="menuItems"></p-menu>
+          </div>
+        </div>
+        <div class="flex justify-content-between mt-3 flex-wrap">
+          <div class="flex flex-column" style="width: 80px;">
+            <span class="mb-1 text-4xl">640</span>
+            <span class="font-medium border-round p-1 text-sm text-teal-600">1420 Completed</span>
+          </div>
+          <p-chart type="line" [data]="spark1" [options]="sparkOpts" [height]="60" [width]="160"></p-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-3">
+    <!-- Card 2 -->
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="card flex flex-column newdesign">
+        <div class="flex align-items-center text-700">
+          <i class="pi pi-dollar mr-2"></i>
+          <span class="font-bold m-0 pl-2"> Caja</span>
+          <div class="ml-auto">
+            <button pButton pRipple type="button" icon="pi pi-ellipsis-h"
+                    class="p-button-text p-button-rounded p-button-icon-only"
+                    (click)="menu2.toggle($event)"></button>
+            <p-menu #menu2 [popup]="true" [model]="menuItems"></p-menu>
+          </div>
+        </div>
+        <div class="flex justify-content-between mt-3 flex-wrap">
+          <div class="flex flex-column" style="width: 80px;">
+            <span class="mb-1 text-4xl">$57K</span>
+            <span class="font-medium border-round p-1 text-sm text-teal-600">$9,640 Income</span>
+          </div>
+          <p-chart type="line" [data]="spark2" [options]="sparkOpts" [height]="60" [width]="160"></p-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-3">
+    <!-- Card 3 -->
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="card flex flex-column newdesign">
+        <div class="flex align-items-center text-700">
+          <i class="pi pi-users mr-2"></i>
+          <span class="font-bold m-0 pl-2"> Clientes</span>
+          <div class="ml-auto">
+            <button pButton pRipple type="button" icon="pi pi-ellipsis-h"
+                    class="p-button-text p-button-rounded p-button-icon-only"
+                    (click)="menu3.toggle($event)"></button>
+            <p-menu #menu3 [popup]="true" [model]="menuItems"></p-menu>
+          </div>
+        </div>
+        <div class="flex justify-content-between mt-3 flex-wrap">
+          <div class="flex flex-column" style="width: 80px;">
+            <span class="mb-1 text-4xl">8572</span>
+            <span class="font-medium border-round p-1 text-sm" style="color:#e91e63">25402 Registered</span>
+          </div>
+          <p-chart type="line" [data]="spark3" [options]="sparkOptsPink" [height]="60" [width]="160"></p-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-3">
+    <!-- Card 4 -->
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="card flex flex-column newdesign">
+        <div class="flex align-items-center text-700">
+          <i class="pi pi-comments mr-2"></i>
+          <span class="font-bold m-0 pl-2"> Facturación</span>
+          <div class="ml-auto">
+            <button pButton pRipple type="button" icon="pi pi-ellipsis-h"
+                    class="p-button-text p-button-rounded p-button-icon-only"
+                    (click)="menu4.toggle($event)"></button>
+            <p-menu #menu4 [popup]="true" [model]="menuItems"></p-menu>
+          </div>
+        </div>
+        <div class="flex justify-content-between mt-3 flex-wrap">
+          <div class="flex flex-column" style="width: 80px;">
+            <span class="mb-1 text-4xl">805</span>
+            <span class="font-medium border-round p-1 text-sm text-teal-600">85 Responded</span>
+          </div>
+          <p-chart type="line" [data]="spark4" [options]="sparkOpts" [height]="60" [width]="160"></p-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-12">
+    <!-- Card 4 -->
+    <div class="card newdesign">
+      <div class="flex align-items-center text-700 mb-3">
+        <span class="font-bold m-0">Ventas Diarias</span>
+        <div class="ml-auto">
+          <button pButton pRipple type="button" icon="pi pi-ellipsis-h"
+                  class="p-button-text p-button-rounded p-button-icon-only"
+                  (click)="menu5.toggle($event)"></button>
+          <p-menu #menu5 [popup]="true" [model]="menuItems"></p-menu>
+        </div>
+      </div>
+      <p-chart type="line" [data]="orderGraph" [options]="orderGraphOpts" [height]="280"></p-chart>
+    </div>
+</div>
+
+<!--<div class="p-grid dashboard">
 
     <div class="p-col-12 p-md-12 p-lg-12">
         <h5>Módulo de Ventas</h5>
@@ -10,10 +123,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-shopping-cart"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -21,7 +134,7 @@
                         <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Ventas</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-shopping-cart" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -29,16 +142,16 @@
         </a>
     </div>
 
-    <div class="p-col-12 p-md-6 p-lg-3">
+  <div class="p-col-12 p-md-6 p-lg-3">
         <a href="/ventas/venta_realizada">
             <div class="card overview-box p-d-flex p-flex-column p-pt-2">
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-shopping-cart"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -46,7 +159,7 @@
                         <span class="overview-status p-p-1 pink-bgcolor fs-small">Ver Ventas Realizadas</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-inbox" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -60,10 +173,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-shopping-cart"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -71,7 +184,7 @@
                         <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Clientes</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-users" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -85,10 +198,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-shopping-cart"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -96,7 +209,7 @@
                         <span class="overview-status p-p-1 green-bgcolor fs-small">Registro de Pagos de Ventas</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-money-bill" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -115,10 +228,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-dollar"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -126,7 +239,7 @@
                         <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Movimientos de Caja por Sucursal</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-sort-numeric-down-alt" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -140,10 +253,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-dollar"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -151,7 +264,7 @@
                         <span class="overview-status p-p-1 pink-bgcolor fs-small">Caja del Día por Sucursal</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-table" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -165,10 +278,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-dollar"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -176,7 +289,7 @@
                         <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Inicio de Comprobantes</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-table" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -195,10 +308,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-compass"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -206,7 +319,7 @@
                         <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Compras</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-shopping-cart" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -220,10 +333,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-compass"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -231,7 +344,7 @@
                         <span class="overview-status p-p-1 pink-bgcolor fs-small">Ver Compras Realizadas</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-list" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -245,10 +358,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-compass"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -256,7 +369,7 @@
                         <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Proveedores</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-user-plus" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -270,10 +383,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-compass"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -281,7 +394,7 @@
                         <span class="overview-status p-p-1 green-bgcolor fs-small">Registro de Pagos por Compras</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-star" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -303,10 +416,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-inbox"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -314,7 +427,7 @@
                         <span class="overview-status p-p-1 teal-bgcolor fs-small">Registro de Productos</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-camera" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -328,10 +441,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-inbox"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -339,7 +452,7 @@
                         <span class="overview-status p-p-1 pink-bgcolor fs-small">Ver Inventario por Sucursal</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-briefcase" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -353,10 +466,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-inbox"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -364,7 +477,7 @@
                         <span class="overview-status p-p-1 indigo-bgcolor fs-small">Registro de Salidas e Ingresos Libres de Productos</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-sort" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -379,10 +492,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-shopping-cart"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -390,7 +503,7 @@
                         <span class="overview-status p-p-1 green-bgcolor fs-small">Reporte de Salidas e Ingresos Libres de Productos</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-list" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -405,10 +518,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-inbox"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -416,7 +529,7 @@
                         <span class="overview-status p-p-1 teal-bgcolor fs-small">Reprote de Productos Bajos de Stock</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-angle-double-down" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -431,10 +544,10 @@
                 <div class="p-d-flex p-ai-center muted-text">
                     <i class="pi pi-inbox"></i>
                     <h6 class="p-m-0" [ngClass]="{'p-pl-2': !app.isRTL, 'p-pr-2': app.isRTL}">Módulo</h6>
-                    <!-- <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
+                    &lt;!&ndash; <div [ngClass]="{'p-ml-auto': !app.isRTL, 'p-mr-auto': app.isRTL}">
                         <button pButton pRipple type="button" icon="pi pi-ellipsis-h" class="p-button-rounded p-button-text p-button-plain" (click)="menu1.toggle($event)"></button>
                         <p-menu #menu1 [popup]="true" [model]="[{label: 'Update', icon: 'pi pi-fw pi-refresh'},{label: 'Edit', icon: 'pi pi-fw pi-pencil'}]"></p-menu>
-                    </div> -->
+                    </div> &ndash;&gt;
                 </div>
                 <div class="p-d-flex p-jc-between p-mt-3 p-flex-wrap">
                     <div class="p-d-flex p-flex-column">
@@ -442,7 +555,7 @@
                         <span class="overview-status p-p-1 pink-bgcolor fs-small">Reprote de Productos Vencidos</span>
                     </div>
                     <div class="p-d-flex p-ai-end">
-                        <!-- <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> -->
+                        &lt;!&ndash; <p-chart type="line" [data]="overviewChartData1" [options]="overviewChartOptions" responsive="true" height="60px" width="160px"></p-chart> &ndash;&gt;
                         <i class="pi pi-backward" style="font-size: 4rem"></i>
                     </div>
                 </div>
@@ -463,4 +576,4 @@
 
 
 
-</div>
+</div>-->

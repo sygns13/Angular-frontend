@@ -1,0 +1,29 @@
+/* ===== Nivel raíz (ESCRITORIO) ===== */
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+> li.layout-root-menuitem > a,
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+> li.layout-root-menuitem > a .layout-menuitem-text,
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+> li.layout-root-menuitem > a .layout-menuitem-icon,
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+> li.layout-root-menuitem > a .layout-submenu-toggler {
+  color: #000 !important; /* negro para menú principal */
+}
+
+/* ===== Nivel raíz (MÓVIL: label va en <div> … <span.layout-menuitem-text>) ===== */
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+> li.layout-root-menuitem > div .layout-menuitem-text {
+  color: #000 !important; /* negro para el header del root en móvil */
+}
+
+/* ===== Submenús (texto, iconos y toggler) ===== */
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+li ul li > a,
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+li ul li > a .layout-menuitem-text,
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+li ul li > a .layout-menuitem-icon,
+:host ::ng-deep .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu
+li ul li > a .layout-submenu-toggler {
+  color: #fff !important; /* blanco para submenús */
+}

@@ -97,6 +97,7 @@ export class UsuariosComponent implements OnInit {
   //Asignación de Cajas
   displayCajas: boolean = false;
   almacensCajas: any[] = [];
+  almacensCajasVista: any[] = [];
   clsAlmacenCaja: any = null;
   txtBuscarCaja: String = '';
   cajasUser: any[] = [];
@@ -211,6 +212,7 @@ listarPageMain(p: number, s:number) {
 
   this.userService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
     this.users = data.content;
+    //console.log(this.users);
     this.isFirst = data.first;
     this.isLast = data.last;
     this.numberElements = data.numberOfElements;
@@ -572,6 +574,46 @@ asignarCajas(data: User, event: Event){
   this.txtBuscarCaja = '';
   this.cajasUser = [];
 
+  this.almacensCajasVista = [];
+
+  let isFirst = true;
+
+  this.almacensCajas.forEach(almacen => {
+
+    if(this.user != null && this.user.almacenId != null && this.user.almacenId == 0){
+     
+      this.almacensCajasVista.push(almacen);
+
+      if(isFirst){
+        const delay = 0; // <= eso es ser rapido
+        setTimeout(() => { 
+          this.clsAlmacenCaja = almacen;
+          this.buscarCaja();
+        }, delay);
+
+        isFirst = false;
+      }
+      
+    }
+
+    if(this.user != null && this.user.almacenId != null && this.user.almacenId != 0){
+      if(this.user.almacenId == almacen.code){
+
+        this.almacensCajasVista.push(almacen);
+
+        const delay = 0; // <= eso es ser rapido
+        setTimeout(() => { 
+          this.clsAlmacenCaja = almacen;
+          this.buscarCaja();
+        }, delay);
+        
+      }
+      
+    }
+    
+  });
+
+  console.log("displayCajas");
   this.displayCajas = true;
   //this.listarCajas();
 }
@@ -595,7 +637,7 @@ listarCajas() {
   this.cajaService.listarAllByAlmacenAndUser(this.txtBuscarCaja, _idAlmacen, _idUsuario).subscribe(data => {
     this.cajasUser = data;
 
-    this.almacensCajas.forEach(almacen => {
+    this.almacensCajasVista.forEach(almacen => {
       let count = 0;
       this.cajasUser.forEach(cajaUser => {
         if(cajaUser.caja.almacen.id == almacen.code){
@@ -605,7 +647,7 @@ listarCajas() {
       });
     });
     this.loading = false;
-    console.log(this.cajasUser);
+    //console.log(this.cajasUser);
   });
 }
 

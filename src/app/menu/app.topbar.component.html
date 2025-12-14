@@ -3,7 +3,7 @@
         <!-- lOGO EN LA BARRA DE TAREAS SUPERIOR -->
         <a class="layout-topbar-logo" routerLink="/">
             <!-- <img id="app-logo" src="assets/layout/images/logo-light.svg" alt="ultima-layout" style="height: 2.25rem"> -->
-            <img id="app-logo" src="assets/layout/images/logo-final.png" alt="ultima-layout" style="height: 2.25rem">
+            <img id="app-logo" src="assets/layout/images/logoCSI-topbar.png" alt="ultima-layout" style="height: 2.25rem">
         </a>
 
         <!-- BOTON MINIMIZAR MENUS IZQUIERDA -->
@@ -22,9 +22,9 @@
         <div class="layout-topbar-actions-left">
              <!-- MENUS SUPERIORES -->
             <!-- <p-megaMenu [model]="model" styleClass="layout-megamenu"></p-megaMenu> -->
-            Sistema de Gestión de Ventas y Comprobantes Electrónicos CSI V.1.0
+            Sistema de Ventas y Facturación Electrónica CSI V.1.0
         </div>
-        
+
         <div class="layout-topbar-actions-right">
             <ul class="layout-topbar-items">
                 <!-- BOTON BUSCAR -->
@@ -156,7 +156,7 @@
                 </li> -->
                 <li class="layout-topbar-item">
                     <a class="layout-topbar-action p-d-flex p-dir-row p-jc-center p-ai-center p-px-2 rounded-circle" (click)="appMain.onTopbarItemClick($event, 'profile')" pRipple>
-                        <img src="assets/demo/images/avatar/avatar2.png" alt="avatar" style="width: 32px; height: 32px;">
+                        <img src="assets/layout/images/logoCSI-user.png" alt="avatar" style="width: 32px; height: 32px;">
                     </a>
 
                     <ul class="layout-topbar-action-panel p-shadow-6" [@topbarActionPanelAnimation]="'visible'" *ngIf="appMain.activeTopbarItem === 'profile'">

@@ -1,3 +1,4 @@
+import { CajaDato } from './../../../_model/caja_dato';
 import { CobroVentaService } from './../../../_service/cobro_venta.service';
 import { ProductoService } from './../../../_service/producto.service';
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
@@ -35,10 +36,12 @@ import { InitComprobante } from '../../../_model/init_comprobante';
 import { MetodoPago } from '../../../_model/metodo_pago';
 import { DetalleMetodoPago } from '../../../_model/detalle_metodo_pago';
 import { CobroVenta } from './../../../_model/cobro_venta';
+import { CajaService } from 'src/app/_service/caja.service';
 
 import { ProductoVentas } from 'src/app/_model/producto_ventas';
 import { FiltroProductosVenta } from 'src/app/_util/filtro_productos_venta';
-import {Unidad } from '../../../_model/unidad';
+import { Unidad } from '../../../_model/unidad';
+import { CajaInicioCierreDto } from 'src/app/_model/caja_inicio_cierre_dto';
 
 import * as moment from 'moment';
 import { ProductoAddVenta } from 'src/app/_model/producto_add_venta';
@@ -62,20 +65,22 @@ export class VentaComponent implements OnInit {
   @ViewChild('inputcantidadDescuentoStock', { static: false }) inputcantidadDescuentoStock: ElementRef;
   @ViewChild('inputcodigoProducto', { static: false }) inputcodigoProducto: ElementRef;
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
+  @ViewChild('inputInicioCaja', { static: false }) inputInicioCaja: ElementRef;
+  @ViewChild('inputSustentoCajaInicio', { static: false }) inputSustentoCajaInicio: ElementRef;
 
   labelTitle: string = 'Registro de Ventas';
 
-  vistaCarga : boolean = true;
-  verFrmVenta : boolean = false;
-  verFrmAlmacen : boolean = false;
-  displayClient : boolean = false;
-  vistaRegistroCliente : boolean = false;
-  displayProductsToVentas : boolean = false;
-  displayAddProductsLotes : boolean = false;
-  displayAddProductsNoLotes : boolean = false;
+  vistaCarga: boolean = true;
+  verFrmVenta: boolean = false;
+  verFrmAlmacen: boolean = false;
+  displayClient: boolean = false;
+  vistaRegistroCliente: boolean = false;
+  displayProductsToVentas: boolean = false;
+  displayAddProductsLotes: boolean = false;
+  displayAddProductsNoLotes: boolean = false;
   activeProductLote: boolean = false;
-  displayEditProductsLotes : boolean = false;
-  displayEditProductsNoLotes : boolean = false;
+  displayEditProductsLotes: boolean = false;
+  displayEditProductsNoLotes: boolean = false;
 
   almacens: any[] = [];
   clsAlmacen: any = null;
@@ -83,7 +88,10 @@ export class VentaComponent implements OnInit {
   venta: Venta = new Venta();
   cobroVenta: CobroVenta = new CobroVenta();
 
-  
+  cajaDato: CajaDato = new CajaDato();
+  cajaDatoLast: CajaDato = new CajaDato();
+
+
   codigoProducto: string = '';
   txtBuscarDocCliente: string = '';
   nombreDocIdentidad: string = '';
@@ -115,7 +123,7 @@ export class VentaComponent implements OnInit {
   isLastClientes: boolean = false;
   totalRecordsClientes: number = 0;
   numberElementsClientes: number = 0;
-  loadingClientes: boolean = true; 
+  loadingClientes: boolean = true;
 
   selectedClient: Cliente;
 
@@ -133,9 +141,9 @@ export class VentaComponent implements OnInit {
   correo2Cliente: string = '';
 
   tipoFrmCliente: String = 'Nuevo Cliente';
-  vistaBotonRegistroCliente : boolean = false;
-  vistaBotonEdicionCliente : boolean = false;
-  vistaCargaCliente : boolean = true;
+  vistaBotonRegistroCliente: boolean = false;
+  vistaBotonEdicionCliente: boolean = false;
+  vistaCargaCliente: boolean = true;
 
   newCliente = new Cliente();
 
@@ -152,7 +160,7 @@ export class VentaComponent implements OnInit {
   isLastProductosToVentas: boolean = false;
   totalRecordsProductosToVentas: number = 0;
   numberElementsProductosToVentas: number = 0;
-  loadingProductosToVentas: boolean = true; 
+  loadingProductosToVentas: boolean = true;
 
   txtBuscarProducto: string = '';
 
@@ -160,7 +168,7 @@ export class VentaComponent implements OnInit {
 
   unidads: any[] = [];
   clsUnidad: any = null;
-  
+
   lotesProducto: any[] = [];
   clsLote: any = null;
   fechaVencimiento: string = '';
@@ -169,25 +177,25 @@ export class VentaComponent implements OnInit {
 
 
   lotesProductoBack: any[] = [];
-  indexLote : number = 0;
+  indexLote: number = 0;
 
   cantidadProductoLotes: number = 1;
-  
+
   tiposDescuento: any[] = [
-    {name: '% (0 a 100)', code: '1'},
-    {name: 'Valor Fijo', code: '2'}
+    { name: '% (0 a 100)', code: '1' },
+    { name: 'Valor Fijo', code: '2' }
   ];
-  
+
   clsTiposDescuento: any = null;
   cantidadDescuento: number = 0;
   precioUnitario: string = null;
   precioTotal: string = null;
-  
+
   cantStock: number = null;
   cantUnitStock: number = null;
 
   stocksProductoBack: any[] = [];
-  
+
   cantidadProductoStocks: number = 1;
   cantidadDescuentoStock: number = 0;
 
@@ -197,7 +205,7 @@ export class VentaComponent implements OnInit {
   detalleVentaGestion: DetalleVenta = new DetalleVenta();
 
   //Cobrar
-  displayConfirmarPago : boolean = false;
+  displayConfirmarPago: boolean = false;
   tipoComprobantes: any[] = [];
   clsTipoComprobante: any = null;
   serieComprobantes: any[] = [];
@@ -216,7 +224,7 @@ export class VentaComponent implements OnInit {
   clsTipoTarjeta: any = null;
   numeroTarjeta: string = '';
   numeroCheque: string = '';
-  
+
   numeroCelulares: any[] = [];
   clsNumeroCelular: any = null;
   //initComprobantes: InitComprobante[] = [];
@@ -224,40 +232,52 @@ export class VentaComponent implements OnInit {
   montoVenta: string = null;
   montoAbonado: number = null;
   montoVuelto: string = null;
-  
+
   //Edición de Ventas
   idVentaEdit: number = null;
 
 
+  //Cajas
+  cajaInicioCierreDto: CajaInicioCierreDto = new CajaInicioCierreDto();
+  cajas: any[] = [];
+  cajaCheck: any[] = [];
+  monto_cierre_caja_str: string = '';
+  monto_cierre_caja: number = null;
+  monto_inicio_caja: number = null;
+  monto_diferencia_caja: string = '';
+  sustento_inicio_caja: string = '';
+
+
   constructor(public app: AppComponent, private gestionloteService: GestionloteService, private messageService: MessageService, private clienteService: ClienteService,
-              private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService , private ventaService: VentaService,
-              private productoService: ProductoService, private unidadService:UnidadService, private stockService: StockService, private breadcrumbService: AppBreadcrumbService,
-              private tipoComprobanteService: TipoComprobanteService, private initComprobanteService:InitComprobanteService, private metodoPagoService:MetodoPagoService,
-              private tipoTarjetaService: TipoTarjetaService, private bancoService: BancoService, private detalleMetodoPagoService: DetalleMetodoPagoService,
-              private cobroVentaService: CobroVentaService, private ventaServiceData: VentaServiceData) {
-                this.breadcrumbService.setItems([
-                  { label: 'Ventas' },
-                  { label: 'Venta de Productos', routerLink: ['/ventas/venta'] }
-                  ]);
-               }
+    private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService, private ventaService: VentaService,
+    private productoService: ProductoService, private unidadService: UnidadService, private stockService: StockService, private breadcrumbService: AppBreadcrumbService,
+    private tipoComprobanteService: TipoComprobanteService, private initComprobanteService: InitComprobanteService, private metodoPagoService: MetodoPagoService,
+    private tipoTarjetaService: TipoTarjetaService, private bancoService: BancoService, private detalleMetodoPagoService: DetalleMetodoPagoService,
+    private cobroVentaService: CobroVentaService, private ventaServiceData: VentaServiceData, private cajaService: CajaService, private primengConfig: PrimeNGConfig) {
+    this.breadcrumbService.setItems([
+      { label: 'Ventas' },
+      { label: 'Venta de Productos', routerLink: ['/ventas/venta'] }
+    ]);
+  }
 
   ngOnInit(): void {
+
+    this.getSessionCaja();
 
     this.getAlmacens();
     this.getUnidads();
     this.getTipoDocumentos();
-    this.vistaCarga = false;
-    this.verFrmAlmacen = true;
+
 
     //Verificar si hay venta en curso
     this.ventaServiceData.getVentaStore().subscribe((data) => {
-      if(data != null){
+      if (data != null) {
         this.idVentaEdit = data.id;
       }
     });
 
     //inicializar subclases de venta
-    if(this.idVentaEdit == null){
+    if (this.idVentaEdit == null) {
 
       this.venta = new Venta();
       this.venta.cliente = new Cliente();
@@ -270,18 +290,114 @@ export class VentaComponent implements OnInit {
     }
   }
 
+  getSessionCaja() {
+    this.cajaService.getCajaIniciada().subscribe(data => {
+      this.cajaDato = data;
+      console.log(this.cajaDato);
+
+      this.renderInit();
+    });
+  }
+
+  renderInit() {
+
+    if (this.cajaDato == null || this.cajaDato.id == null) {
+      this.vistaCarga = false;
+      this.verFrmAlmacen = true;
+    }
+    else {
+      this.vistaCarga = false;
+      this.clsAlmacen = { name: this.cajaDato.caja.almacen.nombre, code: this.cajaDato.caja.almacen.id };
+      this.seleccionarLocal();
+    }
+  }
+
   getAlmacens() {
 
     this.clsAlmacen = null;
     this.almacens = [];
 
-  
+
     this.gestionloteService.getAlmacens().subscribe(data => {
-      if(data.length > 0){
-        this.clsAlmacen = {name: data[0].nombre, code: data[0].id};
+      if (data.length > 0) {
+        this.clsAlmacen = { name: data[0].nombre, code: data[0].id };
       }
       data.forEach(almacen => {
-        this.almacens.push({name: almacen.nombre, code: almacen.id});
+        this.almacens.push({ name: almacen.nombre, code: almacen.id });
+      });
+      this.getCajasAsignadas();
+    });
+  }
+
+  cambioSucursal(event: Event) {
+    this.getCajasAsignadas();
+    this.cajaCheck = [];
+
+    this.monto_cierre_caja_str = '';
+    this.monto_cierre_caja = null;
+    this.monto_inicio_caja = null;
+    this.monto_diferencia_caja = '';
+    this.sustento_inicio_caja = '';
+
+    this.cajaInicioCierreDto = new CajaInicioCierreDto();
+  }
+
+  seleccionCaja(event: Event, cajaId: number) {
+    if (this.cajaCheck != null && this.cajaCheck.length > 0) {
+      this.cajaCheck = [];
+      this.cajaCheck.push(cajaId);
+      this.getLastCierrreCaja(cajaId);
+    }
+  }
+
+  getLastCierrreCaja(cajaId: number) {
+
+    this.cajaInicioCierreDto = new CajaInicioCierreDto();
+    this.cajaInicioCierreDto.idCaja = cajaId;
+    this.cajaInicioCierreDto.monto = 0;
+
+    this.cajaService.getLastMontoCaja(this.cajaInicioCierreDto).subscribe(data => {
+      this.cajaDatoLast = data;
+      console.log(this.cajaDatoLast);
+
+      this.monto_cierre_caja = (this.cajaDatoLast != null && this.cajaDatoLast.montoFinal != null) ? this.cajaDatoLast.montoFinal : 0;
+      this.monto_cierre_caja_str = this.monto_cierre_caja.toFixed(2);
+      this.monto_inicio_caja = this.monto_cierre_caja;
+
+
+      this.calcularDiferenciaCaja(event);
+      this.sustento_inicio_caja = '';
+
+      this.setFocusInicioCaja();
+
+
+    });
+  }
+
+  calcularDiferenciaCaja(event: Event) {
+
+    let _monto_diferencia_caja = 0;
+    _monto_diferencia_caja = this.monto_inicio_caja - this.monto_cierre_caja;
+    this.monto_diferencia_caja = _monto_diferencia_caja.toFixed(2);
+  }
+
+  getCajasAsignadas() {
+
+    let _idAlmacen = (this.clsAlmacen != null) ? this.clsAlmacen.code : 0;
+    let _txtBuscar = "";
+
+    this.cajaService.listarByAlmacenUser(_txtBuscar, _idAlmacen).subscribe(data => {
+      this.cajas = data;
+
+
+      this.almacens.forEach(almacen => {
+        let count = 0;
+        this.cajas.forEach(cajaAsignada => {
+          if (cajaAsignada.caja.almacen.id == almacen.code) {
+            count++;
+            cajaAsignada.caja.countIdx = count;
+          }
+        });
       });
     });
   }
@@ -293,20 +409,61 @@ export class VentaComponent implements OnInit {
 
     this.unidadService.listarAll().subscribe(data => {
       data.forEach(unidad => {
-        this.unidads.push({name: unidad.nombre, code: unidad.id});
+        this.unidads.push({ name: unidad.nombre, code: unidad.id });
 
-        if(unidad.cantidad == 1){
-          this.clsUnidad = {name: unidad.nombre, code: unidad.id};
+        if (unidad.cantidad == 1) {
+          this.clsUnidad = { name: unidad.nombre, code: unidad.id };
         }
       });
     });
   }
 
-  seleccionarLocal(): void{
+  seleccionarLocalNoCaja(): void {
+
+    this.seleccionarLocal();
+  }
+
+  seleccionarLocalCaja(): void {
+
+    if (this.cajaInicioCierreDto == null || this.cajaInicioCierreDto.idCaja == null) {
+      this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Debe seleccionar una caja para iniciar' });
+      return;
+    }
+
+    if (this.monto_cierre_caja != this.monto_inicio_caja) {
+
+      if (this.sustento_inicio_caja.trim().length == 0) {
+        this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Si existe diferencia entre el último cierre de caja y el monto de inicio de caja, debe ingresar un sustento' });
+        this.setFocusSustentoCajaInicio();
+        return;
+      }
+    }
+
+    this.iniciarCaja();
+
+
+  }
+
+  iniciarCaja(): void {
+
+    this.cajaInicioCierreDto.monto = this.monto_inicio_caja;
+    this.cajaInicioCierreDto.sustento = this.sustento_inicio_caja;
+
+    this.cajaService.iniciarCaja(this.cajaInicioCierreDto).subscribe(data => {
+      if (data != null) {
+        this.cajaDato = data;
+        console.log(this.cajaDato);
+
+        this.renderInit();
+      }
+    });
+  }
+
+  seleccionarLocal(): void {
 
     this.labelTitle = 'Registro de Ventas';
 
-    if(this.clsAlmacen != null){
+    if (this.clsAlmacen != null) {
       this.venta.almacen = new Almacen();
       this.venta.almacen.id = this.clsAlmacen.code;
       this.venta.almacen.nombre = this.clsAlmacen.name;
@@ -336,131 +493,131 @@ export class VentaComponent implements OnInit {
       this.venta.comprobante = new Comprobante();
 
       this.setFocusCodigoProducto();
-/* 
-      this.ventaService.registrarRetVenta(this.venta).subscribe({
-        next: (data) => {
-          if(data != null && data.id != null){
-            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-            this.venta.id = data.id;
-            this.venta.fecha = data.fecha;
-            this.venta.subtotalInafecto = data.subtotalInafecto;
-            this.venta.subtotalAfecto = data.subtotalAfecto;
-            this.venta.subtotalExonerado = data.subtotalExonerado;
-            this.venta.totalMonto = data.totalMonto;
-            this.venta.totalAfectoIsc = data.totalAfectoIsc;
-            this.venta.igv = data.igv;
-            this.venta.isc = data.isc;
-            this.venta.estado = data.estado;
-            this.venta.pagado = data.pagado;
-            this.venta.hora = data.hora;
-            this.venta.tipo = data.tipo;
-            this.venta.numeroVenta = data.numeroVenta;
-            this.venta.montoIcbper = data.montoIcbper;
-            this.venta.cantidadIcbper = data.cantidadIcbper;
-
-            this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
-
-            this.venta.cliente = new Cliente();
-            this.venta.comprobante = new Comprobante();
-            this.detalleVentas = [];
-            this.venta.detalleVentas = this.detalleVentas;
-  
-            this.verFrmVenta = true;
-            this.vistaCarga = false;
-            this.verFrmAlmacen = false;
-
-            this.setFocusCodigoProducto();
-          }
-        },
-        error: (err) => {
-          console.log(err);
-        }        
-     });
- */
+      /* 
+            this.ventaService.registrarRetVenta(this.venta).subscribe({
+              next: (data) => {
+                if(data != null && data.id != null){
+                  //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+                  this.venta.id = data.id;
+                  this.venta.fecha = data.fecha;
+                  this.venta.subtotalInafecto = data.subtotalInafecto;
+                  this.venta.subtotalAfecto = data.subtotalAfecto;
+                  this.venta.subtotalExonerado = data.subtotalExonerado;
+                  this.venta.totalMonto = data.totalMonto;
+                  this.venta.totalAfectoIsc = data.totalAfectoIsc;
+                  this.venta.igv = data.igv;
+                  this.venta.isc = data.isc;
+                  this.venta.estado = data.estado;
+                  this.venta.pagado = data.pagado;
+                  this.venta.hora = data.hora;
+                  this.venta.tipo = data.tipo;
+                  this.venta.numeroVenta = data.numeroVenta;
+                  this.venta.montoIcbper = data.montoIcbper;
+                  this.venta.cantidadIcbper = data.cantidadIcbper;
       
+                  this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+      
+                  this.venta.cliente = new Cliente();
+                  this.venta.comprobante = new Comprobante();
+                  this.detalleVentas = [];
+                  this.venta.detalleVentas = this.detalleVentas;
+        
+                  this.verFrmVenta = true;
+                  this.vistaCarga = false;
+                  this.verFrmAlmacen = false;
+      
+                  this.setFocusCodigoProducto();
+                }
+              },
+              error: (err) => {
+                console.log(err);
+              }        
+           });
+       */
+
     }
-    else{
-      this.messageService.add({severity:'warn', summary:'Advertencia', detail: 'No ha seleccionado un Local o Sucursal Válido'});
+    else {
+      this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'No ha seleccionado un Local o Sucursal Válido' });
     }
-    
+
   }
 
-/* iniciarVentaT(): Promise<any>{
-    return this.ventaService.registrarRetVenta(this.venta).toPromise()
-    .then(response => response as Venta)
-    .catch();
-} */
+  /* iniciarVentaT(): Promise<any>{
+      return this.ventaService.registrarRetVenta(this.venta).toPromise()
+      .then(response => response as Venta)
+      .catch();
+  } */
 
-iniciarVentaT2(): Promise<any>{
-  return new Promise((resolve, reject) => {
-    if(this.venta.id == null){
-      this.venta.cliente = null;
-      this.venta.comprobante = null;
-      this.ventaService.registrarRetVenta(this.venta).subscribe({
-        next: (data) => {
-          if(data != null && data.id != null){
-            //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-            this.venta.id = data.id;
-            this.venta.fecha = data.fecha;
-            this.venta.subtotalInafecto = data.subtotalInafecto;
-            this.venta.subtotalAfecto = data.subtotalAfecto;
-            this.venta.subtotalExonerado = data.subtotalExonerado;
-            this.venta.totalMonto = data.totalMonto;
-            this.venta.totalAfectoIsc = data.totalAfectoIsc;
-            this.venta.igv = data.igv;
-            this.venta.isc = data.isc;
-            this.venta.estado = data.estado;
-            this.venta.pagado = data.pagado;
-            this.venta.hora = data.hora;
-            this.venta.tipo = data.tipo;
-            this.venta.numeroVenta = data.numeroVenta;
-            this.venta.montoIcbper = data.montoIcbper;
-            this.venta.cantidadIcbper = data.cantidadIcbper;
+  iniciarVentaT2(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.venta.id == null) {
+        this.venta.cliente = null;
+        this.venta.comprobante = null;
+        this.ventaService.registrarRetVenta(this.venta).subscribe({
+          next: (data) => {
+            if (data != null && data.id != null) {
+              //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
+              this.venta.id = data.id;
+              this.venta.fecha = data.fecha;
+              this.venta.subtotalInafecto = data.subtotalInafecto;
+              this.venta.subtotalAfecto = data.subtotalAfecto;
+              this.venta.subtotalExonerado = data.subtotalExonerado;
+              this.venta.totalMonto = data.totalMonto;
+              this.venta.totalAfectoIsc = data.totalAfectoIsc;
+              this.venta.igv = data.igv;
+              this.venta.isc = data.isc;
+              this.venta.estado = data.estado;
+              this.venta.pagado = data.pagado;
+              this.venta.hora = data.hora;
+              this.venta.tipo = data.tipo;
+              this.venta.numeroVenta = data.numeroVenta;
+              this.venta.montoIcbper = data.montoIcbper;
+              this.venta.cantidadIcbper = data.cantidadIcbper;
 
-            this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+              this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
 
-            //this.venta.cliente = new Cliente();
-            this.venta.comprobante = new Comprobante();
-            this.detalleVentas = [];
-            this.venta.detalleVentas = this.detalleVentas;
+              //this.venta.cliente = new Cliente();
+              this.venta.comprobante = new Comprobante();
+              this.detalleVentas = [];
+              this.venta.detalleVentas = this.detalleVentas;
 
-            if(data.cliente != null){
-              this.venta.cliente = data.cliente;
-            } else {
-              this.venta.cliente = new Cliente();
+              if (data.cliente != null) {
+                this.venta.cliente = data.cliente;
+              } else {
+                this.venta.cliente = new Cliente();
+              }
+              resolve(this.venta);
+
+
+
+
             }
-            resolve(this.venta);
-
-
-  
-            
+          },
+          error: (err) => {
+            console.log(err);
           }
-        },
-        error: (err) => {
-          console.log(err);
-        }        
-     });
-    }
-    else{
-      resolve(this.venta);
-    }
-  });
-}
+        });
+      }
+      else {
+        resolve(this.venta);
+      }
+    });
+  }
 
-  editarVenta(): void{
+  editarVenta(): void {
 
     this.ventaService.listarPorId(this.idVentaEdit).subscribe(data => {
-      if(data != null && data.id != null){
+      if (data != null && data.id != null) {
 
         this.venta = data;
 
-        
+
         this.labelTitle = "Edición de Venta";
         this.clsAlmacen.code = this.venta.almacen.id;
         this.clsAlmacen.name = this.venta.almacen.nombre;
 
-        
-        
+
+
         this.venta.id = data.id;
         this.venta.fecha = data.fecha;
         this.venta.subtotalInafecto = data.subtotalInafecto;
@@ -476,7 +633,7 @@ iniciarVentaT2(): Promise<any>{
         this.venta.tipo = data.tipo;
         this.venta.numeroVenta = data.numeroVenta;
 
-        if(data.cliente != null){
+        if (data.cliente != null) {
           this.venta.cliente = data.cliente;
           this.nombreDocIdentidad = this.venta.cliente.tipoDocumento.tipo;
         } else {
@@ -500,7 +657,7 @@ iniciarVentaT2(): Promise<any>{
         this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
 
         this.codigoProducto = "";
-        
+
 
         this.displayClient = false;
         this.displayProductsToVentas = false;
@@ -512,7 +669,7 @@ iniciarVentaT2(): Promise<any>{
         this.setFocusCodigoProducto();
       }
     });
-    
+
   }
 
 
@@ -521,15 +678,15 @@ iniciarVentaT2(): Promise<any>{
 
     this.clsTipoDocumentoCliente = null;
     this.tipoDocumentosCliente = [];
-  
+
     this.clienteService.getTipoDocumentos().subscribe(data => {
       data.forEach(tipoDoc => {
-        this.tipoDocumentosCliente.push({name: tipoDoc.tipo, code: tipoDoc.id});
+        this.tipoDocumentosCliente.push({ name: tipoDoc.tipo, code: tipoDoc.id });
       });
     });
   }
 
-  buscarCliente(): void{
+  buscarCliente(): void {
     this.displayClient = false;
     this.displayClient = true;
     this.selectedClient = null;
@@ -537,13 +694,13 @@ iniciarVentaT2(): Promise<any>{
     this.buscarClientes();
   }
 
-  buscarClientes(): void{
+  buscarClientes(): void {
     this.cerrarCliente();
     this.pageClientes = 0;
-    this.listarPageClientes(this.pageClientes , this.rowsClientes);
+    this.listarPageClientes(this.pageClientes, this.rowsClientes);
   }
 
-  listarPageClientes(p: number, s:number) {
+  listarPageClientes(p: number, s: number) {
 
     this.clienteService.listarPageable(p, s, this.txtBuscarCliente).subscribe(data => {
       this.clientes = data.content;
@@ -557,52 +714,62 @@ iniciarVentaT2(): Promise<any>{
     });
   }
 
-  loadDataClientes(event: LazyLoadEvent) { 
-    this.loadingClientes = true; 
+  loadDataClientes(event: LazyLoadEvent) {
+    this.loadingClientes = true;
     this.rowsClientes = event.rows;
     this.pageClientes = event.first / this.rows;
-  
+
     this.listarPageClientes(this.pageClientes, this.rowsClientes);
-  
+
   }
 
-  
+
   isLastPageClientes(): boolean {
-      //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
-      return this.isLastClientes;
-  }
-  
-  isFirstPageClientes(): boolean {
-      return this.isFirstClientes;
+    //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
+    return this.isLastClientes;
   }
 
-  setFocusBuscar() {    
+  isFirstPageClientes(): boolean {
+    return this.isFirstClientes;
+  }
+
+  setFocusBuscar() {
     this.changeDetectorRef.detectChanges();
     this.inputBuscar.nativeElement.focus();
   }
 
-  setFocusBuscarDocCliente() {    
+  setFocusBuscarDocCliente() {
     this.changeDetectorRef.detectChanges();
     this.inputBuscarDocCliente.nativeElement.focus();
   }
 
-  setFocusCodigoProducto() {    
+  setFocusCodigoProducto() {
     this.changeDetectorRef.detectChanges();
     this.inputcodigoProducto.nativeElement.focus();
   }
 
-  setFocusNombreCliente() {    
+  setFocusNombreCliente() {
     this.changeDetectorRef.detectChanges();
     this.inputNombreClienteReg.nativeElement.focus();
   }
 
-  setFocusMontoAbonado() {    
+  setFocusMontoAbonado() {
     this.changeDetectorRef.detectChanges();
     this.inputmontoAbonado.nativeElement.focus();
   }
 
-  aceptarCliente(registro){
-    if(registro != null){
+  setFocusInicioCaja() {
+    this.changeDetectorRef.detectChanges();
+    this.inputInicioCaja.nativeElement.focus();
+  }
+
+  setFocusSustentoCajaInicio() {
+    this.changeDetectorRef.detectChanges();
+    this.inputSustentoCajaInicio.nativeElement.focus();
+  }
+
+  aceptarCliente(registro) {
+    if (registro != null) {
 
       /* if(this.venta.id == null){
         this.iniciarVentaT().then((v) => {
@@ -613,10 +780,10 @@ iniciarVentaT2(): Promise<any>{
         this.venta.cliente = registro;
         this.ventaService.modificarCliente(this.venta).subscribe({
           next: (dataUdpCliente) => {
-            if(dataUdpCliente != null && dataUdpCliente.id != null){
+            if (dataUdpCliente != null && dataUdpCliente.id != null) {
 
               this.venta.cliente = dataUdpCliente.cliente;
-              
+
               this.txtBuscarCliente = "";
               this.txtBuscarDocCliente = "";
               this.displayClient = false;
@@ -625,66 +792,66 @@ iniciarVentaT2(): Promise<any>{
           },
           error: (errUdpCliente) => {
             console.log(errUdpCliente);
-          }        
-       });
+          }
+        });
       });
 
-      
+
     }
   }
 
-  modificarCantidadICBPER(event: Event){
+  modificarCantidadICBPER(event: Event) {
 
 
     this.cantIcbper = this.venta.cantidadIcbper;
     this.iniciarVentaT2().then((v) => {
-      if(this.venta != null && v.id != null){
+      if (this.venta != null && v.id != null) {
         this.venta.cantidadIcbper = this.cantIcbper;
-          this.ventaService.modificarVenta(this.venta).subscribe({
-            next: (data) => {
-              if(data != null && data.id != null){
+        this.ventaService.modificarVenta(this.venta).subscribe({
+          next: (data) => {
+            if (data != null && data.id != null) {
 
-                this.venta.id = data.id;
-                this.venta.fecha = data.fecha;
-                this.venta.subtotalInafecto = data.subtotalInafecto;
-                this.venta.subtotalAfecto = data.subtotalAfecto;
-                this.venta.subtotalExonerado = data.subtotalExonerado;
-                this.venta.totalMonto = data.totalMonto;
-                this.venta.totalAfectoIsc = data.totalAfectoIsc;
-                this.venta.igv = data.igv;
-                this.venta.isc = data.isc;
-                this.venta.estado = data.estado;
-                this.venta.pagado = data.pagado;
-                this.venta.hora = data.hora;
-                this.venta.tipo = data.tipo;
-                this.venta.numeroVenta = data.numeroVenta;
+              this.venta.id = data.id;
+              this.venta.fecha = data.fecha;
+              this.venta.subtotalInafecto = data.subtotalInafecto;
+              this.venta.subtotalAfecto = data.subtotalAfecto;
+              this.venta.subtotalExonerado = data.subtotalExonerado;
+              this.venta.totalMonto = data.totalMonto;
+              this.venta.totalAfectoIsc = data.totalAfectoIsc;
+              this.venta.igv = data.igv;
+              this.venta.isc = data.isc;
+              this.venta.estado = data.estado;
+              this.venta.pagado = data.pagado;
+              this.venta.hora = data.hora;
+              this.venta.tipo = data.tipo;
+              this.venta.numeroVenta = data.numeroVenta;
 
-                if(data.cliente != null){
-                  this.venta.cliente = data.cliente;
-                } else {
-                  this.venta.cliente = new Cliente();
-                }
-                this.venta.comprobante = data.comprobante;
-                this.detalleVentas = data.detalleVentas;
-                this.venta.detalleVentas = this.detalleVentas;
-
-
-                let opGrabada = this.venta.subtotalAfecto;
-                this.OpGravada = opGrabada.toFixed(2);
-                this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
-                this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
-                this.TotalISC = this.venta.isc.toFixed(2);
-                this.TotalIGV = this.venta.igv.toFixed(2);
-                this.ImporteTotal = this.venta.totalMonto.toFixed(2);
-
-                this.venta.montoIcbper = data.montoIcbper;
-                this.venta.cantidadIcbper = data.cantidadIcbper;
-                this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+              if (data.cliente != null) {
+                this.venta.cliente = data.cliente;
+              } else {
+                this.venta.cliente = new Cliente();
               }
-            },
-            error: (errUdpCliente) => {
-              console.log(errUdpCliente);
-            }        
+              this.venta.comprobante = data.comprobante;
+              this.detalleVentas = data.detalleVentas;
+              this.venta.detalleVentas = this.detalleVentas;
+
+
+              let opGrabada = this.venta.subtotalAfecto;
+              this.OpGravada = opGrabada.toFixed(2);
+              this.OpExonerada = this.venta.subtotalExonerado.toFixed(2);
+              this.OpInafecta = this.venta.subtotalInafecto.toFixed(2);
+              this.TotalISC = this.venta.isc.toFixed(2);
+              this.TotalIGV = this.venta.igv.toFixed(2);
+              this.ImporteTotal = this.venta.totalMonto.toFixed(2);
+
+              this.venta.montoIcbper = data.montoIcbper;
+              this.venta.cantidadIcbper = data.cantidadIcbper;
+              this.TotalICBPER = (this.venta.montoIcbper * this.venta.cantidadIcbper).toFixed(2);
+            }
+          },
+          error: (errUdpCliente) => {
+            console.log(errUdpCliente);
+          }
         });
       }
     });
@@ -694,24 +861,24 @@ iniciarVentaT2(): Promise<any>{
 
     this.iniciarVentaT2().then((v) => {
       this.clienteService.getByDocument(this.txtBuscarDocCliente).subscribe({
-        next: (data) => {        
-              this.venta.cliente = data;
-              this.ventaService.modificarCliente(this.venta).subscribe({
-                next: (dataUdpCliente) => {
-                  if(dataUdpCliente != null && dataUdpCliente.id != null){
+        next: (data) => {
+          this.venta.cliente = data;
+          this.ventaService.modificarCliente(this.venta).subscribe({
+            next: (dataUdpCliente) => {
+              if (dataUdpCliente != null && dataUdpCliente.id != null) {
 
-                    this.venta.cliente = dataUdpCliente.cliente;
-                    
-                    this.txtBuscarCliente = "";
-                    this.txtBuscarDocCliente = "";
-                    this.displayClient = false;
-                    this.nombreDocIdentidad = data.tipoDocumento.tipo;
-                  }
-                },
-                error: (errUdpCliente) => {
-                  console.log(errUdpCliente);
-                }        
-            });       
+                this.venta.cliente = dataUdpCliente.cliente;
+
+                this.txtBuscarCliente = "";
+                this.txtBuscarDocCliente = "";
+                this.displayClient = false;
+                this.nombreDocIdentidad = data.tipoDocumento.tipo;
+              }
+            },
+            error: (errUdpCliente) => {
+              console.log(errUdpCliente);
+            }
+          });
         },
         error: (err) => {
           this.txtBuscarDocCliente = "";
@@ -721,20 +888,20 @@ iniciarVentaT2(): Promise<any>{
     });
   }
 
-  nuevoCliente(): void{
+  nuevoCliente(): void {
     this.vistaBotonRegistroCliente = true;
     this.vistaBotonEdicionCliente = false;
-    
-    this.tipoFrmCliente = 'Nuevo Cliente' 
+
+    this.tipoFrmCliente = 'Nuevo Cliente'
     this.vistaRegistroCliente = true;
 
-  this.cancelarCliente();
+    this.cancelarCliente();
   }
 
   cancelarCliente() {
 
     this.newCliente = new Cliente();
-  
+
     this.clsTipoDocumentoCliente = null;
     this.nombreCliente = '';
     this.tipo_documento_idCliente = null;
@@ -743,82 +910,82 @@ iniciarVentaT2(): Promise<any>{
     this.telefonoCliente = '';
     this.correo1Cliente = '';
     this.correo2Cliente = '';
-  
+
     this.setFocusNombreCliente();
-    
+
   }
 
-  cerrarCliente(){
+  cerrarCliente() {
     this.vistaRegistroCliente = false;
   }
 
   registrarCliente(event: Event) {
     this.confirmationService.confirm({
-        key: 'confirmDialog',
-        target: event.target,
-        message: '¿Está seguro de Registrar al Cliente?',
-        icon: 'pi pi-info-circle',
-        header: 'Confirmación Registro',
-        accept: () => {
-          //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
-         // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
-          this.registrarConfirmadoCliente();
-        },
-        reject: () => {
-         // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-        }
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Registrar al Cliente?',
+      icon: 'pi pi-info-circle',
+      header: 'Confirmación Registro',
+      accept: () => {
+        //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
+        // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+        this.registrarConfirmadoCliente();
+      },
+      reject: () => {
+        // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
+      }
     });
   }
 
-  registrarConfirmadoCliente(){
-    
+  registrarConfirmadoCliente() {
+
     this.vistaCargaCliente = true;
     let tipoDocumentoBase = new TipoDocumento();
     tipoDocumentoBase.id = parseInt((this.clsTipoDocumentoCliente != null) ? this.clsTipoDocumentoCliente.code : "0");
 
-    
-  
-  
-        this.newCliente.nombre = this.nombreCliente.toString().trim();
-        this.newCliente.tipoDocumento = tipoDocumentoBase;
-        this.newCliente.documento = this.documentoCliente;
-        this.newCliente.direccion = this.direccionCliente;
-        this.newCliente.telefono = this.telefonoCliente;
-        this.newCliente.correo1 = this.correo1Cliente;
-        this.newCliente.correo2 = this.correo2Cliente;
-      
-      
-      this.clienteService.registrarRetCliente(this.newCliente).subscribe(data => {
-          if(data != null){
 
-            this.iniciarVentaT2().then((v) => {
-              this.venta.cliente = data;
-              this.ventaService.modificarCliente(this.venta).subscribe({
-                next: (dataUdpCliente) => {
-                  if(dataUdpCliente != null && dataUdpCliente.id != null){
 
-                    this.venta.cliente = dataUdpCliente.cliente;
-                    this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-                    this.txtBuscarCliente = "";
-                    this.txtBuscarDocCliente = "";
-                    this.displayClient = false;
-                    this.nombreDocIdentidad = data.tipoDocumento.tipo;
-                  }
-                },
-                error: (errUdpCliente) => {
-                  console.log(errUdpCliente);
-                }        
-              });
 
-            });
+    this.newCliente.nombre = this.nombreCliente.toString().trim();
+    this.newCliente.tipoDocumento = tipoDocumentoBase;
+    this.newCliente.documento = this.documentoCliente;
+    this.newCliente.direccion = this.direccionCliente;
+    this.newCliente.telefono = this.telefonoCliente;
+    this.newCliente.correo1 = this.correo1Cliente;
+    this.newCliente.correo2 = this.correo2Cliente;
 
-          }
-      });
-    
-  
+
+    this.clienteService.registrarRetCliente(this.newCliente).subscribe(data => {
+      if (data != null) {
+
+        this.iniciarVentaT2().then((v) => {
+          this.venta.cliente = data;
+          this.ventaService.modificarCliente(this.venta).subscribe({
+            next: (dataUdpCliente) => {
+              if (dataUdpCliente != null && dataUdpCliente.id != null) {
+
+                this.venta.cliente = dataUdpCliente.cliente;
+                this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente' });
+                this.txtBuscarCliente = "";
+                this.txtBuscarDocCliente = "";
+                this.displayClient = false;
+                this.nombreDocIdentidad = data.tipoDocumento.tipo;
+              }
+            },
+            error: (errUdpCliente) => {
+              console.log(errUdpCliente);
+            }
+          });
+
+        });
+
+      }
+    });
+
+
   }
 
-  setFocusBuscarProducto() {    
+  setFocusBuscarProducto() {
     this.changeDetectorRef.detectChanges();
     this.inputBuscarProductos.nativeElement.focus();
   }
@@ -834,11 +1001,11 @@ iniciarVentaT2(): Promise<any>{
     this.selectedProductVenta = null
     this.buscarProductos();
     this.setFocusBuscarProducto();
-    
+
   }
 
-  buscarProductos(): void{
-    this.loadingProductosToVentas = true; 
+  buscarProductos(): void {
+    this.loadingProductosToVentas = true;
     this.filtroProductosVenta.palabraClave = this.txtBuscarProducto;
     this.filtroProductosVenta.unidadId = parseInt((this.clsUnidad != null) ? this.clsUnidad.code : 0);
     this.filtroProductosVenta.page = 0;
@@ -846,13 +1013,13 @@ iniciarVentaT2(): Promise<any>{
   }
 
 
-  loadDataProductosToVentas(event: LazyLoadEvent) { 
-    this.loadingProductosToVentas = true; 
+  loadDataProductosToVentas(event: LazyLoadEvent) {
+    this.loadingProductosToVentas = true;
     this.filtroProductosVenta.size = event.rows;
     this.filtroProductosVenta.page = event.first / this.rows;
-  
+
     this.listarPageProductosToVentas();
-  
+
   }
 
   listarPageProductosToVentas() {
@@ -869,7 +1036,7 @@ iniciarVentaT2(): Promise<any>{
     });
   }
 
-  aceptarProducto(registro){
+  aceptarProducto(registro) {
     this.selectedProductVenta = registro;
     this.activeProductLote = registro.producto.activoLotes == 1;
     this.lotesProducto = [];
@@ -877,7 +1044,7 @@ iniciarVentaT2(): Promise<any>{
 
     this.cantidadProductoLotes = 1;
     this.cantidadProductoStocks = 1;
-    this.clsTiposDescuento = {name: "% (0 a 100)", code: '1'};;
+    this.clsTiposDescuento = { name: "% (0 a 100)", code: '1' };;
     this.cantidadDescuento = 0;
     this.cantidadDescuentoStock = 0;
 
@@ -886,17 +1053,17 @@ iniciarVentaT2(): Promise<any>{
 
     this.stockService.listarStocksVentas(this.venta.almacen.id, registro.producto.id).subscribe(data => {
 
-      if(this.activeProductLote){
+      if (this.activeProductLote) {
 
         this.lotesProductoBack = data.respuesta;
 
         let isFirst = true;
         data.respuesta.forEach(registroLote => {
-          this.lotesProducto.push({name: registroLote.lote.nombre, code: registroLote.lote.id});
-  
-          if(isFirst){
-            this.clsLote = {name: registroLote.lote.nombre, code: registroLote.lote.id};
-            if(registroLote.lote.activoVencimiento == 1){
+          this.lotesProducto.push({ name: registroLote.lote.nombre, code: registroLote.lote.id });
+
+          if (isFirst) {
+            this.clsLote = { name: registroLote.lote.nombre, code: registroLote.lote.id };
+            if (registroLote.lote.activoVencimiento == 1) {
               const fechaVenc = moment(registroLote.lote.fechaVencimiento, 'YYYY-MM-DD');
               this.fechaVencimiento = fechaVenc.format('DD/MM/YYYY');
             } else {
@@ -905,7 +1072,7 @@ iniciarVentaT2(): Promise<any>{
 
             this.cantUnitLote = registroLote.lote.cantidad;
             this.cantLote = this.floor10(registroLote.lote.cantidad / registro.detalleUnidadProducto.unidad.cantidad, -2);
-            
+
             isFirst = false;
           }
         });
@@ -919,7 +1086,7 @@ iniciarVentaT2(): Promise<any>{
 
       }
 
-      else{
+      else {
 
         this.stocksProductoBack = data.respuesta;
 
@@ -941,18 +1108,18 @@ iniciarVentaT2(): Promise<any>{
     });
   }
 
-  cambioLotes(): void{
+  cambioLotes(): void {
 
     this.cantUnitLote = null;
     this.cantLote = null;
 
     this.lotesProductoBack.forEach((registroLote, index) => {
 
-      if(registroLote.lote.id == this.clsLote.code){
+      if (registroLote.lote.id == this.clsLote.code) {
 
         this.indexLote = index;
 
-        if(registroLote.lote.activoVencimiento == 1){
+        if (registroLote.lote.activoVencimiento == 1) {
           const fechaVenc = moment(registroLote.lote.fechaVencimiento, 'YYYY-MM-DD');
           this.fechaVencimiento = fechaVenc.format('DD/MM/YYYY');
         } else {
@@ -963,7 +1130,7 @@ iniciarVentaT2(): Promise<any>{
         this.cantLote = this.floor10(registroLote.lote.cantidad / this.selectedProductVenta.detalleUnidadProducto.unidad.cantidad, -2);
 
         this.setFocusCantProductos();
-        
+
         return;
       }
     });
@@ -1004,37 +1171,37 @@ iniciarVentaT2(): Promise<any>{
 
     this.precioTotal = null;
 
-    if( this.cantidadProductoLotes == null || this.cantidadProductoLotes < 0){
-      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+    if (this.cantidadProductoLotes == null || this.cantidadProductoLotes < 0) {
+      this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de cantidad válido' });
       this.setFocusCantProductos();
       return;
-    }   
-    
+    }
+
     let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoLotes;
 
-    if(this.clsTiposDescuento.code == '1'){
-      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > 100){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
-          this.setFocusCantidadDescuento();
-          return;
+    if (this.clsTiposDescuento.code == '1') {
+      if (this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > 100) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100' });
+        this.setFocusCantidadDescuento();
+        return;
       }
 
       precioTotal = precioTotal - (precioTotal * this.cantidadDescuento / 100);
 
     }
 
-    if(this.clsTiposDescuento.code == '2'){
-      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > precioTotal){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
-          this.setFocusCantidadDescuento();
-          return;
+    if (this.clsTiposDescuento.code == '2') {
+      if (this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > precioTotal) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2) });
+        this.setFocusCantidadDescuento();
+        return;
       }
 
       precioTotal = precioTotal - this.cantidadDescuento;
 
     }
-      
-      this.precioTotal = precioTotal.toFixed(2); 
+
+    this.precioTotal = precioTotal.toFixed(2);
   }
 
 
@@ -1042,109 +1209,109 @@ iniciarVentaT2(): Promise<any>{
 
     this.precioTotal = null;
 
-    if( this.cantidadProductoLotes == null || this.cantidadProductoLotes < 0){
-      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+    if (this.cantidadProductoLotes == null || this.cantidadProductoLotes < 0) {
+      this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de cantidad válido' });
       this.setFocusCantProductos();
       return;
-    }   
-    
+    }
+
     let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoLotes;
 
-    if(this.clsTiposDescuento.code == '1'){
-      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > 100){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
-          this.setFocusCantidadDescuento();
-          return;
+    if (this.clsTiposDescuento.code == '1') {
+      if (this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > 100) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100' });
+        this.setFocusCantidadDescuento();
+        return;
       }
 
       precioTotal = precioTotal - (precioTotal * this.cantidadDescuento / 100);
 
     }
 
-    if(this.clsTiposDescuento.code == '2'){
-      if(this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > precioTotal){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
-          this.setFocusCantidadDescuento();
-          return;
+    if (this.clsTiposDescuento.code == '2') {
+      if (this.cantidadDescuento == null || this.cantidadDescuento < 0 || this.cantidadDescuento > precioTotal) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2) });
+        this.setFocusCantidadDescuento();
+        return;
       }
 
       precioTotal = precioTotal - this.cantidadDescuento;
 
     }
-      
-      this.precioTotal = precioTotal.toFixed(2); 
+
+    this.precioTotal = precioTotal.toFixed(2);
   }
 
-  calcularPreciosStocksZ(): void{
+  calcularPreciosStocksZ(): void {
     this.precioTotal = null;
 
-    if( this.cantidadProductoStocks == null || this.cantidadProductoStocks < 0){
-      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+    if (this.cantidadProductoStocks == null || this.cantidadProductoStocks < 0) {
+      this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de cantidad válido' });
       this.setFocusCantProductosStocks();
       return;
-    }   
-    
+    }
+
     let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoStocks;
 
-    if(this.clsTiposDescuento.code == '1'){
-      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > 100){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
-          this.setFocusCantidadDescuentoStocks();
-          return;
+    if (this.clsTiposDescuento.code == '1') {
+      if (this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > 100) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100' });
+        this.setFocusCantidadDescuentoStocks();
+        return;
       }
 
       precioTotal = precioTotal - (precioTotal * this.cantidadDescuentoStock / 100);
 
     }
 
-    if(this.clsTiposDescuento.code == '2'){
-      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > precioTotal){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
-          this.setFocusCantidadDescuentoStocks();
-          return;
+    if (this.clsTiposDescuento.code == '2') {
+      if (this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > precioTotal) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2) });
+        this.setFocusCantidadDescuentoStocks();
+        return;
       }
 
       precioTotal = precioTotal - this.cantidadDescuentoStock;
 
     }
-      
-      this.precioTotal = precioTotal.toFixed(2); 
+
+    this.precioTotal = precioTotal.toFixed(2);
   }
 
-  calcularPreciosStocks(event: Event): void{
+  calcularPreciosStocks(event: Event): void {
     this.precioTotal = null;
 
-    if( this.cantidadProductoStocks == null || this.cantidadProductoStocks < 0){
-      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de cantidad válido'});
+    if (this.cantidadProductoStocks == null || this.cantidadProductoStocks < 0) {
+      this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de cantidad válido' });
       this.setFocusCantProductosStocks();
       return;
-    }   
-    
+    }
+
     let precioTotal = this.selectedProductVenta.detalleUnidadProducto.precio * this.cantidadProductoStocks;
 
-    if(this.clsTiposDescuento.code == '1'){
-      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > 100){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100'});
-          this.setFocusCantidadDescuentoStocks();
-          return;
+    if (this.clsTiposDescuento.code == '1') {
+      if (this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > 100) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento porcentual: entre 0 a 100' });
+        this.setFocusCantidadDescuentoStocks();
+        return;
       }
 
       precioTotal = precioTotal - (precioTotal * this.cantidadDescuentoStock / 100);
 
     }
 
-    if(this.clsTiposDescuento.code == '2'){
-      if(this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > precioTotal){
-          this.messageService.add({severity:'error', summary:'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2)});
-          this.setFocusCantidadDescuentoStocks();
-          return;
+    if (this.clsTiposDescuento.code == '2') {
+      if (this.cantidadDescuentoStock == null || this.cantidadDescuentoStock < 0 || this.cantidadDescuentoStock > precioTotal) {
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Ingrese un valor numérico de descuento fijo válido: entre 0 a ' + precioTotal.toFixed(2) });
+        this.setFocusCantidadDescuentoStocks();
+        return;
       }
 
       precioTotal = precioTotal - this.cantidadDescuentoStock;
 
     }
-      
-      this.precioTotal = precioTotal.toFixed(2); 
+
+    this.precioTotal = precioTotal.toFixed(2);
   }
 
   changeTipoDescuentoStock(): void {
@@ -1153,7 +1320,7 @@ iniciarVentaT2(): Promise<any>{
   }
 
 
-  agregarProductoPorCodigo(): void{
+  agregarProductoPorCodigo(): void {
 
     this.iniciarVentaT2().then((v) => {
       let productoAddVenta = new ProductoAddVenta();
@@ -1164,7 +1331,7 @@ iniciarVentaT2(): Promise<any>{
 
       this.ventaService.agregarProductoAVentaPorCodigo(productoAddVenta).subscribe({
         next: (data) => {
-          if(data != null && data.id != null){
+          if (data != null && data.id != null) {
             //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
             this.venta.id = data.id;
             this.venta.fecha = data.fecha;
@@ -1181,7 +1348,7 @@ iniciarVentaT2(): Promise<any>{
             this.venta.tipo = data.tipo;
             this.venta.numeroVenta = data.numeroVenta;
 
-            if(data.cliente != null){
+            if (data.cliente != null) {
               this.venta.cliente = data.cliente;
             } else {
               this.venta.cliente = new Cliente();
@@ -1210,15 +1377,15 @@ iniciarVentaT2(): Promise<any>{
         },
         error: (err) => {
           console.log(err);
-        }        
+        }
+      });
     });
-   });
   }
 
-  agregarProducto(): void{
+  agregarProducto(): void {
 
-    if(this.clsLote == null){
-      this.messageService.add({severity:'error', summary:'Aviso', detail: 'Seleccione un lote Disponible'});
+    if (this.clsLote == null) {
+      this.messageService.add({ severity: 'error', summary: 'Aviso', detail: 'Seleccione un lote Disponible' });
       //this.setFocusLote();
       return;
     }
@@ -1248,7 +1415,7 @@ iniciarVentaT2(): Promise<any>{
 
       this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
         next: (data) => {
-          if(data != null && data.id != null){
+          if (data != null && data.id != null) {
             //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
             this.venta.id = data.id;
             this.venta.fecha = data.fecha;
@@ -1265,7 +1432,7 @@ iniciarVentaT2(): Promise<any>{
             this.venta.tipo = data.tipo;
             this.venta.numeroVenta = data.numeroVenta;
 
-            if(data.cliente != null){
+            if (data.cliente != null) {
               this.venta.cliente = data.cliente;
             } else {
               this.venta.cliente = new Cliente();
@@ -1295,19 +1462,19 @@ iniciarVentaT2(): Promise<any>{
         },
         error: (err) => {
           console.log(err);
-        }        
+        }
+      });
     });
-   });
 
 
   }
 
-  agregarProductoStock(): void{
+  agregarProductoStock(): void {
 
-    
-      //this.detalleVentaGestion.venta = this.venta;
 
-      this.iniciarVentaT2().then((v) => {
+    //this.detalleVentaGestion.venta = this.venta;
+
+    this.iniciarVentaT2().then((v) => {
 
       this.calcularPreciosStocksZ();
       this.detalleVentaGestion = new DetalleVenta();
@@ -1333,7 +1500,7 @@ iniciarVentaT2(): Promise<any>{
 
       this.ventaService.agregarProductoAVenta(this.detalleVentaGestion).subscribe({
         next: (data) => {
-          if(data != null && data.id != null){
+          if (data != null && data.id != null) {
             //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
             this.venta.id = data.id;
             this.venta.fecha = data.fecha;
@@ -1350,7 +1517,7 @@ iniciarVentaT2(): Promise<any>{
             this.venta.tipo = data.tipo;
             this.venta.numeroVenta = data.numeroVenta;
 
-            if(data.cliente != null){
+            if (data.cliente != null) {
               this.venta.cliente = data.cliente;
             } else {
               this.venta.cliente = new Cliente();
@@ -1380,12 +1547,12 @@ iniciarVentaT2(): Promise<any>{
         },
         error: (err) => {
           console.log(err);
-        }        
+        }
+      });
     });
-   });
   }
 
-  eliminarDV(detalleVenta:DetalleVenta, event: Event){
+  eliminarDV(detalleVenta: DetalleVenta, event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -1393,21 +1560,21 @@ iniciarVentaT2(): Promise<any>{
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Eliminación',
       accept: () => {
-       this.eliminarConfirmadoDV(detalleVenta);
+        this.eliminarConfirmadoDV(detalleVenta);
       },
       reject: () => {
       }
     });
   }
 
-  eliminarConfirmadoDV(detalleVenta:DetalleVenta){
+  eliminarConfirmadoDV(detalleVenta: DetalleVenta) {
 
-   detalleVenta.ventaIdReference = this.venta.id;
+    detalleVenta.ventaIdReference = this.venta.id;
 
 
     this.ventaService.deleteProductoAVenta(detalleVenta).subscribe({
       next: (data) => {
-        if(data != null && data.id != null){
+        if (data != null && data.id != null) {
           //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
           this.venta.id = data.id;
           this.venta.fecha = data.fecha;
@@ -1424,7 +1591,7 @@ iniciarVentaT2(): Promise<any>{
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          if(data.cliente != null){
+          if (data.cliente != null) {
             this.venta.cliente = data.cliente;
           } else {
             this.venta.cliente = new Cliente();
@@ -1455,11 +1622,11 @@ iniciarVentaT2(): Promise<any>{
       },
       error: (err) => {
         console.log(err);
-      }        
-   });
+      }
+    });
   }
 
-  editarDV(detalleVenta:DetalleVenta, event: Event){
+  editarDV(detalleVenta: DetalleVenta, event: Event) {
 
     this.detalleVentaGestion = new DetalleVenta();
     this.detalleVentaGestion = structuredClone(detalleVenta);
@@ -1474,7 +1641,7 @@ iniciarVentaT2(): Promise<any>{
     detalleUnidadProducto.unidad.nombre = detalleVenta.unidad;
     detalleUnidadProducto.unidad.cantidad = detalleVenta.cantidadReal;
     detalleUnidadProducto.precio = detalleVenta.precioVenta;
-    
+
     this.selectedProductVenta.producto = detalleVenta.producto;
     this.selectedProductVenta.almacen = almacen;
     this.selectedProductVenta.detalleUnidadProducto = detalleUnidadProducto;
@@ -1487,35 +1654,35 @@ iniciarVentaT2(): Promise<any>{
 
     this.cantidadProductoLotes = detalleVenta.cantidad;
     this.cantidadProductoStocks = detalleVenta.cantidad;
-    
+
     this.cantidadDescuento = detalleVenta.descuento;
     this.cantidadDescuentoStock = detalleVenta.descuento;
 
-    if(detalleVenta.tipDescuento == 1){
-      this.clsTiposDescuento = {name: "% (0 a 100)", code: '1'};
+    if (detalleVenta.tipDescuento == 1) {
+      this.clsTiposDescuento = { name: "% (0 a 100)", code: '1' };
     }
 
-    if(detalleVenta.tipDescuento == 2){
-      this.clsTiposDescuento = {name: 'Valor Fijo', code: '2'};
+    if (detalleVenta.tipDescuento == 2) {
+      this.clsTiposDescuento = { name: 'Valor Fijo', code: '2' };
     }
 
     let loteIdAdd = 0;
-    if(this.activeProductLote){
+    if (this.activeProductLote) {
       loteIdAdd = detalleVenta.lote.id;
     }
 
     this.stockService.listarStocksVentasEdit(this.venta.almacen.id, detalleVenta.producto.id, loteIdAdd).subscribe(data => {
 
-      if(this.activeProductLote){
+      if (this.activeProductLote) {
 
         this.lotesProductoBack = data.respuesta;
 
         data.respuesta.forEach(registroLote => {
-          this.lotesProducto.push({name: registroLote.lote.nombre, code: registroLote.lote.id});
-  
-          if(detalleVenta.lote.id == registroLote.lote.id){
-            this.clsLote = {name: registroLote.lote.nombre, code: registroLote.lote.id};
-            if(registroLote.lote.activoVencimiento == 1){
+          this.lotesProducto.push({ name: registroLote.lote.nombre, code: registroLote.lote.id });
+
+          if (detalleVenta.lote.id == registroLote.lote.id) {
+            this.clsLote = { name: registroLote.lote.nombre, code: registroLote.lote.id };
+            if (registroLote.lote.activoVencimiento == 1) {
               const fechaVenc = moment(registroLote.lote.fechaVencimiento, 'YYYY-MM-DD');
               this.fechaVencimiento = fechaVenc.format('DD/MM/YYYY');
             } else {
@@ -1526,7 +1693,7 @@ iniciarVentaT2(): Promise<any>{
 
             this.cantUnitLote = registroLote.lote.cantidad;
             this.cantLote = this.floor10(registroLote.lote.cantidad / detalleVenta.cantidadReal, -2);
-            
+
           }
         });
 
@@ -1539,7 +1706,7 @@ iniciarVentaT2(): Promise<any>{
 
       }
 
-      else{
+      else {
 
         this.stocksProductoBack = data.respuesta;
 
@@ -1561,11 +1728,11 @@ iniciarVentaT2(): Promise<any>{
     });
   }
 
-  modificarProducto(): void{
+  modificarProducto(): void {
 
     this.calcularPreciosZ();
 
-    
+
 
     //this.detalleVentaGestion.venta = this.venta;
 
@@ -1582,7 +1749,7 @@ iniciarVentaT2(): Promise<any>{
 
     this.ventaService.modificarProductoAVenta(this.detalleVentaGestion).subscribe({
       next: (data) => {
-        if(data != null && data.id != null){
+        if (data != null && data.id != null) {
           //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
           this.venta.id = data.id;
           this.venta.fecha = data.fecha;
@@ -1599,7 +1766,7 @@ iniciarVentaT2(): Promise<any>{
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          if(data.cliente != null){
+          if (data.cliente != null) {
             this.venta.cliente = data.cliente;
           } else {
             this.venta.cliente = new Cliente();
@@ -1628,11 +1795,11 @@ iniciarVentaT2(): Promise<any>{
       },
       error: (err) => {
         console.log(err);
-      }        
-   });
+      }
+    });
   }
 
-  modificarProductoStock(): void{
+  modificarProductoStock(): void {
     this.calcularPreciosStocksZ();
 
     //this.detalleVentaGestion = new DetalleVenta();
@@ -1650,7 +1817,7 @@ iniciarVentaT2(): Promise<any>{
 
     this.ventaService.modificarProductoAVenta(this.detalleVentaGestion).subscribe({
       next: (data) => {
-        if(data != null && data.id != null){
+        if (data != null && data.id != null) {
           //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
           this.venta.id = data.id;
           this.venta.fecha = data.fecha;
@@ -1667,7 +1834,7 @@ iniciarVentaT2(): Promise<any>{
           this.venta.tipo = data.tipo;
           this.venta.numeroVenta = data.numeroVenta;
 
-          if(data.cliente != null){
+          if (data.cliente != null) {
             this.venta.cliente = data.cliente;
           } else {
             this.venta.cliente = new Cliente();
@@ -1697,64 +1864,64 @@ iniciarVentaT2(): Promise<any>{
       },
       error: (err) => {
         console.log(err);
-      }        
-   });
+      }
+    });
   }
 
-  round10(value, exp): number{
+  round10(value, exp): number {
     return this.decimalAdjust("round", value, exp);
   }
 
-  floor10 (value, exp): number{
+  floor10(value, exp): number {
     return this.decimalAdjust("floor", value, exp);
   }
 
-  ceil10 (value, exp): number{
+  ceil10(value, exp): number {
     return this.decimalAdjust("ceil", value, exp);
   }
 
 
-  setFocusCantProductos() {    
+  setFocusCantProductos() {
     this.changeDetectorRef.detectChanges();
     //this.inputcantidadProductoLotes.nativeElement.focus();
     this.inputcantidadProductoLotes.nativeElement.select();
   }
 
-  
-  setFocusCantidadDescuento() {    
+
+  setFocusCantidadDescuento() {
     this.changeDetectorRef.detectChanges();
     //this.inputcantidadProductoLotes.nativeElement.focus();
     this.inputcantidadDescuento.nativeElement.select();
   }
 
-  setFocusCantProductosStocks() {    
+  setFocusCantProductosStocks() {
     this.changeDetectorRef.detectChanges();
     //this.inputcantidadProductoLotes.nativeElement.focus();
     this.inputcantidadProductoStocks.nativeElement.select();
   }
 
-  
-  setFocusCantidadDescuentoStocks() {    
+
+  setFocusCantidadDescuentoStocks() {
     this.changeDetectorRef.detectChanges();
     //this.inputcantidadProductoLotes.nativeElement.focus();
     this.inputcantidadDescuentoStock.nativeElement.select();
   }
 
-  limpiarDatos(): void{
+  limpiarDatos(): void {
     this.activeProductLote = false;
     this.displayEditProductsLotes = false;
     this.displayEditProductsNoLotes = false;
-  
+
     this.venta = new Venta();
-  
-    
+
+
     this.codigoProducto = '';
     this.txtBuscarDocCliente = '';
     this.nombreDocIdentidad = '';
     this.cantIcbper = 0;
-  
+
     this.detalleVentas = [];
-  
+
     this.OpGravada = '';
     this.OpExonerada = '';
     this.OpInafecta = '';
@@ -1762,11 +1929,11 @@ iniciarVentaT2(): Promise<any>{
     this.TotalIGV = '';
     this.TotalICBPER = '';
     this.ImporteTotal = '';
-  
-  
+
+
     this.txtBuscarCliente = '';
     this.clientes = [];
-  
+
     this.pageClientes = 0;
     this.firstClientes = 0;
     this.lastClientes = 0;
@@ -1775,12 +1942,12 @@ iniciarVentaT2(): Promise<any>{
     this.isLastClientes = false;
     this.totalRecordsClientes = 0;
     this.numberElementsClientes = 0;
-    this.loadingClientes = true; 
-  
+    this.loadingClientes = true;
+
     this.selectedClient = null;
-  
+
     //Reg Cliente
-  
+
     this.nombreCliente = '';
     this.tipo_documento_idCliente = null;
     this.documentoCliente = '';
@@ -1788,14 +1955,14 @@ iniciarVentaT2(): Promise<any>{
     this.telefonoCliente = '';
     this.correo1Cliente = '';
     this.correo2Cliente = '';
-  
+
     this.newCliente = new Cliente();
-  
+
     //Estructuras de Productos
-  
+
     this.productosVentas = [];
     this.filtroProductosVenta = new FiltroProductosVenta();
-  
+
     this.pageProductosToVentas = 0;
     this.firstProductosToVentas = 0;
     this.lastProductosToVentas = 0;
@@ -1804,39 +1971,39 @@ iniciarVentaT2(): Promise<any>{
     this.isLastProductosToVentas = false;
     this.totalRecordsProductosToVentas = 0;
     this.numberElementsProductosToVentas = 0;
-    this.loadingProductosToVentas = true; 
-  
+    this.loadingProductosToVentas = true;
+
     this.txtBuscarProducto = '';
-  
+
     this.selectedProductVenta = null;
-    
+
     this.lotesProducto = [];
     this.clsLote = null;
     this.fechaVencimiento = '';
     this.cantLote = null;
     this.cantUnitLote = null;
-  
-  
-    this.lotesProductoBack= [];
+
+
+    this.lotesProductoBack = [];
     this.indexLote = 0;
-  
+
     this.cantidadProductoLotes = 1;
-  
+
     this.cantidadDescuento = 0;
     this.precioUnitario = null;
     this.precioTotal = null;
-    
+
     this.cantStock = null;
     this.cantUnitStock = null;
-  
+
     this.stocksProductoBack = [];
-    
+
     this.cantidadProductoStocks = 1;
     this.cantidadDescuentoStock = 0;
-  
-  
+
+
     //Detalle Ventas
-  
+
     this.detalleVentaGestion = new DetalleVenta();
 
     //Cobro Venta
@@ -1861,7 +2028,7 @@ iniciarVentaT2(): Promise<any>{
     this.clsTipoTarjeta = null;
     this.numeroTarjeta = '';
     this.numeroCheque = '';
-    
+
     this.numeroCelulares = [];
     this.clsNumeroCelular = null;
     //initComprobantes: InitComprobante[] = [];
@@ -1879,9 +2046,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.tipoComprobanteService.listarAll().subscribe(data => {
       data.forEach(tipoComprobante => {
-        this.tipoComprobantes.push({name: tipoComprobante.nombre, code: tipoComprobante.id, prefix: tipoComprobante.prefix});
-        if(isFirst){
-          this.clsTipoComprobante = {name: tipoComprobante.nombre, code: tipoComprobante.id, prefix: tipoComprobante.prefix};
+        this.tipoComprobantes.push({ name: tipoComprobante.nombre, code: tipoComprobante.id, prefix: tipoComprobante.prefix });
+        if (isFirst) {
+          this.clsTipoComprobante = { name: tipoComprobante.nombre, code: tipoComprobante.id, prefix: tipoComprobante.prefix };
           this.buscarSeriesComprobantes();
           isFirst = false;
         }
@@ -1899,9 +2066,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.initComprobanteService.listarAll(tipo_comprobante_id, this.venta.almacen.id).subscribe(data => {
       data.forEach(initComprobantes => {
-        this.serieComprobantes.push({name: initComprobantes.letraSerieStr + initComprobantes.numSerieStr, code: initComprobantes.id});
-        if(isFirst){
-          this.clsSerieComprobante = {name: initComprobantes.letraSerieStr + initComprobantes.numSerieStr, code: initComprobantes.id};
+        this.serieComprobantes.push({ name: initComprobantes.letraSerieStr + initComprobantes.numSerieStr, code: initComprobantes.id });
+        if (isFirst) {
+          this.clsSerieComprobante = { name: initComprobantes.letraSerieStr + initComprobantes.numSerieStr, code: initComprobantes.id };
           isFirst = false;
         }
       });
@@ -1909,7 +2076,7 @@ iniciarVentaT2(): Promise<any>{
   }
 
   getMetodoPagos() {
-  
+
     this.clsMetodoPago = null;
     this.metodoPagos = [];
     let isFirst = true;
@@ -1918,32 +2085,32 @@ iniciarVentaT2(): Promise<any>{
 
     this.metodoPagoService.listarAll().subscribe(data => {
       data.forEach(metodoPago => {
-          this.metodoPagos.push({name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId});
-          if(isFirst){
-            this.clsMetodoPago = {name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId};
-            this.buscarBancos();
-            isFirst = false;
-          }
+        this.metodoPagos.push({ name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId });
+        if (isFirst) {
+          this.clsMetodoPago = { name: metodoPago.nombre, code: metodoPago.id, tipoId: metodoPago.tipoId };
+          this.buscarBancos();
+          isFirst = false;
+        }
       });
     });
   }
 
-  getDataMetodosPagos(){
+  getDataMetodosPagos() {
 
-    if(this.clsMetodoPago.tipoId == 'WT' || this.clsMetodoPago.tipoId == 'CH'){
+    if (this.clsMetodoPago.tipoId == 'WT' || this.clsMetodoPago.tipoId == 'CH') {
       this.buscarBancos();
       this.numeroCheque = "";
     }
-    if(this.clsMetodoPago.tipoId == 'CC'){
+    if (this.clsMetodoPago.tipoId == 'CC') {
       this.buscarTipoTarjetas();
     }
-    if(this.clsMetodoPago.tipoId == 'EW'){
+    if (this.clsMetodoPago.tipoId == 'EW') {
       this.buscarCelulares();
     }
   }
 
   buscarBancos() {
-  
+
     this.clsBanco = null;
     this.bancos = [];
     let isFirst = true;
@@ -1951,9 +2118,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.bancoService.listarAll().subscribe(data => {
       data.forEach(banco => {
-        this.bancos.push({name: banco.nombre, code: banco.id});
-        if(isFirst){
-          this.clsBanco = {name: banco.nombre, code: banco.id};
+        this.bancos.push({ name: banco.nombre, code: banco.id });
+        if (isFirst) {
+          this.clsBanco = { name: banco.nombre, code: banco.id };
           this.buscarCuentas();
           isFirst = false;
         }
@@ -1962,7 +2129,7 @@ iniciarVentaT2(): Promise<any>{
   }
 
   buscarTipoTarjetas() {
-  
+
     this.clsTipoTarjeta = null;
     this.tipoTarjetas = [];
     let isFirst = true;
@@ -1970,9 +2137,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.tipoTarjetaService.listarAll().subscribe(data => {
       data.forEach(data => {
-        this.tipoTarjetas.push({name: data.nombre, code: data.id, sigla: data.sigla});
-        if(isFirst){
-          this.clsTipoTarjeta = {name: data.nombre, code: data.id, sigla: data.sigla};
+        this.tipoTarjetas.push({ name: data.nombre, code: data.id, sigla: data.sigla });
+        if (isFirst) {
+          this.clsTipoTarjeta = { name: data.nombre, code: data.id, sigla: data.sigla };
           //this.buscarCuentas();
           isFirst = false;
         }
@@ -1981,7 +2148,7 @@ iniciarVentaT2(): Promise<any>{
   }
 
   buscarCuentas() {
-  
+
     this.clsNumeroCuenta = null;
     this.numeroCuentas = [];
     let isFirst = true;
@@ -1991,9 +2158,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
       data.forEach(numeroCuenta => {
-        this.numeroCuentas.push({name: numeroCuenta.numeroCuenta, code: numeroCuenta.id});
-        if(isFirst){
-          this.clsNumeroCuenta = {name: numeroCuenta.numeroCuenta, code: numeroCuenta.id};
+        this.numeroCuentas.push({ name: numeroCuenta.numeroCuenta, code: numeroCuenta.id });
+        if (isFirst) {
+          this.clsNumeroCuenta = { name: numeroCuenta.numeroCuenta, code: numeroCuenta.id };
           isFirst = false;
         }
       });
@@ -2001,7 +2168,7 @@ iniciarVentaT2(): Promise<any>{
   }
 
   buscarCelulares() {
-  
+
     this.clsNumeroCelular = null;
     this.numeroCelulares = [];
     let isFirst = true;
@@ -2012,9 +2179,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.detalleMetodoPagoService.listarAll(metodos_pago_id, banco_id).subscribe(data => {
       data.forEach(data => {
-        this.numeroCelulares.push({name: data.numeroCelular, code: data.id});
-        if(isFirst){
-          this.clsNumeroCelular = {name: data.numeroCelular, code: data.id};
+        this.numeroCelulares.push({ name: data.numeroCelular, code: data.id });
+        if (isFirst) {
+          this.clsNumeroCelular = { name: data.numeroCelular, code: data.id };
           isFirst = false;
         }
       });
@@ -2023,24 +2190,24 @@ iniciarVentaT2(): Promise<any>{
 
   calcularMontos(event: Event): void {
     let importe = this.floor10(this.venta.totalMonto, -2);
-    let vuelto =  this.montoAbonado - importe;
+    let vuelto = this.montoAbonado - importe;
     this.montoVuelto = vuelto.toFixed(2);
   }
 
-  cobrarVenta(): void{
+  cobrarVenta(): void {
 
-    if(this.venta.id == null){
-      this.messageService.add({severity:'error', summary:'Error', detail: 'No se ha registrado la Venta'});
+    if (this.venta.id == null) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se ha registrado la Venta' });
       return;
     }
 
-    if(this.venta.detalleVentas == null || this.venta.detalleVentas.length == 0){
-      this.messageService.add({severity:'error', summary:'Error', detail: 'No se ha agregado ningún producto a la venta'});
+    if (this.venta.detalleVentas == null || this.venta.detalleVentas.length == 0) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se ha agregado ningún producto a la venta' });
       return;
     }
 
-    if(this.venta.totalMonto == null || this.venta.totalMonto == 0){
-      this.messageService.add({severity:'error', summary:'Error', detail: 'No se puede cobrar un monto de venta igual a cero'});
+    if (this.venta.totalMonto == null || this.venta.totalMonto == 0) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se puede cobrar un monto de venta igual a cero' });
       return;
     }
 
@@ -2057,21 +2224,21 @@ iniciarVentaT2(): Promise<any>{
     this.displayConfirmarPago = true;
 
     this.setFocusMontoAbonado();
-    
+
   }
-  nuevaVenta(): void{
+  nuevaVenta(): void {
     //nueva venta
     this.limpiarDatos();
     this.seleccionarLocal();
-    
+
   }
 
-  cancelarVenta(event: Event): void{
+  cancelarVenta(event: Event): void {
 
-    if(this.venta.id != null){
+    if (this.venta.id != null) {
       this.ventaService.resetVenta(this.venta).subscribe({
         next: (data) => {
-          if(data != null && data.id != null){
+          if (data != null && data.id != null) {
             //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
             this.venta.id = data.id;
             this.venta.fecha = data.fecha;
@@ -2113,22 +2280,22 @@ iniciarVentaT2(): Promise<any>{
         },
         error: (err) => {
           console.log(err);
-        }        
-    });
-    
+        }
+      });
+
     }
   }
 
-  cerrarVenta(event: Event): void{
+  cerrarVenta(event: Event): void {
 
-      this.limpiarDatos();
-      this.verFrmAlmacen = true;
-      this.verFrmVenta = false;
-      this.vistaCarga = false;
-    
+    this.limpiarDatos();
+    this.verFrmAlmacen = true;
+    this.verFrmVenta = false;
+    this.vistaCarga = false;
+
   }
 
-  confirmarPago(): void{
+  confirmarPago(): void {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -2136,14 +2303,14 @@ iniciarVentaT2(): Promise<any>{
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Cobro de Venta',
       accept: () => {
-       this.confirmarPagoConfirmado();
+        this.confirmarPagoConfirmado();
       },
       reject: () => {
       }
     });
   }
 
-  confirmarPagoConfirmado(): void{
+  confirmarPagoConfirmado(): void {
     this.cobroVenta = new CobroVenta();
     let metodoPago = new MetodoPago();
 
@@ -2183,9 +2350,9 @@ iniciarVentaT2(): Promise<any>{
 
     this.ventaService.cobroVenta(this.cobroVenta).subscribe({
       next: (data) => {
-        if(data != null && data.id != null){
+        if (data != null && data.id != null) {
           //this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Cliente se ha registrado satisfactoriamente'});
-          this.messageService.add({severity:'success', summary:'Confirmado', detail: 'La Venta se ha Cobrado Exitosamente'});
+          this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'La Venta se ha Cobrado Exitosamente' });
           this.cobroVenta = data;
           this.displayConfirmarPago = false;
           this.printComprobante(idVenta, prefix);
@@ -2194,76 +2361,76 @@ iniciarVentaT2(): Promise<any>{
       },
       error: (err) => {
         console.log(err);
-      }        
-   });
+      }
+    });
 
   }
 
 
-  printComprobante(idVenta: number, prefixComprobante: string): void{
+  printComprobante(idVenta: number, prefixComprobante: string): void {
 
-    if(prefixComprobante == 'B'){
+    if (prefixComprobante == 'B') {
       this.ventaService.imprimirBoleta(idVenta).subscribe(data => {
-  
-        const file = new Blob([data], { type: 'application/pdf' });  
+
+        const file = new Blob([data], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);
-    
+
         const a = document.createElement('a');
         a.setAttribute('style', 'display:none');
         document.body.appendChild(a);
         a.href = fileURL;
         a.download = 'BoletaVenta.pdf';
         a.click();
-    
+
         //window.open(fileURL);
       });
     }
-    if(prefixComprobante == 'F'){
+    if (prefixComprobante == 'F') {
       this.ventaService.imprimirFactura(idVenta).subscribe(data => {
-  
-        const file = new Blob([data], { type: 'application/pdf' });  
+
+        const file = new Blob([data], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);
-    
+
         const a = document.createElement('a');
         a.setAttribute('style', 'display:none');
         document.body.appendChild(a);
         a.href = fileURL;
         a.download = 'FacturaVenta.pdf';
         a.click();
-    
+
         //window.open(fileURL);
       });
     }
-    if(prefixComprobante == 'NV'){
+    if (prefixComprobante == 'NV') {
       this.ventaService.imprimirNotaVenta(idVenta).subscribe(data => {
-  
-        const file = new Blob([data], { type: 'application/pdf' });  
+
+        const file = new Blob([data], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);
-    
+
         const a = document.createElement('a');
         a.setAttribute('style', 'display:none');
         document.body.appendChild(a);
         a.href = fileURL;
         a.download = 'NotaVenta.pdf';
         a.click();
-    
+
         //window.open(fileURL);
       });
     }
-    
+
   }
 
 
 
   //Utilitarios
-  soloNumeros(e : any): boolean {
-    let key=e.charCode; 
-        if((key >= 48 && key <= 57) || (key==8) || (key==35) || (key==34) || (key==46)){
-            return true;
-        }
-        else{
-            e.preventDefault();
-        }
+  soloNumeros(e: any): boolean {
+    let key = e.charCode;
+    if ((key >= 48 && key <= 57) || (key == 8) || (key == 35) || (key == 34) || (key == 46)) {
+      return true;
+    }
+    else {
+      e.preventDefault();
+    }
   }
 
   soloNumerosNaturales(event: any) {
@@ -2271,9 +2438,9 @@ iniciarVentaT2(): Promise<any>{
     const soloNumeros = /^[0-9]+$/;
 
     if (!soloNumeros.test(tecla) && tecla !== "Backspace" && tecla !== "Delete" && tecla !== "ArrowLeft" && tecla !== "ArrowRight") {
-        event.preventDefault();
+      event.preventDefault();
     }
-}
+  }
 
   permitirNumerosConDecimales(event: KeyboardEvent, input: number): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
@@ -2283,14 +2450,14 @@ iniciarVentaT2(): Promise<any>{
     const tieneDecimal = valor.includes('.');
 
     if (charCode === 46 && !tieneDecimal) {
-        // Permitir el punto decimal si no hay uno ya
-        return true;
+      // Permitir el punto decimal si no hay uno ya
+      return true;
     } else if (charCode >= 48 && charCode <= 57) {
-        // Permitir números del 0 al 9
-        return true;
+      // Permitir números del 0 al 9
+      return true;
     } else if (charCode === 8 || charCode === 9 || charCode === 37 || charCode === 39 || charCode === 46) {
-        // Permitir teclas de control como backspace, tab, flechas y delete
-        return true;
+      // Permitir teclas de control como backspace, tab, flechas y delete
+      return true;
     }
 
     event.preventDefault();

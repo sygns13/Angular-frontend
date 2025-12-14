@@ -5,6 +5,7 @@ import { User } from './../_model/user';
 import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TipoDocumento } from './../_model/tipo_documento';
+import { Almacen } from '../_model/almacen';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,9 @@ export class UserService extends GenericService<User>  {
 
   registrarRetUser(user: User) {
     return this.http.post<User>(this.url, user);
+  }
+
+  getAlmacens() {
+    return this.http.get<Almacen[]>(`${this.url}/almacens`);
   }
 }

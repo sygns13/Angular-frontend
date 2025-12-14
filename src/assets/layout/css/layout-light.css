@@ -997,7 +997,7 @@ body .p-overlay-badge .p-badge {
 }
 .layout-topbar-lightblue .layout-topbar {
   color: #ffffff;
-  background-color: #0288D1;
+  background-color: #1565C0;
 }
 .layout-topbar-lightblue .layout-topbar a {
   color: #ffffff;
@@ -1007,7 +1007,7 @@ body .p-overlay-badge .p-badge {
   transition: background-color 0.2s;
 }
 .layout-topbar-lightblue .layout-topbar .layout-topbar-left {
-  background-color: #0277BD;
+  background-color: #0f5cb3;
 }
 .layout-topbar-lightblue .layout-topbar .layout-topbar-left .layout-menu-button {
   color: #212121;
@@ -2411,14 +2411,20 @@ body .p-overlay-badge .p-badge {
   --menu-text-color: rgba(255, 255, 255, 0.6);
 }
 .layout-menu-dark .menu-wrapper {
-  background-color: #1e1e1e;
+  /*background-color: #1e1e1e;
   box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.2), 4px 0 5px 0 rgba(0, 0, 0, 0.14), 1px 0 10px 0 rgba(0, 0, 0, 0.12);
+  */
+  background-color: #ffc408;
+  box-shadow:
+    2px 0 4px -1px rgba(8, 255, 196, 0.2),   /* turquesa suave */
+    4px 0 5px 0 rgba(196, 8, 255, 0.14),     /* violeta suave */
+    1px 0 10px 0 rgba(255, 196, 8, 0.12);    /* amarillo suave */
 }
 .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu > li > div .layout-menuitem-text {
   color: rgba(255, 255, 255, 0.6);
 }
 .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu > li > ul {
-  background-color: #1e1e1e;
+  background-color: #0f5cb3;
 }
 .layout-menu-dark .menu-wrapper .layout-menu-container .layout-menu li a {
   color: rgba(255, 255, 255, 0.87);
@@ -3149,7 +3155,9 @@ body .p-overlay-badge .p-badge {
   color: #616161;
 }
 .pages-body.login-page {
-  background: url("../images/pages/login-bg.jpg");
+  background-image: url("../images/backgroundHuandoy.jpg");
+  background-repeat: no-repeat;
+  background-position: center 25%;
   background-size: cover;
 }
 .pages-body.login-page .pages-panel .pages-header {
@@ -3751,7 +3759,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   padding: 0;
   margin: 0;
-  background-color: #f7f7f7;
+  /*background-color: #f7f7f7;*/
+  background-color: #f1f5f9;
   min-height: 100%;
 }
 body a {

@@ -1,106 +1,73 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AppBreadcrumbService } from '../../../menu/app.breadcrumb.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { PrimeNGConfig } from 'primeng/api';
-import { LazyLoadEvent } from 'primeng/api';
+import { PrimeNGConfig, MenuItem } from 'primeng/api';
 import { AppComponent } from '../../../app.component';
+import 'chart.js/auto';
 
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
   styleUrls: ['./principal.component.scss'],
-  providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
-export class PrincipalComponent implements OnInit{
+export class PrincipalComponent implements OnInit {
+  menuItems: MenuItem[] = [];
+  spark1: any; spark2: any; spark3: any; spark4: any;
+  sparkOpts: any; sparkOptsPink: any;
+  orderGraph: any; orderGraphOpts: any;
 
-  overviewChartData1: any;
-  overviewChartOptions: any;
-
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef,
-    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
-    public app: AppComponent) {
-    this.breadcrumbService.setItems([
-    { label: 'Principal' },
-    ]);
-
+  constructor(
+    private breadcrumbService: AppBreadcrumbService,
+    private primengConfig: PrimeNGConfig,
+    public app: AppComponent
+  ) {
+    this.breadcrumbService.setItems([{ label: 'Principal' }]);
   }
 
   ngOnInit(): void {
-    /* this.getTipoProductos();
-    this.getMarcas();
-    this.getPresentaciones();
-    this.listarPageMain(this.page, this.rows); */
     this.primengConfig.ripple = true;
-    /* this.vistaCarga = false; */
-    this.overviewChartData1 = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
+
+    this.menuItems = [
+      { label: 'Refresh', icon: 'pi pi-refresh' },
+      { label: 'Export',  icon: 'pi pi-download' }
+    ];
+
+    this.spark1 = this.mkSpark([50,64,32,24,18,27,20,36,30], '#009688', 'rgba(0,150,136,.15)');
+    this.spark2 = this.mkSpark([15,25,35,55,45,65,50,70,60], '#009688', 'rgba(0,150,136,.15)');
+    this.spark3 = this.mkSpark([10,22,18,30,26,20,24,28,22], '#673ab7', 'rgba(103,58,183,.15)');
+    this.spark4 = this.mkSpark([12,18,22,16,14,20,26,18,16], '#009688', 'rgba(0,150,136,.15)');
+    this.sparkOpts = this.mkSparkOpts();
+    this.sparkOptsPink = this.mkSparkOpts();
+
+    this.orderGraph = {
+      labels: ['January','February','March','April','May','June','July','August','September'],
       datasets: [
-          {
-              data: [50, 64, 32, 24, 18, 27, 20, 36, 30],
-              borderColor: [
-                  '#4DD0E1',
-              ],
-              backgroundColor: [
-                  'rgba(77, 208, 225, 0.8)',
-              ],
-              borderWidth: 2,
-              fill: true
-          }
+        { label: 'Nuevas Ventas', data: [30,22,70,30,60,25,60,30,45],
+          fill: true, tension: 0.4, borderWidth: 2,
+          borderColor: '#26c6da', backgroundColor: 'rgba(38,198,218,.25)' },
+        { label: 'Ventas Frecuentes', data: [58,48,28,88,38,5,22,60,56],
+          fill: false, tension: 0.4, borderWidth: 2, borderColor: '#3f51b5' }
       ]
-  };
-
-  this.overviewChartOptions = {
-    legend: {
-        display: false
-    },
-    responsive: true,
-    scales: {
-        yAxes: [{
-            display: false
-        }],
-        xAxes: [{
-            display: false
-        }]
-    },
-    tooltips: {
-        enabled: false
-    },
-    elements: {
-        point: {
-            radius: 0
-        }
-    },
-  };
-
-  this.setOverviewColors();
+    };
+    this.orderGraphOpts = {
+      plugins: { legend: { display: true }, tooltip: { enabled: true } },
+      elements: { point: { radius: 3 } },
+      scales: { x: { grid: { display: true } }, y: { grid: { display: true }, suggestedMin: 0, suggestedMax: 90 } }
+    };
   }
 
-  setOverviewColors() {
-    const { pinkBorderColor, pinkBgColor, tealBorderColor, tealBgColor } = this.getOverviewColors();
-
-    this.overviewChartData1.datasets[0].borderColor[0] = tealBorderColor;
-    this.overviewChartData1.datasets[0].backgroundColor[0] = tealBgColor;
-
-    /* this.overviewChartData2.datasets[0].borderColor[0] = tealBorderColor;
-    this.overviewChartData2.datasets[0].backgroundColor[0] = tealBgColor;
-
-    this.overviewChartData3.datasets[0].borderColor[0] = pinkBorderColor;
-    this.overviewChartData3.datasets[0].backgroundColor[0] = pinkBgColor;
-
-    this.overviewChartData4.datasets[0].borderColor[0] = tealBorderColor;
-    this.overviewChartData4.datasets[0].backgroundColor[0] = tealBgColor; */
-  
-  }
-
-  getOverviewColors() {
-    const isLight = this.app.layoutMode === 'light';
+  mkSpark(data: number[], stroke: string, fill: string) {
     return {
-        pinkBorderColor: isLight ? '#E91E63' : '#EC407A',
-        pinkBgColor: isLight ? '#F48FB1' : '#F8BBD0',
-        tealBorderColor: isLight ? '#009688' : '#26A69A',
-        tealBgColor: isLight ? '#80CBC4' : '#B2DFDB'
-    }
-}
-
+      labels: Array(data.length).fill(''),
+      datasets: [{ data, borderColor: stroke, backgroundColor: fill, tension: 0.4, fill: true, borderWidth: 2 }]
+    };
+  }
+  mkSparkOpts() {
+    return {
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      responsive: false,
+      elements: { point: { radius: 0 } },
+      scales: { x: { display: false }, y: { display: false } }
+    };
+  }
 }

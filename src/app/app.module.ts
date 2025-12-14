@@ -225,6 +225,7 @@ import { EgresoscomprasComponent } from './paginas/reporte/egresoscompras/egreso
 import { EgresosotrosComponent } from './paginas/reporte/egresosotros/egresosotros.component';
 import { PrincipalComponent } from './paginas/principal/principal/principal.component';
 import { CajaComponent } from './paginas/caja/caja/caja.component';
+import { GestionComponent } from './paginas/caja/gestion/gestion.component';
 
 export function tokenGetter() {
     return sessionStorage.getItem(environment.TOKEN_NAME);
@@ -444,6 +445,7 @@ export function tokenGetter() {
         EgresosotrosComponent,
         PrincipalComponent,
         CajaComponent,
+        GestionComponent,
     ],
     providers: [
         CountryService, CustomerService, EventService, IconService, NodeService,
