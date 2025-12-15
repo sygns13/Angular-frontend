@@ -73,6 +73,7 @@ export class VentaComponent implements OnInit {
   vistaCarga: boolean = true;
   verFrmVenta: boolean = false;
   verFrmAlmacen: boolean = false;
+  verFrmCierreCaja: boolean = false;
   displayClient: boolean = false;
   vistaRegistroCliente: boolean = false;
   displayProductsToVentas: boolean = false;
@@ -247,6 +248,9 @@ export class VentaComponent implements OnInit {
   monto_diferencia_caja: string = '';
   sustento_inicio_caja: string = '';
 
+  sustento_cierre_caja: string = '';
+  monto_inicio_caja_str: string = '';
+
 
   constructor(public app: AppComponent, private gestionloteService: GestionloteService, private messageService: MessageService, private clienteService: ClienteService,
     private changeDetectorRef: ChangeDetectorRef, private confirmationService: ConfirmationService, private ventaService: VentaService,
@@ -261,7 +265,11 @@ export class VentaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.init();
+  }
 
+  init(): void {
+    this.initCaja();
     this.getSessionCaja();
 
     this.getAlmacens();
@@ -290,6 +298,20 @@ export class VentaComponent implements OnInit {
     }
   }
 
+  initCaja(): void {
+
+    this.cajas = [];
+    this.cajaInicioCierreDto = new CajaInicioCierreDto();
+    this.cajaCheck = [];
+    this.monto_cierre_caja_str = '';
+    this.monto_cierre_caja = null;
+    this.monto_inicio_caja = null;
+    this.monto_diferencia_caja = '';
+    this.sustento_inicio_caja = '';
+    this.sustento_cierre_caja = '';
+    this.monto_inicio_caja_str = '';
+  }
+
   getSessionCaja() {
     this.cajaService.getCajaIniciada().subscribe(data => {
       this.cajaDato = data;
@@ -300,6 +322,8 @@ export class VentaComponent implements OnInit {
   }
 
   renderInit() {
+
+    this.verFrmCierreCaja = false;
 
     if (this.cajaDato == null || this.cajaDato.id == null) {
       this.vistaCarga = false;
@@ -488,6 +512,7 @@ export class VentaComponent implements OnInit {
       this.verFrmVenta = true;
       this.vistaCarga = false;
       this.verFrmAlmacen = false;
+      this.verFrmCierreCaja = false;
 
       this.venta.cliente = new Cliente();
       this.venta.comprobante = new Comprobante();
@@ -665,6 +690,7 @@ export class VentaComponent implements OnInit {
         this.verFrmVenta = true;
         this.vistaCarga = false;
         this.verFrmAlmacen = false;
+        this.verFrmCierreCaja = false;
 
         this.setFocusCodigoProducto();
       }
@@ -2291,8 +2317,87 @@ export class VentaComponent implements OnInit {
     this.limpiarDatos();
     this.verFrmAlmacen = true;
     this.verFrmVenta = false;
+    this.verFrmCierreCaja = false;
     this.vistaCarga = false;
 
+  }
+
+  cerrarVentaCaja(event: Event): void {
+
+    //this.limpiarDatos();
+
+    this.cajaService.getCajaIniciada().subscribe(data => {
+      this.cajaDato = data;
+
+      this.cajaDato.montoFinal = this.cajaDato.montoTemporal;
+      this.monto_cierre_caja = this.cajaDato.montoTemporal;
+
+      this.monto_inicio_caja_str = this.cajaDato.montoInicio.toFixed(2);
+      this.monto_cierre_caja_str = this.cajaDato.montoTemporal.toFixed(2);
+
+      this.sustento_cierre_caja = '';
+
+      this.calcularDiferenciaCajaCierre();
+
+      console.log(this.cajaDato);
+
+      this.verFrmCierreCaja = true;
+      this.verFrmAlmacen = false;
+      this.verFrmVenta = false;
+      this.vistaCarga = false;
+    });
+
+  }
+
+  calcularDiferenciaCajaCierre() {
+
+    let _monto_diferencia_caja = 0;
+    _monto_diferencia_caja = this.monto_cierre_caja - this.cajaDato.montoTemporal;
+    this.monto_diferencia_caja = _monto_diferencia_caja.toFixed(2);
+  }
+
+  cancelarCierreCajaFuncion(): void {
+
+    //this.limpiarDatos();
+
+    this.verFrmCierreCaja = false;
+    this.verFrmAlmacen = false;
+    this.verFrmVenta = true;
+    this.vistaCarga = false;
+
+  }
+
+  cierreCajaFuncion(): void {
+    console.log('cierreCajaFuncion');
+    this.confirmationService.confirm({
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Confirma que desea realizar el Cierre de la Caja?',
+      icon: 'pi pi-exclamation-triangle',
+      header: 'Confirmación Cierre de Caja',
+      accept: () => {
+        this.cierreCajaConfirmado();
+      },
+      reject: () => {
+      }
+    });
+  }
+
+  cierreCajaConfirmado(): void {
+
+    this.cajaInicioCierreDto = new CajaInicioCierreDto();
+    this.cajaInicioCierreDto.idCaja = this.cajaDato.caja.id;
+    this.cajaInicioCierreDto.monto = this.monto_cierre_caja;
+    this.cajaInicioCierreDto.sustento = this.sustento_cierre_caja;
+
+    this.cajaService.cerrarCaja(this.cajaInicioCierreDto).subscribe(data => {
+      this.initCaja();
+      this.getSessionCaja();
+
+      this.getAlmacens();
+      this.getUnidads();
+      this.getTipoDocumentos();
+    });
   }
 
   confirmarPago(): void {
