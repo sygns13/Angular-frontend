@@ -4,7 +4,7 @@ export const environment = {
   // CAMBIO 1: El HOST ya no es localhost.
   // Es tu dominio público + el prefijo '/api' que configuramos en Traefik.
   // Nota: No pongas slash al final aquí para evitar dobles slash (//) al concatenar.
-  HOST: 'https://bcscode.com/api',
+  HOST: 'https://bcscode.com',
 
   // CAMBIO 2: Los nombres de los microservicios.
   // Deben coincidir EXACTAMENTE con lo que definiste en el application.properties de Zuul
