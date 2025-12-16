@@ -2,23 +2,22 @@ import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
 import { HttpClient } from '@angular/common/http';
 import { Config } from './../_model/config';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject, of, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { of, Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigsService extends GenericService<Config>  {
+export class ConfigsService extends GenericService<Config> {
 
   configs = new Subject<Config[]>();
 
   protected url: string = `${environment.HOST}/api/backend/configs`
   mensajeCambio = new Subject<string>();
 
-  constructor(protected http: HttpClient) { 
+  constructor(protected http: HttpClient) {
     super(http, `${environment.HOST}/api/backend/configs`);
   }
 
@@ -26,16 +25,25 @@ export class ConfigsService extends GenericService<Config>  {
     return this.http.get(`${this.url}/altabaja/${id}/${valor}`);
   }
 
-  listarPageable(p: number, s:number, txtBuscar:String){
+  listarPageable(p: number, s: number, txtBuscar: String) {
     return this.http.get<any>(`${this.url}?page=${p}&size=${s}&buscar=${txtBuscar}`);
-    
+
   }
 
-  listarAll(){
+  listarAll() {
     return this.http.get<Config[]>(`${this.url}/listar-all`);
   }
 
   modificarList(configs: Config[]) {
     return this.http.put(`${this.url}/modificar-list`, configs);
+  }
+
+  // Variable global para controlar la visibilidad del módulo de cajas
+  public verModulosCajas = new BehaviorSubject<boolean>(false);
+
+  initConfigCajas() {
+    this.listarPorIdStr("cajas_enabled").subscribe(data => {
+      this.verModulosCajas.next(data?.valor === '1');
+    });
   }
 }

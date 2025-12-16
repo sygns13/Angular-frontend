@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import { AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { AppBreadcrumbService } from '../../../menu/app.breadcrumb.service';
 import { IngresoSalidaCajaService } from '../../../_service/ingreso_salida_caja.service';
 import { switchMap } from 'rxjs/operators';
-import { ConfirmationService, MessageService} from 'primeng/api';
-import { Message} from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Message } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { IngresoSalidaCaja } from '../../../_model/ingreso_salida_caja';
 import { LazyLoadEvent } from 'primeng/api';
@@ -21,16 +21,16 @@ import * as moment from 'moment';
   providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
-export class CajaDiariaComponent implements OnInit{
+export class CajaDiariaComponent implements OnInit {
 
 
-  clsAlmacen: any = {name: 'GENERAL (TODOS LOS LOCALES)', code: 0};
+  clsAlmacen: any = { name: 'GENERAL (TODOS LOS LOCALES)', code: 0 };
   almacens: any[] = [];
 
   fechaBD: string = '';
   //horaBD: string = '';
 
-  vistaCarga : boolean = true;
+  vistaCarga: boolean = true;
 
   cajaInicial: string = "0.00";
   cajaTotal: string = "0.00";
@@ -39,7 +39,7 @@ export class CajaDiariaComponent implements OnInit{
   ingresoOtros: string = "0.00";
 
   ingresoTotal: string = "0.00";
-  
+
   egresoCompras: string = "0.00";
   egresoOtros: string = "0.00";
 
@@ -49,14 +49,14 @@ export class CajaDiariaComponent implements OnInit{
 
   cajaSucursalDTO: CajaSucursalDTO = new CajaSucursalDTO();
 
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private ingresoSalidaCajaService:IngresoSalidaCajaService,
-    private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService, 
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef, private ingresoSalidaCajaService: IngresoSalidaCajaService,
+    private confirmationService: ConfirmationService, private primengConfig: PrimeNGConfig, private messageService: MessageService,
     private almacenService: AlmacenService,
     private gestionloteService: GestionloteService,
     private cajaDiariaSucursalService: CajaDiariaSucursalService) {
     this.breadcrumbService.setItems([
-    { label: 'Caja' },
-    { label: 'Caja Diaria por  Sucursal', routerLink: ['/caja/caja-diaria'] }
+      { label: 'Tesorería Sucursal' },
+      { label: 'Caja Diaria por  Sucursal', routerLink: ['/tesoreria/caja-diaria'] }
     ]);
   }
 
@@ -71,7 +71,7 @@ export class CajaDiariaComponent implements OnInit{
 
     this.almacens = [];
 
-    this.almacens.push({name: 'GENERAL (TODOS LOS LOCALES)', code: 0});
+    this.almacens.push({ name: 'GENERAL (TODOS LOS LOCALES)', code: 0 });
     //this.clsAlmacen = {name: 'GENERAL (TODOS LOS LOCALES)', code: 0};
 
     this.gestionloteService.getAlmacensDate().subscribe(data => {
@@ -81,16 +81,16 @@ export class CajaDiariaComponent implements OnInit{
       this.fechaVista = this.fechaBD;
 
       data.almacens.forEach(almacen => {
-        this.almacens.push({name: almacen.nombre, code: almacen.id});
+        this.almacens.push({ name: almacen.nombre, code: almacen.id });
       });
 
       this.getMainData();
     });
   }
 
-  getMainData(){
+  getMainData() {
     const fechaFormatBD = moment(this.fechaVista, 'DD/MM/YYYY');
-      
+
     /*
     if(!fechaFormatBD.isValid){
         this.messageService.add({severity:'error', summary:'Alerta', detail: 'La fecha indicada no corresponde a una fecha válida, por favor ingrese una fecha correcta'});
@@ -98,52 +98,52 @@ export class CajaDiariaComponent implements OnInit{
         return false;
       }
     */
-   let fecha = fechaFormatBD.format('YYYY-MM-DD');
+    let fecha = fechaFormatBD.format('YYYY-MM-DD');
 
-   this.cajaDiariaSucursalService.getCajaDiaria(fecha, this.clsAlmacen.code).subscribe(data => {
-    this.cajaSucursalDTO = data;
+    this.cajaDiariaSucursalService.getCajaDiaria(fecha, this.clsAlmacen.code).subscribe(data => {
+      this.cajaSucursalDTO = data;
 
-    this.cajaInicial = this.cajaSucursalDTO.cajaInicial.toFixed(2);
-    this.cajaTotal = this.cajaSucursalDTO.cajaTotal.toFixed(2);
+      this.cajaInicial = this.cajaSucursalDTO.cajaInicial.toFixed(2);
+      this.cajaTotal = this.cajaSucursalDTO.cajaTotal.toFixed(2);
 
-    this.ingresoVentas = this.cajaSucursalDTO.ingresosVentas.toFixed(2);
-    this.ingresoOtros = this.cajaSucursalDTO.ingresosOtros.toFixed(2);
+      this.ingresoVentas = this.cajaSucursalDTO.ingresosVentas.toFixed(2);
+      this.ingresoOtros = this.cajaSucursalDTO.ingresosOtros.toFixed(2);
 
-    this.ingresoTotal = this.cajaSucursalDTO.ingresosTotal.toFixed(2);
-    
-    this.egresoCompras = this.cajaSucursalDTO.egresosCompras.toFixed(2);
-    this.egresoOtros = this.cajaSucursalDTO.egresosOtros.toFixed(2);
+      this.ingresoTotal = this.cajaSucursalDTO.ingresosTotal.toFixed(2);
 
-    this.egresoTotal = this.cajaSucursalDTO.egresosTotal.toFixed(2);
-  });
+      this.egresoCompras = this.cajaSucursalDTO.egresosCompras.toFixed(2);
+      this.egresoOtros = this.cajaSucursalDTO.egresosOtros.toFixed(2);
+
+      this.egresoTotal = this.cajaSucursalDTO.egresosTotal.toFixed(2);
+    });
   }
 
   cambioSucursal(event: any) {
     this.getMainData();
   }
 
-  actualizar(){
+  actualizar() {
     this.getMainData();
   }
 
-  printDetallado(){
+  printDetallado() {
 
   }
 
-  printResumen(){
+  printResumen() {
 
   }
 
-  verIngresosVentas(){
+  verIngresosVentas() {
 
   }
-  verIngresosOtros(){
+  verIngresosOtros() {
 
   }
-  verEgresosCompras(){
+  verEgresosCompras() {
 
   }
-  verEgresosOtros(){
+  verEgresosOtros() {
 
   }
 

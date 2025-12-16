@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import { AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { AppBreadcrumbService } from '../../../menu/app.breadcrumb.service';
 import { InitComprobanteService } from '../../../_service/init_comprobante.service';
 import { TipoComprobanteService } from '../../../_service/tipo_comprobante.service';
 import { AlmacenService } from '../../../_service/almacen.service';
 import { switchMap } from 'rxjs/operators';
-import { ConfirmationService, MessageService} from 'primeng/api';
-import { Message} from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Message } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { InitComprobante } from '../../../_model/init_comprobante';
 import { TipoComprobante } from '../../../_model/tipo_comprobante';
@@ -36,8 +36,8 @@ export class InitcomprobanteComponent implements OnInit {
   clsEstado: any = null;
 
   estados: any[] = [
-      {name: 'Activo', code: '1'},
-      {name: 'Inactivo', code: '0'}
+    { name: 'Activo', code: '1' },
+    { name: 'Inactivo', code: '0' }
   ];
 
 
@@ -59,11 +59,11 @@ export class InitcomprobanteComponent implements OnInit {
   position: string;
 
   tipoFrm: string = 'Nuevo Inicio de Comprobante';
-  vistaBotonRegistro : boolean = false;
-  vistaBotonEdicion : boolean = false;
-  vistaCarga : boolean = true;
+  vistaBotonRegistro: boolean = false;
+  vistaBotonEdicion: boolean = false;
+  vistaCarga: boolean = true;
 
-  loading: boolean = true; 
+  loading: boolean = true;
   txtBuscar: string = '';
 
   tipo_comprobante_id: number = 0;
@@ -74,15 +74,15 @@ export class InitcomprobanteComponent implements OnInit {
 
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef,
-                private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService,
-                private tipoComprobanteService: TipoComprobanteService, private almacenService: AlmacenService,
-                private initComprobanteService:InitComprobanteService) {
+    private confirmationService: ConfirmationService, private primengConfig: PrimeNGConfig, private messageService: MessageService,
+    private tipoComprobanteService: TipoComprobanteService, private almacenService: AlmacenService,
+    private initComprobanteService: InitComprobanteService) {
     this.breadcrumbService.setItems([
-        { label: 'Caja' },
-        { label: 'Iniciar Comprobantes', routerLink: ['/caja/init-comprobantes'] }
+      { label: 'Configuraciones' },
+      { label: 'Iniciar Comprobantes', routerLink: ['/configs/init-comprobantes'] }
     ]);
 
-}
+  }
 
   ngOnInit(): void {
     this.getTipoComprobantes();
@@ -98,25 +98,25 @@ export class InitcomprobanteComponent implements OnInit {
   }
 
   prev() {
-      this.page--;
-      this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
+    this.page--;
+    this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
   }
 
   reset() {
-      this.first = 0;
-      this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
+    this.first = 0;
+    this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
   }
 
   isLastPage(): boolean {
-      //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
-      return this.isLast;
+    //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
+    return this.isLast;
   }
 
   isFirstPage(): boolean {
-      return this.isFirst;
+    return this.isFirst;
   }
 
-  setFocusLetraSerie() {    
+  setFocusLetraSerie() {
 
     this.changeDetectorRef.detectChanges();
     this.inputletraSerie.nativeElement.focus();
@@ -140,7 +140,7 @@ export class InitcomprobanteComponent implements OnInit {
 
     this.tipoComprobanteService.listarAll().subscribe(data => {
       data.forEach(tipoComprobante => {
-        this.tipoComprobantes.push({name: tipoComprobante.nombre, code: tipoComprobante.id});
+        this.tipoComprobantes.push({ name: tipoComprobante.nombre, code: tipoComprobante.id });
       });
     });
   }
@@ -149,17 +149,17 @@ export class InitcomprobanteComponent implements OnInit {
     this.clsAlmacen_registro = null;
     this.almacenes = [];
 
-    this.almacenes.push({name: 'GENERAL (TODOS LOS LOCALES)', code: 0});
+    this.almacenes.push({ name: 'GENERAL (TODOS LOS LOCALES)', code: 0 });
 
     this.almacenService.listarAll().subscribe(data => {
       data.forEach(almacen => {
-        this.almacenes.push({name: almacen.nombre, code: almacen.id});
+        this.almacenes.push({ name: almacen.nombre, code: almacen.id });
       });
     });
   }
 
-  loadData(event: LazyLoadEvent) { 
-    this.loading = true; 
+  loadData(event: LazyLoadEvent) {
+    this.loading = true;
     this.rows = event.rows;
     this.page = event.first / this.rows;
 
@@ -167,7 +167,7 @@ export class InitcomprobanteComponent implements OnInit {
 
   }
 
-  listarPageMain(p: number, s:number, tipo_comprobante_id:number, almacen_id:number) {
+  listarPageMain(p: number, s: number, tipo_comprobante_id: number, almacen_id: number) {
 
     this.initComprobanteService.listarPageable(p, s, this.txtBuscar, tipo_comprobante_id, almacen_id).subscribe(data => {
       this.initComprobantes = data.content;
@@ -181,9 +181,9 @@ export class InitcomprobanteComponent implements OnInit {
     });
   }
 
-  buscar(){
+  buscar() {
     this.page = 0;
-    this.listarPageMain(this.page , this.rows, this.tipo_comprobante_id, this.almacen_id);
+    this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
   }
 
   //Funciones crud
@@ -193,7 +193,7 @@ export class InitcomprobanteComponent implements OnInit {
 
     this.vistaBotonRegistro = true;
     this.vistaBotonEdicion = false;
-    this.tipoFrm = 'Nuevo Inicio de Comprobante' 
+    this.tipoFrm = 'Nuevo Inicio de Comprobante'
     this.vistaRegistro = true;
 
     this.cancelar();
@@ -212,14 +212,14 @@ export class InitcomprobanteComponent implements OnInit {
     this.clsEstado = null;
 
     this.setFocusLetraSerie();
-    
+
   }
 
-  cerrar(){
+  cerrar() {
     this.vistaRegistro = false;
   }
 
-  editar(data:InitComprobante){
+  editar(data: InitComprobante) {
     this.initComprobante = data;
 
     this.vistaBotonRegistro = false;
@@ -228,20 +228,20 @@ export class InitcomprobanteComponent implements OnInit {
     this.letraSerie = this.initComprobante.letraSerie;
     this.numero = this.initComprobante.numero;
 
-    this.clsTipoComprobante = {name: this.initComprobante.tipoComprobante.nombre, code: this.initComprobante.tipoComprobante.id};
-    this.clsAlmacen_registro = {name: this.initComprobante.almacen.nombre, code: this.initComprobante.almacen.id};
+    this.clsTipoComprobante = { name: this.initComprobante.tipoComprobante.nombre, code: this.initComprobante.tipoComprobante.id };
+    this.clsAlmacen_registro = { name: this.initComprobante.almacen.nombre, code: this.initComprobante.almacen.id };
 
     console.log(this.initComprobante);
 
-    this.clsEstado =  (this.initComprobante.activo === 1) ?  {name: "Activo", code: this.initComprobante.activo} : {name: "Inactivo", code: this.initComprobante.activo};
-    this.tipoFrm = 'Editar Inicio de Comprobante' 
+    this.clsEstado = (this.initComprobante.activo === 1) ? { name: "Activo", code: this.initComprobante.activo } : { name: "Inactivo", code: this.initComprobante.activo };
+    this.tipoFrm = 'Editar Inicio de Comprobante'
     this.vistaRegistro = true;
 
     this.setFocusLetraSerie();
     console.log(this.clsAlmacen_registro);
   }
 
-  eliminar(data:InitComprobante, event: Event){
+  eliminar(data: InitComprobante, event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -249,54 +249,54 @@ export class InitcomprobanteComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Eliminación',
       accept: () => {
-       this.eliminarConfirmado(data);
+        this.eliminarConfirmado(data);
       },
       reject: () => {
       }
-  });
-    
+    });
+
   }
 
 
   registrar(event: Event) {
     this.confirmationService.confirm({
-        key: 'confirmDialog',
-        target: event.target,
-        message: '¿Está seguro de Registrar?',
-        icon: 'pi pi-info-circle',
-        header: 'Confirmación Registro',
-        accept: () => {
-          //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
-         // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
-         this.registrarConfirmado();
-        },
-        reject: () => {
-         // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-        }
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Registrar?',
+      icon: 'pi pi-info-circle',
+      header: 'Confirmación Registro',
+      accept: () => {
+        //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
+        // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+        this.registrarConfirmado();
+      },
+      reject: () => {
+        // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
+      }
     });
   }
 
   modificar(event: Event) {
     this.confirmationService.confirm({
-        key: 'confirmDialog',
-        target: event.target,
-        message: '¿Está seguro de Editar?',
-        icon: 'pi pi-info-circle',
-        header: 'Confirmación Edición',
-        accept: () => {
-          //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
-         // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
-         this.editarConfirmado();
-        },
-        reject: () => {
-         // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-        }
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Editar?',
+      icon: 'pi pi-info-circle',
+      header: 'Confirmación Edición',
+      accept: () => {
+        //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
+        // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+        this.editarConfirmado();
+      },
+      reject: () => {
+        // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
+      }
     });
   }
 
 
-  registrarConfirmado(){
-    
+  registrarConfirmado() {
+
     this.vistaCarga = true;
 
     let tipoComprobanteBase = new TipoComprobante();
@@ -316,27 +316,27 @@ export class InitcomprobanteComponent implements OnInit {
 
     this.initComprobante.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
 
-   this.initComprobanteService.registrar(this.initComprobante).subscribe({
-    next: c => {
-      this.vistaCarga = false;
-      this.loading = true; 
-      this.cancelar();
-      this.cerrar();
-      this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Inicio de Comprobante se ha registrado satisfactoriamente'});
-    },
-    error: error => {
-      console.log('Error complete');
-      this.vistaCarga = false;
-    },
-    complete: () => {
-      this.vistaCarga = false;
-      console.log('Request complete');
-    }
-  });
+    this.initComprobanteService.registrar(this.initComprobante).subscribe({
+      next: c => {
+        this.vistaCarga = false;
+        this.loading = true;
+        this.cancelar();
+        this.cerrar();
+        this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'El Inicio de Comprobante se ha registrado satisfactoriamente' });
+      },
+      error: error => {
+        console.log('Error complete');
+        this.vistaCarga = false;
+      },
+      complete: () => {
+        this.vistaCarga = false;
+        console.log('Request complete');
+      }
+    });
   }
 
-  editarConfirmado(){
+  editarConfirmado() {
     this.vistaCarga = true;
 
     let initComprobanteEdit = new InitComprobante();
@@ -362,25 +362,25 @@ export class InitcomprobanteComponent implements OnInit {
 
     this.initComprobanteService.modificar(initComprobanteEdit).subscribe({
       next: c => {
-      this.loading = true; 
-      this.vistaCarga = false;
-      this.cancelar();
-      this.cerrar();
-      this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Inicio de Comprobante se ha editado satisfactoriamente'});
-    },
-    error: error => {
-      console.log('Error complete');
-      this.vistaCarga = false;
-    },
-    complete: () => {
-      this.vistaCarga = false;
-      console.log('Request complete');
-    }
-  });
+        this.loading = true;
+        this.vistaCarga = false;
+        this.cancelar();
+        this.cerrar();
+        this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'El Inicio de Comprobante se ha editado satisfactoriamente' });
+      },
+      error: error => {
+        console.log('Error complete');
+        this.vistaCarga = false;
+      },
+      complete: () => {
+        this.vistaCarga = false;
+        console.log('Request complete');
+      }
+    });
   }
 
-  eliminarConfirmado(data:InitComprobante){
+  eliminarConfirmado(data: InitComprobante) {
     this.vistaCarga = true;
     /* this.bancoService.eliminar(data.id).subscribe(() => {
       this.loading = true; 
@@ -391,28 +391,28 @@ export class InitcomprobanteComponent implements OnInit {
       this.listarPageMain(this.page, this.rows);
       this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Banco se ha eliminado satisfactoriamente'});
    }); */
-   this.initComprobanteService.eliminar(data.id).subscribe({
-    next: c => {
-      this.loading = true; 
-      this.vistaCarga = false;
-      if(this.numberElements <= 1 && this.page > 0){
-        this.page--;
+    this.initComprobanteService.eliminar(data.id).subscribe({
+      next: c => {
+        this.loading = true;
+        this.vistaCarga = false;
+        if (this.numberElements <= 1 && this.page > 0) {
+          this.page--;
+        }
+        this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'El Inicio de Comprobante se ha eliminado satisfactoriamente' });
+      },
+      error: error => {
+        this.vistaCarga = false;
+      },
+      complete: () => {
+        this.vistaCarga = false;
+        console.log('Request complete');
       }
-      this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El Inicio de Comprobante se ha eliminado satisfactoriamente'});
-    },
-    error: error => {
-      this.vistaCarga = false;
-    },
-    complete: () => {
-      this.vistaCarga = false;
-      console.log('Request complete');
-    }
-  });
+    });
   }
-  
 
-  alta(data:InitComprobante, event: Event){
+
+  alta(data: InitComprobante, event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -420,17 +420,17 @@ export class InitcomprobanteComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Activación',
       accept: () => {
-        let msj : string = 'El Inicio de Comprobante se ha activado satisfactoriamente';
+        let msj: string = 'El Inicio de Comprobante se ha activado satisfactoriamente';
         let valor: number = 1;
         this.altaBaja(data, valor, msj);
-        },
-        reject: () => {
-        }
+      },
+      reject: () => {
+      }
     });
-    
+
   }
 
-  baja(data:InitComprobante, event: Event){
+  baja(data: InitComprobante, event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -438,14 +438,14 @@ export class InitcomprobanteComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Desactivación',
       accept: () => {
-        let msj : string = 'El Inicio de Comprobante se ha desactivado satisfactoriamente';
+        let msj: string = 'El Inicio de Comprobante se ha desactivado satisfactoriamente';
         let valor: number = 0;
         this.altaBaja(data, valor, msj);
-        },
-        reject: () => {
-        }
+      },
+      reject: () => {
+      }
     });
-    
+
   }
 
   /*
@@ -462,14 +462,14 @@ export class InitcomprobanteComponent implements OnInit {
 
   }*/
 
-  altaBaja(data:InitComprobante, valor: number, msj: string){
+  altaBaja(data: InitComprobante, valor: number, msj: string) {
     this.vistaCarga = true;
     this.initComprobanteService.altaBaja(data.id, valor).subscribe({
       next: c => {
-       this.loading = true; 
-       this.vistaCarga = false;
-       this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
-       this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
+        this.loading = true;
+        this.vistaCarga = false;
+        this.listarPageMain(this.page, this.rows, this.tipo_comprobante_id, this.almacen_id);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: msj });
       },
       error: error => {
         this.vistaCarga = false;

@@ -67,6 +67,7 @@ export class VentaComponent implements OnInit {
   @ViewChild('inputmontoAbonado', { static: false }) inputmontoAbonado: ElementRef;
   @ViewChild('inputInicioCaja', { static: false }) inputInicioCaja: ElementRef;
   @ViewChild('inputSustentoCajaInicio', { static: false }) inputSustentoCajaInicio: ElementRef;
+  @ViewChild('inputCierreCajaReal', { static: false }) inputCierreCajaReal: ElementRef;
 
   labelTitle: string = 'Registro de Ventas';
 
@@ -792,6 +793,11 @@ export class VentaComponent implements OnInit {
   setFocusSustentoCajaInicio() {
     this.changeDetectorRef.detectChanges();
     this.inputSustentoCajaInicio.nativeElement.focus();
+  }
+
+  setFocusCierreCajaReal() {
+    this.changeDetectorRef.detectChanges();
+    this.inputCierreCajaReal.nativeElement.focus();
   }
 
   aceptarCliente(registro) {
@@ -2345,6 +2351,8 @@ export class VentaComponent implements OnInit {
       this.verFrmAlmacen = false;
       this.verFrmVenta = false;
       this.vistaCarga = false;
+
+      this.setFocusCierreCajaReal();
     });
 
   }
