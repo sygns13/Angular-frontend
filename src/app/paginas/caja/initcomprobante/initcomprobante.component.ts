@@ -71,6 +71,7 @@ export class InitcomprobanteComponent implements OnInit {
 
   tipoComprobantes: any[] = [];
   almacenes: any[] = [];
+  almacens: any[] = [];
 
 
   constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef,
@@ -123,6 +124,10 @@ export class InitcomprobanteComponent implements OnInit {
 
   }
 
+  cambioSucursal(event: Event) {
+    this.buscar();
+  }
+
   //Carga de Data
   /*
   listarMain() {
@@ -150,10 +155,12 @@ export class InitcomprobanteComponent implements OnInit {
     this.almacenes = [];
 
     this.almacenes.push({ name: 'GENERAL (TODOS LOS LOCALES)', code: 0 });
+    this.almacens.push({ name: "General - Todas", code: 0 });
 
     this.almacenService.listarAll().subscribe(data => {
       data.forEach(almacen => {
         this.almacenes.push({ name: almacen.nombre, code: almacen.id });
+        this.almacens.push({ name: almacen.nombre, code: almacen.id });
       });
     });
   }
@@ -169,7 +176,9 @@ export class InitcomprobanteComponent implements OnInit {
 
   listarPageMain(p: number, s: number, tipo_comprobante_id: number, almacen_id: number) {
 
-    this.initComprobanteService.listarPageable(p, s, this.txtBuscar, tipo_comprobante_id, almacen_id).subscribe(data => {
+    let _idAlmacen = (this.clsAlmacen != null) ? this.clsAlmacen.code : 0;
+
+    this.initComprobanteService.listarPageable(p, s, this.txtBuscar, tipo_comprobante_id, _idAlmacen).subscribe(data => {
       this.initComprobantes = data.content;
       this.isFirst = data.first;
       this.isLast = data.last;
@@ -303,7 +312,7 @@ export class InitcomprobanteComponent implements OnInit {
     let almacenBase = new Almacen();
 
     tipoComprobanteBase.id = parseInt((this.clsTipoComprobante != null) ? this.clsTipoComprobante.code : "0");
-    almacenBase.id = parseInt((this.clsAlmacen_registro != null) ? this.clsTipoComprobante.code : "0");
+    almacenBase.id = parseInt((this.clsAlmacen_registro != null) ? this.clsAlmacen_registro.code : "0");
 
     this.initComprobante.tipoComprobante = tipoComprobanteBase;
     this.initComprobante.almacen = almacenBase;

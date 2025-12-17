@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import {AppBreadcrumbService} from '../../../menu/app.breadcrumb.service';
+import { AppBreadcrumbService } from '../../../menu/app.breadcrumb.service';
 import { AlmacenService } from './../../../_service/almacen.service';
 import { switchMap } from 'rxjs/operators';
 import { Almacen } from './../../../_model/almacen';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {Message} from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Message } from 'primeng/api';
 import { PrimeNGConfig } from 'primeng/api';
 import { LazyLoadEvent } from 'primeng/api';
 
@@ -17,7 +17,7 @@ import { LazyLoadEvent } from 'primeng/api';
 })
 export class LocalComponent implements OnInit {
 
- @ViewChild('inputNombre', { static: false }) inputNombre: ElementRef;
+  @ViewChild('inputNombre', { static: false }) inputNombre: ElementRef;
 
   vistaRegistro: boolean = false;
 
@@ -30,8 +30,8 @@ export class LocalComponent implements OnInit {
   clsEstado: any = null;
 
   estados: any[] = [
-      {name: 'Activo', code: '1'},
-      {name: 'Inactivo', code: '0'}
+    { name: 'Activo', code: '1' },
+    { name: 'Inactivo', code: '0' }
   ];
   departamentos: any[] = [];
   provincias: any[] = [];
@@ -55,23 +55,23 @@ export class LocalComponent implements OnInit {
   position: string;
 
   tipoFrm: String = 'Nuevo Local';
-  vistaBotonRegistro : boolean = false;
-  vistaBotonEdicion : boolean = false;
-  vistaCarga : boolean = true;
+  vistaBotonRegistro: boolean = false;
+  vistaBotonEdicion: boolean = false;
+  vistaCarga: boolean = true;
 
-  loading: boolean = true; 
+  loading: boolean = true;
   txtBuscar: String = '';
 
 
 
-  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef , private almacenService: AlmacenService,
-                private confirmationService: ConfirmationService , private primengConfig: PrimeNGConfig , private messageService: MessageService) {
+  constructor(private breadcrumbService: AppBreadcrumbService, private changeDetectorRef: ChangeDetectorRef, private almacenService: AlmacenService,
+    private confirmationService: ConfirmationService, private primengConfig: PrimeNGConfig, private messageService: MessageService) {
     this.breadcrumbService.setItems([
-        { label: 'Tablas Base' },
-        { label: 'Gestión de Locales', routerLink: ['/tablas/locales'] }
+      { label: 'Tablas Base' },
+      { label: 'Gestión de Locales', routerLink: ['/tablas/locales'] }
     ]);
 
-}
+  }
 
   ngOnInit(): void {
     this.getDepartamentos();
@@ -86,25 +86,25 @@ export class LocalComponent implements OnInit {
   }
 
   prev() {
-      this.page--;
-      this.listarPageMain(this.page, this.rows);
+    this.page--;
+    this.listarPageMain(this.page, this.rows);
   }
 
   reset() {
-      this.first = 0;
-      this.listarPageMain(this.page, this.rows);
+    this.first = 0;
+    this.listarPageMain(this.page, this.rows);
   }
 
   isLastPage(): boolean {
-      //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
-      return this.isLast;
+    //return this.bancos ? this.first > (this.bancos.length - this.rows): true;
+    return this.isLast;
   }
 
   isFirstPage(): boolean {
-      return this.isFirst;
+    return this.isFirst;
   }
 
-  setFocusNombre() {    
+  setFocusNombre() {
 
     this.changeDetectorRef.detectChanges();
     this.inputNombre.nativeElement.focus();
@@ -122,20 +122,20 @@ export class LocalComponent implements OnInit {
 
     this.almacenService.getDepartamentos(1).subscribe(data => {
       data.forEach(dep => {
-        this.departamentos.push({name: dep.nombre, code: dep.id});
+        this.departamentos.push({ name: dep.nombre, code: dep.id });
       });
     });
   }
 
   getProvincias() {
 
-    if(this.clsDepartamento == null){
+    if (this.clsDepartamento == null) {
       this.provincias = [];
       this.distritos = [];
       this.clsProvincia = null;
       this.clsDistrito = null;
     }
-    else{
+    else {
       this.provincias = [];
       this.distritos = [];
       this.clsProvincia = null;
@@ -143,7 +143,7 @@ export class LocalComponent implements OnInit {
 
       this.almacenService.getProvincias(this.clsDepartamento.code).subscribe(data => {
         data.forEach(dep => {
-          this.provincias.push({name: dep.nombre, code: dep.id});
+          this.provincias.push({ name: dep.nombre, code: dep.id });
         });
       });
     }
@@ -152,17 +152,17 @@ export class LocalComponent implements OnInit {
 
   getDistritos() {
 
-    if(this.clsProvincia == null){
+    if (this.clsProvincia == null) {
       this.distritos = [];
       this.clsDistrito = null;
     }
-    else{
+    else {
       this.distritos = [];
       this.clsDistrito = null;
 
       this.almacenService.getDistritos(this.clsProvincia.code).subscribe(data => {
         data.forEach(dep => {
-          this.distritos.push({name: dep.nombre, code: dep.id});
+          this.distritos.push({ name: dep.nombre, code: dep.id });
         });
       });
     }
@@ -170,9 +170,9 @@ export class LocalComponent implements OnInit {
   }
 
 
-  getProvinciasEd(dataAlmacen: Almacen){
+  getProvinciasEd(dataAlmacen: Almacen) {
 
-    if(this.clsDepartamento == null){
+    if (this.clsDepartamento == null) {
 
       this.provincias = [];
       this.distritos = [];
@@ -180,7 +180,7 @@ export class LocalComponent implements OnInit {
       this.clsDistrito = null;
 
     }
-    else{
+    else {
       this.provincias = [];
       this.distritos = [];
       this.clsProvincia = null;
@@ -188,45 +188,45 @@ export class LocalComponent implements OnInit {
 
       this.almacenService.getProvincias(this.clsDepartamento.code).subscribe(data => {
         data.forEach(dep => {
-          this.provincias.push({name: dep.nombre, code: dep.id});
+          this.provincias.push({ name: dep.nombre, code: dep.id });
         });
-        this.clsProvincia = {name: dataAlmacen.provincia.nombre, code: dataAlmacen.provincia.id};
+        this.clsProvincia = { name: dataAlmacen.provincia.nombre, code: dataAlmacen.provincia.id };
         this.getDistritosEd(dataAlmacen)
-      });  
+      });
     }
   }
 
   getDistritosEd(dataAlmacen: Almacen) {
 
-    if(this.clsProvincia == null){
+    if (this.clsProvincia == null) {
       this.distritos = [];
       this.clsDistrito = null;
     }
-    else{
+    else {
       this.distritos = [];
       this.clsDistrito = null;
 
       this.almacenService.getDistritos(this.clsProvincia.code).subscribe(data => {
         data.forEach(dep => {
-          this.distritos.push({name: dep.nombre, code: dep.id});
+          this.distritos.push({ name: dep.nombre, code: dep.id });
         });
-        this.clsDistrito = {name: dataAlmacen.distrito.nombre, code: dataAlmacen.distrito.id};
+        this.clsDistrito = { name: dataAlmacen.distrito.nombre, code: dataAlmacen.distrito.id };
       });
 
     }
 
   }
-/*
-  listarMain() {
+  /*
+    listarMain() {
+  
+      this.almacenService.listar().subscribe(data => {
+        
+        this.almacens = data;
+      });
+    }*/
 
-    this.almacenService.listar().subscribe(data => {
-      
-      this.almacens = data;
-    });
-  }*/
-
-  loadData(event: LazyLoadEvent) { 
-    this.loading = true; 
+  loadData(event: LazyLoadEvent) {
+    this.loading = true;
     this.rows = event.rows;
     this.page = event.first / this.rows;
 
@@ -234,7 +234,7 @@ export class LocalComponent implements OnInit {
 
   }
 
-  listarPageMain(p: number, s:number) {
+  listarPageMain(p: number, s: number) {
 
     this.almacenService.listarPageable(p, s, this.txtBuscar).subscribe(data => {
       this.almacens = data.content;
@@ -248,9 +248,9 @@ export class LocalComponent implements OnInit {
     });
   }
 
-  buscar(){
+  buscar() {
     this.page = 0;
-    this.listarPageMain(this.page , this.rows);
+    this.listarPageMain(this.page, this.rows);
   }
 
 
@@ -261,8 +261,8 @@ export class LocalComponent implements OnInit {
 
     this.vistaBotonRegistro = true;
     this.vistaBotonEdicion = false;
-    
-    this.tipoFrm = 'Nuevo Local' 
+
+    this.tipoFrm = 'Nuevo Local'
     this.vistaRegistro = true;
 
     this.cancelar();
@@ -281,29 +281,29 @@ export class LocalComponent implements OnInit {
     this.clsEstado = null;
 
     this.setFocusNombre();
-    
+
   }
 
-  cerrar(){
+  cerrar() {
     this.vistaRegistro = false;
 
   }
 
-  editar(data: Almacen){
+  editar(data: Almacen) {
     this.almacen = data;
 
     this.vistaBotonRegistro = false;
     this.vistaBotonEdicion = true;
 
-    this.clsDepartamento = {name: this.almacen.departamento.nombre, code: this.almacen.departamento.id};
+    this.clsDepartamento = { name: this.almacen.departamento.nombre, code: this.almacen.departamento.id };
     this.clsProvincia = null;
     this.clsDistrito = null;
     this.nombre = this.almacen.nombre;
     this.codigo = this.almacen.codigo;
     this.direccion = this.almacen.direccion;
-    this.clsEstado =  (this.almacen.activo === 1) ?  {name: "Activo", code: this.almacen.activo} : {name: "Inactivo", code: this.almacen.activo};
+    this.clsEstado = (this.almacen.activo === 1) ? { name: "Activo", code: this.almacen.activo } : { name: "Inactivo", code: this.almacen.activo };
 
-    this.tipoFrm = 'Editar Local' 
+    this.tipoFrm = 'Editar Local'
 
     this.getProvinciasEd(this.almacen);
 
@@ -314,7 +314,7 @@ export class LocalComponent implements OnInit {
 
   }
 
-  eliminar(data: Almacen, event: Event){
+  eliminar(data: Almacen, event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -322,91 +322,91 @@ export class LocalComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Eliminación',
       accept: () => {
-       this.eliminarConfirmado(data);
+        this.eliminarConfirmado(data);
       },
       reject: () => {
       }
-  });
-    
+    });
+
   }
 
 
   registrar(event: Event) {
     this.confirmationService.confirm({
-        key: 'confirmDialog',
-        target: event.target,
-        message: '¿Está seguro de Registrar?',
-        icon: 'pi pi-info-circle',
-        header: 'Confirmación Registro',
-        accept: () => {
-          //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
-         // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
-         this.registrarConfirmado();
-        },
-        reject: () => {
-         // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-        }
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Registrar?',
+      icon: 'pi pi-info-circle',
+      header: 'Confirmación Registro',
+      accept: () => {
+        //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
+        // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+        this.registrarConfirmado();
+      },
+      reject: () => {
+        // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
+      }
     });
   }
 
   modificar(event: Event) {
     this.confirmationService.confirm({
-        key: 'confirmDialog',
-        target: event.target,
-        message: '¿Está seguro de Editar?',
-        icon: 'pi pi-info-circle',
-        header: 'Confirmación Edición',
-        accept: () => {
-          //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
-         // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
-         this.editarConfirmado();
-        },
-        reject: () => {
-         // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-        }
+      key: 'confirmDialog',
+      target: event.target,
+      message: '¿Está seguro de Editar?',
+      icon: 'pi pi-info-circle',
+      header: 'Confirmación Edición',
+      accept: () => {
+        //this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
+        // this.messageService.add({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+        this.editarConfirmado();
+      },
+      reject: () => {
+        // this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
+      }
     });
   }
 
 
-  registrarConfirmado(){
-    
+  registrarConfirmado() {
+
     this.vistaCarga = true;
 
     this.almacen.nombre = this.nombre.toString().trim();
     this.almacen.codigo = this.codigo.toString().trim();
     this.almacen.direccion = this.direccion.toString().trim();
     this.almacen.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
-    this.almacen.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
+    this.almacen.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code : "");
 
     this.almacenService.registrar(this.almacen).subscribe({
       next: (data) => {
-      this.vistaCarga = false;
-      this.loading = true; 
-      this.cancelar();
-      this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha registrado satisfactoriamente'});
-    },
-    error: (err) => {
-      this.vistaCarga = false;
-      console.log(err);
-    }        
-});
+        this.vistaCarga = false;
+        this.loading = true;
+        this.cancelar();
+        this.listarPageMain(this.page, this.rows);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'El local se ha registrado satisfactoriamente' });
+      },
+      error: (err) => {
+        this.vistaCarga = false;
+        console.log(err);
+      }
+    });
 
 
-/*
-    this.almacenService.registrar(this.almacen).pipe(switchMap(() => {
-      return this.almacenService.listar();
-    })).subscribe(data => {
-      this.vistaCarga = false;
-      //this.almacenService.almacens.next(data);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail:'El local se ha registrado satisfactoriamente'});
-      this.cancelar();
-      this.almacens = data;
-    });*/
+    /*
+        this.almacenService.registrar(this.almacen).pipe(switchMap(() => {
+          return this.almacenService.listar();
+        })).subscribe(data => {
+          this.vistaCarga = false;
+          //this.almacenService.almacens.next(data);
+          this.messageService.add({severity:'success', summary:'Confirmado', detail:'El local se ha registrado satisfactoriamente'});
+          this.cancelar();
+          this.almacens = data;
+        });*/
 
   }
 
-  editarConfirmado(){
+  editarConfirmado() {
     this.vistaCarga = true;
 
     let almacenEdit = new Almacen();
@@ -416,47 +416,47 @@ export class LocalComponent implements OnInit {
     almacenEdit.codigo = this.codigo.toString().trim();
     almacenEdit.direccion = this.direccion.toString().trim();
     almacenEdit.activo = parseInt((this.clsEstado != null) ? this.clsEstado.code : "1");
-    almacenEdit.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code: "");
+    almacenEdit.distritoId = parseInt((this.clsDistrito != null) ? this.clsDistrito.code : "");
 
     this.almacenService.modificar(almacenEdit).subscribe({
       next: (data) => {
-      this.loading = true; 
-      this.vistaCarga = false;
-      this.cancelar();
-      this.cerrar();
-      this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha editado satisfactoriamente'});
+        this.loading = true;
+        this.vistaCarga = false;
+        this.cancelar();
+        this.cerrar();
+        this.listarPageMain(this.page, this.rows);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'El local se ha editado satisfactoriamente' });
       },
       error: (err) => {
         this.vistaCarga = false;
         console.log(err);
-      }        
+      }
     });
 
   }
 
-  eliminarConfirmado(data: Almacen){
+  eliminarConfirmado(data: Almacen) {
     this.vistaCarga = true;
     this.almacenService.eliminar(data.id).subscribe({
       next: (data) => {
-      this.loading = true; 
-      this.vistaCarga = false;
-      if(this.numberElements <= 1 && this.page > 0){
-        this.page--;
+        this.loading = true;
+        this.vistaCarga = false;
+        if (this.numberElements <= 1 && this.page > 0) {
+          this.page--;
+        }
+        this.listarPageMain(this.page, this.rows);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'El local se ha eliminado satisfactoriamente' });
+      },
+      error: (err) => {
+        this.vistaCarga = false;
+        console.log(err);
       }
-      this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: 'El local se ha eliminado satisfactoriamente'});
-    },
-    error: (err) => {
-      this.vistaCarga = false;
-      console.log(err);
-    }        
-  });
+    });
 
   }
 
 
-  alta(data: Almacen, event: Event){
+  alta(data: Almacen, event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -464,17 +464,17 @@ export class LocalComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Activación',
       accept: () => {
-        let msj : string = 'El local se ha activado satisfactoriamente';
+        let msj: string = 'El local se ha activado satisfactoriamente';
         let valor: number = 1;
-       this.altaBaja(data, valor, msj);
+        this.altaBaja(data, valor, msj);
       },
       reject: () => {
       }
-  });
-    
+    });
+
   }
 
-  baja(data: Almacen, event: Event){
+  baja(data: Almacen, event: Event) {
     this.confirmationService.confirm({
       key: 'confirmDialog',
       target: event.target,
@@ -482,31 +482,32 @@ export class LocalComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       header: 'Confirmación Desactivación',
       accept: () => {
-        let msj : string = 'El local se ha desactivado satisfactoriamente';
+        let msj: string = 'El local se ha desactivado satisfactoriamente';
         let valor: number = 0;
         this.altaBaja(data, valor, msj);
       },
       reject: () => {
       }
-  });
-    
+    });
+
   }
 
-  altaBaja(data: Almacen, valor: number, msj: string){
+  altaBaja(data: Almacen, valor: number, msj: string) {
     this.vistaCarga = true;
-    
+
     this.almacenService.altaBaja(data.id, valor).subscribe({
       next: (data) => {
-      this.loading = true; 
-      this.listarPageMain(this.page, this.rows);
-      this.messageService.add({severity:'success', summary:'Confirmado', detail: msj});
-    },
-    error: (err) => {
-      this.vistaCarga = false;
-      console.log(err);
-    }        
-  });
-  
+        this.vistaCarga = false;
+        this.loading = true;
+        this.listarPageMain(this.page, this.rows);
+        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: msj });
+      },
+      error: (err) => {
+        this.vistaCarga = false;
+        console.log(err);
+      }
+    });
+
 
   }
 

@@ -97,6 +97,18 @@
             <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [hidden]="isLastPage()" styleClass="p-button-text"></p-button>
         </div>-->
 
+        <div class="p-fluid box">
+            <div class="p-field p-grid">
+                <label for="almacen" class="p-col-12 p-mb-12 p-md-12 p-mb-md-12">Seleccione Local para Filtrar los Datos</label><br>
+                <div class="p-col-12 p-md-12">
+                    <span class="p-float-label">
+                        <p-dropdown #tinputclsTipoProducto inputId="almacen" [options]="almacens" (onChange)="cambioSucursal($event)" [(ngModel)]="clsAlmacen" optionLabel="name" [autoDisplayFirst]="false" [style]="{'height':'31px'}" [filter]="true"></p-dropdown>
+                            <label>GENERAL TODOS</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+
         <div class="p-mb-3">
             <div class="p-inputgroup">
                 <button pButton pRipple type="button" label="Buscar" (click)="buscar()"></button>
